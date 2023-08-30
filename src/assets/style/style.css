@@ -366,3 +366,15 @@ pre[class*="language-"] {
   left: 20px;
   transform: rotate(45deg);
 }
+
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6,
+.dark p,
+.dark span,
+.dark label {
+  color: #ccc;
+}

@@ -67,6 +67,34 @@
   @apply text-sm px-5 py-2;
 }
 
+// badges
+
+.badge-primary {
+  @apply rounded bg-primary px-4 p-1 pt-0.5 inline m-1 text-white;
+}
+
+.badge-secondary {
+  @apply rounded bg-secondary px-4 p-1 pt-0.5 inline m-1 text-white;
+}
+
+.badge-success {
+  @apply rounded bg-success px-4 p-1 pt-0.5 inline m-1 text-white;
+}
+
+.badge-danger {
+  @apply rounded bg-danger px-4 p-1 pt-0.5 inline m-1 text-white;
+}
+
+.badge-warning {
+  @apply rounded bg-warning px-4 p-1 pt-0.5 inline m-1 text-white;
+}
+.badge-info {
+  @apply rounded bg-info px-4 p-1 pt-0.5 inline m-1 text-white;
+}
+.badge-dark {
+  @apply rounded bg-dark px-4 p-1 pt-0.5 inline m-1 text-white;
+}
+
 // forms
 .form-input {
   @apply mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary;
