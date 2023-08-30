@@ -1,0 +1,20 @@
+{
+  "global": {
+    "logout": "Выйти",
+    "add": "Добавить",
+    "change": "",
+    "cancel": "",
+    "go_to_page": "",
+    "forward": "",
+    "are_you_really_going_to_delete_it": "",
+    "backups": "Создание резервных копий",
+    "journaling": "Журналирование",
+    "backup&archiving": "Резервное копирование и архивирование данных",
+    "system": "Система"
+  },
+
+
+  "users": "Пользователи",
+  "administration": "Администрация",
+  "stuff": "Стаф"
+}

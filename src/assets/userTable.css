@@ -1,0 +1,121 @@
+:root {
+  --easy-table-header-font-size: .857rem;
+  --easy-table-header-height: 36px;
+  --easy-table-header-font-color: #6e6b7b;
+  --easy-table-header-background-color: #f3f2f7;
+  --easy-table-header-item-padding: 5px 10px;
+  --easy-table-body-row-font-size: .857rem;
+  --easy-table-body-row-font-color: #212121;
+  --easy-table-body-row-background-color: none;
+  --easy-table-body-row-hover-font-color: #212121;
+  --easy-table-body-row-hover-background-color: none;
+  --easy-table-body-even-row-font-color: #212121;
+  --easy-table-body-even-row-background-color: #fafafa;
+  --easy-table-body-item-padding: 0px 10px;
+  --easy-table-footer-background-color: #ffffff;
+  --easy-table-footer-font-color: #212121;
+  --easy-table-footer-font-size: .857rem;
+  --easy-table-footer-padding: 20px 5px;
+  --easy-table-footer-height: 36px;
+  --easy-table-rows-per-page-selector-width: auto;
+  --easy-table-rows-per-page-selector-option-padding: 5px;
+  --easy-table-rows-per-page-selector-z-index: auto;
+  --easy-table-message-font-color: #212121;
+  --easy-table-message-font-size: .857rem;
+  --easy-table-message-padding: 20px;
+  --easy-table-loading-mask-background-color: #ff0202;
+  --easy-table-loading-mask-opacity: .5;
+  --easy-table-scrollbar-track-color: #2b00ff;
+  --easy-table-scrollbar-color: #f800c2;
+  --easy-table-scrollbar-thumb-color: #c1c1c1;
+  --easy-table-scrollbar-corner-color: #00ffe5;
+  --easy-table-buttons-pagination-border: 1px solid #e0e0e0
+}
+
+#user-table table {
+  border-spacing: 0 1rem !important;
+}
+
+#user-table.vue3-easy-data-table[data-v-19cc4b1b] {
+  border: none !important;
+}
+
+#user-table .vue3-easy-data-table__header th[data-v-19cc4b1b] {
+  border: none !important;
+}
+
+#user-table .vue3-easy-data-table__header th {
+  background: none;
+}
+
+#user-table .vue3-easy-data-table__body tr {
+  transition: all .5s ease-in-out;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .05);
+}
+
+#user-table .vue3-easy-data-table__body tr td:first-child {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
+#user-table .vue3-easy-data-table__body tr td:last-child {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+#user-table .vue3-easy-data-table__body tr:hover {
+  transform: translateY(-5px);
+}
+
+
+#user-table .vue3-easy-data-table__body tr[data-v-19cc4b1b] {
+  height: 80px;
+  background: #fff;
+  color: #212121;
+  font-size: .857rem
+}
+
+.dark #user-table .vue3-easy-data-table__body tr[data-v-19cc4b1b] {
+  background: #171D32;
+  color: #ffffff !important;
+}
+
+.dark #user-table .vue3-easy-data-table__body tr[data-v-19cc4b1b]:hover {
+  color: #fff !important;
+}
+
+#user-table .vue3-easy-data-table__body td[data-v-19cc4b1b] {
+  padding: 0 20px;
+  border: none;
+  border-bottom: 0;
+  position: relative
+}
+
+.dark #user-table .vue3-easy-data-table__body td[data-v-19cc4b1b] {
+  background-color: #171D32;
+  color: #fff;
+  border-color: #4b5563;
+}
+
+#user-table .vue3-easy-data-table__footer[data-v-19cc4b1b] {
+  background-color: #ffffff;
+  color: #212121;
+  border-top: 0;
+  font-size: .857rem;
+  padding: 20px 5px;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 30px;
+  border-radius: 10px;
+  height: 70px;
+}
+
+.dark #user-table .vue3-easy-data-table__footer[data-v-19cc4b1b] {
+  background: #171D32;
+  color: #fff;
+}
+
+/* ======================== STYLES OF VUE3-EASY-DATA-TABLE ======================== */

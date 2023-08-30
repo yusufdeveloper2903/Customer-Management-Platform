@@ -1,0 +1,205 @@
+.btn-primary {
+  @apply rounded-lg flex justify-center items-center bg-primary px-8 py-2 text-white duration-100 hover:shadow-buttonShadow hover:shadow-primary active:shadow-none disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+.btn-secondary {
+  @apply rounded-lg flex justify-center items-center bg-secondary px-8 py-2 text-white duration-100 hover:shadow-buttonShadow hover:shadow-secondary active:shadow-none disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+.btn-success {
+  @apply rounded-lg flex justify-center items-center bg-success px-8 py-2 text-white duration-100 hover:shadow-buttonShadow hover:shadow-success active:shadow-none disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+.btn-danger {
+  @apply rounded-lg flex justify-center items-center bg-danger px-8 py-2 text-white duration-100 hover:shadow-buttonShadow hover:shadow-danger active:shadow-none disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+.btn-warning {
+  @apply rounded-lg flex justify-center items-center bg-warning px-8 py-2 text-white duration-100 hover:shadow-buttonShadow hover:shadow-warning active:shadow-none disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+.btn-info {
+  @apply rounded-lg flex justify-center items-center bg-info px-8 py-2 text-white duration-100 hover:shadow-buttonShadow hover:shadow-info active:shadow-none disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+.btn-dark {
+  @apply rounded-lg flex justify-center items-center bg-dark px-8 py-2 text-white duration-100 hover:shadow-buttonShadow hover:shadow-dark active:shadow-none disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+// outline buttons
+.btn-outline-primary {
+  @apply rounded-lg flex justify-center items-center px-8 py-2 text-primary border border-primary duration-100 active:opacity-80 hover:bg-primary/10 disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+.btn-outline-secondary {
+  @apply rounded-lg flex justify-center items-center px-8 py-2 text-secondary border border-secondary duration-100 active:opacity-80 hover:bg-secondary/10 disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+.btn-outline-success {
+  @apply rounded-lg flex justify-center items-center px-8 py-2 text-success border border-success duration-100 active:opacity-80 hover:bg-success/10 disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+.btn-outline-danger {
+  @apply rounded-lg flex justify-center items-center px-8 py-2 text-danger border border-danger duration-100 active:opacity-80 hover:bg-danger/10 disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+.btn-outline-warning {
+  @apply rounded-lg flex justify-center items-center px-8 py-2 text-warning border border-warning duration-100 active:opacity-80 hover:bg-warning/10 disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+.btn-outline-info {
+  @apply rounded-lg flex justify-center items-center px-8 py-2 text-info border border-info duration-100 active:opacity-80 hover:bg-info/10 disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+.btn-outline-dark {
+  @apply rounded-lg flex justify-center items-center px-8 py-2 text-dark border border-dark duration-100 active:opacity-80 hover:bg-dark/10 disabled:bg-secondary disabled:hover:shadow-none disabled:opacity-70;
+}
+
+.btn-small {
+  @apply px-5;
+}
+
+.btn-action {
+  @apply p-0 rounded pt-2 pb-2 px-2.5;
+}
+
+.btn-medium {
+  @apply text-sm px-5 py-2;
+}
+
+// forms
+.form-input {
+  @apply mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary;
+}
+
+.form-file-input {
+  @apply block w-full mt-1 p-2.5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400;
+}
+
+input.form-file-input::file-selector-button {
+  // display: none;
+  background: none;
+  border: none;
+  border-right: 1px solid gray;
+  color: #000;
+  padding-right: 10px;
+  margin-right: 10px;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.dark input.form-file-input::file-selector-button {
+  color: #fff;
+}
+
+// card
+.card {
+  @apply p-5 bg-white dark:bg-darkLayoutStorm rounded-md shadow-lg;
+}
+
+// date picker
+.dp__input_wrap {
+  input {
+    @apply mt-1 pl-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary;
+  }
+}
+
+.dp__menu {
+  .dp__range_end {
+    @apply bg-primary rounded-lg rounded-l-none;
+  }
+  .dp__range_start {
+    @apply bg-primary rounded-lg rounded-r-none;
+  }
+
+  .dp__select {
+    @apply text-primary ml-3;
+  }
+
+  .dp__active_date {
+    @apply bg-primary rounded-lg;
+  }
+
+  .dp__today {
+    @apply text-primary border border-primary text-dark rounded-lg;
+  }
+}
+
+// checkbox
+.checkbox-classic {
+  @apply appearance-none w-9 focus:outline-none h-5 checked:bg-primary bg-gray-200 rounded-full 
+  before:inline-block before:rounded-full before:bg-white before:h-4 before:w-4 
+  checked:before:translate-x-full shadow-inner transition-all duration-300 before:ml-0.5 flex
+  place-items-center;
+}
+
+.table-header-left {
+  span {
+    display: flex !important;
+    justify-content: flex-start !important;
+  }
+}
+.table-header-center {
+  span {
+    display: flex !important;
+    justify-content: center !important;
+  }
+}
+.table-header-right {
+  span {
+    display: flex !important;
+    justify-content: flex-end !important;
+  }
+}
+
+.table-row-selected {
+  td {
+    background-color: rgba(115, 103, 240, 0.65) !important;
+    color: white !important;
+  }
+}
+
+.vs__selected {
+  @apply dark:text-white;
+}
+
+@media (min-width: 0px) and (max-width: 480px) {
+  .btn-action {
+    @apply p-0 rounded pt-1 pb-1 px-1;
+  }
+
+  // card
+  .card {
+    @apply w-full;
+  }
+}
+
+.uk-modal-dialog {
+  .uk-modal-header {
+    @apply dark:bg-[#283046];
+  }
+  .uk-modal-body {
+    @apply dark:bg-[#283046];
+  }
+  .uk-modal-footer {
+    @apply dark:bg-[#283046];
+  }
+  .uk-modal-title {
+    @apply dark:text-white;
+  }
+}
+
+.open-to-top {
+  @media (min-width: 1024px) {
+    .vs__dropdown-menu {
+      bottom: calc(100% - var(--vs-border-width));
+      top: auto;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.required-input {
+  border-color: #ea5455!important;
+}
+

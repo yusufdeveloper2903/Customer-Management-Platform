@@ -1,0 +1,131 @@
+@media only screen and (max-width: 1000px) {
+  .sidebar {
+    width: 0% !important;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sidebar.open {
+    width: 30% !important;
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .open-sidebar {
+    margin-left: 0 !important;
+    transition: all .3s ease;
+  }
+
+  .close-sidebar {
+    margin-left: 0 !important;
+    transition: all .3s ease;
+  }
+
+  .setting {
+    display: none;
+  }
+
+  .right-sidebar.horizontal {
+    width: 94%;
+    border-radius: 10px !important;
+    padding: 16px 20px;
+    transform: none;
+    top: 10px;
+    min-height: 70px !important;
+    right: 50%;
+    transform: translateX(50%);
+  }
+
+  .right-sidebar.horizontal .logout {
+    display: none;
+  }
+
+  .right-sidebar.horizontal .additional-classes .vertical {
+    width: 100%;
+    // background: #000 !important;
+    margin: 0 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    flex-direction: row-reverse !important;
+    position: relative;
+  }
+
+
+  .right-sidebar.horizontal .additional-classes .avatar-tooltip {
+    margin: 0 !important;
+  }
+
+  .vertical .lang {
+    height: 16px !important;
+    width: 30px !important;
+    margin-bottom: 15px;
+    position: absolute;
+    top: -6px;
+    right: 20px !important;
+  }
+
+  .vertical .action-icons {
+    position: absolute;
+    top: -9px;
+    left: 0;
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 20px !important;
+    margin: 0 !important;
+
+    .search-icon {
+      margin: 0 !important;
+    }
+  }
+
+  .burger-btn {
+    display: block !important;
+  }
+
+  .close-on-phone {
+    display: none;
+  }
+
+}
+
+@media only screen and (max-width: 500px) {
+
+  .right-sidebar.horizontal,
+  .smaller {
+    width: calc(100% - 10%);
+  }
+
+  .sidebar.open {
+    width: 55% !important;
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .action-icons span {
+    display: none !important;
+  }
+
+  span.burger-btn {
+    display: block !important;
+  }
+
+  .change-theme {
+    display: block !important;
+  }
+
+  .main-layout {
+    padding-top: 120px;
+  }
+
+  .sidebar.open li.profile {
+    width: 55% !important;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .close-on-phone {
+    display: none;
+  }
+
+}

@@ -1,0 +1,71 @@
+<script lang="ts" setup>
+import i18n from "@/plugins/i18n";
+import { useI18n } from "vue-i18n";
+
+const { locale } = useI18n();
+function onChangeLocale(lang) {
+  i18n.global.locale.value = lang;
+  localStorage.setItem("last-locale", lang);
+}
+</script>
+<template>
+  <!-- lang -->
+  <div class="mx-auto w-[35px] cursor-pointer lang flex justify-end">
+    <div class="inline-block w-[28px]">
+      <img
+        v-if="locale == 'ru'"
+        class="w-[48px]"
+        src="@/assets/image/flags/ru.png"
+        alt="ru"
+      />
+
+      <img
+        v-if="locale == 'uz' || locale == 'oz'"
+        class="w-[48px]"
+        src="@/assets/image/flags/uz.png"
+        alt="uz"
+      />
+    </div>
+
+    <div
+      uk-dropdown="pos: left-top;"
+      class="bg-white dark:text-gray-300 p-0 py-2"
+    >
+      <div
+        class="p-3 hover:bg-primary/10 hover:text-primary"
+        @click="onChangeLocale('ru')"
+      >
+        <img
+          class="mr-2 inline-block w-[28px]"
+          src="@/assets/image/flags/ru.png"
+          alt="ru"
+        />
+        <span>Russian</span>
+      </div>
+
+      <div
+        class="p-3 hover:bg-primary/10 hover:text-primary"
+        @click="onChangeLocale('uz')"
+      >
+        <img
+          class="mr-2 inline-block w-[28px]"
+          src="@/assets/image/flags/uz.png"
+          alt="uz"
+        />
+        <span>Uzbek</span>
+      </div>
+
+      <div
+        class="p-3 hover:bg-primary/10 hover:text-primary"
+        @click="onChangeLocale('oz')"
+      >
+        <img
+          class="mr-2 inline-block w-[28px]"
+          src="@/assets/image/flags/uz.png"
+          alt="oz"
+        />
+        <span>Ўзбек</span>
+      </div>
+    </div>
+  </div>
+</template>
