@@ -52,6 +52,7 @@ const deleteUser = () => {
 };
 
 const current = ref<number>(1);
+
 const changePagionation = (e: number) => {
   paginationFilter.page = e;
   current.value = e;

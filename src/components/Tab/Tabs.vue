@@ -12,12 +12,12 @@
           t(title) == t(selectedTitle)
             ? !pill
               ? 'border-b-[3px] border-primary text-primary'
-              : 'bg-primary active text-white rounded'
+              : 'bg-primary active shadow shadow-primary text-white rounded'
             : ''
         "
         @click="onTitleSelected(title)"
       >
-        {{ t(title) }}
+        <span class="dark:text-gray-400">{{ t(title) }}</span>
       </li>
     </ul>
     <div :class="vertical && 'w-5/6'" class="tabs__main__body">
@@ -54,9 +54,9 @@ export default {
 
     provide("selectedTitle", selectedTitle);
 
-    function onTitleSelected(title){
-      selectedTitle.value = title
-      emit("selectedTitle", selectedTitle.value)
+    function onTitleSelected(title) {
+      selectedTitle.value = title;
+      emit("selectedTitle", selectedTitle.value);
     }
 
     return {
@@ -71,7 +71,10 @@ export default {
 
 <style lang="scss">
 .active {
-  box-shadow: 0 4px 18px -4px rgba(115, 103, 240, 0.65);
+  box-shadow: 0 4px 18px -4px rgba(70, 171, 70, 0.65);
+  span {
+    color: white !important;
+  }
 }
 
 @media (min-width: 0px) and (max-width: 480px) {
