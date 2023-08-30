@@ -1,8 +1,29 @@
 export default [
   {
+    name: "dashboard",
+    icon: "Cat",
+    path: "/dashboard",
+    permissions: ["admin"],
+  },
+
+  {
     name: "users",
     icon: "Users Group Rounded",
     path: "/users",
+    permissions: ["admin"],
+  },
+
+  {
+    name: "knowledgeBase",
+    icon: "Book Bookmark",
+    path: "/knowledgeBase",
+    permissions: ["admin"],
+  },
+
+  {
+    name: "stuff",
+    icon: "Box",
+    path: "/stuff",
     permissions: ["admin"],
   },
 
@@ -36,12 +57,5 @@ export default [
         permissions: ["admin"],
       },
     ],
-  },
-
-  {
-    name: "stuff",
-    icon: "Box",
-    path: "/stuff",
-    permissions: ["admin"],
   },
 ];

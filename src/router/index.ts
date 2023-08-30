@@ -5,13 +5,17 @@ import registration from "./registration";
 import users from "@/modules/Users/router";
 import administration from "@/modules/Administration/router";
 import stuff from "@/modules/Stuff/router";
+import knowledgeBase from "@/modules/KnowledgeBase/router";
+import dashboard from "@/modules/Dashboard/router";
 import { check } from "@/mixins/permissions";
 
 const routes: Array<RouteRecordRaw> = [
   ...registration,
+  ...dashboard,
   ...users,
-  ...administration,
   ...stuff,
+  ...knowledgeBase,
+  ...administration,
 
   {
     path: "/",
