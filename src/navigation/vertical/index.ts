@@ -1,7 +1,7 @@
 export default [
   {
     name: "dashboard",
-    icon: "Cat",
+    icon: "Home Smile",
     path: "/dashboard",
     permissions: ["admin"],
   },
