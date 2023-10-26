@@ -6,9 +6,9 @@ import { formatPhoneNumber, formatCreditCardNumber } from "../features/index";
 import users from "../store/index";
 import UIkit from "uikit";
 
-import ProfileActionsModal from "../components/ProfileActionsModal.vue";
-import DeleteUserCardModal from "../components/DeleteUserCardModal.vue";
-import ChangePhoneNumber from "../components/ChangePhoneNumber.vue";
+// import ProfileActionsModal from "../components/ProfileActionsModal.vue";
+// import DeleteUserCardModal from "../components/DeleteUserCardModal.vue";
+// import ChangePhoneNumber from "../components/ChangePhoneNumber.vue";
 import { useI18n } from "vue-i18n";
 
 const { locale } = useI18n();
@@ -107,7 +107,7 @@ onMounted(() => {
               </div>
 
               <div class="flex items-center mb-3 justify-between">
-                <h2 class="dark:text-gray-300">{{ $t("phone_number") }}</h2>
+                <h2 class="dark:text-gray-300">{{ $t("global.phone_number") }}</h2>
                 <h2 class="dark:text-gray-300">
                   {{ store.user.phone && formatPhoneNumber(store.user.phone) }}
                 </h2>
@@ -213,8 +213,8 @@ onMounted(() => {
       </div>
     </div>
 
-    <ChangePhoneNumber :phone="store.user.phone" />
-    <ProfileActionsModal @createCard="createCard" :exactCard="exactCard" />
-    <DeleteUserCardModal :cardId="cardId" @deleteUserCard="refresh()" />
+<!--    <ChangePhoneNumber :phone="store.user.phone" />-->
+<!--    <ProfileActionsModal @createCard="createCard" :exactCard="exactCard" />-->
+<!--    <DeleteUserCardModal :cardId="cardId" @deleteUserCard="refresh()" />-->
   </div>
 </template>

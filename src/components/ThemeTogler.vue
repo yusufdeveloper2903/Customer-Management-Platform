@@ -3,11 +3,11 @@
     v-if="sidebar.currentTheme === 'light'"
     @click="sidebar.changeTheme('dark')"
   >
-    <Icon icon="Moon" color="#3ca14b"/>
+    <Icon icon="Moon" color="#ffffff"/>
   </button>
   <button v-else>
     <!-- <img src="@/assets/icons/Sun.svg" @click="sidebar.changeTheme('light')" /> -->
-    <Icon icon="Sun" @click="sidebar.changeTheme('light')" color="#3ca14b" />
+    <Icon icon="Sun" @click="sidebar.changeTheme('light')" color="#FFCC00" />
   </button>
 </template>
 

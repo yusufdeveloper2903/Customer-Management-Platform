@@ -26,7 +26,11 @@ const tableData = reactive([
 
 <template>
   <div class="card">
-    <EasyDataTable :headers="productsFields" :items="tableData" hide-footer>
+    <EasyDataTable
+        :headers="productsFields"
+        :items="tableData"
+        hide-footer
+    >
       <template #item-product="items">
         <div class="p-2 flex items-center">
           <img :src="items.product.img" class="w-[100px] rounded" />

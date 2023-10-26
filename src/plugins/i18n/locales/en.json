@@ -1,17 +1,24 @@
 {
-  "validation":{
+  "validation": {
     "this_field_is_required": "This field is required"
   },
   "nav": {
-    "Admin Page": "Admin",
-    "Homepage": "Home Page",
-    "Staffs": "Staffs",
-    "Students": "Students",
-    "Directory": "Directory",
-    "Tariffs": "Tariffs",
-    "About Us": "About Us",
-    "Finance": "Finance",
-    "Statistics": "Statistics"
+    "advertising": "Advertising",
+    "posts": "Posts",
+    "staffs": "Staffs",
+    "users": "Users",
+    "directory": "Directory",
+    "forms": "Forms",
+    "listing_types": "Listing types",
+    "social_links": "Social links",
+    "interest": "Interest",
+    "nearby_places": "Nearby Places",
+    "types_places": "Types of Places",
+    "contacts": "Contacts",
+    "add_new_form": "Add new form",
+    "edit_form": "Edit form",
+    "adding_user": "Add user",
+    "editing_user": "Edit user"
   },
   "info_card": {
     "Time": "Time",
@@ -37,16 +44,45 @@
     "un_publish": "UNPUBLISH",
     "draft": "DRAFT"
   },
-  "test":{
+  "test": {
     "test": "Test",
     "add_test": "Add test",
     "type_test": "Type of testing",
     "question": "Question",
     "audio": "Audio"
   },
+  "deactivate": "Deactivate",
+  "delete": "Delete",
+  "delete_all": "Delete all",
+  "address": "Address",
+  "author": "Author",
+  "from": "Date from",
+  "to": "Date to",
+  "region": "Region",
+  "no_photo": "No photo",
+  "pagination_text": "rows per page",
+  "parol": "Parol",
+  "sign_in": "Sign in",
+  "confirmation_parol": "Confirmation parol",
+  "role": "Role",
+  "account_type_status": "Account type of status",
+  "phone_number": "Phone number",
+  "username": "Username",
+  "name_two": "Name",
+  "avatar": "Avatar",
+  "type_form": "Form type",
+  "empty_text": "No data",
+  "button": "Button",
+  "main_type": "Main type",
+  "horizontal": "Horizontal",
+  "vertical": "Vertical",
+  "id": "№",
+  "name": "Name",
+  "title_of_block": "Title of block",
   "success": "Success",
   "error": "Error",
   "Search": "Search",
+  "State": "Form state",
   "Add": "Add",
   "Payment": "Payment",
   "Time": "Time",
@@ -60,7 +96,7 @@
   "Active": "Active",
   "First Name": "First Name",
   "Surname": "Surname",
-  "phone_number": "Phone Number",
+  "Phone Number": "Phone Number",
   "Cancel": "Cancel",
   "Save": "Save",
   "Close": "Close",
@@ -100,7 +136,7 @@
   "upload": "Upload",
   "deadline": "Deadline",
   "Name of tags": "Name of tags",
-  "Are you sure?" : "Are you sure?",
+  "Are you sure?": "Are you sure?",
   "You won't be able to revert this!": "You won't be able to revert this!",
   "Are you sure you to leave this page?": "Are you sure you to leave this page?",
   "Phone number must be entered in the format: '998 [XX] [XXX XX XX]'. Up to 12 digits allowed!": "Phone number must be entered in the format: '998 [XX] [XXX XX XX]'. Up to 12 digits allowed!",
@@ -177,8 +213,4 @@
   "progress": "Progress",
   "hour": "h",
   "minute": "m"
-
-
-
-
 }

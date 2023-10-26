@@ -44,10 +44,6 @@ let userData = ref<User>({
 
 const rules = computed(() => {
   return {
-    // password: {
-    //   required: helpers.withMessage("required", required),
-    //   minLength: helpers.withMessage("kamida 4 ta", minLength(4)),
-    // },
     phone: {
       required: helpers.withMessage("required", required),
       minLength: helpers.withMessage(
@@ -61,22 +57,6 @@ const rules = computed(() => {
     regions: {
       required: helpers.withMessage("required", required),
     },
-
-    // oked: {
-    //   required: helpers.withMessage("required", required),
-    // },
-
-    // inn: {
-    //   required: helpers.withMessage("required", required),
-    // },
-
-    // mfo: {
-    //   required: helpers.withMessage("required", required),
-    // },
-
-    // settlement_account: {
-    //   required: helpers.withMessage("required", required),
-    // },
   };
 });
 
@@ -341,7 +321,7 @@ store.getRegions({ page_Size: 10 });
             </label>
 
             <label for="phone" class="my-5 block text-xs">
-              {{ $t("phone_number") }}:
+              {{ $t("global.phone_number") }}:
               <input
                 :placeholder="$t('phone_number')"
                 v-model="userData.phone"
@@ -379,7 +359,7 @@ store.getRegions({ page_Size: 10 });
             </label>
 
             <label for="passwordDetail" class="w-6/12 text-xs relative">
-              {{ $t("Password") }}:
+              {{ $t("global.password") }}:
               <input
                 autocomplete="off"
                 id="passwordDetail"
@@ -510,7 +490,7 @@ store.getRegions({ page_Size: 10 });
             </label>
 
             <label for="phone" class="my-5 block text-xs">
-              {{ $t("phone_number") }}:
+              {{ $t("global.phone_number") }}:
               <input
                 :placeholder="$t('phone_number')"
                 v-model="userData.phone"

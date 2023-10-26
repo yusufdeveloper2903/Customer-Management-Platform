@@ -20,10 +20,6 @@ export const fields = [
     value: "role",
   },
   {
-    text: "tableHeaders.scoring",
-    value: "scoring",
-  },
-  {
     text: "Status",
     value: "is_active",
   },

@@ -3,7 +3,6 @@ import App from "./App.vue";
 import router from "./router/index";
 import i18n from "@/plugins/i18n";
 
-import "./assets/app.sass";
 import "./assets/style/style.css";
 import "@/assets/style/tailwind.css";
 import "@/assets/style/responsive.scss";
@@ -31,8 +30,6 @@ import VueTailwindPagination from "@ocrv/vue-tailwind-pagination";
 import "./assets/pagination.css";
 
 import vSelect from "vue-select";
-import Input from "@/components/input/Input.vue";
-// import 'vue-select/dist/vue-select.css';
 import "./assets/style/vue-select/vue-select.css";
 
 import VueDatePicker from "@vuepic/vue-datepicker";
@@ -42,7 +39,6 @@ import icons from "uikit/dist/js/uikit-icons";
 import { vMaska } from "maska";
 
 import Paginate from "vuejs-paginate-next";
-import FileInput from "./components/FileInput/FileInput.vue";
 import LazySelect from "./components/LazySelect.vue";
 import VueNativeSock from "vue-native-websocket-vue3";
 import VueApexCharts from "vue3-apexcharts";
@@ -80,8 +76,6 @@ app.component("EasyDataTable", Vue3EasyDataTable);
 app.component("Multiselect", Multiselect);
 app.component("TwPagination", VueTailwindPagination);
 app.component("VSelect", vSelect);
-app.component("Input", Input);
-app.component("FileInput", FileInput);
 app.component("VueDatePicker", VueDatePicker);
 app.component("Icon", Icon);
 

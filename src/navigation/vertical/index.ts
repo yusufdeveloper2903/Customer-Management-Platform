@@ -1,34 +1,48 @@
 export default [
   {
-    name: "dashboard",
+    name: "Панель приборов",
     icon: "Home Smile",
     path: "/dashboard",
     permissions: ["admin"],
   },
 
   {
-    name: "users",
+    name: "Пользователи",
     icon: "Users Group Rounded",
     path: "/users",
     permissions: ["admin"],
   },
 
   {
-    name: "knowledgeBase",
+    name: "Справочник",
     icon: "Book Bookmark",
     path: "/knowledgeBase",
     permissions: ["admin"],
   },
 
   {
-    name: "stuff",
+    name: "Персонал",
     icon: "Box",
-    path: "/stuff",
+    path: "/staff",
+    permissions: ["admin"],
+  },
+
+  // {
+  //   name: "news",
+  //   icon: "Fire",
+  //   path: "/news",
+  //   permissions: ["admin"],
+  // },
+
+  {
+    name: "Уведомления",
+    icon: "Chat Line",
+    path: "/sms-template",
     permissions: ["admin"],
   },
 
   {
-    name: "administration",
+    name: "Администрация",
     icon: "Settings",
     permissions: ["admin"],
     child: [

@@ -20,12 +20,8 @@ interface Login {
 const router = useRouter();
 const { t } = useI18n();
 
-const checkHrefSite = (): boolean => {
-  return window.location.href.toLowerCase().includes("service.avtojoy.uz");
-};
-
 let formData = reactive<Login>({
-  phone: checkHrefSite() ? "" : "+998",
+  phone: "+998",
   password: "",
 });
 
@@ -54,10 +50,7 @@ const rulesEmployee = computed(() => {
     },
   };
 });
-const validate: Ref<Validation> = useVuelidate(
-  checkHrefSite() ? rulesEmployee : rules,
-  formData
-);
+const validate: Ref<Validation> = useVuelidate(rules, formData);
 const isPasswordShown = ref<Boolean>(false);
 
 const validationForm = async () => {
@@ -65,22 +58,20 @@ const validationForm = async () => {
   if (!success) return;
 
   try {
-    const sendData = JSON.parse(JSON.stringify(formData));
-    if (!checkHrefSite()) {
-      sendData.phone = sendData.phone.replace(/\D/g, "");
-    }
-    const { data } = await login(sendData);
-    setAccessToken(data.access);
-    setRefreshToken(data.refresh);
+    // const sendData = JSON.parse(JSON.stringify(formData));
+    //   sendData.phone = sendData.phone.replace(/\D/g, "");
+    // const { data } = await login(sendData);
+    setAccessToken("dasdadw");
+    setRefreshToken("dasdas");
     let userAbilities = [{ subject: "all", action: "manage" }];
     localStorage.setItem("userAbilities", JSON.stringify(userAbilities));
     ability.update(userAbilities);
 
-    if (check("car_showroom")) {
-      router.push("/users");
-    } else {
-      router.push("/users");
-    }
+    // if (check("car_showroom")) {
+    router.push("/dashboard");
+    // } else {
+    //   router.push("/dashboard");
+    // }
     setTimeout(() => {
       toast.success(t("success"));
     }, 200);
@@ -99,44 +90,18 @@ const validationForm = async () => {
         <h2
           class="text-center text-4xl font-bold text-gray-700 dark:text-white"
         >
-          {{ $t("sign_in2") }}
+          {{ $t("global.login") }}
         </h2>
       </div>
 
       <div class="mt-8">
         <form @submit.prevent="validationForm">
-          <div v-if="checkHrefSite()">
+          <div>
             <div class="flex justify-between">
               <label
                 for="phone"
                 class="text-sm text-gray-600 dark:text-gray-200"
-                >{{ $t("Login") }}</label
-              >
-            </div>
-
-            <input
-              v-model="formData.phone"
-              id="username"
-              type="text"
-              name="username"
-              :placeholder="$t('Login')"
-              class="form-input"
-              :class="validate.phone.$errors.length ? 'required-input' : ''"
-            />
-            <p
-              v-for="error in validate.phone.$errors"
-              :key="error.$uid"
-              class="whitespace-nowrap text-danger text-sm"
-            >
-              {{ $t(error.$message) }}
-            </p>
-          </div>
-          <div v-else>
-            <div class="flex justify-between">
-              <label
-                for="phone"
-                class="text-sm text-gray-600 dark:text-gray-200"
-                >{{ $t("phone_number") }}</label
+                >{{ $t("global.phone_number") }}</label
               >
             </div>
             <input
@@ -166,7 +131,7 @@ const validationForm = async () => {
               <label
                 for="password"
                 class="text-sm text-gray-600 dark:text-gray-200"
-                >{{ $t("Password") }}</label
+                >{{ $t("global.password") }}</label
               >
             </div>
 
@@ -201,7 +166,7 @@ const validationForm = async () => {
 
           <div class="mt-12">
             <button type="submit" class="btn-primary w-full">
-              {{ $t("sign_in2") }}
+              {{ $t("global.login") }}
             </button>
           </div>
         </form>

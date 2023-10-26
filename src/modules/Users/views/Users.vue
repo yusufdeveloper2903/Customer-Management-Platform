@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { fields } from "../constants/index";
-import { onMounted, reactive, ref, watch } from "vue";
+import {fields} from "../constants/index";
+import {onMounted, reactive, ref, watch} from "vue";
 import DeleteUserModal from "../components/DeleteUserModal.vue";
 import UIkit from "uikit";
-import { useRouter } from "vue-router";
+import {useRouter} from "vue-router";
 import users from "../store/index";
-import { toast } from "vue3-toastify";
-import { formatCurrency, formatDate } from "@/mixins/features";
-import { formatPhoneNumber } from "../features";
-import { useI18n } from "vue-i18n";
+import {toast} from "vue3-toastify";
+import {formatPhoneNumber} from "../features";
+import {useI18n} from "vue-i18n";
 
-const { locale } = useI18n();
+const {locale} = useI18n();
 const store = users();
 const router = useRouter();
 let usersList = ref<object[]>([]);
@@ -40,7 +39,7 @@ const refresh = async (filter) => {
     usersList.value = store.usersList.results;
   } catch (error: any) {
     toast.error(
-      error.response.data.msg || error.response.data.error || "Error"
+        error.response.data.msg || error.response.data.error || "Error"
     );
   }
 
@@ -56,7 +55,7 @@ const current = ref<number>(1);
 const changePagionation = (e: number) => {
   paginationFilter.page = e;
   current.value = e;
-  refresh({ ...paginationFilter, ...filterUsers });
+  refresh({...paginationFilter, ...filterUsers});
 };
 
 const timeout = ref();
@@ -69,27 +68,27 @@ const searchByName = () => {
 };
 
 watch(
-  () => filterUsers.role,
-  () => {
-    refresh(filterUsers);
+    () => filterUsers.role,
+    () => {
+      refresh(filterUsers);
 
-    if (usersList.value.length <= 10) {
-      current.value = 1;
+      if (usersList.value.length <= 10) {
+        current.value = 1;
+      }
     }
-  }
 );
 
 watch(
-  () => filterUsers.search,
-  () => {
-    if (usersList.value.length <= 10) {
-      current.value = 1;
+    () => filterUsers.search,
+    () => {
+      if (usersList.value.length <= 10) {
+        current.value = 1;
+      }
     }
-  }
 );
 
 onMounted(async () => {
-  refresh(paginationFilter);
+  await refresh(paginationFilter);
 
   await store.getUsersRoles();
 });
@@ -101,47 +100,50 @@ onMounted(async () => {
       <div class="md:flex items-center justify-between mb-5">
         <form class="mb-4 md:flex items-center gap-5 md:w-5/12">
           <div class="md:w-1/2">
-            <label for="search" class="dark:text-gray-300">{{
-              $t("Search")
-            }}</label>
+            <label for="search" class="dark:text-gray-300">
+              {{ $t("Search") }}
+            </label>
+
             <input
-              id="search"
-              type="text"
-              class="form-input"
-              :placeholder="$t('Search')"
-              v-model="filterUsers.search"
-              @input="searchByName"
+                id="search"
+                type="text"
+                class="form-input"
+                :placeholder="$t('Search')"
+                v-model="filterUsers.search"
+                @input="searchByName"
             />
           </div>
 
           <div class="md:w-1/2 md:m-0 mt-2">
-            <label for="role" class="dark:text-gray-300">{{
-              $t("Role")
-            }}</label>
+            <label for="role" class="dark:text-gray-300">
+              {{ $t("Role") }}
+            </label>
+
             <v-select
-              :placeholder="$t('Role')"
-              :options="store.usersRolesList.results"
-              :getOptionLabel="(role) => role.name[locale]"
-              :reduce="(role) => role.id"
-              v-model="filterUsers.role"
+                :placeholder="$t('Role')"
+                :options="store.usersRolesList.results"
+                :getOptionLabel="(role) => role.name[locale]"
+                :reduce="(role) => role.id"
+                v-model="filterUsers.role"
             >
-              <template #no-options> {{ $t("no_matching_options") }} </template>
+              <template #no-options>{{ $t("no_matching_options") }}</template>
             </v-select>
           </div>
         </form>
         <button
-          class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-          @click="router.push('/add-user')"
+            class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
+            @click="router.push('/add-user')"
         >
           {{ $t("add") }}
         </button>
       </div>
+
       <EasyDataTable
-        theme-color="#7367f0"
-        hide-footer
-        :loading="isLoading"
-        :headers="fields"
-        :items="usersList"
+          theme-color="#7367f0"
+          hide-footer
+          :loading="isLoading"
+          :headers="fields"
+          :items="usersList"
       >
         <template #empty-message>
           <div class="dark:text-white">{{ $t("no_available_data") }}</div>
@@ -167,10 +169,6 @@ onMounted(async () => {
           {{ $t(header.text).toUpperCase() }}
         </template>
 
-        <template #header-scoring="header">
-          {{ $t(header.text).toUpperCase() }}
-        </template>
-
         <template #header-is_active="header">
           {{ $t(header.text).toUpperCase() }}
         </template>
@@ -181,17 +179,16 @@ onMounted(async () => {
 
         <template #item-name="items">
           <div class="py-3 flex items-center gap-3">
-            <img
-              v-if="items && items.photo"
-              class="w-[45px] h-[45px] rounded object-cover"
-              :src="items.photo"
-              alt="Rounded avatar"
+            <img v-if="items && items.photo"
+                 class="w-[45px] h-[45px] rounded object-cover"
+                 :src="items.photo"
+                 alt="Rounded avatar"
             />
             <div
-              v-else
-              class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded"
+                v-else
+                class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded"
             >
-              <Icon icon="User" color="#3ca14b" />
+              <Icon icon="User" color="#356c2d"/>
             </div>
 
             {{ items.name }}
@@ -215,76 +212,58 @@ onMounted(async () => {
         </template>
 
         <template #item-role="items">
-          <span
-            v-for="userRole in items.role"
-            class="rounded bg-primary px-4 p-1 pt-0.5 inline m-1 text-white"
-          >
+          <span v-for="userRole in items.role" class="badge-primary">
             {{ userRole.name[locale] }}
           </span>
         </template>
 
-        <template #item-scoring="items">
-          <div clas>
-            <span class="font-semibold text-info">
-              {{
-                items.scoring_date ? formatDate(items.scoring_date) : "- - -"
-              }}
-            </span>
-            <br />
-            <span class="mt-1 text-[16px] font-semibold text-success">
-              {{ items && formatCurrency(items.scoring_amount) }}
-              {{ $t("som") }}
-            </span>
-          </div>
-        </template>
-
         <template #item-is_active="items">
-          <label className="relative inline-flex items-center cursor-pointer">
+          <label class="relative inline-flex items-center cursor-pointer">
             <input
-              type="checkbox"
-              :checked="items.is_active"
-              disabled
-              class="sr-only peer"
+                type="checkbox"
+                :checked="items.is_active"
+                disabled
+                class="sr-only peer"
             />
             <div
-              className="w-11 h-6 bg-gray-200 peer-focus:outline-none 
-          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-            ></div>
+                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"/>
           </label>
         </template>
 
         <template #item-actions="items">
           <div class="flex">
             <button
-              class="btn-warning btn-action"
-              @click="
+                class="btn-warning btn-action"
+                @click="
                 router.push({ name: 'user detail', params: { id: items.id } })
               "
             >
-              <!-- <span uk-icon="icon: file-edit; ratio: 0.8"></span> -->
-              <Icon icon="Pen 2" color="#fff" size="16" />
+              <Icon icon="Pen New Square" color="#fff" size="16"/>
             </button>
             <button
-              class="ml-3 btn-danger btn-action"
-              @click="handleDeleteModal(items.id)"
+                class="ml-3 btn-danger btn-action"
+                @click="handleDeleteModal(items.id)"
             >
-              <Icon icon="Trash Bin Trash" color="#fff" size="16" />
+              <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
             </button>
           </div>
         </template>
       </EasyDataTable>
 
       <TwPagination
-        class="mt-10 tw-pagination"
-        :current="current"
-        :total="store.usersList.count"
-        :per-page="10"
-        :text-before-input="$t('go_to_page')"
-        :text-after-input="$t('forward')"
-        @page-changed="changePagionation"
+          class="mt-10 tw-pagination"
+          :current="current"
+          :total="store.usersList.count"
+          :per-page="10"
+          :text-before-input="$t('go_to_page')"
+          :text-after-input="$t('forward')"
+          @page-changed="changePagionation"
       />
 
-      <DeleteUserModal :userId="userId" @deleteUser="deleteUser" />
+      <DeleteUserModal
+          :userId="userId"
+          @deleteUser="deleteUser"
+      />
     </div>
   </div>
 </template>

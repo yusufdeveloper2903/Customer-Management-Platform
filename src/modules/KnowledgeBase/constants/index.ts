@@ -1,4 +1,4 @@
-export const fields = [
+export const categoryFields = [
   {
     text: "ID",
     value: "id",
@@ -17,21 +17,24 @@ export const fields = [
   },
 ];
 
-export const items = [
+export const categoryitems = [
   {
-    id: "1",
-    photo: "https://app.savda.uz:4040/media/category/atirlaruz.png",
+    id: 1,
+    photo: "https://picsum.photos/300",
     name: "Парфюм",
+    step_id: 1,
   },
   {
-    id: "2",
-    photo: "https://app.savda.uz:4040/media/category/kattalarUchunuz.png",
+    id: 2,
+    photo: "",
     name: "Для взрослых",
+    step_id: 2,
   },
   {
-    id: "3",
-    photo: "https://app.savda.uz:4040/media/category/aksessuarlaruz.png",
+    id: 3,
+    photo: "https://picsum.photos/300",
     name: "Аксессуары",
+    step_id: 3,
   },
 ];
 
@@ -60,25 +63,28 @@ export const introFields = [
 
 export const introItems = [
   {
-    id: "1",
-    photo: "https://app.savda.uz:4040/media/category/atirlaruz.png",
+    id: 1,
+    photo: "https://picsum.photos/300",
     name: "Парфюм",
     description:
       "Publish up your selfies to make yourself more beautiful with this app",
+    step_id: 1,
   },
   {
-    id: "2",
-    photo: "https://app.savda.uz:4040/media/category/kattalarUchunuz.png",
+    id: 2,
+    photo: "https://picsum.photos/300",
     name: "Для взрослых",
     description:
       "Publish up your selfies to make yourself more beautiful with this app",
+    step_id: 2,
   },
   {
-    id: "3",
-    photo: "https://app.savda.uz:4040/media/category/aksessuarlaruz.png",
+    id: 3,
+    photo: "",
     name: "Аксессуары",
     description:
       "Publish up your selfies to make yourself more beautiful with this app",
+    step_id: 3,
   },
 ];
 
@@ -101,7 +107,7 @@ export const splashFields = [
   },
   {
     text: "Status",
-    value: "status",
+    value: "is_active",
   },
   {
     text: "actions",
@@ -111,24 +117,82 @@ export const splashFields = [
 
 export const splashItems = [
   {
-    id: "1",
-    photo: "https://app.savda.uz:4040/media/category/atirlaruz.png",
+    id: 1,
+    photo: "https://picsum.photos/300",
     version: "1.16",
     time: "24-08-2023",
-    status: true,
+    is_active: true,
   },
   {
-    id: "2",
+    id: 2,
     photo: "",
     version: "1.14",
     time: "24-08-2023",
-    status: false,
+    is_active: false,
   },
   {
-    id: "3",
+    id: 3,
     photo: "",
     version: "1.12",
     time: "24-08-2023",
-    status: false,
+    is_active: false,
+  },
+];
+
+export const locationFields = [
+  {
+    text: "ID",
+    value: "id",
+  },
+  {
+    text: "Title",
+    value: "title",
+  },
+  {
+    text: "Kordinates",
+    value: "kordinates",
+  },
+  {
+    text: "Address",
+    value: "address",
+  },
+  {
+    text: "Phone Number",
+    value: "phone",
+  },
+  {
+    text: "Work hours",
+    value: "workHours",
+  },
+  {
+    text: "actions",
+    value: "actions",
+  },
+];
+
+export const locationItems = [
+  {
+    id: 1,
+    title: "Chilonzor",
+    kordinates: "44.000000, 61.00000",
+    address: "Muqumiy kocha",
+    phone: "+998 99 777 01 01",
+    workHours: "08:00 - 23:00",
+  },
+  {
+    id: 2,
+    title: "Olmazor",
+    kordinates: "44.000000, 61.00000",
+    address: "Xorazm kocha",
+    phone: "+998 99 777 01 01",
+    workHours: "08:00 - 23:00",
+  },
+  {
+    id: 3,
+    title: "Shayxontoxur",
+    kordinates: "44.000000, 61.00000",
+    address: "Alisher navoiy kocha",
+    phone: "+998 99 777 01 01",
+    workHours: "08:00 - 23:00",
   },
 ];

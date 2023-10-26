@@ -1,7 +1,9 @@
-import store from './store'
-import router from './router'
+import { defineStore } from "pinia";
 
-export default {
-  store,
-  router,
-}
+export default defineStore("dashboard", {
+  state: () => {
+    return {};
+  },
+
+  actions: {},
+});

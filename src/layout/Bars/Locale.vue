@@ -20,7 +20,7 @@ function onChangeLocale(lang) {
       />
 
       <img
-        v-if="locale == 'uz' || locale == 'oz'"
+        v-if="locale == 'uz'"
         class="w-[48px]"
         src="@/assets/image/flags/uz.png"
         alt="uz"
@@ -32,7 +32,7 @@ function onChangeLocale(lang) {
       class="bg-white dark:text-gray-300 p-0 py-2"
     >
       <div
-        class="p-3 hover:bg-primary/10 hover:text-primary"
+        class="p-3 hover:bg-primary/20 hover:text-primary"
         @click="onChangeLocale('ru')"
       >
         <img
@@ -55,7 +55,7 @@ function onChangeLocale(lang) {
         <span>Uzbek</span>
       </div>
 
-      <div
+      <!-- <div
         class="p-3 hover:bg-primary/10 hover:text-primary"
         @click="onChangeLocale('oz')"
       >
@@ -65,7 +65,7 @@ function onChangeLocale(lang) {
           alt="oz"
         />
         <span>Ўзбек</span>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

@@ -15,7 +15,7 @@
     </div>
 
     <div
-      class="right-sidebar shadow-2xl w-16 bg-[#051e34] dark:bg-darkLayoutStorm py-5 text-white"
+      class="right-sidebar shadow-2xl w-16 bg-primary dark:bg-darkLayoutStorm py-5 text-white"
       :class="checkMiniSidebar()"
     >
       <Minisidebar />

@@ -6,7 +6,6 @@ import {
   UsersRolesList,
   User,
   Regions,
-  userCards,
 } from "../interfaces";
 
 export default defineStore("users", {
@@ -16,7 +15,6 @@ export default defineStore("users", {
       usersRolesList: {} as UsersRolesList,
       user: {} as User,
       regions: {} as Regions,
-      userCards: {} as userCards,
     };
   },
 
@@ -51,36 +49,6 @@ export default defineStore("users", {
       const { data } = await $axios.get("/knowledge_base/regions/", {params});
       this.regions = data;
       return data;
-    },
-
-    async getUserCards(id: number) {
-      const { data } = await $axios.get(`/users/user-cards/${id}/`);
-      this.userCards = data;
-    },
-
-    createUserCard(data) {
-      return $axios.post(`/users/user-card/`, data);
-    },
-
-    updateUserCard(data) {
-      return $axios.patch(`/users/user-card/${data.id}/`, data);
-    },
-
-    deleteUserCard(id: number) {
-      return $axios.delete(`/users/user-card/${id}/`);
-    },
-
-    // change user phone
-    updateUserPhone(phone) {
-      return $axios.post(`/users/change_user_phone/`, phone);
-    },
-
-    smsCodeToUpdateUserPhone(data) {
-      return $axios.post(`/users/change_user_phone/check_sms_code/`, data);
-    },
-
-    checkScoring(id) {
-      return $axios.post(`/users/scoring/${id}/`, id);
     },
   },
 });

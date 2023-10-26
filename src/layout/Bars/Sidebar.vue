@@ -1,9 +1,12 @@
 <template>
   <div
-    class="sidebar bg-[#051e34] dark:bg-darkLayoutStorm"
+    class="sidebar bg-primary dark:bg-darkLayoutStorm"
     :class="{ open: sidebar.isSidebarOpen }"
   >
-    <div class="logo-details bg-[#051e34] dark:bg-darkLayoutStorm">
+    <div class="logo-details bg-primary dark:bg-darkLayoutStorm">
+      <div class="w-16 h-16 mt-6 ml-3" v-if="sidebar.isSidebarOpen">
+        <img src="../../assets/havas/logo.svg" alt="" />
+      </div>
       <div class="logo_name">
         <span v-if="sidebar.isSidebarOpen">Havas</span>
       </div>
@@ -19,7 +22,7 @@
               (isOpenLink[index] &&
                 sidebar.isSidebarOpen &&
                 'open_dropdown multiple-item') ||
-              ($route.path === route.path && 'bg-[#ffffff1e]')
+              ($route.path === route.path && 'active-module')
             "
           >
             <a
@@ -28,7 +31,7 @@
               v-if="check(route.permissions)"
             >
               <i class="flex w-[30px] items-center justify-center text-white">
-                <Icon :icon="route.icon" color="#fff" />
+                <Icon :icon="route.icon" :color="$route.path === route.path ? '#FFCC00' : '#fff'" />
               </i>
               <span class="links_name">
                 {{ $t(route.name) }}
@@ -67,9 +70,11 @@
                   <i
                     class="flex w-[30px] items-center justify-center text-white"
                   >
-                    <Icon :icon="child.icon" color="#fff" size="16" />
+                    <Icon :icon="child.icon" :color="$route.path === child.path ? '#FFCC00' : '#fff'" size="16" />
                   </i>
-                  {{ $t(child.name) }}
+                  <span :class="$route.path === child.path && 'text-warning'">
+                    {{ $t(child.name) }}
+                  </span>
                 </template>
               </router-link>
             </span>
@@ -161,3 +166,17 @@ onMounted(() => {
   }
 });
 </script>
+
+<style scoped lang="scss"> 
+.active-module {
+  background: rgba(255, 204, 0, 0.10);
+
+  a {
+    color: #FFCC00 !important;
+  }
+
+  .links_name {
+    transition: none !important;
+  }
+}
+</style>

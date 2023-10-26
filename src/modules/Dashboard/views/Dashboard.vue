@@ -7,10 +7,12 @@ import Products from "../components/Products/Products.vue";
 <template>
   <div>
     <Statistics />
+
     <div class="flex justify-between mt-5 gap-5">
       <div class="w-1/3">
         <Activities />
       </div>
+
       <div class="w-2/3">
         <Products />
       </div>

@@ -16,7 +16,7 @@ import Locale from "@/layout/Bars/Locale.vue";
         </div>
 
         <div
-          class="bg-white flex items-center gap-4 dark:bg-darkLayoutMain pt-3 pb-3 px-4 rounded-md"
+          class="flex items-center gap-4 bg-primary dark:bg-darkLayoutMain pt-3 pb-3 px-4 rounded-md"
         >
           <ThemeTogler />
 
