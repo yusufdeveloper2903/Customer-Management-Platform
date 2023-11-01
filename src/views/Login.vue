@@ -7,13 +7,12 @@ import { setAccessToken } from "@/auth/jwtService";
 import { setRefreshToken } from "@/auth/jwtService";
 import ability from "@/plugins/casl/ability";
 import useVuelidate, { Validation } from "@vuelidate/core";
-import { required, helpers, minLength } from "@vuelidate/validators";
-import { validateMessage } from "@/plugins/validations/utils";
+import { required, helpers } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n";
-import { check } from "@/mixins/permissions";
+// import { check } from "@/mixins/permissions";
 
 interface Login {
-  phone: string;
+  username: string;
   password: string;
 }
 
@@ -21,18 +20,14 @@ const router = useRouter();
 const { t } = useI18n();
 
 let formData = reactive<Login>({
-  phone: "+998",
+  username: "",
   password: "",
 });
 
 const rules = computed(() => {
   return {
-    phone: {
+    username: {
       required: helpers.withMessage("required", required),
-      minLength: helpers.withMessage(
-        validateMessage("minLength", { minLength: 12 }),
-        minLength(17)
-      ),
     },
     password: {
       required: helpers.withMessage("required", required),
@@ -40,16 +35,6 @@ const rules = computed(() => {
   };
 });
 
-const rulesEmployee = computed(() => {
-  return {
-    phone: {
-      required: helpers.withMessage("required", required),
-    },
-    password: {
-      required: helpers.withMessage("required", required),
-    },
-  };
-});
 const validate: Ref<Validation> = useVuelidate(rules, formData);
 const isPasswordShown = ref<Boolean>(false);
 
@@ -58,11 +43,11 @@ const validationForm = async () => {
   if (!success) return;
 
   try {
-    // const sendData = JSON.parse(JSON.stringify(formData));
+    const sendData = JSON.parse(JSON.stringify(formData));
     //   sendData.phone = sendData.phone.replace(/\D/g, "");
-    // const { data } = await login(sendData);
-    setAccessToken("dasdadw");
-    setRefreshToken("dasdas");
+    const { data } = await login(sendData);
+    setAccessToken(data.access);
+    setRefreshToken(data.refresh);
     let userAbilities = [{ subject: "all", action: "manage" }];
     localStorage.setItem("userAbilities", JSON.stringify(userAbilities));
     ability.update(userAbilities);
@@ -99,26 +84,22 @@ const validationForm = async () => {
           <div>
             <div class="flex justify-between">
               <label
-                for="phone"
+                for="login"
                 class="text-sm text-gray-600 dark:text-gray-200"
-                >{{ $t("global.phone_number") }}</label
+                >{{ $t("global.login") }}</label
               >
             </div>
             <input
-              v-model="formData.phone"
-              v-maska
-              data-maska="+998 ## ### ## ##"
-              id="phone"
-              pattern="[0-9 +]*"
-              inputmode="numeric"
+              v-model="formData.username"
+              id="login"
               type="text"
-              name="phone"
-              placeholder="+998 ## ### ## ##"
+              name="login"
+              placeholder="Login"
               class="form-input"
-              :class="validate.phone.$errors.length ? 'required-input' : ''"
+              :class="validate.username.$errors.length ? 'required-input' : ''"
             />
             <p
-              v-for="error in validate.phone.$errors"
+              v-for="error in validate.username.$errors"
               :key="error.$uid"
               class="whitespace-nowrap text-danger text-sm"
             >

@@ -7,7 +7,6 @@ import { helpers, minLength, required } from "@vuelidate/validators";
 
 // store
 const store = staff()
-console.log(store)
 
 // variables
 const { locale } = useI18n();
@@ -23,7 +22,8 @@ const userData = reactive({
   username: "",
   password: "",
   role: null,
-  is_active: true
+  is_active: true,
+  photo: ""
 })
 
 // required fields
@@ -49,10 +49,25 @@ const validate: Ref<Validation> = useVuelidate(rules, userData);
 
 
 // functions
-const handleFileUpload = () => {}
-const deleteImage = () => {}
+const handleFileUpload = (event) => {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+
+  reader.onload = (event: any) => {
+    imageUrl.value = event.target.result;
+    userData.photo = file;
+  };
+  reader.readAsDataURL(file);
+};
+
+const deleteImage = () => {
+  imageUrl.value = "";
+  userData.photo = "";
+};
 const saveUser = () => {}
 </script>
+
+
 
 <template>
   <div>

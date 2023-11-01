@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { toast } from "vue3-toastify";
-import users from "../store/index";
+import staff from "../store/index";
 import { useI18n } from "vue-i18n";
 
-const store = users();
+const store = staff();
 const { t } = useI18n();
 
 interface PropsUser {
@@ -14,7 +14,7 @@ const props = defineProps<PropsUser>();
 const emits = defineEmits(["deleteUser"]);
 const deleteUser = async () => {
   try {
-    await store.deleteUser(props.userId).then(() => {
+    await store.deleteStaff(props.userId).then(() => {
       emits("deleteUser");
       toast.success(t("deleted_successfully"));
     });

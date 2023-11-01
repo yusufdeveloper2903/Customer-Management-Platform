@@ -20,7 +20,7 @@ export default defineStore("users", {
 
   actions: {
     async getUsers(params) {
-      const { data } = await $axios.get("/users/users/", { params });
+      const { data } = await $axios.get("/users/users/", { params});
       this.usersList = data;
     },
 

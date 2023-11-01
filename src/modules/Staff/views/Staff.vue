@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, reactive, ref, watch} from "vue";
-import users from "../store/index";
-import {formatPhoneNumber} from "@/mixins/features";
+import staff from "../store/index";
+// import {formatPhoneNumber} from "@/mixins/features";
 import {fields} from "../constants/index";
 import UIkit from "uikit";
 import DeleteUserModal from "../components/DeleteUserModal.vue";
@@ -11,13 +11,14 @@ import {useI18n} from "vue-i18n";
 
 // variables
 const {locale} = useI18n();
-const store = users();
+const store = staff();
 const router = useRouter();
 const userId = ref<number | null>(null);
 const isLoading = ref(false);
 let usersList = ref<object[]>([]);
 const timeout = ref();
 const current = ref<number>(1);
+
 
 // filters
 const filterUsers = reactive({
@@ -90,6 +91,7 @@ watch(
 
 onMounted(async () => {
   await refresh(paginationFilter);
+  await store.getUsersRolesList()
 });
 </script>
 
@@ -118,8 +120,8 @@ onMounted(async () => {
             </label>
             <v-select
                 :placeholder="$t('Role')"
-                :options="[]"
-                :getOptionLabel="(role) => role.name[locale]"
+                :options="store.users_roles.results"
+                :getOptionLabel="(role) => role.name"
                 :reduce="(role) => role.id"
                 v-model="filterUsers.role"
             >
@@ -198,9 +200,10 @@ onMounted(async () => {
         </template>
 
         <template #item-phone="items">
-          <span>
+          <!-- <span>
             {{ formatPhoneNumber(items.phone) }}
-          </span>
+          </span> -->
+          {{ items.phone }}
         </template>
 
         <template #item-role="items">
@@ -248,9 +251,9 @@ onMounted(async () => {
       </EasyDataTable>
 
       <TwPagination
+        :total="store.staffsList.count"
           class="mt-10 tw-pagination"
           :current="current"
-          :total="store.staffsList.count"
           :per-page="10"
           :text-before-input="$t('go_to_page')"
           :text-after-input="$t('forward')"

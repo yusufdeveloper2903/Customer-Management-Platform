@@ -32,66 +32,65 @@ const handleDeleteModal = (id: number) => {
   UIkit.modal("#user-delete-modal").show();
 };
 
-const refresh = async (filter) => {
-  isLoading.value = true;
-  try {
-    await store.getUsers(filter);
-    usersList.value = store.usersList.results;
-  } catch (error: any) {
-    toast.error(
-        error.response.data.msg || error.response.data.error || "Error"
-    );
-  }
+// const refresh = async (filter) => {
+//   isLoading.value = true;
+//   try {
+//     await store.getUsers(filter);
+//     usersList.value = store.usersList.results;
+//   } catch (error: any) {
+//     toast.error(
+//         error.response.data.msg || error.response.data.error || "Error"
+//     );
+//   }
 
-  isLoading.value = false;
-};
+//   isLoading.value = false;
+// };
 
-const deleteUser = () => {
-  refresh(filterUsers);
-};
+// const deleteUser = () => {
+//   refresh(filterUsers);
+// };
 
-const current = ref<number>(1);
+// const current = ref<number>(1);
 
-const changePagionation = (e: number) => {
-  paginationFilter.page = e;
-  current.value = e;
-  refresh({...paginationFilter, ...filterUsers});
-};
+// const changePagionation = (e: number) => {
+//   paginationFilter.page = e;
+//   current.value = e;
+//   refresh({...paginationFilter, ...filterUsers});
+// };
 
-const timeout = ref();
+// const timeout = ref();
 
-const searchByName = () => {
-  clearTimeout(timeout.value);
-  timeout.value = setTimeout(() => {
-    refresh(filterUsers);
-  }, 500);
-};
+// const searchByName = () => {
+//   clearTimeout(timeout.value);
+//   timeout.value = setTimeout(() => {
+//     refresh(filterUsers);
+//   }, 500);
+// };
 
-watch(
-    () => filterUsers.role,
-    () => {
-      refresh(filterUsers);
+// watch(
+//     () => filterUsers.role,
+//     () => {
+//       refresh(filterUsers);
 
-      if (usersList.value.length <= 10) {
-        current.value = 1;
-      }
-    }
-);
+//       if (usersList.value.length <= 10) {
+//         current.value = 1;
+//       }
+//     }
+// );
 
-watch(
-    () => filterUsers.search,
-    () => {
-      if (usersList.value.length <= 10) {
-        current.value = 1;
-      }
-    }
-);
+// watch(
+//     () => filterUsers.search,
+//     () => {
+//       if (usersList.value.length <= 10) {
+//         current.value = 1;
+//       }
+//     }
+// );
 
-onMounted(async () => {
-  await refresh(paginationFilter);
+// onMounted(async () => {
+//   await refresh(paginationFilter);
 
-  await store.getUsersRoles();
-});
+// });
 </script>
 
 <template>
@@ -137,7 +136,7 @@ onMounted(async () => {
           {{ $t("add") }}
         </button>
       </div>
-
+ {{ usersList }}
       <EasyDataTable
           theme-color="#7367f0"
           hide-footer

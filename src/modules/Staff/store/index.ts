@@ -1,29 +1,34 @@
 import { defineStore } from "pinia";
 import $axios from "@/plugins/axios";
 
-import { IStaff, IStaffList } from "../interfaces";
+import { IStaff, Results, UsersRoles } from "../interfaces/index";
 
 export default defineStore("staff", {
   state: () => {
     return {
-      staffsList: {} as IStaffList,
-      staff: {} as IStaff,
+      staffsList: {
+          results: [] as IStaff[]
+      } as Results<IStaff>,
+
+      users_roles: {
+        results: [] as UsersRoles[]
+    } as Results<UsersRoles>,
     };
   },
 
   actions: {
     async getStaffs(params) {
       const { data } = await $axios.get("/users/users/", { params });
-      this.staffsList = data;
+      this.staffsList = data;  
     },
 
-    async getStaffById(id: number) {
-      const { data } = await $axios.get(`/staffs/staffs/${id}`);
-      this.staff = data;
-    },
+    // async getStaffById(id: number) {
+    //   const { data } = await $axios.get(`/staffs/staffs/${id}`);
+    //   this.staff = data;
+    // },
 
     createStaff(data: object) {
-      return $axios.post("/staffs/staffs/", data);
+      return $axios.post("/users/users/", data);
     },
 
     updateStaff(data) {
@@ -31,7 +36,13 @@ export default defineStore("staff", {
     },
 
     deleteStaff(id: number) {
-      return $axios.delete(`/staffs/staffs/${id}/`);
+      return $axios.delete(`/users/users/${id}/`);
+    },
+
+    // role
+    async getUsersRolesList() {
+      const { data } = await $axios.get("/users/roles/");
+      this.users_roles = data;  
     },
   },
 });
