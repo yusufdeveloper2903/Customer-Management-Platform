@@ -9,7 +9,7 @@ export const fields = [
   },
   {
     text: "full_name",
-    value: "name",
+    value: "full_name",
   },
   {
     text: "username",

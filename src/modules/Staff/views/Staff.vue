@@ -148,7 +148,7 @@ onMounted(async () => {
           <div class="dark:text-white">{{ $t("no_available_data") }}</div>
         </template>
 
-        <template #header-name="header">
+        <template #header-full_name="header">
           {{ $t(header.text).toUpperCase() }}
         </template>
 
@@ -180,7 +180,7 @@ onMounted(async () => {
           {{ $t(header.text).toUpperCase() }}
         </template>
 
-        <template #item-name="items">
+        <template #item-photo="items">
           <div class="py-3 flex items-center gap-3">
             <img
                 v-if="items && items.photo"
@@ -195,7 +195,6 @@ onMounted(async () => {
               <Icon icon="User" color="#356c2d"/>
             </div>
 
-            {{ items.name }}
           </div>
         </template>
 
@@ -208,10 +207,10 @@ onMounted(async () => {
 
         <template #item-role="items">
           <span
-              v-for="userRole in items.role"
+          v-if="items.role"
               class="rounded bg-primary px-4 p-1 pt-0.5 inline m-1 text-white"
           >
-            {{ userRole.name[locale] }}
+            {{ items.role.name }}
           </span>
         </template>
 

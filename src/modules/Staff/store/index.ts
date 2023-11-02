@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import $axios from "@/plugins/axios";
 
-import { IStaff, Results, UsersRoles } from "../interfaces/index";
+import { IStaff, Results, UsersRoles, StaffDetails } from "../interfaces/index";
 
 export default defineStore("staff", {
   state: () => {
@@ -13,6 +13,8 @@ export default defineStore("staff", {
       users_roles: {
         results: [] as UsersRoles[]
     } as Results<UsersRoles>,
+
+    staff: {} as StaffDetails
     };
   },
 
@@ -22,17 +24,17 @@ export default defineStore("staff", {
       this.staffsList = data;  
     },
 
-    // async getStaffById(id: number) {
-    //   const { data } = await $axios.get(`/staffs/staffs/${id}`);
-    //   this.staff = data;
-    // },
+    async getStaffById(id: number) {
+      const { data } = await $axios.get(`/users/users/${id}`);
+      this.staff = data;
+    },
 
     createStaff(data: object) {
       return $axios.post("/users/users/", data);
     },
 
     updateStaff(data) {
-      return $axios.patch(`/staffs/staffs/${data.get("id")}/`, data);
+      return $axios.patch(`/users/users/${data.get("id")}/`, data);
     },
 
     deleteStaff(id: number) {
