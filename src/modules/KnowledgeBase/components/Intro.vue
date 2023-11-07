@@ -1,88 +1,88 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref} from "vue";
-import {toast} from "vue3-toastify";
-import {introFields, introItems} from "../constants";
-import IntroDetail from "./modals/IntroDetail.vue";
-import ConfirmModal from "@/components/ConfirmModals/ConfirmModal.vue";
-import {IIntro} from "../interfaces";
+// import {onMounted, reactive, ref} from "vue";
+// import {toast} from "vue3-toastify";
+// import {introFields, introItems} from "../constants";
+// import IntroDetail from "./modals/IntroDetail.vue";
+// import ConfirmModal from "@/components/ConfirmModals/ConfirmModal.vue";
+// import {IIntro} from "../interfaces";
 
-const current = ref<number>(1);
-const itemId = ref<number | null>(null);
-const isLoading = ref<boolean>(false);
+// const current = ref<number>(1);
+// const itemId = ref<number | null>(null);
+// const isLoading = ref<boolean>(false);
 
-const items = ref<IIntro[]>(introItems);
+// const items = ref<IIntro[]>(introItems);
 
-const paginationFilter = reactive({
-  page_size: 10,
-  page: 1,
-});
+// const paginationFilter = reactive({
+//   page_size: 10,
+//   page: 1,
+// });
 
-const currentRow = ref<IIntro | null>(null);
+// const currentRow = ref<IIntro | null>(null);
 
-const dragStart = (item) => {
-  currentRow.value = item;
-};
+// const dragStart = (item) => {
+//   currentRow.value = item;
+// };
 
-const dragOver = (e) => {
-  e.preventDefault();
-  e.target.style.backgroundColor = "inherit";
-};
+// const dragOver = (e) => {
+//   e.preventDefault();
+//   e.target.style.backgroundColor = "inherit";
+// };
 
-const dragDrop = (item: IIntro) => {
-  event?.preventDefault();
-  items.value = items.value.map((r) => {
-    if (r.id == item.id) {
-      return {...r, step_id: currentRow.value?.step_id || r.step_id};
-    }
+// const dragDrop = (item: IIntro) => {
+//   event?.preventDefault();
+//   items.value = items.value.map((r) => {
+//     if (r.id == item.id) {
+//       return {...r, step_id: currentRow.value?.step_id || r.step_id};
+//     }
 
-    if (r.id == currentRow.value?.id) {
-      return {...r, step_id: item.step_id || r.step_id};
-    }
+//     if (r.id == currentRow.value?.id) {
+//       return {...r, step_id: item.step_id || r.step_id};
+//     }
 
-    return r;
-  });
+//     return r;
+//   });
 
-  console.log(items.value);
-};
+//   console.log(items.value);
+// };
 
-const sortItems = (a, b) => {
-  if (a.step_id > b.step_id) {
-    return 1;
-  } else {
-    return -1;
-  }
-};
+// const sortItems = (a, b) => {
+//   if (a.step_id > b.step_id) {
+//     return 1;
+//   } else {
+//     return -1;
+//   }
+// };
 
-const changePagionation = (e: number) => {
-  paginationFilter.page = e;
-  current.value = e;
-  refresh({...paginationFilter});
-};
+// const changePagionation = (e: number) => {
+//   paginationFilter.page = e;
+//   current.value = e;
+//   refresh({...paginationFilter});
+// };
 
-const deleteCategory = () => {
-  console.log(itemId);
-};
+// const deleteCategory = () => {
+//   console.log(itemId);
+// };
 
-const refresh = async (filter) => {
-  isLoading.value = true;
-  try {
-    console.log(filter);
-  } catch (error: any) {
-    toast.error(
-        error.response.data.msg || error.response.data.error || "Error"
-    );
-  }
+// const refresh = async (filter) => {
+//   isLoading.value = true;
+//   try {
+//     console.log(filter);
+//   } catch (error: any) {
+//     toast.error(
+//         error.response.data.msg || error.response.data.error || "Error"
+//     );
+//   }
 
-  isLoading.value = false;
-};
+//   isLoading.value = false;
+// };
 
-onMounted(() => {
-  refresh(paginationFilter);
-});
+// onMounted(() => {
+//   refresh(paginationFilter);
+// });
 </script>
 
 <template>
-  <div class="card">
+  <!-- <div class="card">
     <div class="flex justify-between items-end mb-10">
       <label
           for="search"
@@ -181,5 +181,5 @@ onMounted(() => {
     >
       <p>Are you sure?</p>
     </ConfirmModal>
-  </div>
+  </div> -->
 </template>

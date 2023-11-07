@@ -4,7 +4,6 @@ import Tab from "@/components/Tab/Tab.vue";
 import Message from '@/modules/sms/components/smsTemplate/index.vue'
 import News from '@/modules/sms/components/news/index.vue'
 import Banner from '@/modules/sms/components/banner/index.vue'
-import Push from '@/modules/sms/components/push/indx.vue'
 
 </script>
 <template>
@@ -12,9 +11,6 @@ import Push from '@/modules/sms/components/push/indx.vue'
     <Tabs vertical pill>
       <Tab title="СМС рассылка">
         <Message/>
-      </Tab>
-      <Tab title="Push уведомления">
-        <Push/>
       </Tab>
       <Tab title="Новости">
         <News/>

@@ -149,20 +149,8 @@ export const locationFields = [
     value: "title",
   },
   {
-    text: "Kordinates",
-    value: "kordinates",
-  },
-  {
-    text: "Address",
-    value: "address",
-  },
-  {
-    text: "Phone Number",
-    value: "phone",
-  },
-  {
-    text: "Work hours",
-    value: "workHours",
+    text: "Description",
+    value: "description"
   },
   {
     text: "actions",
@@ -174,25 +162,13 @@ export const locationItems = [
   {
     id: 1,
     title: "Chilonzor",
-    kordinates: "44.000000, 61.00000",
-    address: "Muqumiy kocha",
-    phone: "+998 99 777 01 01",
-    workHours: "08:00 - 23:00",
   },
   {
     id: 2,
     title: "Olmazor",
-    kordinates: "44.000000, 61.00000",
-    address: "Xorazm kocha",
-    phone: "+998 99 777 01 01",
-    workHours: "08:00 - 23:00",
   },
   {
     id: 3,
     title: "Shayxontoxur",
-    kordinates: "44.000000, 61.00000",
-    address: "Alisher navoiy kocha",
-    phone: "+998 99 777 01 01",
-    workHours: "08:00 - 23:00",
   },
 ];

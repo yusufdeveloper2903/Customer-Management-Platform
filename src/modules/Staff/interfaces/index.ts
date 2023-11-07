@@ -1,10 +1,8 @@
 export interface Results<T> {
-  // data: {
     count: number;
     next: number | null;
     previous: number | null;
     results: T[];
-  // }
 }
 
 export interface IStaff {

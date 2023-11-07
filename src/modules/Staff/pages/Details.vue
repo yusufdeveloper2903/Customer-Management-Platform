@@ -43,12 +43,6 @@ onMounted(async () => {
         imageUrl.value = store.staff.photo;
         userData.value.photo = null;
       }
-
-      // if (store.user.role[0].unique_name === "car_showroom") {
-      //   isDiller.value = true;
-      // } else {
-      //   isDiller.value = false;
-      // }
     });
   }
 });
@@ -56,7 +50,6 @@ onMounted(async () => {
 
 // required fields
 const rules = computed(() => {
-  // console.log(userData.value.phone, "phonenumber");
   return {
    phone: {     
       required: helpers.withMessage("required", required),

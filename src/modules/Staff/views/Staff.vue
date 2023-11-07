@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {onMounted, reactive, ref, watch} from "vue";
 import staff from "../store/index";
-// import {formatPhoneNumber} from "@/mixins/features";
 import {fields} from "../constants/index";
 import UIkit from "uikit";
 import DeleteUserModal from "../components/DeleteUserModal.vue";
@@ -199,9 +198,6 @@ onMounted(async () => {
         </template>
 
         <template #item-phone="items">
-          <!-- <span>
-            {{ formatPhoneNumber(items.phone) }}
-          </span> -->
           {{ items.phone }}
         </template>
 
