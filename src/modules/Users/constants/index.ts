@@ -1,30 +1,22 @@
 export const fields = [
   {
     text: "Full Name",
-    value: "name",
-  },
-  {
-    text: "Login",
-    value: "username",
+    value: "full_name",
   },
   {
     text: "phone_number",
     value: "phone",
   },
   {
-    text: "region",
-    value: "region",
+    text: "created date",
+    value: "created_date"
   },
   {
-    text: "Role",
-    value: "role",
+    text: "Last visit",
+    value: "last_login"
   },
   {
     text: "Status",
     value: "is_active",
-  },
-  {
-    text: "actions",
-    value: "actions",
   },
 ];

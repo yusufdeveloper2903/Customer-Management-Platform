@@ -20,12 +20,12 @@ export default defineStore("users", {
 
   actions: {
     async getUsers(params) {
-      const { data } = await $axios.get("/users/users/", { params});
+      const { data } = await $axios.get("/clients/client/", { params});
       this.usersList = data;
     },
 
     async getUserById(id: number) {
-      const { data } = await $axios.get(`/users/users/${id}`);
+      const { data } = await $axios.get(`/clients/client/${id}`);
       this.user = data;
     },
 

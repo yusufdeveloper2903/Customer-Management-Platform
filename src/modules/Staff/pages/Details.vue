@@ -319,6 +319,5 @@ const saveUser = async () => {
         </div>
       </div>
     </div>
-    {{ userData }}
   </div>
 </template>

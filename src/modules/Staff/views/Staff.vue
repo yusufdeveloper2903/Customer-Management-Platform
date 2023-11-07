@@ -7,10 +7,10 @@ import UIkit from "uikit";
 import DeleteUserModal from "../components/DeleteUserModal.vue";
 import {useRouter} from "vue-router";
 import {toast} from "vue3-toastify";
-import {useI18n} from "vue-i18n";
+// import {useI18n} from "vue-i18n";
 
 // variables
-const {locale} = useI18n();
+// const {locale} = useI18n();
 const store = staff();
 const router = useRouter();
 const userId = ref<number | null>(null);
