@@ -150,7 +150,7 @@ export const locationFields = [
   },
   {
     text: "Description",
-    value: "description"
+    value: "description",
   },
   {
     text: "actions",
@@ -170,5 +170,32 @@ export const locationItems = [
   {
     id: 3,
     title: "Shayxontoxur",
+  },
+];
+
+export const newsTemplateTable = [
+  {
+    text: "ID",
+    value: "id",
+  },
+  {
+    text: "Title",
+    value: "title",
+  },
+  {
+    text: "Description",
+    value: "description",
+  },
+  {
+    text: "Photo",
+    value: "photo",
+  },
+  {
+    text: "Link",
+    value: "url",
+  },
+  {
+    text: "actions",
+    value: "actions",
   },
 ];
