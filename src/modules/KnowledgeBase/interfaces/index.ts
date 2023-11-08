@@ -23,8 +23,7 @@
 //   is_active: boolean;
 // }
 
-
-// sms template 
+// sms template
 export interface Results<T> {
   count: number;
   next: number | null;
@@ -44,3 +43,21 @@ export interface SmsTemplate {
   };
 }
 
+export interface NewsTemplate {
+  id?: number;
+  title: {
+    uz: string | null;
+    ru: string | null;
+  };
+  description: {
+    uz: string | null;
+    ru: string | null;
+  };
+  file: null | string;
+  url: string;
+}
+
+export interface Params {
+  page?: number;
+  page_size?: number;
+}
