@@ -15,8 +15,8 @@ const changePagionation = () => {};
       <button class="btn-primary" uk-toggle="target: #banner-detail">
         {{ $t("global.add") }}
       </button>
+      uyuyuiyyui
     </div>
-
     <EasyDataTable
       theme-color="#7367f0"
       hide-footer
@@ -24,7 +24,7 @@ const changePagionation = () => {};
       :headers="fields"
       :items="newsItems"
     >
-      <template #item-actions="items">
+      <template #item-actions="">
         <div class="flex my-2">
           <button class="btn-warning btn-action">
             <Icon icon="Pen New Square" color="#fff" size="16" />

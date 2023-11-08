@@ -8,7 +8,7 @@ import Banner from "../components/Banner.vue";
 
 <template>
   <div class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm">
-    <Tabs vertical pill>dsadsadsadas
+    <Tabs vertical pill>
       <Tab title="News">
         <News />
       </Tab>

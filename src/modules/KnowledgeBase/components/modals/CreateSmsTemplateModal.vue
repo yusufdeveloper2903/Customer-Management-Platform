@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Ref, ref, computed, inject, watch } from "vue";
+import { Ref, ref, computed } from "vue";
 import UIkit from "uikit";
 import { useI18n } from "vue-i18n";
 import { toast } from "vue3-toastify";

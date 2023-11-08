@@ -1,60 +1,216 @@
-<script setup>
-import {ref} from "vue";
-import {useI18n} from "vue-i18n";
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import AddEditModal from './AddEditModal.vue'
+import { bannerFields } from "../../constants/index"
+import knowledgeBase from "../../store/index"
+import { onMounted, ref, reactive, watch } from "vue";
+import { toast } from "vue3-toastify";
+import DeleteBanner from "./DeleteBannerModal.vue"
+import UIkit from "uikit";
 
-const {t, locale} = useI18n()
+const { t } = useI18n()
+const store = knowledgeBase()
+const bannerList = ref<object[]>([]);
+const isLoading = ref(false);
+const timeout = ref();
+const current = ref<number>(1);
+const bannerId = ref<number | null>(null)
 
-const openShowModal = ref(false)
-const loading = ref(false);
-const headers = [
-  {text: "id", value: "id"},
-  {text: "title", value: "title"},
-  {text: "Запланировать время", value: "schedule"},
-  {text: "Группа", value: "group"},
-  {text: "Фото", value: "photo"},
-  {text: "actions", value: "actions"},
-];
-const serverOptions = ref({
+const paginationFilter = reactive({
+  page_size: 10,
   page: 1,
-  rowsPerPage: 5
 });
 
-const headerItemClassNameFunction = (header) => {
-  if (header.value === "actions") return "move";
-  return "";
-};
-const openModal = () => {
-  openShowModal.value = !openShowModal.value
+const filterBanner = reactive({
+  page_size: 10,
+  search: "",
+  status: null,
+    start_time: null,
+    end_time: null,
+
+});
+
+interface EditData {
+  id: number | null,
+  title: {
+    uz: string,
+    ru: string
+  } 
+    file: string,
+    start_time: string,
+    end_time: string,
+    status: string
 }
+
+
+const editData = ref<EditData>({
+  id: null,
+    title: {
+      uz: "",
+      ru: ""
+    },
+    file: "",
+    start_time: "",
+    end_time: "",
+    status: ""
+})
+
+const refresh = async (filter) => {
+  isLoading.value = true;
+  try {
+    await store.getBanner(filter)
+    bannerList.value = store.bannerList.results;
+  } catch (error: any) {
+    toast.error(
+      error.response.data.msg || error.response.data.error || "Error"
+    );
+  }
+
+  isLoading.value = false;
+};
+
+const changePagionation = (e: number) => {
+  paginationFilter.page = e;
+  current.value = e;
+  refresh({ ...paginationFilter, ...filterBanner });
+};
+
+const searchByTitle = () => {
+  clearTimeout(timeout.value);
+  timeout.value = setTimeout(() => {
+    refresh(filterBanner);
+  }, 500);
+};
+
+const saveBanner = () => {
+  refresh(filterBanner);
+}
+
+const handleDeleteModal = (id: number) => {
+  bannerId.value = id;
+  UIkit.modal("#banner-delete-modal").show();
+};
+
+const deleteBanner = () => {
+  refresh(filterBanner);
+};
+
+watch(
+  () => filterBanner.search,
+  () => {
+    if (bannerList.value.length <= 10) {
+      current.value = 1;
+    }
+  }
+);
+
+watch(
+  
+    () => filterBanner.start_time , 
+    () => {
+      refresh(filterBanner);
+      console.log(filterBanner.start_time);
+      
+      if (bannerList.value.length <= 10) {
+        current.value = 1;
+      }
+    },
+
+);
+
+watch(
+  
+    () => filterBanner.end_time , 
+    () => {
+      refresh(filterBanner);
+      console.log(filterBanner.end_time);
+      
+      if (bannerList.value.length <= 10) {
+        current.value = 1;
+      }
+    },
+
+);
+
+watch(
+  
+    () => filterBanner.status , 
+    () => {
+      refresh(filterBanner);
+      console.log(filterBanner.status);
+      
+      if (bannerList.value.length <= 10) {
+        current.value = 1;
+      }
+    },
+
+);
+
+onMounted(async () => {
+  await refresh(paginationFilter);
+  await store.getStatus()
+});
 </script>
+
 <template>
   <div>
-    <div class="flex justify-between items-end  my-2 mb-12">
-      <label for="default" class="text-gray-700 select-none font-medium w-1/4">
-        {{ $t('Search') }}
-        <input id="default" type="text" name="default" class="form-input"/>
-      </label>
 
-      <button
-          @click="openModal"
-          class="rounded-md bg-success px-8 py-2 text-white duration-100 hover:shadow-[0px_8px_25px_-8px_#67f07b] active:shadow-none">
-        {{ $t('Add') }}
-      </button>
+
+      <div class="md:flex items-center justify-between mb-5">
+        <form class="mb-4 md:flex items-center gap-5 md:w-9/12">
+          <div class="md:w-1/2">
+            <label for="search" class="dark:text-gray-300">
+              {{ $t("Search") }}
+            </label>
+            <input
+                id="search"
+                type="text"
+                class="form-input"
+                :placeholder="$t('Search')"
+                v-model="filterBanner.search"
+                @input="searchByTitle"
+            />
+          </div>
+
+          <div class="md:w-1/2 md:m-0 mt-2">
+            <label for="role" class="dark:text-gray-300">
+              {{ $t("Status") }}
+            </label>
+            <v-select
+                :placeholder="$t('Status')"
+                :options="store.statusList.results"
+                v-model="filterBanner.status"
+                :getOptionLabel="(name) => name.title[$i18n.locale]"  
+                :reduce="(name) => name.id"
+                >
+              <template #no-options> {{ $t("no_matching_options") }}</template>
+            </v-select>
+          </div>
+
+          <div class="md:w-1/2 md:m-0 mt-2">
+            <label for="from" class="dark:text-gray-300">
+              {{ $t("from") }}
+            </label>
+            <VueDatePicker v-model="filterBanner.start_time"></VueDatePicker>
+          </div>
+
+          <div class="md:w-1/2 md:m-0 mt-2">
+            <label for="to" class="dark:text-gray-300">
+              {{ $t("to") }}
+            </label>
+            <VueDatePicker v-model="filterBanner.end_time" ></VueDatePicker>
+          </div>
+        </form>
+        <button
+            class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
+            @click="editData = {}"
+            uk-toggle="target: #bannerModal"
+        >
+          {{ $t("Add") }}
+        </button>
     </div>
 
-    <EasyDataTable
-        buttons-pagination
-        v-model:server-options="serverOptions"
-        theme-color="#7367f0"
-        :server-items-length="2"
-        :loading="loading"
-        class="user-table2"
-        :header-item-class-name="headerItemClassNameFunction"
-        :headers="headers"
-        items=""
-        :rows-items="[5, 10, 15]"
-        :rows-per-page="10" :rows-per-page-message="$t('pagination_text')">
+    <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="bannerFields" :items="bannerList">
 
       <template #empty-message>
         <span class="dark:text-neutral-400">{{ t('empty_text') }}</span>
@@ -64,25 +220,49 @@ const openModal = () => {
         {{ t(data.text).toUpperCase() }}
       </template>
 
-      <template #item-name="item">
-        {{ item.name[locale.valueOf()] }}
+      <template #item-title="item">
+        {{ item.title[$i18n.locale] }}
       </template>
 
+      <template #item-status="item">
+        <span
+          :class="item.status.unique_name == 'not_sent' ? 'rounded-md bg-danger px-4 pb-0.5 text-white' : item.status.unique_name == 'in_progress' ? 'rounded-md bg-warning px-4 pb-0.5 text-white' : 'rounded-md bg-primary px-4 pb-0.5 text-white'">{{
+            item.status.title[$i18n.locale] }}</span>
+      </template>
+
+      <template #item-from_to="item">
+        <div>{{ item.start_time }}</div>
+        <div>{{ item.end_time }}</div>
+      </template>
+
+      <template #item-photo="item">
+        <div class="py-3 flex items-center gap-3">
+          <img v-if="item.file" class="w-[45px] h-[45px] rounded object-cover" :src="item.file" alt="Rounded avatar" />
+          <div v-else
+            class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded">
+            <Icon icon="Camera" color="#356c2d" />
+          </div>
+        </div>
+      </template>
+
+
       <template #item-actions="item">
-        <div class="flex items-center justify-end gap-2">
-          <button class="btn-warning btn-action" @click="$router.push(`/form-detail/${item.id}`)">
-            <span uk-icon="icon: pencil" class="uk-icon"></span>
+        <div class="flex my-2">
+          <button class="btn-warning btn-action" uk-toggle="target: #bannerModal" @click="editData = item">
+            <!-- @click="editData = item" -->
+            <Icon icon="Pen New Square" color="#fff" size="16" />
           </button>
-          <button class="btn-danger btn-action">
-            <span uk-icon="icon: trash" class="uk-icon"></span>
+          <button class="ml-3 btn-danger btn-action" @click="handleDeleteModal(item.id)">
+            <Icon icon="Trash Bin Trash" color="#fff" size="16" />
           </button>
         </div>
       </template>
     </EasyDataTable>
 
-    <AddEditModal
-        @openModal="openModal"
-        :openShowModal="openShowModal"
-    />
+    <TwPagination class="mt-10 tw-pagination" :current="current" :total="store.bannerList.count" :per-page="10"
+      :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')" @page-changed="changePagionation" />
+
+    <AddEditModal  :editData="editData" @saveBanner="saveBanner"/>
+    <DeleteBanner  @deleteBanner="deleteBanner" :bannerId="bannerId"/>
   </div>
 </template>

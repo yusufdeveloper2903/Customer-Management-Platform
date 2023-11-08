@@ -1,23 +1,23 @@
 export const fields = [
   {
-    text: "№",
+    text: "ID",
     value: "id",
   },
   {
-    text: "full_name",
-    value: "name",
+    text: "Title",
+    value: "title",
   },
   {
-    text: "username",
-    value: "username",
+    text: "Photo",
+    value: "photo",
   },
   {
-    text: "phone_number",
-    value: "phone",
+    text: "Status",
+    value: "is_active",
   },
   {
-    text: "Role",
-    value: "role",
+    text: "from/to",
+    value: "from_to",
   },
   {
     text: "actions",
@@ -28,9 +28,9 @@ export const fields = [
 export const newsItems = [
   {
     id: 1,
-    full_name: "text",
-    username: "text",
-    phone_number: "text",
-    full_name: "text",
+    title: "text",
+    photo: "text",
+    is_active: "text",
+    from_to: "text",
   },
 ];
