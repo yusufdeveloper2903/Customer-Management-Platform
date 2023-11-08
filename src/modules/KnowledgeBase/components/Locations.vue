@@ -10,7 +10,7 @@ import { locationFields, locationItems } from "../constants";
         <input type="text" class="form-input" placeholder="Search" />
       </label>
       <button class="btn-primary" uk-toggle="target: #intro">
-        {{ $t("global.add") }}
+        {{ $t("Добавить") }}
       </button>
     </div>
 

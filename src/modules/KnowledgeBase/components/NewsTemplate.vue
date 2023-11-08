@@ -7,11 +7,15 @@ import { useI18n } from "vue-i18n";
 import UIKit from "uikit";
 import NewsTemplateModal from "../components/modals/NewsTemplateModal.vue";
 import { NewsTemplate } from "../interfaces";
+import { toast } from "vue3-toastify";
+import { watchDebounced } from "@vueuse/core";
 
 const store = knowledgeBase();
 const isLoading = ref(false);
 const { locale } = useI18n();
 const current = ref<number>(1);
+const search = ref<string>("");
+const itemToDelete = ref<number | null>(null);
 const dataToEdit = ref<NewsTemplate>({
   title: {
     uz: null,
@@ -27,28 +31,47 @@ const dataToEdit = ref<NewsTemplate>({
 
 // functions
 const refresh = async () => {
-  await store.getNewsTemplate({ page: current.value, page_size: 10 });
+  await store.getNewsTemplate({
+    page: current.value,
+    page_size: 10,
+    search: search.value,
+  });
 };
 
-const openModal = () => {
-  dataToEdit.value = {
-    title: {
-      uz: null,
-      ru: null,
-    },
-    description: {
-      uz: null,
-      ru: null,
-    },
-    file: null,
-    url: "",
-  };
+const openModal = (isEdit?: boolean, data?: NewsTemplate) => {
+  if (isEdit && data) {
+    dataToEdit.value = data;
+  } else {
+    dataToEdit.value = {
+      title: {
+        uz: null,
+        ru: null,
+      },
+      description: {
+        uz: null,
+        ru: null,
+      },
+      file: null,
+      url: "",
+    };
+  }
   nextTick(() => {
     UIKit.modal("#news_template").show();
   });
 };
 
+const deleteTemplate = async () => {
+  if (!itemToDelete.value) return;
+  await store.deleteNewsTemplate(itemToDelete.value);
+  UIKit.modal("#delete-template").hide();
+  refresh();
+
+  toast.success("Успешно удалено");
+};
+
 // hooks
+watchDebounced(() => search.value, refresh, { debounce: 600 });
+
 onMounted(() => {
   refresh();
 });
@@ -59,9 +82,14 @@ onMounted(() => {
     <div class="flex justify-between items-end mb-10">
       <label for="search" class="w-1/4">
         Search
-        <input type="text" class="form-input" placeholder="Search" />
+        <input
+          v-model="search"
+          type="text"
+          class="form-input"
+          placeholder="Search"
+        />
       </label>
-      <button class="btn-primary" @click="openModal">
+      <button class="btn-primary" @click="openModal(false)">
         {{ $t("Добавить") }}
       </button>
     </div>
@@ -85,12 +113,12 @@ onMounted(() => {
       <template #item-url="{ url }">
         <a :href="url" class="">{{ url }}</a>
       </template>
-      <template #item-photo="{ photo }">
+      <template #item-photo="{ file }">
         <div class="py-3 flex items-center gap-3">
           <img
-            v-if="photo"
+            v-if="file"
             class="w-[45px] h-[45px] rounded object-cover"
-            :src="photo"
+            :src="file"
             alt="Rounded avatar"
           />
           <div
@@ -101,15 +129,17 @@ onMounted(() => {
           </div>
         </div>
       </template>
-      <template #item-actions>
+      <template #item-actions="data">
         <div class="flex my-4">
-          <button
-            class="btn-warning btn-action"
-            uk-toggle="target: #sms_template"
-          >
+          <button class="btn-warning btn-action" @click="openModal(true, data)">
             <Icon icon="Pen New Square" color="#fff" size="16" />
           </button>
-          <button class="ml-3 btn-danger btn-action">
+          <button
+            class="ml-3 btn-danger btn-action"
+            @click="
+              UIKit.modal('#delete-template').show(), (itemToDelete = data.id)
+            "
+          >
             <Icon icon="Trash Bin Trash" color="#fff" size="16" />
           </button>
         </div>
@@ -128,14 +158,14 @@ onMounted(() => {
   </div>
   <ConfirmModal
     id="delete-template"
-    :title="$t('confirmation')"
-    :ok="$t('confirm')"
-    :cancel="$t('cancel2')"
+    :title="$t('Подтвердите')"
+    :ok="$t('Удалить')"
+    :cancel-class="'btn-success'"
+    :okClass="'btn-danger'"
+    :cancel="$t('Отмена')"
+    @ok="deleteTemplate"
   >
-    {{ $t("Реально хотите закрыть спринт?") }}
+    {{ $t("Реально хотите удалить шаблон?") }}
   </ConfirmModal>
-  <NewsTemplateModal :edit-data="dataToEdit" />
-  <!-- <DeleteSmsTemplate :userId="userId" @deleteSmsTemplate="deleteSmsTemplate" />
-
-  <CreateSmsTemplate @saveSmsTemplate="saveSmsTemplate" :editData="editData" /> -->
+  <NewsTemplateModal :edit-data="dataToEdit" @refresh="refresh" />
 </template>

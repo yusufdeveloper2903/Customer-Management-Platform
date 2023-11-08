@@ -44,7 +44,14 @@ export default defineStore("knowledgeBase", {
     },
 
     createNewsTemplate(data: NewsTemplate) {
-      return $axios.post(`/knowledge_base/sms_template/`);
+      return $axios.post(`/knowledge_base/news_template/`, data);
+    },
+
+    updateNewsTemplate(data) {
+      return $axios.patch(`/knowledge_base/news_template/${data.id || data.get('id')}/`, data);
+    },
+    deleteNewsTemplate(id: number) {
+      return $axios.delete(`/knowledge_base/news_template/${id}/`);
     },
   },
 });
