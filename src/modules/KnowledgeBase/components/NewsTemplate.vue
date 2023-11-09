@@ -69,6 +69,11 @@ const deleteTemplate = async () => {
   toast.success("Успешно удалено");
 };
 
+const changePagination = async (page: number) => {
+  current.value = page;
+  refresh();
+};
+
 // hooks
 watchDebounced(() => search.value, refresh, { debounce: 600 });
 
@@ -153,7 +158,7 @@ onMounted(() => {
       :per-page="10"
       :text-before-input="$t('go_to_page')"
       :text-after-input="$t('forward')"
-      @page-changed="refresh"
+      @page-changed="changePagination"
     />
   </div>
   <ConfirmModal
