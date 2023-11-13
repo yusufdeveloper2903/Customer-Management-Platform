@@ -1,7 +1,7 @@
 <script setup>
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
-import Message from '@/modules/sms/components/smsTemplate/index.vue'
+import Message from '@/modules/sms/components/smsSending/index.vue'
 import News from '@/modules/sms/components/news/index.vue'
 import Banner from '@/modules/sms/components/banner/index.vue'
 

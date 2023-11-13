@@ -36,6 +36,73 @@ export interface Results<T> {
     }
   }
 
+//   news
+export interface News {
+    id: number;
+    start_time: string;
+    title: {
+        ru: string;
+        uz: string;
+    },
+    description: {
+        ru: string;
+        uz: string;
+    };
+    file: string | null;
+    url_title: null | string,
+    url: string | null,
+    enable_push_notify: boolean;
+    template: {
+        id: number;
+        title: {
+            ru: string;
+            uz: string;
+        }
+        description: {
+            ru: string;
+            uz: string;
+        };
+        file: string | null;
+        url: string | null;
+    }
+    status: null | string
+}
+
+// sms sending
+export interface SmsSending {
+    id: number;
+    start_time: string | null
+    title: {
+        ru: string;
+        uz: string;
+    },
+    description: {
+        ru: string;
+        uz: string;
+    };
+    template: {
+        id: number;
+        title: {
+            ru: string;
+            uz: string;
+        }
+        description: {
+            ru: string;
+            uz: string;
+        };
+        file: string | null;
+        url: string | null;
+    }
+    status: {
+        id: number;
+        title: {
+            ru: string | null;
+            uz: string | null
+        }
+        unique_name: string
+    }
+}
+
 //   status
 export interface Status {
     id: number;

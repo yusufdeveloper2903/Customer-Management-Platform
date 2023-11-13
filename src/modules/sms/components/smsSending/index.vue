@@ -1,31 +1,31 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import AddEditModal from './AddEditModal.vue'
-import { newsFields } from "../../constants/index"
+// import AddEditModal from './AddEditModal.vue'
+import { smsFields       } from "../../constants/index"
 import knowledgeBase from "../../store/index"
 import { onMounted, ref, reactive, watch } from "vue";
 import { toast } from "vue3-toastify";
-import DeleteNewsModal from "./DeleteNewsModal.vue";
+import DeleteSmsSendingModal from "./DeleteSmsSending.vue";
 import UIkit from "uikit";
 
 const { t } = useI18n()
 const store = knowledgeBase()
-const newsList = ref<object[]>([]);
+const smsSendingList = ref<object[]>([]);
 const isLoading = ref(false);
 const timeout = ref();
 const current = ref<number>(1);
-const newsId = ref<number | null>(null)
+const smsId = ref<number | null>(null)
 
 const paginationFilter = reactive({
   page_size: 10,
   page: 1,
 });
 
-const filterNews = reactive({
+const filterSmsSending = reactive({
   page_size: 10,
   search: "",
   status: null,
-    start_time: null,
+  start_time: null,
 
 });
 
@@ -35,7 +35,6 @@ interface EditData {
     uz: string,
     ru: string
   } 
-    file: string,
     start_time: string,
     status: string
 }
@@ -47,7 +46,6 @@ const editData = ref<EditData>({
       uz: "",
       ru: ""
     },
-    file: "",
     start_time: "",
     status: ""
 })
@@ -55,8 +53,8 @@ const editData = ref<EditData>({
 const refresh = async (filter) => {
   isLoading.value = true;
   try {
-    await store.getNews(filter)
-    newsList.value = store.newsList.results;
+    await store.getSmsSending(filter)
+    smsSendingList.value = store.smsSendingList.results;
   } catch (error: any) {
     toast.error(
       error.response.data.msg || error.response.data.error || "Error"
@@ -69,33 +67,33 @@ const refresh = async (filter) => {
 const changePagionation = (e: number) => {
   paginationFilter.page = e;
   current.value = e;
-  refresh({ ...paginationFilter, ...filterNews });
+  refresh({ ...paginationFilter, ...filterSmsSending });
 };
 
 const searchByTitle = () => {
   clearTimeout(timeout.value);
   timeout.value = setTimeout(() => {
-    refresh(filterNews);
+    refresh(filterSmsSending);
   }, 500);
 };
 
 const saveNews = () => {
-  refresh(filterNews);
+  refresh(filterSmsSending);
 }
 
 const handleDeleteModal = (id: number) => {
-  newsId.value = id;
-  UIkit.modal("#news-delete-modal").show();
+  smsId.value = id;
+  UIkit.modal("#sms_sending-delete-modal").show();
 };
 
-const deleteNews = () => {
-  refresh(filterNews);
+const deleteSms = () => {
+  refresh(filterSmsSending);
 };
 
 watch(
-  () => filterNews.search,
+  () => filterSmsSending.search,
   () => {
-    if (newsList.value.length <= 10) {
+    if (smsSendingList.value.length <= 10) {
       current.value = 1;
     }
   }
@@ -103,11 +101,11 @@ watch(
 
 watch(
   
-    () => filterNews.start_time , 
+    () => filterSmsSending.start_time , 
     () => {
-      refresh(filterNews);
+      refresh(filterSmsSending);
       
-      if (newsList.value.length <= 10) {
+      if (smsSendingList.value.length <= 10) {
         current.value = 1;
       }
     },
@@ -116,11 +114,11 @@ watch(
 
 watch(
   
-    () => filterNews.status , 
+    () => filterSmsSending.status , 
     () => {
-      refresh(filterNews);
+      refresh(filterSmsSending);
       
-      if (newsList.value.length <= 10) {
+      if (smsSendingList.value.length <= 10) {
         current.value = 1;
       }
     },
@@ -148,7 +146,7 @@ onMounted(async () => {
                 type="text"
                 class="form-input"
                 :placeholder="$t('Search')"
-                v-model="filterNews.search"
+                v-model="filterSmsSending.search"
                 @input="searchByTitle"
             />
           </div>
@@ -160,7 +158,7 @@ onMounted(async () => {
             <v-select
                 :placeholder="$t('Status')"
                 :options="store.statusList.results"
-                v-model="filterNews.status"
+                v-model="filterSmsSending.status"
                 :getOptionLabel="(name) => name.title[$i18n.locale]"  
                 :reduce="(name) => name.id"
                 >
@@ -172,7 +170,7 @@ onMounted(async () => {
             <label for="from" class="dark:text-gray-300">
               {{ $t("from") }}
             </label>
-            <VueDatePicker v-model="filterNews.start_time"></VueDatePicker>
+            <VueDatePicker v-model="filterSmsSending.start_time"></VueDatePicker>
           </div>
 
         </form>
@@ -185,7 +183,7 @@ onMounted(async () => {
         </button>
     </div>
 
-    <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="newsFields" :items="newsList">
+    <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="smsFields" :items="smsSendingList">
 
       <template #empty-message>
         <span class="dark:text-neutral-400">{{ t('empty_text') }}</span>
@@ -196,7 +194,7 @@ onMounted(async () => {
       </template>
 
       <template #item-title="item">
-        {{ item.title[$i18n.locale] }}
+        {{ item.template.title[$i18n.locale] }}
       </template>
 
       <template #item-status="item">
@@ -207,16 +205,6 @@ onMounted(async () => {
 
       <template #item-from_to="item">
         <div>{{ item.start_time }}</div>
-      </template>
-
-      <template #item-photo="item">
-        <div class="py-3 flex items-center gap-3">
-          <img v-if="item.file" class="w-[45px] h-[45px] rounded object-cover" :src="item.file" alt="Rounded avatar" />
-          <div v-else
-            class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded">
-            <Icon icon="Camera" color="#356c2d" />
-          </div>
-        </div>
       </template>
 
 
@@ -232,10 +220,10 @@ onMounted(async () => {
       </template>
     </EasyDataTable>
 
-    <TwPagination class="mt-10 tw-pagination" :current="current" :total="store.newsList.count" :per-page="10"
+    <TwPagination class="mt-10 tw-pagination" :current="current" :total="store.smsSendingList.count" :per-page="10"
       :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')" @page-changed="changePagionation" />
 
     <AddEditModal  :editData="editData" @saveNews="saveNews"/>
-    <DeleteNewsModal  @deleteNews="deleteNews" :newsId="newsId"/>
+    <DeleteSmsSendingModal  @deleteSms="deleteSms" :smsId="smsId"/>
   </div>
 </template>

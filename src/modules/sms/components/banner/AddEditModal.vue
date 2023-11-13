@@ -73,7 +73,7 @@ function openModal(){
 }
 
 const getFile = (e: any) => {
-  BannerData.value.photo = e
+  BannerData.value.photo = e.target.files[0]
 }
 
 const updateDeal = async () => {
@@ -83,14 +83,15 @@ const updateDeal = async () => {
     const formData = new FormData()
     formData.append('file', BannerData.value.photo)
     formData.append('title', JSON.stringify(BannerData.value.title))
-    // formData.append('title.ru', BannerData.value.title.ru)
     formData.append('status', BannerData.value.status)
     formData.append('start_time', BannerData.value.start_time)
     formData.append('end_time', BannerData.value.end_time)
 
   if (propData.editData.id) {
       try {
-        await store.updateBanner({id: propData.editData.id, ...formData}).then(() => {
+        formData.append('id', propData.editData.id)
+
+        await store.updateBanner(formData).then(() => {
           emits("saveBanner");
           setTimeout(() => {
             toast.success(t("updated_successfully"));

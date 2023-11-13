@@ -1,109 +1,228 @@
-<template>
-  <div :class="openShowModal ? 'openCatalog menu dark:bg-darkLayoutStorm w-150' : 'defaultCatalog menu'">
-    <div class="modal-title dark:bg-darkLayoutStorm">
-      <h5>{{ $t('Add') }} Новости</h5>
-      <button uk-icon="close" class="dark:bg-darkLayoutStorm" @click="$emit('openModal')"/>
-    </div>
+<script lang="ts" setup>
+import { Ref, ref, computed, onMounted } from 'vue';
+import UIkit from "uikit";
+import { useI18n } from "vue-i18n";
+import { toast } from "vue3-toastify";
+import { helpers, required } from "@vuelidate/validators";
+import useVuelidate, { Validation } from "@vuelidate/core";
+import knowledgeBase from "../../store/index";
 
-    <form @submit.prevent="onSubmit">
-      <div class="modal-body">
-        <div class="grid grid-cols-2">
-          <div class="px-2">
-            <label for="form-stacked-text">{{ $t('title') }}</label>
-            <div class="uk-form-controls">
-              <input class="form-input"/>
-            </div>
-          </div>
+const { t } = useI18n();
+const isSubmitted = ref<boolean>(false);
+const store = knowledgeBase()
+const emits = defineEmits(["saveNews"]);
 
-          <div class="px-2">
-            <label for="form-stacked-text">{{ $t('Запланировать время') }}</label>
-            <div class="uk-form-controls">
-              <VueDatePicker v-model="date"></VueDatePicker>
-            </div>
-          </div>
-
-          <div class="px-2 mt-4">
-            <label for="form-stacked-text">{{ $t('Группа') }}</label>
-            <div class="uk-form-controls">
-              <VSelect/>
-            </div>
-          </div>
-
-          <div class="px-2 mt-4">
-            <label for="form-stacked-text">{{ $t('Описание') }}</label>
-            <div class="uk-form-controls">
-              <input type="file" class="form-file-input p-1"/>
-            </div>
-          </div>
-
-          <div class="px-2 mt-4">
-            <label for="form-stacked-text">{{ $t('title') }}</label>
-            <div class="uk-form-controls">
-              <input class="form-input"/>
-            </div>
-          </div>
-
-          <div class="px-2 mt-4">
-            <label for="form-stacked-text">{{ $t('Ссылки') }}</label>
-            <div class="uk-form-controls">
-              <input class="form-input"/>
-            </div>
-          </div>
-        </div>
-
-        <div class="px-2 mt-4">
-          <label for="form-stacked-text">{{ $t('Описание') }}</label>
-          <div class="uk-form-controls">
-            <textarea class="form-input"/>
-          </div>
-        </div>
-
-        <div class="uk-margin mb-0 mt-4 px-3">
-          <label for="form-stacked-text">{{ $t('Статус') }}</label>
-          <div class="uk-form-controls">
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input
-                  type="checkbox"
-                  :checked="is_active"
-                  class="sr-only peer"
-              />
-              <div
-                  class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"/>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button @click="$emit('openModal')" class="btn-danger">
-          Отменить
-        </button>
-        <button type="submit" class="btn-primary" @click="$emit('openModal')">
-          Сохранить
-        </button>
-      </div>
-    </form>
-  </div>
-  <div :class="openShowModal ? 'black__shadow' : ''" @click="$emit('openModal')"/>
-</template>
-
-<script setup>
-import VueDatePicker from '@vuepic/vue-datepicker';
-import {ref} from "vue";
-import '@vuepic/vue-datepicker/dist/main.css'
-import '@/assets/modal.css'
-
-const date = ref(null)
-const is_active = ref(true)
-const props = defineProps({
-  openShowModal: {
-    type: Boolean,
-    default: () => false
-  },
-})
-const emit = defineEmits(['refresh', 'openModal'])
-
-const onSubmit = () => {
-
+interface EditData {
+  id: number | null,
+  title: {
+    uz: string,
+    ru: string
+  } 
+    file: string,
+    start_time: string,
+    status: string
 }
+
+var NewsData = ref({
+    title: {
+      uz: "",
+      ru: ""
+    },
+    photo: "",
+    start_time: "",
+    status: ""
+})
+
+const rules = computed(() => {
+  return {   
+    title: {
+      required: helpers.withMessage("required", required),
+    },
+    start_time: {
+      required: helpers.withMessage("required", required),
+    },
+  };
+  
+});
+
+const validate: Ref<Validation> = useVuelidate(rules, NewsData);
+
+const propData = defineProps<{editData: EditData}>();
+
+
+function openModal(){
+  if(propData.editData.id) {
+    console.log(propData)
+    NewsData.value.title.uz = propData.editData.title.uz
+    NewsData.value.title.ru = propData.editData.title.ru
+    NewsData.value.photo = propData.editData.file
+    NewsData.value.start_time = propData.editData.start_time
+    NewsData.value.status = propData.editData.status
+
+  } else {
+    NewsData.value.title.uz = ""
+    NewsData.value.title.ru = ""
+    NewsData.value.photo = ""
+    NewsData.value.start_time = ""
+    NewsData.value.status = ""
+  }
+}
+
+const getFile = (e: any) => {
+  NewsData.value.photo = e.target.files[0]
+  console.log(NewsData.value.photo);
+  
+}
+
+const updateDeal = async () => {
+  const success = await validate.value.$validate();
+  if (!success) return;
+
+    const formData = new FormData()
+    formData.append('file', NewsData.value.photo)
+    formData.append('title', JSON.stringify(NewsData.value.title))
+    formData.append('status', NewsData.value.status)
+    formData.append('start_time', NewsData.value.start_time)
+    
+  if (propData.editData.id) {    
+    try {
+        formData.append('id', propData.editData.id)
+        await store.updateNews(formData).then(() => {
+          emits("saveNews");
+          setTimeout(() => {
+            toast.success(t("created_successfully"));
+          }, 200);
+          UIkit.modal("#newsModal").hide();
+        });
+        isSubmitted.value = false;
+      } catch (error: any) {
+        isSubmitted.value = false;
+        if (error) {
+          toast.error(
+            // error.response || error.response.data.msg || error.response.data.error || "Error"
+            error.response || "Error"
+
+          );
+        }
+      }
+    
+  } else {
+      try {
+        await store.createNews(formData).then(() => {
+          emits("saveNews");
+          setTimeout(() => {
+            toast.success(t("created_successfully"));
+          }, 200);
+          UIkit.modal("#newsModal").hide();
+        });
+        isSubmitted.value = false;
+      } catch (error: any) {
+        isSubmitted.value = false;
+        if (error) {
+          toast.error(
+            // error.response || error.response.data.msg || error.response.data.error || "Error"
+            error.response || "Error"
+
+          );
+        }
+      }
+  }
+};
+
+onMounted(async() => {
+  await store.getStatus()
+})
 </script>
+
+<template>
+  <div id="newsModal" class="uk-flex-top" uk-modal @shown="openModal">
+    <div
+      class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
+    >
+      <button class="uk-modal-close-default" type="button" uk-close />
+      <div class="uk-modal-header">
+        <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
+          {{ propData.editData.id ? $t("Change") : $t('Add') }}
+        </h2>
+      </div>
+
+      <div class="uk-modal-body py-4">
+            <form>
+              <div class="flex justify-between">
+                <label for="title_uz" class="w-full mr-4"> Title uz
+                <input
+                  id="title_ru"
+                  type="text"
+                  class="form-input"
+                  placeholder="Title"
+                  v-model="NewsData.title.uz"
+                  :class="validate.title.$errors.length ? 'required-input' : ''"
+                />
+                <p
+                v-for="error in validate.title.$errors"
+                :key="error.$uid"
+                class="text-danger text-sm"
+              >
+                {{ $t(error.$message) }}
+              </p>
+            </label>
+
+            <label for="title_ru" class="w-full"> Title ru
+                <input
+                  id="title_ru"
+                  type="text"
+                  class="form-input"
+                  placeholder="Title"
+                  v-model="NewsData.title.ru"
+                  :class="validate.title.$errors.length ? 'required-input' : ''"
+                />
+                <p
+                v-for="error in validate.title.$errors"
+                :key="error.$uid"
+                class="text-danger text-sm"
+              >
+                {{ $t(error.$message) }}
+              </p>
+            </label>
+              </div>
+
+
+            <label for="form-stacked-text" class="mt-4 block">{{ $t('Photo') }}
+              <input @input="getFile" type="file" class="form-file-input p-1" />
+          </label>
+
+          <label for="form-stacked-text" class="mt-4 block">{{ $t('Status') }}
+              <VSelect v-model="NewsData.status" 
+                :options="store.statusList.results"
+                :getOptionLabel="(name) => name.title[$i18n.locale]"  
+                :reduce="(name) => name.id"
+                />
+            </label>
+
+            <label for="form-stacked-text" class="mt-4 block">{{ $t('Start time') }}
+              <VueDatePicker v-model="NewsData.start_time" model-type="yyyy-MM-dd hh:mm" :placeholder="NewsData.start_time"></VueDatePicker>
+            </label>
+
+            </form>
+      </div>
+
+      <div
+        class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
+      >
+        <button uk-toggle="target: #newsModal" class="btn-secondary">
+          {{ $t("cancel2") }}
+        </button>
+
+        <button :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal" :disabled="isSubmitted">
+          <img
+            src="@/assets/image/loading.svg"
+            alt="loading.svg"
+            class="inline w-4 h-4 text-white animate-spin mr-2"
+            v-if="isSubmitted"
+          />
+          <span>{{ propData.editData.id ? $t("Change") : $t('Add') }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
