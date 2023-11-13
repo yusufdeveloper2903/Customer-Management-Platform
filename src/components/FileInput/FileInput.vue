@@ -13,29 +13,31 @@ interface Emits {
 }
 
 interface Props {
-  modelValue: string | string[];
+  modelValue: string | string[] | null;
   eye?: boolean;
   minus?: boolean;
   class?: string;
+  multiple?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   eye: true,
   minus: true,
+  multiple: false,
 });
 const emit = defineEmits<Emits>();
-const inputValue = ref<string | string[]>();
+const inputValue = ref<string | string[] | null>();
 const input = ref<boolean>(true);
 const image = ref<string>("");
 const imageCard = ref();
 const onShowFile = (item) => {
   console.log(item);
   image.value = item;
-  console.log(image.value)
+  console.log(image.value);
   nextTick(() => {
     UIkit.modal("#file-modal").show();
     emit("show", item);
-  })
+  });
 };
 watch(
   () => props.modelValue,
@@ -70,6 +72,7 @@ const onInputFile = (value) => {
     @input="onInputFile"
     v-on="emit"
     type="file"
+    :multiple="multiple"
   />
   <template v-if="typeof inputValue === 'string'">
     <div class="flex justify-between items-center mt-3 mx-5">

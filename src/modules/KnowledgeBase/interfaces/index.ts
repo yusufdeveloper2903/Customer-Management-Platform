@@ -60,4 +60,5 @@ export interface NewsTemplate {
 export interface Params {
   page?: number;
   page_size?: number;
+  search?: string;
 }

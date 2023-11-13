@@ -4,6 +4,8 @@ interface Props {
   cancel: string;
   ok: string;
   id?: string;
+  okClass?: string;
+  cancelClass?: string;
 }
 interface Emits {
   (event: "ok"): void;
@@ -33,12 +35,16 @@ const emit = defineEmits<Emits>();
       >
         <button
           :uk-toggle="`target: #${props.id || 'confirm-modal'}`"
-          class="btn-small btn-danger mr-2"
+          :class="props.cancelClass || 'btn-small btn-danger'"
+          class="mr-2"
           @click="emit('cancel')"
         >
           {{ props.cancel }}
         </button>
-        <button class="btn-small btn-success" @click="emit('ok')">
+        <button
+          @click="emit('ok')"
+          :class="props.okClass || 'btn-small btn-success'"
+        >
           {{ props.ok }}
         </button>
       </div>

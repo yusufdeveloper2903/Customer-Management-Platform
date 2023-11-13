@@ -26,19 +26,19 @@ import NewsTemplate from "../components/NewsTemplate.vue";
         <Splash/>
       </Tab> -->
     <Tabs vertical pill>
-      <Tab title="Category">
+      <Tab title="Категория">
         <Categories />
       </Tab>
 
-      <Tab title="Locations">
+      <Tab title="Локации">
         <Locations />
       </Tab>
 
-      <Tab title="SMS Template">
+      <Tab title="СМС шаблон">
         <SMSTemplate />
       </Tab>
 
-      <Tab title="News Template">
+      <Tab title="Шаблон новости">
         <NewsTemplate />
       </Tab>
     </Tabs>

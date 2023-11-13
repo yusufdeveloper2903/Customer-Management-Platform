@@ -85,7 +85,7 @@ onMounted(() => {
         <input type="text" class="form-input" placeholder="Search"/>
       </label>
       <button class="btn-primary" uk-toggle="target: #categories">
-        {{ $t("global.add") }}
+        {{ $t("Добавить") }}
       </button>
     </div>
 

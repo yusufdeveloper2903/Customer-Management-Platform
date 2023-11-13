@@ -9,11 +9,13 @@ import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
 import knowledgeBase from "../../store/index";
 import { NewsTemplate } from "../../interfaces";
+import FileInput from "@/components/FileInput/FileInput.vue";
+import { objectToFormData } from "@/mixins/formmatter";
 
 const { t } = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase();
-const emits = defineEmits(["saveSmsTemplate"]);
+const emit = defineEmits(["refresh"]);
 
 var newsTemplateData = ref<NewsTemplate>({
   title: {
@@ -31,16 +33,23 @@ var newsTemplateData = ref<NewsTemplate>({
 const rules = computed(() => {
   return {
     title: {
-      required: helpers.withMessage("required", required),
+      ru: {
+        required: helpers.withMessage("required", required),
+      },
+      uz: {
+        required: helpers.withMessage("required", required),
+      },
     },
     // title_ru: {
     //   required: helpers.withMessage("required", required),
     // },
     description: {
-      required: helpers.withMessage("required", required),
-    },
-    url: {
-      required: helpers.withMessage("required", required),
+      ru: {
+        required: helpers.withMessage("required", required),
+      },
+      uz: {
+        required: helpers.withMessage("required", required),
+      },
     },
   };
 });
@@ -74,20 +83,22 @@ const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
 
+  const { title, description, file, ...rest } = newsTemplateData.value;
   if (propData.editData.id) {
     try {
-      await store
-        .updateSmsTemplate({
-          id: propData.editData.id,
-          ...newsTemplateData.value,
-        })
-        .then(() => {
-          emits("saveSmsTemplate");
-          setTimeout(() => {
-            toast.success(t("updated_successfully"));
-          }, 200);
-          UIkit.modal("#news_template").hide();
-        });
+      const fd = objectToFormData({
+        title: JSON.stringify(title),
+        description: JSON.stringify(description),
+        file: file || "",
+        ...rest,
+      });
+      await store.updateNewsTemplate(fd).then(() => {
+        setTimeout(() => {
+          toast.success(t("updated_successfully"));
+        }, 200);
+        emit("refresh");
+        UIkit.modal("#news_template").hide();
+      });
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
@@ -100,11 +111,18 @@ const updateDeal = async () => {
     }
   } else {
     try {
-      await store.createNewsTemplate(newsTemplateData.value).then(() => {
-        emits("saveSmsTemplate");
+      const fd = objectToFormData({
+        title: JSON.stringify(title),
+        description: JSON.stringify(description),
+        file: file || "",
+        ...rest,
+      });
+
+      await store.createNewsTemplate(fd).then(() => {
         setTimeout(() => {
           toast.success(t("created_successfully"));
         }, 200);
+        emit("refresh");
         UIkit.modal("#news_template").hide();
       });
       isSubmitted.value = false;
@@ -122,7 +140,13 @@ const updateDeal = async () => {
 </script>
 
 <template>
-  <div id="news_template" class="uk-flex-top" uk-modal @shown="openModal">
+  <div
+    id="news_template"
+    class="uk-flex-top"
+    uk-modal
+    @shown="openModal"
+    @hidden="validate.$reset()"
+  >
     <div
       class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
     >
@@ -145,10 +169,12 @@ const updateDeal = async () => {
                   class="form-input"
                   placeholder="Nomi"
                   v-model="newsTemplateData.title.uz"
-                  :class="validate.title.$errors.length ? 'required-input' : ''"
+                  :class="
+                    validate.title.uz.$errors.length ? 'required-input' : ''
+                  "
                 />
                 <p
-                  v-for="error in validate.title.$errors"
+                  v-for="error in validate.title.uz.$errors"
                   :key="error.$uid"
                   class="text-danger text-sm"
                 >
@@ -165,11 +191,13 @@ const updateDeal = async () => {
                   placeholder="Tavsif"
                   v-model="newsTemplateData.description.uz"
                   :class="
-                    validate.description.$errors.length ? 'required-input' : ''
+                    validate.description.uz.$errors.length
+                      ? 'required-input'
+                      : ''
                   "
                 />
                 <p
-                  v-for="error in validate.description.$errors"
+                  v-for="error in validate.description.uz.$errors"
                   :key="error.$uid"
                   class="text-danger text-sm"
                 >
@@ -189,10 +217,12 @@ const updateDeal = async () => {
                   class="form-input"
                   placeholder="Заголовок"
                   v-model="newsTemplateData.title.ru"
-                  :class="validate.title.$errors.length ? 'required-input' : ''"
+                  :class="
+                    validate.title.ru.$errors.length ? 'required-input' : ''
+                  "
                 />
                 <p
-                  v-for="error in validate.title.$errors"
+                  v-for="error in validate.title.ru.$errors"
                   :key="error.$uid"
                   class="text-danger text-sm"
                 >
@@ -209,11 +239,13 @@ const updateDeal = async () => {
                   placeholder="Описание"
                   v-model="newsTemplateData.description.ru"
                   :class="
-                    validate.description.$errors.length ? 'required-input' : ''
+                    validate.description.ru.$errors.length
+                      ? 'required-input'
+                      : ''
                   "
                 />
                 <p
-                  v-for="error in validate.description.$errors"
+                  v-for="error in validate.description.ru.$errors"
                   :key="error.$uid"
                   class="text-danger text-sm"
                 >
@@ -228,18 +260,17 @@ const updateDeal = async () => {
           <input
             id="nameUz"
             type="text"
-            class="form-input"
+            class="form-input mb-4"
             placeholder="Nomi"
             v-model="newsTemplateData.url"
-            :class="validate.url.$errors.length ? 'required-input' : ''"
           />
-          <p
-            v-for="error in validate.url.$errors"
-            :key="error.$uid"
-            class="text-danger text-sm"
-          >
-            {{ $t(error.$message) }}
-          </p>
+        </label>
+        <label for="nameUz"
+          >Фото
+          <FileInput
+            v-model="newsTemplateData.file"
+            @remove="newsTemplateData.file = null"
+          />
         </label>
       </div>
 

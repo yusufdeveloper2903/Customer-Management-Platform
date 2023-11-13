@@ -112,7 +112,7 @@ watch(
         <input type="text" class="form-input" placeholder="Search" @input="searchByName" v-model="filterSmsTemplate.search"/>
       </label>
       <button class="btn-primary" uk-toggle="target: #sms_template" @click="editData = {}">
-        {{ $t("global.add") }}
+        {{ $t("Добавить") }}
       </button>
     </div>
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="locationFields"
