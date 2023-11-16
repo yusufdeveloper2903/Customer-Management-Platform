@@ -15,7 +15,7 @@ const store = staff()
 const { locale, t } = useI18n();
 const imageUrl = ref<string>("")
 const isPasswordShown = ref<boolean>(false)
-  const router = useRouter();
+const router = useRouter();
 const route = useRoute();
 
 // user's data

@@ -11,6 +11,7 @@ const { t } = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase()
 const emits = defineEmits(["saveBanner"]);
+const file = ref<string>("")
 
 interface EditData {
   id: number | null,
@@ -74,6 +75,7 @@ function openModal(){
 
 const getFile = (e: any) => {
   BannerData.value.photo = e.target.files[0]
+  file.value = e.target.files[0]
 }
 
 const updateDeal = async () => {
@@ -81,11 +83,18 @@ const updateDeal = async () => {
   if (!success) return;
 
     const formData = new FormData()
-    formData.append('file', BannerData.value.photo)
-    formData.append('title', JSON.stringify(BannerData.value.title))
-    formData.append('status', BannerData.value.status)
-    formData.append('start_time', BannerData.value.start_time)
-    formData.append('end_time', BannerData.value.end_time)
+    if(file.value) {
+      formData.append('file', BannerData.value.photo)
+      formData.append('title', JSON.stringify(BannerData.value.title))
+      formData.append('status', BannerData.value.status)
+      formData.append('start_time', BannerData.value.start_time)
+      formData.append('end_time', BannerData.value.end_time)
+    } else {
+      formData.append('title', JSON.stringify(BannerData.value.title))
+      formData.append('status', BannerData.value.status)
+      formData.append('start_time', BannerData.value.start_time)
+      formData.append('end_time', BannerData.value.end_time)
+    }
 
   if (propData.editData.id) {
       try {
@@ -196,7 +205,7 @@ onMounted(async() => {
 
           <label for="form-stacked-text" class="mt-4 block">{{ $t('Status') }}
               <VSelect v-model="BannerData.status" 
-                :options="store.statusList.results"
+                :options="store.statusList && store.statusList.results"
                 :getOptionLabel="(name) => name.title[$i18n.locale]"  
                 :reduce="(name) => name.id"
                 />

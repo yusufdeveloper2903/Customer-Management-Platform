@@ -13,18 +13,6 @@ import NewsTemplate from "../components/NewsTemplate.vue";
   <div
     class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm"
   >
-    <!-- 
-      <Tab
-          title="Intro"
-      >
-        <Intro/>
-      </Tab>
-
-      <Tab
-          title="Splash"
-      >
-        <Splash/>
-      </Tab> -->
     <Tabs vertical pill>
       <Tab title="Категория">
         <Categories />

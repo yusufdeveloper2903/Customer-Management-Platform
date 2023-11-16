@@ -103,7 +103,7 @@ onMounted(() => {
       hide-footer
       :loading="isLoading"
       :headers="newsTemplateTable"
-      :items="store.newTemplate.results"
+      :items="store.newTemplate && store.newTemplate.results"
     >
       <template #header="header">
         {{ $t(header.text).toUpperCase() }}
@@ -152,7 +152,7 @@ onMounted(() => {
     </EasyDataTable>
 
     <TwPagination
-      :total="store.newTemplate.count"
+      :total="store.newTemplate && store.newTemplate.count"
       class="mt-10 tw-pagination"
       :current="current"
       :per-page="10"

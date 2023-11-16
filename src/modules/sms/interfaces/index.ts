@@ -103,6 +103,18 @@ export interface SmsSending {
     }
 }
 
+// sms sending detail
+
+export interface Reseivers {
+id: number;
+// avatar: string | null;
+full_name: string | null;
+phone: string | null;
+created_date: string | null;
+last_login: string | null;
+is_active: boolean
+}
+
 //   status
 export interface Status {
     id: number;

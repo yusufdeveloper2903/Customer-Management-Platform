@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import $axios from "@/plugins/axios";
-import { Banner, Results, Status, News, SmsSending } from "../interfaces";
+import { Banner, Results, Status, News, SmsSending, Reseivers } from "../interfaces";
 
 
-export default defineStore("knowledgeBase", {
+export default defineStore("sms", {
   state: () => {
     return {
       // banner
@@ -20,11 +20,18 @@ export default defineStore("knowledgeBase", {
         results: [] as News[]
       } as Results<News>,
 
+      newsListDetail: {} as News,
+
       // sms sending
       smsSendingList: {
         results: [] as SmsSending[]
-      } as Results<SmsSending>
+      } as Results<SmsSending>,
 
+      smsSendingDetail: {} as SmsSending,
+
+      reseiversList: {
+        results: [] as Reseivers[]
+      } as Results<Reseivers>
     };
   },
 
@@ -40,7 +47,7 @@ export default defineStore("knowledgeBase", {
     },
 
     updateBanner(data) {
-      return $axios.patch(`/knowledge_base/banner/${data.id}/`, data);
+      return $axios.patch(`/knowledge_base/banner/${data.id || data.get('id')}/`, data);
     },
 
     deleteBanner(id: number) {
@@ -51,6 +58,11 @@ export default defineStore("knowledgeBase", {
     async getNews(params) {
       const { data } = await $axios.get("/knowledge_base/news/", { params });
       this.newsList = data;
+    },
+
+    async getNewsDetail(params) {
+      const { data } = await $axios.get(`/knowledge_base/news/${params.id}`, { params });
+      this.newsListDetail = data;
     },
 
     createNews(data: object) {
@@ -71,6 +83,11 @@ export default defineStore("knowledgeBase", {
       this.smsSendingList = data;
     },
 
+    async getSmsSendingDetail(params) {
+      const { data } = await $axios.get(`/knowledge_base/sms/${params.id}/`, { params });
+      this.smsSendingDetail = data;
+    },
+
     createSmsSending(data: object) {
       return $axios.post("/knowledge_base/sms/", data);
     },
@@ -88,5 +105,12 @@ export default defineStore("knowledgeBase", {
       const { data } = await $axios.get("/knowledge_base/status_notification/");
       this.statusList = data;
     },
+
+    // clients receivers
+    async getReseivers(params: any) {
+      const { data } = await $axios.get("/clients/client/get_receivers_of_notification/", {params});
+      this.reseiversList = data;
+    },
+
   },
 });

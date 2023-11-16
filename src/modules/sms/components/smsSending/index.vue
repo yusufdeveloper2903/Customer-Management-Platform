@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-// import AddEditModal from './AddEditModal.vue'
-import { smsFields       } from "../../constants/index"
+import { smsFields } from "../../constants/index"
 import knowledgeBase from "../../store/index"
 import { onMounted, ref, reactive, watch } from "vue";
 import { toast } from "vue3-toastify";
 import DeleteSmsSendingModal from "./DeleteSmsSending.vue";
 import UIkit from "uikit";
+import {useRouter} from "vue-router";
 
 const { t } = useI18n()
+const router = useRouter()
 const store = knowledgeBase()
 const smsSendingList = ref<object[]>([]);
 const isLoading = ref(false);
@@ -57,12 +58,18 @@ const refresh = async (filter) => {
     smsSendingList.value = store.smsSendingList.results;
   } catch (error: any) {
     toast.error(
-      error.response.data.msg || error.response.data.error || "Error"
+      error.response.message || "Error"
     );
   }
 
   isLoading.value = false;
 };
+
+
+onMounted(async () => {
+  await refresh(paginationFilter);
+  await store.getStatus()
+});
 
 const changePagionation = (e: number) => {
   paginationFilter.page = e;
@@ -89,6 +96,7 @@ const handleDeleteModal = (id: number) => {
 const deleteSms = () => {
   refresh(filterSmsSending);
 };
+
 
 watch(
   () => filterSmsSending.search,
@@ -125,10 +133,7 @@ watch(
 
 );
 
-onMounted(async () => {
-  await refresh(paginationFilter);
-  await store.getStatus()
-});
+
 </script>
 
 <template>
@@ -157,7 +162,7 @@ onMounted(async () => {
             </label>
             <v-select
                 :placeholder="$t('Status')"
-                :options="store.statusList.results"
+                :options="store.statusList && store.statusList.results"
                 v-model="filterSmsSending.status"
                 :getOptionLabel="(name) => name.title[$i18n.locale]"  
                 :reduce="(name) => name.id"
@@ -176,8 +181,7 @@ onMounted(async () => {
         </form>
         <button
             class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-            @click="editData = {}"
-            uk-toggle="target: #newsModal"
+            @click="router.push('/add-sms')"
         >
           {{ $t("Add") }}
         </button>
@@ -194,7 +198,7 @@ onMounted(async () => {
       </template>
 
       <template #item-title="item">
-        {{ item.template.title[$i18n.locale] }}
+        {{ item.template && item.template.title && item.template.title[$i18n.locale] }}
       </template>
 
       <template #item-status="item">
@@ -208,19 +212,21 @@ onMounted(async () => {
       </template>
 
 
-      <template #item-actions="item">
+      <template #item-actions="items">
         <div class="flex my-2">
-          <button class="btn-warning btn-action" uk-toggle="target: #newsModal" @click="editData = item">
+          <button class="btn-warning btn-action" @click="
+                router.push(`/sms-detail/${items.id}`)
+              ">
             <Icon icon="Pen New Square" color="#fff" size="16" />
           </button>
-          <button class="ml-3 btn-danger btn-action" @click="handleDeleteModal(item.id)">
+          <button class="ml-3 btn-danger btn-action" @click="handleDeleteModal(items.id)">
             <Icon icon="Trash Bin Trash" color="#fff" size="16" />
           </button>
         </div>
       </template>
     </EasyDataTable>
 
-    <TwPagination class="mt-10 tw-pagination" :current="current" :total="store.smsSendingList.count" :per-page="10"
+    <TwPagination class="mt-10 tw-pagination" :current="current" :total="store.smsSendingList && store.smsSendingList.count" :per-page="10"
       :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')" @page-changed="changePagionation" />
 
     <AddEditModal  :editData="editData" @saveNews="saveNews"/>

@@ -130,7 +130,7 @@ onMounted(async () => {
         </form>
         <button
             class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-            @click="router.push('/add-staff')"
+            
         >
           {{ $t("add") }}
         </button>

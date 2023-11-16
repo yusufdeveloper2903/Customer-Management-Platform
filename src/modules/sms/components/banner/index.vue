@@ -62,12 +62,14 @@ const refresh = async (filter) => {
     bannerList.value = store.bannerList.results;
   } catch (error: any) {
     toast.error(
-      error.response.data.msg || error.response.data.error || "Error"
+      error.response.message || "Error"
     );
   }
 
   isLoading.value = false;
 };
+
+
 
 const changePagionation = (e: number) => {
   paginationFilter.page = e;
@@ -150,6 +152,7 @@ onMounted(async () => {
   await refresh(paginationFilter);
   await store.getStatus()
 });
+
 </script>
 
 <template>
@@ -178,7 +181,7 @@ onMounted(async () => {
             </label>
             <v-select
                 :placeholder="$t('Status')"
-                :options="store.statusList.results"
+                :options="store.statusList && store.statusList.results"
                 v-model="filterBanner.status"
                 :getOptionLabel="(name) => name.title[$i18n.locale]"  
                 :reduce="(name) => name.id"
@@ -259,7 +262,7 @@ onMounted(async () => {
       </template>
     </EasyDataTable>
 
-    <TwPagination class="mt-10 tw-pagination" :current="current" :total="store.bannerList.count" :per-page="10"
+    <TwPagination class="mt-10 tw-pagination" :current="current" :total="store.bannerList && store.bannerList.count" :per-page="10"
       :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')" @page-changed="changePagionation" />
 
     <AddEditModal  :editData="editData" @saveBanner="saveBanner"/>

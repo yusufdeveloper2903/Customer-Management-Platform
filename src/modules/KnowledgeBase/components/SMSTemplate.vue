@@ -61,7 +61,7 @@ const refresh = async (filter) => {
     smsTemplateList.value = store.smsTemplateList.results;
   } catch (error: any) {
     toast.error(
-      error.response.data.msg || error.response.data.error || "Error"
+      error.response || "Error"
     );
   }
 
@@ -150,7 +150,7 @@ watch(
       </template>
     </EasyDataTable>
 
-    <TwPagination :total="store.smsTemplateList.count" class="mt-10 tw-pagination" :current="current" :per-page="10"
+    <TwPagination :total="store.smsTemplateList && store.smsTemplateList.count" class="mt-10 tw-pagination" :current="current" :per-page="10"
       :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')" @page-changed="changePagionation" />
   </div>
 

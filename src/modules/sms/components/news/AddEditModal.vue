@@ -11,6 +11,7 @@ const { t } = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase()
 const emits = defineEmits(["saveNews"]);
+const file = ref<string>("")
 
 interface EditData {
   id: number | null,
@@ -20,7 +21,8 @@ interface EditData {
   } 
     file: string,
     start_time: string,
-    status: string
+    status: string,
+    url: string
 }
 
 var NewsData = ref({
@@ -30,7 +32,8 @@ var NewsData = ref({
     },
     photo: "",
     start_time: "",
-    status: ""
+    status: "",
+    url: ""
 })
 
 const rules = computed(() => {
@@ -70,8 +73,7 @@ function openModal(){
 
 const getFile = (e: any) => {
   NewsData.value.photo = e.target.files[0]
-  console.log(NewsData.value.photo);
-  
+  file.value = e.target.files[0]
 }
 
 const updateDeal = async () => {
@@ -79,18 +81,25 @@ const updateDeal = async () => {
   if (!success) return;
 
     const formData = new FormData()
-    formData.append('file', NewsData.value.photo)
-    formData.append('title', JSON.stringify(NewsData.value.title))
-    formData.append('status', NewsData.value.status)
-    formData.append('start_time', NewsData.value.start_time)
-    
+    if(file.value){
+      formData.append('file', NewsData.value.photo)
+      formData.append('title', JSON.stringify(NewsData.value.title))
+      formData.append('status', NewsData.value.status)
+      formData.append('start_time', NewsData.value.start_time)
+    } else {
+      // formData.append('file', NewsData.value.photo)
+      formData.append('title', JSON.stringify(NewsData.value.title))
+      formData.append('status', NewsData.value.status)
+      formData.append('start_time', NewsData.value.start_time)
+    }
+
   if (propData.editData.id) {    
     try {
         formData.append('id', propData.editData.id)
         await store.updateNews(formData).then(() => {
           emits("saveNews");
           setTimeout(() => {
-            toast.success(t("created_successfully"));
+            toast.success(t("updated_successfully"));
           }, 200);
           UIkit.modal("#newsModal").hide();
         });
@@ -188,12 +197,12 @@ onMounted(async() => {
 
 
             <label for="form-stacked-text" class="mt-4 block">{{ $t('Photo') }}
-              <input @input="getFile" type="file" class="form-file-input p-1" />
+              <input @input="getFile" type="file" class="form-file-input p-1" :placeholder="NewsData.photo"/>
           </label>
 
           <label for="form-stacked-text" class="mt-4 block">{{ $t('Status') }}
               <VSelect v-model="NewsData.status" 
-                :options="store.statusList.results"
+                :options="store.statusList && store.statusList.results"
                 :getOptionLabel="(name) => name.title[$i18n.locale]"  
                 :reduce="(name) => name.id"
                 />
