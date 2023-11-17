@@ -261,7 +261,7 @@ const saveCardDatas = () => {
           uk-toggle="target: #profile-actions-modal"
           class="btn-secondary"
         >
-          {{ $t("cancel2") }}
+          {{ $t("Cancel") }}
         </button>
         <!-- <button
           v-show="getSmsCode"

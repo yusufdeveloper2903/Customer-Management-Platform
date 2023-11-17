@@ -27,6 +27,7 @@ export default [
     },  
   },
 
+  // news
   {
     path: "/news-detail/:id",
     name: "news-detail",
@@ -45,13 +46,24 @@ export default [
       permissions: ["admin"],
     },  
   },
-  // {
-  //   path: "/push-notification",
-  //   name: "push-notification",
-  //   component: () => import("@/modules/sms/components/push/AddPushNotifications.vue"),
-  //   meta: {
-  //     layout: "MainLayout",
-  //     permissions: ["admin"],
-  //   },
-  // },
+
+  // banner
+  {
+    path: "/banner-detail/:id",
+    name: "banner-detail",
+    component: () => import("@/modules/sms/components/banner/AddBanner.vue"),
+    meta: {
+      layout: "MainLayout",
+      permissions: ["admin"],
+    },  
+  },
+  {
+    path: "/add-banner",
+    name: "add-banner",
+    component: () => import("@/modules/sms/components/banner/AddBanner.vue"),
+    meta: {
+      layout: "MainLayout",
+      permissions: ["admin"],
+    },  
+  },
 ];

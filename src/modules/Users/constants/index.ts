@@ -8,11 +8,11 @@ export const fields = [
     value: "phone",
   },
   {
-    text: "created date",
+    text: "created_date",
     value: "created_date"
   },
   {
-    text: "Last visit",
+    text: "last_visit",
     value: "last_login"
   },
   {

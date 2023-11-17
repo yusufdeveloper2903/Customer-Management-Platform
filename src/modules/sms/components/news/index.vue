@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import AddEditModal from './AddEditModal.vue'
 import { newsFields } from "../../constants/index"
 import knowledgeBase from "../../store/index"
 import { onMounted, ref, reactive, watch } from "vue";

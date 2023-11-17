@@ -207,12 +207,12 @@ const updateDeal = async () => {
             </p>
             </label>
 
-              <label class="mt-4 block" for="descriptionRu">Описание
+              <label class="mt-4 block" for="descriptionRu">{{ $t('description') }}
               <input
                 id="descriptionRu"
                 type="text"
                 class="form-input"
-                placeholder="Описание"
+                :placeholder="$t('description')"
                 v-model="smsTemplateData.description.ru"
                 :class="validate.description.$errors.length ? 'required-input' : ''"
               />
@@ -233,7 +233,7 @@ const updateDeal = async () => {
         class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
       >
         <button uk-toggle="target: #intro" class="btn-secondary">
-          {{ $t("cancel2") }}
+          {{ $t("Cancel") }}
         </button>
 
         <button :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal" :disabled="isSubmitted">

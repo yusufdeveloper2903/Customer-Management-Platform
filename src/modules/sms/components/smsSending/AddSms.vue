@@ -26,7 +26,7 @@ const clientsList = ref<object[]>([])
 const headers: Header[] = [
   { text: "", value: "check" },
   { text: "id", value: "id" },
-  { text: "full name", value: "full_name" },
+  { text: "Full Name", value: "full_name" },
   { text: "phone_number", value: "phone" },
 ];
 
@@ -102,7 +102,6 @@ onMounted(async () => {
     smsSendingData.value.description = store.smsSendingDetail.description
     smsSendingData.value.template = store.smsSendingDetail.template.id
   }
-  console.log(smsSendingData.value, 'sadsad');
 
 })
 
@@ -185,7 +184,7 @@ function saveData() {
 <template>
   <div class="flex gap-6">
     <div class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm w-1/2">
-      <h1 class="font-semibold text-lg">СМС-рассылка</h1>
+      <h1 class="font-semibold text-lg">{{ $t('sms sending') }}</h1>
 
       <div class="uk-margin mb-0 flex items-center">
 
@@ -196,18 +195,18 @@ function saveData() {
               class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary" />
           </label>
         </div>
-        <label for="form-stacked-text" class="text-sm">{{ $t('Задать дату и время') }}</label>
+        <label for="form-stacked-text" class="text-sm">{{ $t('Set date and time') }}</label>
       </div>
 
       <div class="uk-margin">
-        <label for="form-stacked-text">{{ $t('Начало рассылки:') }}</label>
+        <label for="form-stacked-text">{{ $t('start_date') }} </label>
         <div class="uk-form-controls">
           <VueDatePicker v-model="smsSendingData.start_time" />
         </div>
       </div>
 
       <div class="uk-margin">
-        <label for="form-stacked-text">{{ $t('СМС-шаблоны:') }}</label>
+        <label for="form-stacked-text">{{ $t('template') }}</label>
         <div class="uk-form-controls">
           <VSelect v-model="smsSendingData.template"
             :options="templateStore.smsTemplateList && templateStore.smsTemplateList.results"
@@ -216,7 +215,7 @@ function saveData() {
       </div>
 
       <div class="uk-margin">
-        <label for="form-stacked-text">{{ $t('Описание') }}</label>
+        <label for="form-stacked-text">{{ $t('description') }}</label>
         <div class="uk-form-controls">
           <textarea v-model="smsSendingData.description[$i18n.locale]" class="form-input" rows="5" />
         </div>
@@ -267,10 +266,10 @@ function saveData() {
   </div>
   <div class="flex justify-end mt-4">
     <button class="btn-secondary" @click="router.back('/sms-template')">
-      Cancel
+      {{ $t('Cancel') }}
     </button>
     <button class="btn-success ml-2" @click="saveData">
-      Save
+      {{ $t('Save') }}
     </button>
   </div>
 </template>

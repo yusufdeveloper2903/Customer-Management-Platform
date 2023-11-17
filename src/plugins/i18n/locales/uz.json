@@ -11,7 +11,8 @@
     "Tariffs": "Tariflar",
     "About Us": "Biz haqimizda",
     "Finance": "Moliya",
-    "Statistics": "Statistika"
+    "Statistics": "Statistika",
+    "staffs": "Xodimlar"
   },
   "info_card": {
     "Time": "Vaqt",
@@ -78,7 +79,7 @@
   "social_links": "Ijtimoiy tarmoqlar",
   "actions": "Amallar",
   "teachers": "O'qituvchilar",
-  "Name": "Nomi",
+  "name": "Nomi",
   "no_image": "Rasm yo'q",
   "image": "Rasm",
   "title": "Sarlavha",
@@ -177,12 +178,32 @@
   "history": "Tarix",
   "hour": "s",
   "minute": "d",
+  "start_date": "Boshlanish sanasi:",
+  "end_date": "Tugash sanasi:",
+  "template": "Shablon:",
+  "photo": "Foto",
+  "url": "URL",
+  "planned for(publish date)": "Rejalangan sana",
+  "go_to_page": "Sahifaga o'ting",
+  "forward": "Oldinga",
+  "from": "Sanadan",
+  "sms sending": "SMS yuborish",
+  "Banner": "Banner",
+  "Receivers": "Qabul qiluvchilar",
+  "phone_number": "Telefon raqam",
+  "Set date and time": "Sana va vaqtni belgilang",
+  "news": "Yangiliklar",
+  "to": "Sanagacha",
+  "start time/ end time": "Boshlanish / tugash sanasi",
+  "are you really going to delete this user": "Siz haqiqatan ham bu foydalanuvchini o'chirib tashlamoqchimisiz?",
+  "are_you_really_terminate_session": "Haqiqatan ham sessiyani tugatyapsizmi?",
+  "delete": "O'chirish",
+  "Notifications": "Bildirishnomalar",
+  "username": "Foydalanuvchi nomi",
+  "last_visit": "Oxirgi tashrif",
+  "users": "Foydalanuvchilar"
+
+  
 
 
-
-
-
-
-
-  "Teacher_is_checking": "O'qituvchi tekshiryabdi"
 }

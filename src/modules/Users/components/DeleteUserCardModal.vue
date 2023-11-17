@@ -28,7 +28,7 @@ const deleteUserCard = () => {
       <button class="uk-modal-close-default" type="button" uk-close />
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ $t('deletion') }}
+          {{ $t('delete') }}
         </h2>
       </div>
       <div class="uk-modal-body">

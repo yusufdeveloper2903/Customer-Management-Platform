@@ -167,7 +167,7 @@ onMounted(() => {
     :ok="$t('Удалить')"
     :cancel-class="'btn-success'"
     :okClass="'btn-danger'"
-    :cancel="$t('Отмена')"
+    :cancel="$t('Cancel')"
     @ok="deleteTemplate"
   >
     {{ $t("Реально хотите удалить шаблон?") }}
