@@ -4,9 +4,10 @@ import Tab from "@/components/Tab/Tab.vue";
 import Categories from "../components/Categories.vue";
 // import Intro from "../components/Intro.vue";
 // import Splash from "../components/Splash.vue";
-import Locations from "../components/Locations.vue";
+// import Locations from "../components/Locations.vue";
 import SMSTemplate from "../components/SMSTemplate.vue";
 import NewsTemplate from "../components/NewsTemplate.vue";
+import NearbyPlaces from "../components/NearbyPlaces/NearbyPlaces.vue";
 </script>
 
 <template>
@@ -18,16 +19,16 @@ import NewsTemplate from "../components/NewsTemplate.vue";
         <Categories />
       </Tab>
 
-      <Tab title="Локации">
-        <Locations />
-      </Tab>
-
       <Tab title="СМС шаблон">
         <SMSTemplate />
       </Tab>
 
       <Tab title="Шаблон новости">
         <NewsTemplate />
+      </Tab>
+
+      <Tab title="Локации">
+        <NearbyPlaces />
       </Tab>
     </Tabs>
   </div>

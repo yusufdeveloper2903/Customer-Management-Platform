@@ -62,3 +62,49 @@ export interface Params {
   page_size?: number;
   search?: string;
 }
+
+export interface Lang {
+  ru: string;
+  uz: string;
+}
+
+export interface LocationPlace {
+  id?: number;
+  title: Lang;
+  address: Lang;
+  coordinates: {
+    lat: number;
+    long: number;
+  };
+  phones: string[];
+  region: {
+    id: 1;
+    name: {
+      ru: string;
+      uz: string;
+    };
+    parent: null;
+  };
+  content_type_id: number;
+}
+
+export interface LocationPlaceData {
+  id?: 1;
+  title: Lang;
+  address: Lang;
+  coordinates: {
+    lat: number | null;
+    lng: number | null;
+  };
+  phones: string[];
+  region: number | null;
+}
+
+export interface Regions {
+  id: number;
+  name: {
+    ru: string;
+    uz: string;
+  };
+  parent: null | number;
+}
