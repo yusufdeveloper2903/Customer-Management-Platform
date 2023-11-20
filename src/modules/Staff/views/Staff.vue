@@ -132,7 +132,7 @@ onMounted(async () => {
             class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
             
         >
-          {{ $t("add") }}
+          {{ $t("Add") }}
         </button>
       </div>
 

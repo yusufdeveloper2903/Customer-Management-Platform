@@ -4,11 +4,11 @@ export const fields = [
     value: "id",
   },
   {
-    text: "Title",
+    text: "name",
     value: "title",
   },
   {
-    text: "Photo",
+    text: "photo",
     value: "photo",
   },
   {

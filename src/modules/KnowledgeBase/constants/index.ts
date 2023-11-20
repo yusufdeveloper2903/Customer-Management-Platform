@@ -4,11 +4,11 @@ export const categoryFields = [
     value: "id",
   },
   {
-    text: "Photo",
+    text: "photo",
     value: "photo",
   },
   {
-    text: "Заголовок",
+    text: "name",
     value: "name",
   },
   {
@@ -44,7 +44,7 @@ export const introFields = [
     value: "id",
   },
   {
-    text: "Photo",
+    text: "photo",
     value: "photo",
   },
   {
@@ -94,7 +94,7 @@ export const splashFields = [
     value: "id",
   },
   {
-    text: "Photo",
+    text: "photo",
     value: "photo",
   },
   {
@@ -187,7 +187,7 @@ export const newsTemplateTable = [
     value: "description",
   },
   {
-    text: "Photo",
+    text: "photo",
     value: "photo",
   },
   {

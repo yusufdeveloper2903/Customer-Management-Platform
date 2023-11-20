@@ -15,6 +15,8 @@ export default defineStore("sms", {
         results: [] as Status[]
       } as Results<Status>,
 
+      bannerListDetail: {} as Banner,
+
       // news
       newsList: {
         results: [] as News[]
@@ -40,6 +42,11 @@ export default defineStore("sms", {
     async getBanner(params) {
       const { data } = await $axios.get("/knowledge_base/banner/", { params });
       this.bannerList = data;
+    },
+
+    async getBannerDetail(params) {
+      const { data } = await $axios.get(`/knowledge_base/banner/${params.id}`, { params });
+      this.bannerListDetail = data;
     },
 
     createBanner(data: object) {

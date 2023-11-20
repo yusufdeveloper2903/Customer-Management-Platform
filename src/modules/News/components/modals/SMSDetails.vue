@@ -87,13 +87,13 @@ const updateDeal = async () => {
             </div>
             <div class="w-[60%]">
               <label>
-                Title
-                <input type="text" class="form-input" placeholder="Title">
+                {{ $t('name') }}
+                <input type="text" class="form-input" placeholder="$t('name')">
               </label>
 
               <label class="mt-3 block">
-                Description
-                <input type="text" class="form-input" placeholder="Description">
+                {{ $t('description') }}
+                <input type="text" class="form-input" :placeholder="$t('description')">
               </label>
 
               <label class="mt-3 block">
@@ -116,7 +116,7 @@ const updateDeal = async () => {
 
       <div class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white">
         <button uk-toggle="target: #sms-detail" class="btn-secondary">
-          {{ $t("cancel2") }}
+          {{ $t("Cancel") }}
         </button>
 
         <button class="btn-success" @click="updateDeal" :disabled="isSubmitted">

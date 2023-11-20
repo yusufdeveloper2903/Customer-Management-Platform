@@ -7,7 +7,7 @@ export default [
   },
 
   {
-    name: "Пользователи",
+    name: "users",
     icon: "Users Group Rounded",
     path: "/users",
     permissions: ["admin"],
@@ -21,7 +21,7 @@ export default [
   },
 
   {
-    name: "Персонал",
+    name: "nav.staffs",
     icon: "Box",
     path: "/staff",
     permissions: ["admin"],
@@ -35,7 +35,7 @@ export default [
   // },
 
   {
-    name: "Уведомления",
+    name: "Notifications",
     icon: "Chat Line",
     path: "/sms-template",
     permissions: ["admin"],

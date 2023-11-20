@@ -304,7 +304,7 @@ const saveUser = async () => {
 
         <div class="mt-8 flex flex-wrap justify-end gap-4">
           <button class="btn-danger" @click="$router.push('/staff')">
-            {{ $t("cancel2") }}
+            {{ $t("Cancel") }}
           </button>
           <button class="btn-success" @click="saveUser">
             {{ $route.params.id ? $t("Change") : $t("Add") }}

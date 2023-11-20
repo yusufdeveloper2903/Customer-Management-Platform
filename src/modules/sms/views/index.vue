@@ -9,13 +9,13 @@ import Banner from '@/modules/sms/components/banner/index.vue'
 <template>
   <div class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm">
     <Tabs vertical pill>
-      <Tab title="СМС рассылка">
+      <Tab :title="$t('sms sending')">
         <Message/>
       </Tab>
-      <Tab title="Новости">
+      <Tab :title="$t('directory.News')">
         <News/>
       </Tab>
-      <Tab title="Баннер">
+      <Tab :title="$t('Banner')">
         <Banner/>
       </Tab>
     </Tabs>

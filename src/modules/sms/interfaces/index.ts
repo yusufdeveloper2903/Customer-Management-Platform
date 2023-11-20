@@ -104,7 +104,6 @@ export interface SmsSending {
 }
 
 // sms sending detail
-
 export interface Reseivers {
 id: number;
 // avatar: string | null;

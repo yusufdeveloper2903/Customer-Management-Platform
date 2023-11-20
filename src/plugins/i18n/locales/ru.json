@@ -218,5 +218,24 @@
   "REJECTED": "отклоненный",
   "history": "История",
   "hour": "ч",
-  "minute": "м"
+  "minute": "м",
+  "start_date": "Начало рассылки:",
+  "end_date": "Конец рассылки:",
+  "template": "Шаблон:",
+  "photo": "Фото",
+  "url": "URL",
+  "planned for(publish date)": "Запланированная дата",
+  "go_to_page": "Перейти на страницу",
+  "forward": "Вперед",
+  "sms sending": "СМС рассылка",
+  "Banner": "Баннер",
+  "Receivers": "Ресиверы",
+  "Set date and time": "Задать дату и время",
+  "news": "Новости",
+  "start time/ end time": "Время начала/время окончания",
+  "are you really going to delete this user": "Ты действительно собираешься удалить этого пользователя?",
+  "are_you_really_terminate_session": "Ты действительно завершаешь сеанс?",
+  "Notifications": "Уведомления",
+  "last_visit": "Последнее посещение"
+
 }

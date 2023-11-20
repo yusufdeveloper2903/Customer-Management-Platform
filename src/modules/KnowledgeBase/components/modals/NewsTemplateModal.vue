@@ -231,12 +231,12 @@ const updateDeal = async () => {
               </label>
 
               <label class="mt-4 block" for="descriptionRu"
-                >Описание
+                >{{ $t('description') }}
                 <input
                   id="descriptionRu"
                   type="text"
                   class="form-input"
-                  placeholder="Описание"
+                  :placeholder="$t('description')"
                   v-model="newsTemplateData.description.ru"
                   :class="
                     validate.description.ru.$errors.length

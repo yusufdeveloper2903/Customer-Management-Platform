@@ -8,7 +8,7 @@ export const fields = [
     value: "photo",
   },
   {
-    text: "full_name",
+    text: "Full Name",
     value: "full_name",
   },
   {

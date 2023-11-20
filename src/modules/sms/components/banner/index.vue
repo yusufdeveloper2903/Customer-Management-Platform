@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import AddEditModal from './AddEditModal.vue'
 import { bannerFields } from "../../constants/index"
 import knowledgeBase from "../../store/index"
 import { onMounted, ref, reactive, watch } from "vue";
 import { toast } from "vue3-toastify";
 import DeleteBanner from "./DeleteBannerModal.vue"
 import UIkit from "uikit";
+import {useRouter} from "vue-router";
 
 const { t } = useI18n()
 const store = knowledgeBase()
+const router = useRouter()
 const bannerList = ref<object[]>([]);
 const isLoading = ref(false);
 const timeout = ref();
@@ -111,7 +112,6 @@ watch(
     () => filterBanner.start_time , 
     () => {
       refresh(filterBanner);
-      console.log(filterBanner.start_time);
       
       if (bannerList.value.length <= 10) {
         current.value = 1;
@@ -206,8 +206,7 @@ onMounted(async () => {
         </form>
         <button
             class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-            @click="editData = {}"
-            uk-toggle="target: #bannerModal"
+            @click="router.push('/add-banner')"
         >
           {{ $t("Add") }}
         </button>
@@ -229,8 +228,10 @@ onMounted(async () => {
 
       <template #item-status="item">
         <span
-          :class="item.status.unique_name == 'not_sent' ? 'rounded-md bg-danger px-4 pb-0.5 text-white' : item.status.unique_name == 'in_progress' ? 'rounded-md bg-warning px-4 pb-0.5 text-white' : 'rounded-md bg-primary px-4 pb-0.5 text-white'">{{
+            v-if="item.status && item.status.unique_name"
+            :class="item.status.unique_name == 'not_sent' ? 'rounded-md bg-danger px-4 pb-0.5 text-white' : item.status?.unique_name == 'in_progress' ? 'rounded-md bg-warning px-4 pb-0.5 text-white' : 'rounded-md bg-primary px-4 pb-0.5 text-white'">{{
             item.status.title[$i18n.locale] }}</span>
+            <span v-else></span>
       </template>
 
       <template #item-from_to="item">
@@ -251,8 +252,9 @@ onMounted(async () => {
 
       <template #item-actions="item">
         <div class="flex my-2">
-          <button class="btn-warning btn-action" uk-toggle="target: #bannerModal" @click="editData = item">
-            <!-- @click="editData = item" -->
+          <button class="btn-warning btn-action" @click="
+                router.push(`/banner-detail/${item.id}`)
+              ">
             <Icon icon="Pen New Square" color="#fff" size="16" />
           </button>
           <button class="ml-3 btn-danger btn-action" @click="handleDeleteModal(item.id)">

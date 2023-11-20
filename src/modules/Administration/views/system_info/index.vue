@@ -505,7 +505,7 @@
                   <li class="flex justify-between">
                     <span>{{ $t('system_modules') }}</span>
                     <div class="flex flex-wrap">
-                      <span class="rounded-md font-medium bg-success/20 px-4 pb-0.5 text-success text-xs mb-1 mx-1">Пользователи</span>
+                      <span class="rounded-md font-medium bg-success/20 px-4 pb-0.5 text-success text-xs mb-1 mx-1">{{ $t('users') }}</span>
                       <span class="rounded-md font-medium bg-success/20 px-4 pb-0.5 text-success text-xs mb-1 mx-1">Справочник</span>
                       <span class="rounded-md font-medium bg-success/20 px-4 pb-0.5 text-success text-xs mb-1 mx-1">Администрация</span>
                       <span class="rounded-md font-medium bg-success/20 px-4 pb-0.5 text-success text-xs mb-1 mx-1">Сделки</span>

@@ -195,7 +195,7 @@ const savePhoneNumber = () => {
       >
         <!-- v-show="!getSmsCode" -->
         <button uk-toggle="target: #change-phone-number" class="btn-secondary">
-          {{ $t("cancel2") }}
+          {{ $t("Cancel") }}
         </button>
         <!-- <button
           v-show="getSmsCode"

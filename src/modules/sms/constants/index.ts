@@ -4,11 +4,11 @@ export const bannerFields = [
       value: "id",
     },
     {
-      text: "Title",
+      text: "name",
       value: "title",
     },
     {
-      text: "Photo",
+      text: "photo",
       value: "photo",
     },
     {
@@ -16,7 +16,7 @@ export const bannerFields = [
       value: "status",
     },
     {
-      text: "Start time / end time",
+      text: "start time/ end time",
       value: "from_to",
     },
     {
@@ -31,11 +31,11 @@ export const bannerFields = [
       value: "id",
     },
     {
-      text: "Title",
+      text: "name",
       value: "title",
     },
     {
-      text: "Photo",
+      text: "photo",
       value: "photo",
     },
     {
@@ -43,7 +43,7 @@ export const bannerFields = [
       value: "status",
     },
     {
-      text: "Planned for (publish date)",
+      text: "planned for(publish date)",
       value: "from_to",
     },
     {
@@ -58,7 +58,7 @@ export const bannerFields = [
       value: "id",
     },
     {
-      text: "Title",
+      text: "name",
       value: "title",
     },
     {
@@ -66,7 +66,7 @@ export const bannerFields = [
       value: "status",
     },
     {
-      text: "Planned for (publish date)",
+      text: "planned for(publish date)",
       value: "from_to",
     },
     {
