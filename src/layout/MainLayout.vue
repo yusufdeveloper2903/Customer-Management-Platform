@@ -82,31 +82,31 @@ function breadCrumbStart(newPath) {
   switch (newPath) {
     case "Cars":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
+        { title: "Administration", active: false },
         { title: "sidebar.cars", active: true },
       ];
       break;
     case "Regions":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
+        { title: "Administration", active: false },
         { title: "regions", active: true },
       ];
       break;
     case "Installment":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
+        { title: "Administration", active: false },
         { title: "installment_plan", active: true },
       ];
       break;
     case "TechCertificates":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
+        { title: "Administration", active: false },
         { title: "sidebar.techCertificate", active: true },
       ];
       break;
     case "Requisites":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
+        { title: "Administration", active: false },
         { title: "sidebar.requisites", active: true },
       ];
       break;
@@ -119,26 +119,26 @@ function breadCrumbStart(newPath) {
 
     case "Backup":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
-        { title: "administration.backups", active: true },
+        { title: "Administration", active: false },
+        { title: "backups", active: true },
       ];
       break;
     case "Logging":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
-        { title: "administration.journaling", active: true },
+        { title: "Administration", active: false },
+        { title: "journaling", active: true },
       ];
       break;
     case "DataArchive":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
-        { title: "administration.backup&archiving", active: true },
+        { title: "Administration", active: false },
+        { title: "backup&archiving", active: true },
       ];
       break;
     case "SystemInfo":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
-        { title: "administration.system", active: true },
+        { title: "Administration", active: false },
+        { title: "system", active: true },
       ];
       break;
 

@@ -4,7 +4,7 @@ export const productsFields = [
     value: "id",
   },
   {
-    text: "Product",
+    text: "Products",
     value: "product",
   },
   {
@@ -12,11 +12,11 @@ export const productsFields = [
     value: "status",
   },
   {
-    text: "Seller",
+    text: "Sellers",
     value: "seller",
   },
   {
-    text: "User",
+    text: "Users",
     value: "user",
   },
   {

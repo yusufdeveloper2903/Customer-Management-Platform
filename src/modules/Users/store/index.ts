@@ -29,6 +29,10 @@ export default defineStore("users", {
       this.user = data;
     },
 
+    createTerminateId(data: object) {
+      return $axios.post("/clients/terminate_client_session/", data);
+    },
+
     createUser(data: object) {
       return $axios.post("/users/users/", data);
     },

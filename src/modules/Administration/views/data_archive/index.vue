@@ -350,7 +350,7 @@ const headers: Header[] = [
     value: "author",
   },
   {
-    text: "name2", // $t('name2')
+    text: "name", // $t('name')
     value: "title",
   },
   {

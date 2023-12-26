@@ -81,11 +81,11 @@ onMounted(() => {
   <div class="card">
     <div class="flex justify-between items-end mb-10">
       <label for="search" class="w-1/4">
-        Search
-        <input type="text" class="form-input" placeholder="Search"/>
+        {{ $t('Search') }}
+        <input type="text" class="form-input" :placeholder="$t('Search')"/>
       </label>
       <button class="btn-primary" uk-toggle="target: #categories">
-        {{ $t("Добавить") }}
+        {{ $t("Add") }}
       </button>
     </div>
 
@@ -97,6 +97,7 @@ onMounted(() => {
             class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider"
         >
           {{ field.text }}
+
         </th>
       </tr>
       </thead>

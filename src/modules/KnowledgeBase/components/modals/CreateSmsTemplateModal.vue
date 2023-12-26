@@ -140,7 +140,7 @@ const updateDeal = async () => {
       <button class="uk-modal-close-default" type="button" uk-close />
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? $t("Change") : $t('add') }}
+          {{ propData.editData.id ? $t("Change") : $t('Add') }}
         </h2>
       </div>
 
@@ -207,7 +207,7 @@ const updateDeal = async () => {
             </p>
             </label>
 
-              <label class="mt-4 block" for="descriptionRu">{{ $t('description') }}
+              <label class="mt-4 block" for="descriptionRu">Описание
               <input
                 id="descriptionRu"
                 type="text"
@@ -243,7 +243,7 @@ const updateDeal = async () => {
             class="inline w-4 h-4 text-white animate-spin mr-2"
             v-if="isSubmitted"
           />
-          <span>{{ propData.editData.id ? $t("Change") : $t('add') }}</span>
+          <span>{{ propData.editData.id ? $t("Change") : $t('Add') }}</span>
         </button>
       </div>
     </div>

@@ -1,20 +1,20 @@
 export default [
   {
-    name: "Панель приборов",
+    name: "dashboard",
     icon: "Home Smile",
     path: "/dashboard",
     permissions: ["admin"],
   },
 
   {
-    name: "users",
+    name: "Users",
     icon: "Users Group Rounded",
     path: "/users",
     permissions: ["admin"],
   },
 
   {
-    name: "Справочник",
+    name: "nav.directory",
     icon: "Book Bookmark",
     path: "/knowledgeBase",
     permissions: ["admin"],
@@ -42,30 +42,30 @@ export default [
   },
 
   {
-    name: "Администрация",
+    name: "Administration",
     icon: "Settings",
     permissions: ["admin"],
     child: [
       {
-        name: "global.backups",
+        name: "backups",
         path: "/reference/backup",
         icon: "File",
         permissions: ["admin"],
       },
       {
-        name: "global.journaling",
+        name: "journaling",
         path: "/reference/logging",
         icon: "File",
         permissions: ["admin"],
       },
       {
-        name: "global.backup&archiving",
+        name: "backup&archiving",
         path: "/reference/data-archive",
         icon: "File",
         permissions: ["admin"],
       },
       {
-        name: "global.system",
+        name: "system",
         path: "/reference/system-info",
         icon: "File",
         permissions: ["admin"],

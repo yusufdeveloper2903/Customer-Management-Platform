@@ -8,6 +8,7 @@ import TerminateSessionModal from "../components/TerminateSessionModal.vue"
 const store = users()
 const route = useRoute()
 const userItem = ref<object>({});
+const userId = ref(null)
 
 
 onMounted(async() => {
@@ -16,8 +17,9 @@ onMounted(async() => {
   
 })
 
-const showTerminateModal = () => {
+const showTerminateModal = (item) => {
   UIkit.modal("#terminate-session-modal").show();
+  userId.value = item.id
 };
 </script>
 
@@ -39,7 +41,7 @@ const showTerminateModal = () => {
 
       <!-- device info -->
       <div class="card mt-4">
-        <ul class="uk-list uk-list-divider" v-if="store.user && store.user.sessions.length">
+        <ul class="uk-list uk-list-divider" v-if="store.user && store.user.sessions && store.user.sessions.length">
           <li  v-for="(item, index) in store.user.sessions" :key="index" >
             <div class="flex justify-between">
           <div>
@@ -54,7 +56,7 @@ const showTerminateModal = () => {
           </div>
         </div>
         <div class="uk-flex uk-flex-center mt-2">
-          <span class="rounded-md bg-secondary px-4 pb-0.5 text-white" @click="showTerminateModal"><small>Terminate session</small> </span>
+          <span class="rounded-md bg-secondary px-4 pb-0.5 text-white" @click="showTerminateModal(item)"><small>Terminate session</small> </span>
         </div>
           </li>
         </ul>
@@ -66,5 +68,5 @@ const showTerminateModal = () => {
     </div>
   </div>
 
-  <TerminateSessionModal  />
+  <TerminateSessionModal  :userId="userId"/>
 </template>

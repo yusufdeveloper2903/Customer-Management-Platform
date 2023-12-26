@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { locationFields } from "../constants";
+import { versionControlFields } from "../constants";
 import knowledgeBase from ".././store/index"
 import { onMounted, reactive, ref, watch } from "vue";
 import { toast } from "vue3-toastify";
 import UIkit from "uikit";
 import DeleteSmsTemplate from "./modals/DeleteSmsTemplateModal.vue"
-import CreateSmsTemplate from "./modals/CreateSmsTemplateModal.vue"
+import AddVersionControl from "./modals/VersionControlModal.vue"
 
 const store = knowledgeBase()
 const isLoading = ref(false);
@@ -106,23 +106,44 @@ watch(
 
 <template>
   <div class="card">
-    <div class="flex justify-between items-end mb-10">
-      <label for="search" class="w-1/4" >
-        {{ $t('Search') }}
-        <input type="text" class="form-input" placeholder="Search" @input="searchByName" v-model="filterSmsTemplate.search"/>
-      </label>
-      <button class="btn-primary" uk-toggle="target: #sms_template" @click="editData = {}">
-        {{ $t("Add") }}
-      </button>
+
+    <div class="md:flex items-center justify-between mb-5">
+        <form class="mb-4 md:flex items-center gap-5 md:w-9/12">
+
+          <div class="md:w-1/2 md:m-0 mt-2">
+            <label for="from" class="dark:text-gray-300">
+              {{ $t("from") }}
+            </label>
+            <VueDatePicker></VueDatePicker>
+          </div>
+
+          <div class="md:w-1/2 md:m-0 mt-2">
+            <label for="to" class="dark:text-gray-300">
+              {{ $t("to") }}
+            </label>
+            <VueDatePicker ></VueDatePicker>
+          </div>
+        </form>
+        <button
+        class="btn-primary" uk-toggle="target: #version_control" 
+        >
+          {{ $t("Add") }}
+        </button>
     </div>
-    <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="locationFields"
+
+
+    <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="versionControlFields"
       :items="smsTemplateList">
 
-      <template #header-title="header">
+      <template #header-datetime="header">
         {{ $t(header.text).toUpperCase() }}
       </template>
 
-      <template #header-description="header">
+      <template #header-version_number="header">
+        {{ $t(header.text).toUpperCase() }}
+      </template>
+
+      <template #header-is_active="header">
         {{ $t(header.text).toUpperCase() }}
       </template>
 
@@ -130,17 +151,23 @@ watch(
         {{ $t(header.text).toUpperCase() }}
       </template>
 
-      <template #item-title="item">
-        {{ item.title[$i18n.locale] }}
-      </template>
-
-      <template #item-description="item">
-        {{ item.description[$i18n.locale] }}
-      </template>
+      <template #item-is_active="items">
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+                type="checkbox"
+                :checked="items.is_active"
+                disabled
+                class="sr-only peer"
+            />
+            <div
+                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"/>
+          </label>
+        </template>
 
       <template #item-actions="item">
         <div class="flex my-4">
-          <button class="btn-warning btn-action" uk-toggle="target: #sms_template" @click="editData = item">
+          <button class="btn-warning btn-action" uk-toggle="target: #version_control" >
+            <!-- @click="editData = item" -->
             <Icon icon="Pen New Square" color="#fff" size="16" />
           </button>
           <button class="ml-3 btn-danger btn-action" @click="handleDeleteModal(item.id)">
@@ -157,5 +184,6 @@ watch(
   <DeleteSmsTemplate  :userId="userId"
           @deleteSmsTemplate="deleteSmsTemplate"/>
 
-          <CreateSmsTemplate @saveSmsTemplate="saveSmsTemplate" :editData="editData"/>
+          <AddVersionControl />
+          <!-- @saveSmsTemplate="saveSmsTemplate" :editData="editData" -->
 </template>

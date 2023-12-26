@@ -270,36 +270,36 @@ let pagesList = ref([
 
   // admin
   {
-    name: "administration.backups",
+    name: "backups",
     path: "/reference/backup",
     icon: "File",
   },
   {
-    name: "administration.journaling",
+    name: "journaling",
     path: "/reference/logging",
     icon: "File",
   },
   {
-    name: "administration.backup&archiving",
+    name: "backup&archiving",
     path: "/reference/data-archive",
     icon: "File",
   },
   {
-    name: "administration.system",
+    name: "system",
     path: "/reference/system-info",
     icon: "File",
   },
 
   // deals
   {
-    name: "sidebar.deals",
+    name: "deals",
     icon: "cart",
     path: "/deals",
   },
 
   // profile
   {
-    name: "sidebar.profile",
+    name: "profile",
     icon: "user",
     path: "/profile",
   },

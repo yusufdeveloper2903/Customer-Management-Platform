@@ -354,7 +354,7 @@ const headers: Header[] = [
     value: "author",
   },
   {
-    text: "name2", // $t('name2')
+    text: "name", // $t('name2')
     value: "title",
   },
   {
@@ -642,7 +642,7 @@ const bodyItemClassNameFunction: BodyItemClassNameFunction = (column: string, ro
           />
           <div class="uk-modal-header dark:bg-darkLayoutMain">
             <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b] dark:text-white">
-              {{ $t('creating_a_backup') }} 
+              {{ $t('create_a_backup') }} 
             </h2>
           </div>
           <div class="uk-modal-body dark:text-gray-300">

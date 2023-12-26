@@ -1,37 +1,38 @@
 <script setup lang="ts">
-// import { toast } from "vue3-toastify";
-// import users from "../store/index";
-// import { useI18n } from "vue-i18n";
+import { toast } from "vue3-toastify";
+import users from "../store/index";
+import { useI18n } from "vue-i18n";
 
-// const store = users();
-// const { t } = useI18n();
+const store = users();
+const { t } = useI18n();
 
-// interface PropsUser {
-//   userId: any;
-// }
+interface PropsUser {
+  userId: any;
+}
 
-// const props = defineProps<PropsUser>();
+const props = defineProps<PropsUser>();
 const emits = defineEmits(["deleteUser"]);
-// const deleteUser = async () => {
-//   try {
-//     await store.deleteUser(props.userId).then(() => {
-//       emits("deleteUser");
-//       toast.success(t("deleted_successfully"));
-//     });
-//   } catch (error: any) {
-//     const warning = "Cannot delete some instances of model";
 
-//     if (error.response.data.error.includes(warning)) {
-//       toast.error(
-//         "У пользователя есть сделки, поэтому вы не можете его удалить."
-//       );
-//     } else {
-//       toast.error(
-//         error.response.data.msg || error.response.data.error || "Error"
-//       );
-//     }
-//   }
-// };
+const createTerminateId = async () => {
+  try {
+    await store.createTerminateId({session_id: props.userId}).then(() => {
+      emits("deleteUser");
+      toast.success(t("created_successfully"));
+    });
+  } catch (error: any) {
+    const warning = "Cannot delete some instances of model";
+
+    if (error.response.data.error.includes(warning)) {
+      toast.error(
+        "У пользователя есть сделки, поэтому вы не можете его удалить."
+      );
+    } else {
+      toast.error(
+        error.response.data.msg || error.response.data.error || "Error"
+      );
+    }
+  }
+};
 </script>
 
 <template>
@@ -57,8 +58,8 @@ const emits = defineEmits(["deleteUser"]);
         <button
           uk-toggle="target: #terminate-session-modal"
           class="rounded-md btn-danger px-6 py-2 text-white duration-100 hover:opacity-90"
+          @click="createTerminateId"
           >
-          <!-- @click="deleteUser" -->
           {{ $t("Terminate") }}
         </button>
       </div>

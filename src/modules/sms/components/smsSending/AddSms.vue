@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import VueDatePicker from '@vuepic/vue-datepicker';
 import { useI18n } from 'vue-i18n'
-// import {Textarea} from "flowbite-vue";
 import type { Header } from "vue3-easy-data-table";
 import '@vuepic/vue-datepicker/dist/main.css'
 import { onMounted, ref, reactive, watch } from "vue";
@@ -16,7 +15,6 @@ const templateStore = referenceStore()
 const store = knowledgeBase()
 const router = useRouter()
 const route = useRoute()
-const is_active = ref(false)
 const reseiversList = ref<object[]>([])
 const current = ref<number>(1);
 const loading = ref(false);
@@ -43,12 +41,16 @@ const filterClient = reactive({
 
 interface SmsSendingData {
   start_time: any;
-  template: null | number;
+  template: null | string;
   description: {
     ru: string;
     uz: string;
   }
   receivers: number[]
+  title: {
+    ru: string;
+    uz: string;
+  }
 }
 const smsSendingData = ref<SmsSendingData>({
   start_time: "",
@@ -57,20 +59,13 @@ const smsSendingData = ref<SmsSendingData>({
     ru: "",
     uz: ""
   },
-  receivers: []
+  receivers: [],
+  title: {
+    ru: "",
+    uz: ""
+  },
 
 })
-
-const ckeckedDate = () => {
-  if (is_active.value == false) {
-    is_active.value = true
-    smsSendingData.value.start_time = new Date()
-  } else if (is_active.value == true) {
-    is_active.value = false
-    smsSendingData.value.start_time = null
-  }
-
-}
 
 const refresh = async (filter) => {
   loading.value = true;
@@ -100,7 +95,7 @@ onMounted(async () => {
 
     smsSendingData.value.start_time = store.smsSendingDetail.start_time;
     smsSendingData.value.description = store.smsSendingDetail.description
-    smsSendingData.value.template = store.smsSendingDetail.template.id
+    smsSendingData.value.template = store.smsSendingDetail.template
   }
 
 })
@@ -147,9 +142,21 @@ watch(
 );
 
 function saveData() {
+  const formData = new FormData()
+  if(smsSendingData.value.title){
+        formData.append('title', JSON.stringify(smsSendingData.value.title))
+        formData.append('description', JSON.stringify(smsSendingData.value.description))
+      }
+      formData.append('start_time', smsSendingData.value.start_time)
+      smsSendingData.value.receivers.forEach(el => {
+         formData.append('receivers', el )
+       })
+      if(smsSendingData.value.template){
+        formData.append('template', smsSendingData.value.template?.id)
+      }
   if (route.params.id) {
     try {
-      store.updateSmsSending({ id: route.params.id, ...smsSendingData.value }).then(() => {
+      store.updateSmsSending({ id: route.params.id, ...formData }).then(() => {
         router.push("/sms-template");
         toast.success(t("updated_successfully"));
       })
@@ -157,13 +164,12 @@ function saveData() {
       if (error) {
         toast.error(
           error.response.message || "Error"
-
         );
       }
     }
   } else {
     try {
-      store.createSmsSending(smsSendingData.value).then(() => {
+      store.createSmsSending(formData).then(() => {
         router.push("/sms-template");
         toast.success(t("created_successfully"));
       })
@@ -186,22 +192,20 @@ function saveData() {
     <div class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm w-1/2">
       <h1 class="font-semibold text-lg">{{ $t('sms sending') }}</h1>
 
-      <div class="uk-margin mb-0 flex items-center">
-
+      <!-- <div class="uk-margin mb-0 flex items-center">
         <div class="uk-form-controls mr-2 flex">
           <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" class="sr-only peer" v-model="is_active" @click="ckeckedDate" />
-            <div
-              class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary" />
+            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary" />
           </label>
         </div>
         <label for="form-stacked-text" class="text-sm">{{ $t('Set date and time') }}</label>
-      </div>
+      </div> -->
 
       <div class="uk-margin">
         <label for="form-stacked-text">{{ $t('start_date') }} </label>
         <div class="uk-form-controls">
-          <VueDatePicker v-model="smsSendingData.start_time" />
+          <VueDatePicker v-model="smsSendingData.start_time" model-type="yyyy-MM-dd hh:mm"/>
         </div>
       </div>
 
@@ -210,11 +214,32 @@ function saveData() {
         <div class="uk-form-controls">
           <VSelect v-model="smsSendingData.template"
             :options="templateStore.smsTemplateList && templateStore.smsTemplateList.results"
-            :getOptionLabel="(name) => name.title && name.title[$i18n.locale]" :reduce="(name) => name.id" />
+            :getOptionLabel="(name) => name.title && name.title[$i18n.locale]" :reduce="(name) => name" />
         </div>
       </div>
 
-      <div class="uk-margin">
+      <div class="uk-margin" v-if="smsSendingData.template">
+        <label for="form-stacked-text">{{ $t('name') }}</label>
+        <div class="uk-form-controls">
+          <input class="form-input" v-model="smsSendingData.template.title[$i18n.locale]"/>        
+        </div>
+      </div>
+
+      <div class="uk-margin" v-else>
+        <label for="form-stacked-text">{{ $t('name') }}</label>
+        <div class="uk-form-controls">
+          <input v-model="smsSendingData.title[$i18n.locale]" class="form-input" disabled/>        
+        </div>
+      </div>
+
+      <div class="uk-margin" v-if="smsSendingData.template">
+        <label for="form-stacked-text">{{ $t('description') }}</label>
+        <div class="uk-form-controls">
+          <textarea v-model="smsSendingData.template.description[$i18n.locale]" class="form-input" rows="5" />
+        </div>
+      </div>
+
+      <div class="uk-margin" v-else>
         <label for="form-stacked-text">{{ $t('description') }}</label>
         <div class="uk-form-controls">
           <textarea v-model="smsSendingData.description[$i18n.locale]" class="form-input" rows="5" />

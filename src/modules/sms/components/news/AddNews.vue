@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import VueDatePicker from '@vuepic/vue-datepicker';
 import { useI18n } from 'vue-i18n'
-// import {Textarea} from "flowbite-vue";
 import type { Header } from "vue3-easy-data-table";
 import '@vuepic/vue-datepicker/dist/main.css'
 import { onMounted, ref, reactive, watch } from "vue";
@@ -9,8 +8,11 @@ import { toast } from "vue3-toastify";
 import knowledgeBase from "../../store/index"
 import { useRoute, useRouter } from "vue-router";
 import clientsStore from "@/modules/Users/store/index"
+import newsTemplate from "@/modules/KnowledgeBase/store"
+
 
 const file = ref<string>("")
+const newTemplate = newsTemplate()
 const { t } = useI18n()
 const store = knowledgeBase()
 const router = useRouter()
@@ -29,8 +31,14 @@ interface NewsData {
     ru: string;
     uz: string;
   },
+  description: {
+      uz: string,
+      ru: string
+    },
   photo: string | null,
-  receivers: number[]
+  receivers: number[],
+  template: null | string,
+  enable_push_notify: boolean
 }
 
 const newsData = ref<NewsData>({
@@ -38,12 +46,17 @@ const newsData = ref<NewsData>({
       uz: "",
       ru: ""
     },
+    description: {
+      uz: "",
+      ru: ""
+    },
     photo: "",
     start_time: "",
     status: "",
     url: "",
-    receivers: []
-
+    receivers: [],
+    template: null,
+    enable_push_notify: false
 })
 
 const paginationFilter = reactive({
@@ -79,15 +92,17 @@ const refresh = async (filter) => {
 onMounted(async () => {
   await refresh(filterClient)
   await store.getStatus()
+  await newTemplate.getNewsTemplate()
 
   if (route.params.id) {
-  await store.getNewsDetail({ id: Number(route.params.id)})
-      
+  await store.getNewsDetail({ id: Number(route.params.id)})    
       newsData.value.start_time = store.newsListDetail.start_time;
       newsData.value.title = store.newsListDetail.title
       newsData.value.photo = store.newsListDetail.file
       newsData.value.url = store.newsListDetail.url
       newsData.value.status = store.newsListDetail.status
+      newsData.value.description = store.newsListDetail.description
+      newsData.value.template = store.newsListDetail.template
   }
 })
 
@@ -104,7 +119,7 @@ function getId(id: number) {
 const headers: Header[] = [
   { text: "button", value: "check" },
   { text: "id", value: "id" },
-  { text: "Gender", value: "gender" },
+  { text: "fio", value: "fio" },
   { text: "phone_number", value: "phone" },
 ];
 
@@ -150,17 +165,31 @@ const saveData = async () => {
     const formData = new FormData()
     if(file.value){
       formData.append('file', newsData.value.photo)
-      formData.append('title', JSON.stringify(newsData.value.title))
+      if(newsData.value.title){
+        formData.append('title', JSON.stringify(newsData.value.title))
+        formData.append('description', JSON.stringify(newsData.value.description))
+      }
       formData.append('status', newsData.value.status)
       formData.append('start_time', newsData.value.start_time)
-      formData.append('receivers', newsData.value.receivers )
-
-
+       newsData.value.receivers.forEach(el => {
+         formData.append('receivers', el )
+       })
+      formData.append('template', newsData.value.template.id)
+      formData.append('enable_push_notify', newsData.value.enable_push_notify)
     } else {
-      formData.append('title', JSON.stringify(newsData.value.title))
+      if(newsData.value.title){
+        formData.append('title', JSON.stringify(newsData.value.title))
+        formData.append('description', JSON.stringify(newsData.value.description))
+      }
       formData.append('status', newsData.value.status)
       formData.append('start_time', newsData.value.start_time)
-      formData.append('receivers', newsData.value.receivers)
+      formData.append('enable_push_notify', newsData.value.enable_push_notify)
+      newsData.value.receivers.forEach(el => {
+         formData.append('receivers', el )
+       })
+      if(newsData.value.template){
+        formData.append('template', newsData.value.template?.id)
+      }
 
     }
 
@@ -226,10 +255,41 @@ const saveData = async () => {
             </label>
       </div>
 
-      <div class="uk-margin">
+      <div class="uk-margin" v-if="!newsData.title[$i18n.locale]">
+        <label for="form-stacked-text" class="mt-4 block">{{ $t('template') }}
+              <VSelect v-model="newsData.template" 
+              :getOptionLabel="(name) => name.title[$i18n.locale]"  
+              :options="newTemplate.newTemplate && newTemplate.newTemplate.results"
+              :reduce="(name) => name"
+              />
+            </label>
+      </div>
+
+      <div class="uk-margin" v-if="newsData.template">
         <label for="form-stacked-text">{{ $t('name') }}</label>
         <div class="uk-form-controls">
-          <input v-model="newsData.title[$i18n.locale]" class="form-input" rows="5" />
+          <input v-model="newsData.template.title[$i18n.locale]" class="form-input" disabled/>        
+        </div>
+      </div>
+      
+      <div class="uk-margin" v-else>
+        <label for="form-stacked-text">{{ $t('name') }}</label>
+        <div class="uk-form-controls">
+          <input v-model="newsData.title[$i18n.locale]" class="form-input" />
+        </div>
+      </div>
+
+      <div class="uk-margin" v-if="newsData.template">
+        <label for="form-stacked-text">{{ $t('description') }}</label>
+        <div class="uk-form-controls">
+          <textarea v-model="newsData.template.description[$i18n.locale]" class="form-input" rows="5" disabled />
+        </div>
+      </div>
+
+      <div class="uk-margin" v-else>
+        <label for="form-stacked-text">{{ $t('description') }}</label>
+        <div class="uk-form-controls">
+          <textarea v-model="newsData.description[$i18n.locale]" class="form-input" rows="5" />
         </div>
       </div>
 
@@ -247,7 +307,16 @@ const saveData = async () => {
             </div>        
       </div>
 
+      <div class="uk-form-controls mr-2 flex">
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" class="sr-only peer" v-model="newsData.enable_push_notify"/>
+            <div
+              class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary" />
+          </label>
+        </div>
     </div>
+
+
 
     <div class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm w-full">
       <div>
@@ -261,7 +330,6 @@ const saveData = async () => {
             </div>
           </div>
         </div>
-
         <EasyDataTable theme-color="#7367f0" :loading="loading" :headers="headers" :items="route.params.id ? reseiversList : clientsList" hide-footer>
 
           <template #header-check="">
@@ -279,8 +347,8 @@ const saveData = async () => {
             {{ t(data.text).toUpperCase() }}
           </template>
 
-          <template #item-name="item">
-            {{ item.name[$i18n.locale] }}
+          <template #item-fio="item">
+            {{ item.full_name }}
           </template>
         </EasyDataTable>
       </div>
@@ -297,4 +365,3 @@ const saveData = async () => {
     </button>
   </div>
 </template>
-

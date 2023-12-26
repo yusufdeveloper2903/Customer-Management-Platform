@@ -153,7 +153,7 @@ const updateDeal = async () => {
       <button class="uk-modal-close-default" type="button" uk-close />
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? $t("Изменения") : $t("Добавления") }}
+          {{ propData.editData.id ? $t("edit") : $t("Add") }}
         </h2>
       </div>
 
@@ -231,12 +231,12 @@ const updateDeal = async () => {
               </label>
 
               <label class="mt-4 block" for="descriptionRu"
-                >{{ $t('description') }}
+                >Описание
                 <input
                   id="descriptionRu"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('description')"
+                  placeholder="Описание"
                   v-model="newsTemplateData.description.ru"
                   :class="
                     validate.description.ru.$errors.length
@@ -256,7 +256,7 @@ const updateDeal = async () => {
           </Tab>
         </Tabs>
         <label for="nameUz"
-          >Линк
+          >{{ $t('Link') }}
           <input
             id="nameUz"
             type="text"
@@ -266,7 +266,7 @@ const updateDeal = async () => {
           />
         </label>
         <label for="nameUz"
-          >Фото
+          >{{ $t('photo') }}
           <FileInput
             v-model="newsTemplateData.file"
             @remove="newsTemplateData.file = null"
@@ -292,7 +292,7 @@ const updateDeal = async () => {
             v-if="isSubmitted"
           />
           <span>{{
-            propData.editData.id ? $t("Изменить") : $t("Добавить")
+            propData.editData.id ? $t("edit") : $t("Add")
           }}</span>
         </button>
       </div>

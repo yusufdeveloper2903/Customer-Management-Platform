@@ -86,7 +86,7 @@ onMounted(() => {
   <div class="card">
     <div class="flex justify-between items-end mb-10">
       <label for="search" class="w-1/4">
-        Search
+        {{ $t('Search') }}
         <input
           v-model="search"
           type="text"
@@ -95,7 +95,7 @@ onMounted(() => {
         />
       </label>
       <button class="btn-primary" @click="openModal(false)">
-        {{ $t("Добавить") }}
+        {{ $t("Add") }}
       </button>
     </div>
     <EasyDataTable

@@ -145,11 +145,11 @@ export const locationFields = [
     value: "id",
   },
   {
-    text: "Title",
+    text: "title",
     value: "title",
   },
   {
-    text: "Description",
+    text: "description",
     value: "description",
   },
   {
@@ -179,11 +179,11 @@ export const newsTemplateTable = [
     value: "id",
   },
   {
-    text: "Title",
+    text: "title",
     value: "title",
   },
   {
-    text: "Description",
+    text: "description",
     value: "description",
   },
   {
@@ -199,3 +199,22 @@ export const newsTemplateTable = [
     value: "actions",
   },
 ];
+
+export const versionControlFields = [
+  {
+    text: "date_and_time",
+    value: "datetime"
+  },
+  {
+    text: "version_number",
+    value: "version_number"
+  },
+  {
+    text: "Status",
+    value: "is_active"
+  },
+  {
+    text: "actions",
+    value: "actions",
+  },
+]

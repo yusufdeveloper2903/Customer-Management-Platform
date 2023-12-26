@@ -2,12 +2,10 @@
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
 import Categories from "../components/Categories.vue";
-// import Intro from "../components/Intro.vue";
-// import Splash from "../components/Splash.vue";
-// import Locations from "../components/Locations.vue";
 import SMSTemplate from "../components/SMSTemplate.vue";
 import NewsTemplate from "../components/NewsTemplate.vue";
 import NearbyPlaces from "../components/NearbyPlaces/NearbyPlaces.vue";
+import VersionControl from "../components/VersionControl.vue"
 </script>
 
 <template>
@@ -15,20 +13,24 @@ import NearbyPlaces from "../components/NearbyPlaces/NearbyPlaces.vue";
     class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm"
   >
     <Tabs vertical pill>
-      <Tab title="Категория">
+      <Tab :title="$t('category')">
         <Categories />
       </Tab>
 
-      <Tab title="СМС шаблон">
+      <Tab :title="$t('sms_template')">
         <SMSTemplate />
       </Tab>
 
-      <Tab title="Шаблон новости">
+      <Tab :title="$t('News template')">
         <NewsTemplate />
       </Tab>
 
-      <Tab title="Локации">
+      <Tab :title="$t('Locations')">
         <NearbyPlaces />
+      </Tab>
+
+      <Tab :title="$t('version_control')">
+        <VersionControl />
       </Tab>
     </Tabs>
   </div>
