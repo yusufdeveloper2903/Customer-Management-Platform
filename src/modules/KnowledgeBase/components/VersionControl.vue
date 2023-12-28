@@ -4,44 +4,29 @@ import knowledgeBase from ".././store/index"
 import { onMounted, reactive, ref, watch } from "vue";
 import { toast } from "vue3-toastify";
 import UIkit from "uikit";
-import DeleteSmsTemplate from "./modals/DeleteSmsTemplateModal.vue"
+import DeleteVersionControl from "./modals/DeleteVersionControl.vue"
 import AddVersionControl from "./modals/VersionControlModal.vue"
 
 const store = knowledgeBase()
 const isLoading = ref(false);
-let smsTemplateList = ref<object[]>([]);
-const timeout = ref();
 const current = ref<number>(1);
 const userId = ref<number | null>(null);
 
 interface EditData {
-  id: number | null,
-  title: {
-      uz: string,
-      ru: string
-    },
-    description: {
-      uz: string,
-      ru: string
-    },
+    id: number | null
+    number: string,
 }
 
-
 const editData = ref<EditData>({
-  id: null,
-  title: {
-      uz: "",
-      ru: ""
-    },
-    description: {
-      uz: "",
-      ru: ""
-    },
+    id: null,
+    number: ""
 })
+
 // filters
-const filterSmsTemplate = reactive({
+const filterVersionControl = reactive({
   page_size: 10,
-  search: "",
+  start_time: "",
+  modified_date: ""
 });
 
 const paginationFilter = reactive({
@@ -51,14 +36,13 @@ const paginationFilter = reactive({
 
 const handleDeleteModal = (id: number) => {
   userId.value = id;
-  UIkit.modal("#sms_template-delete-modal").show();
+  UIkit.modal("#version-delete-modal").show();
 };
 
 const refresh = async (filter) => {
   isLoading.value = true;
   try {
-    await store.getSmsTemplate(filter);
-    smsTemplateList.value = store.smsTemplateList.results;
+    await store.getVersionControl(filter);
   } catch (error: any) {
     toast.error(
       error.response || "Error"
@@ -68,39 +52,48 @@ const refresh = async (filter) => {
   isLoading.value = false;
 };
 
-const changePagionation = (e: number) => {
+const changePagination = (e: number) => {
   paginationFilter.page = e;
   current.value = e;
-  refresh({ ...paginationFilter, ...filterSmsTemplate });
+  refresh({ ...paginationFilter, ...filterVersionControl });
 };
 
-const searchByName = () => {
-  clearTimeout(timeout.value);
-  timeout.value = setTimeout(() => {
-    refresh(filterSmsTemplate);
-  }, 500);
+const deleteVersionControl = () => {
+  refresh(filterVersionControl);
 };
 
-const deleteSmsTemplate = () => {
-  refresh(filterSmsTemplate);
-};
-
-const saveSmsTemplate = () => {
-  refresh(filterSmsTemplate);
+const saveVersionControl = () => {
+  refresh(filterVersionControl);
 }
 
 onMounted(async () => {
   await refresh(paginationFilter);
 });
 
+watch(
+  
+    () => filterVersionControl.start_time , 
+    () => {
+      refresh(filterVersionControl);
+      
+      if (store.versionControlList.results.length <= 10) {
+        current.value = 1;
+      }
+    },
+
+);
 
 watch(
-  () => filterSmsTemplate.search,
-  () => {
-    if (smsTemplateList.value.length <= 10) {
-      current.value = 1;
-    }
-  }
+  
+    () => filterVersionControl.modified_date , 
+    () => {
+      refresh(filterVersionControl);
+      
+      if (store.versionControlList.results.length <= 10) {
+        current.value = 1;
+      }
+    },
+
 );
 </script>
 
@@ -114,18 +107,18 @@ watch(
             <label for="from" class="dark:text-gray-300">
               {{ $t("from") }}
             </label>
-            <VueDatePicker></VueDatePicker>
+            <VueDatePicker v-model="filterVersionControl.start_time"></VueDatePicker>
           </div>
 
           <div class="md:w-1/2 md:m-0 mt-2">
             <label for="to" class="dark:text-gray-300">
               {{ $t("to") }}
             </label>
-            <VueDatePicker ></VueDatePicker>
+            <VueDatePicker v-model="filterVersionControl.modified_date"></VueDatePicker>
           </div>
         </form>
         <button
-        class="btn-primary" uk-toggle="target: #version_control" 
+        class="btn-primary" uk-toggle="target: #version_control" @click="editData = {}"
         >
           {{ $t("Add") }}
         </button>
@@ -133,9 +126,13 @@ watch(
 
 
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="versionControlFields"
-      :items="smsTemplateList">
+      :items="store.versionControlList.results">
 
       <template #header-datetime="header">
+        {{ $t(header.text).toUpperCase() }}
+      </template>
+      
+      <template #header-modified_date="header">
         {{ $t(header.text).toUpperCase() }}
       </template>
 
@@ -149,6 +146,14 @@ watch(
 
       <template #header-actions="header">
         {{ $t(header.text).toUpperCase() }}
+      </template>
+
+      <template #item-datetime="items">
+        {{ items.created_date }}
+      </template>
+
+      <template #item-version_number="items">
+        {{ items.number }}
       </template>
 
       <template #item-is_active="items">
@@ -166,8 +171,8 @@ watch(
 
       <template #item-actions="item">
         <div class="flex my-4">
-          <button class="btn-warning btn-action" uk-toggle="target: #version_control" >
-            <!-- @click="editData = item" -->
+          <button class="btn-warning btn-action" uk-toggle="target: #version_control" @click="editData = item" >
+            
             <Icon icon="Pen New Square" color="#fff" size="16" />
           </button>
           <button class="ml-3 btn-danger btn-action" @click="handleDeleteModal(item.id)">
@@ -175,15 +180,18 @@ watch(
           </button>
         </div>
       </template>
+
     </EasyDataTable>
 
-    <TwPagination :total="store.smsTemplateList && store.smsTemplateList.count" class="mt-10 tw-pagination" :current="current" :per-page="10"
-      :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')" @page-changed="changePagionation" />
+    <TwPagination :total="store.versionControlList && store.versionControlList.count" class="mt-10 tw-pagination" :current="current" :per-page="10"
+      :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')" @page-changed="changePagination" />
+
   </div>
 
-  <DeleteSmsTemplate  :userId="userId"
-          @deleteSmsTemplate="deleteSmsTemplate"/>
+    <DeleteVersionControl  :userId="userId"
+          @deleteVersionControl="deleteVersionControl"/>
 
-          <AddVersionControl />
-          <!-- @saveSmsTemplate="saveSmsTemplate" :editData="editData" -->
+
+    <AddVersionControl @saveVersionControl="saveVersionControl" :editData="editData"/>
+          
 </template>

@@ -1,27 +1,3 @@
-// for knowledge base
-
-// export interface ICategory {
-//   id: number;
-//   photo: string | null;
-//   name: string;
-//   step_id: number | null;
-// }
-
-// export interface IIntro {
-//   id: number;
-//   photo: string | null;
-//   name: string;
-//   description: string | null;
-//   step_id: number;
-// }
-
-// export interface ISplash {
-//   id: number;
-//   photo: string | null;
-//   version: string | number;
-//   time: string | null;
-//   is_active: boolean;
-// }
 
 // sms template
 export interface Results<T> {
@@ -107,4 +83,11 @@ export interface Regions {
     uz: string;
   };
   parent: null | number;
+}
+
+export interface VersionControl {
+  number: string,
+  is_active: boolean,
+  created_date: string,
+  modified_date: string
 }

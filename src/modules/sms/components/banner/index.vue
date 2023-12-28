@@ -125,7 +125,6 @@ watch(
     () => filterBanner.end_time , 
     () => {
       refresh(filterBanner);
-      console.log(filterBanner.end_time);
       
       if (bannerList.value.length <= 10) {
         current.value = 1;

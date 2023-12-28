@@ -8,6 +8,7 @@ import {
   LocationPlace,
   LocationPlaceData,
   Regions,
+  VersionControl
 } from "../interfaces";
 
 export default defineStore("knowledgeBase", {
@@ -26,6 +27,10 @@ export default defineStore("knowledgeBase", {
       regionsList: {
         results: [] as Regions[],
       } as Results<Regions>,
+
+      versionControlList: {
+        results: [] as VersionControl[]
+      } as Results<VersionControl>
     };
   },
   actions: {
@@ -66,12 +71,12 @@ export default defineStore("knowledgeBase", {
         data
       );
     },
+
     deleteNewsTemplate(id: number) {
       return $axios.delete(`/knowledge_base/news_template/${id}/`);
     },
 
     // places
-
     AddForms(data: LocationPlaceData) {
       return $axios.post("/knowledge_base/location/", data);
     },
@@ -87,13 +92,33 @@ export default defineStore("knowledgeBase", {
     updateOneForm(data: LocationPlaceData) {
       return $axios.patch(`/knowledge_base/location/${data.id}/`, data);
     },
+
     deleteOneForm(id) {
       return $axios.patch(`/knowledge_base/location/${id}/`);
     },
+
     async getRegions(params) {
       const { data } = await $axios.get(`/knowledge_base/region/`, params);
       this.regionsList = data;
       return this.regionsList;
+    },
+
+    // version control
+    async getVersionControl(params) {
+      const { data } = await $axios.get('/versions/version_list/', {params})
+      this.versionControlList = data
+    },
+    
+    createVersion(data: object) {
+      return $axios.post(`/versions/create_version/`, data);
+    },
+
+    updateVersion(data) {
+      return $axios.patch(`/versions/version/${data.id}/`, data);
+    },
+
+    deleteVersion(id: number) {
+      return $axios.delete(`/versions/version/${id}/`);
     },
   },
 });

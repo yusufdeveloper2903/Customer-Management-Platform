@@ -206,6 +206,10 @@ export const versionControlFields = [
     value: "datetime"
   },
   {
+    text: "Modified date",
+    value: "modified_date"
+  },
+  {
     text: "version_number",
     value: "version_number"
   },
