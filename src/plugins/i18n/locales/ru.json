@@ -271,5 +271,13 @@
   "View order": "Посмотреть заказ",
   "version_number": "Номер версии",
   "version_control": "Контроль версий",
-  "Modified date": "Дата изменения"
+  "Modified date": "Дата изменения",
+  "ram": "Оперативной памяти",
+  "disk": "Диск",
+  "company": "Компания",
+  "tech": "Технология",
+  "products": "Продукты",
+  "website": "Веб-сайт",
+  "licence": "Лицензия"
+
 }

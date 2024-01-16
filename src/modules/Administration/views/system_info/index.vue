@@ -407,11 +407,11 @@
                     <span>zk.uz</span>
                   </li>
                   <li class="flex justify-between">
-                    <span>{{ $t('email2') }}</span>
+                    <span>{{ $t('email') }}</span>
                     <span>info@zk.uz</span>
                   </li>
                   <li class="flex justify-between">
-                    <span>{{ $t('contacts') }}</span>
+                    <span>{{ $t('nav.contacts') }}</span>
                     <span>+998 94 164 66 33</span>
                   </li>
                   <li class="flex justify-between">

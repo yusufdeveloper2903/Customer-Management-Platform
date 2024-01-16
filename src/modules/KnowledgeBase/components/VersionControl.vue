@@ -87,7 +87,7 @@ watch(
   
     () => filterVersionControl.modified_date , 
     () => {
-      refresh(filterVersionControl);
+      refresh(filterVersionControl);  
       
       if (store.versionControlList.results.length <= 10) {
         current.value = 1;

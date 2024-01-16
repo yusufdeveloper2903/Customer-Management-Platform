@@ -238,8 +238,14 @@
   "View order": "Buyurtmani ko'rish",
   "version_number": "Versiya raqami",
   "version_control": "Versiya nazorati",
-  "Modified date": "O'zgartirilgan sana"
-
+  "Modified date": "O'zgartirilgan sana",
+  "ram": "Tasodifiy kirish xotirasi",
+  "disk": "Disk",
+  "company": "Kompaniya",
+  "tech": "Texnologiya",
+  "products": "Mahsulotlar",
+  "website": "Veb-sayt",
+  "licence": "Litsenziya"
 
 
 }

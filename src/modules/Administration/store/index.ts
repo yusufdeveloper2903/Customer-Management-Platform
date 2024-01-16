@@ -22,21 +22,6 @@ interface Regions {
     is_active?: boolean;
     parent?: { id: number; name?: string; is_active?: boolean };
 }
-interface AddRegion {
-    data: {
-        name?: string;
-        is_active?: boolean;
-        parent?: number;
-    }
-}
-interface UpdateRegion {
-    data: {
-        name?: string;
-        is_active?: boolean;
-        parent?: { id?: number; name?: string; is_active?: boolean };
-    },
-    id?: number;
-}   
 interface DeleteId {
     id: number;
 }   
@@ -203,31 +188,6 @@ export const administrationStore = defineStore('administrationStorage', {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-
-
-
-    
-
     
       async FETCH_PERIODS(params: Params) {
         return await axios({
@@ -313,33 +273,14 @@ export const administrationStore = defineStore('administrationStorage', {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       
       
       async CREATE_BACKUP(params) {
         return await axios({
           method: "GET",
           url: `/knowledge_base/back_up_create/`,
-          params
+          params,
+          responseType: 'blob'
         })
           .then(async (e) => {
             //   this.get_period_by_prepayment_amount = e.data
@@ -385,24 +326,14 @@ export const administrationStore = defineStore('administrationStorage', {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
   
 
       async CREATE_BACKUP_MEDIA(params) {
         return await axios({
           method: "GET",
           url: `/knowledge_base/back_up_media_create/`,
-          params
+          params,
+          responseType: 'blob',
         })
           .then(async (e) => {
               return e.data;            
@@ -439,14 +370,6 @@ export const administrationStore = defineStore('administrationStorage', {
               return error;
           })
       },
-
-
-
-
-
-
-
-
 
 
 
