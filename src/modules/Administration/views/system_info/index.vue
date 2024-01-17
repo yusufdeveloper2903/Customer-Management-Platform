@@ -238,7 +238,6 @@
         <div id="chart">
           <Apexchart
             ref="chartRealtime"
-            type="line"
             height="350"
             :options="chartOptions3"
             :series="series3"
@@ -257,94 +256,94 @@
       <div class="mr-5 mt-5 w-3/5 grid-rows-2 rounded bg-white p-5 pb-10 dark:bg-darkLayoutStorm dark:text-gray-300">
         <Tabs>
           <Tab :title="'info_about_system'">
-            <div class="rounded-lg border border-solid border-indigo-700 p-5">
+            <div class="rounded-lg border border-solid border-indigo-700 p-4">
               <ul class="uk-list uk-list-divider text-sm">
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.system_info?.system?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.system_info?.system?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.system_info?.system?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.system_info?.system?.value}}</span>
                 </li>
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.system_info?.machine?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.system_info?.machine?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.system_info?.machine?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.system_info?.machine?.value}}</span>
                 </li>
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.system_info?.processor?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.system_info?.processor?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.system_info?.processor?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.system_info?.processor?.value}}</span>
                 </li>
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.system_info?.version?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.system_info?.version?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.system_info?.version?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.system_info?.version?.value}}</span>
                 </li>
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.system_info?.node_name?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.system_info?.node_name?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.system_info?.node_name?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.system_info?.node_name?.value}}</span>
                 </li>
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.system_info?.release?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.system_info?.release?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.system_info?.release?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.system_info?.release?.value}}</span>
                 </li>
               </ul>
             </div>
           </Tab>
 
           <Tab :title="'processor'">
-            <div class="rounded-lg border border-solid border-indigo-700 p-5">
+            <div class="rounded-lg border border-solid border-indigo-700 p-4">
               <ul class="uk-list uk-list-divider text-sm">
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.cpu_info?.physical_cores?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.cpu_info?.physical_cores?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.cpu_info?.physical_cores?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.cpu_info?.physical_cores?.value}}</span>
                 </li>
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.cpu_info?.total_cores?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.cpu_info?.total_cores?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.cpu_info?.total_cores?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.cpu_info?.total_cores?.value}}</span>
                 </li>
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.cpu_info?.max_frequency?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.cpu_info?.max_frequency?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.cpu_info?.max_frequency?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.cpu_info?.max_frequency?.value}}</span>
                 </li>
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.cpu_info?.min_frequency?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.cpu_info?.min_frequency?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.cpu_info?.min_frequency?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.cpu_info?.min_frequency?.value}}</span>
                 </li>
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.cpu_info?.current_frequency?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.cpu_info?.current_frequency?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.cpu_info?.current_frequency?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.cpu_info?.current_frequency?.value}}</span>
                 </li>
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.cpu_info?.total_cpu_usage?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.cpu_info?.total_cpu_usage?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.cpu_info?.total_cpu_usage?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.cpu_info?.total_cpu_usage?.value}}</span>
                 </li>
               </ul>
             </div>
           </Tab>
 
           <Tab :title="'database'">
-            <div class="rounded-lg border border-solid border-indigo-700 p-5">
+            <div class="rounded-lg border border-solid border-indigo-700 p-4">
               <ul class="uk-list uk-list-divider text-sm">
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.swmem_memory?.available?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.swmem_memory?.available?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.swmem_memory?.available?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.swmem_memory?.available?.value}}</span>
                 </li>
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.swmem_memory?.percentage?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.swmem_memory?.percentage?.value[1]}}%</span>
+                  <span>{{administrationStorage?.os_system_info?.swmem_memory?.percentage?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.swmem_memory?.percentage?.value[1]}}%</span>
                 </li>
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.swmem_memory?.total?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.swmem_memory?.total?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.swmem_memory?.total?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.swmem_memory?.total?.value}}</span>
                 </li>
                 <li class="flex justify-between">
-                  <span>{{administrationStorage?.os_system_info?.system?.swmem_memory?.used?.title}}</span>
-                  <span>{{administrationStorage?.os_system_info?.system?.swmem_memory?.used?.value}}</span>
+                  <span>{{administrationStorage?.os_system_info?.swmem_memory?.used?.title}}</span>
+                  <span>{{administrationStorage?.os_system_info?.swmem_memory?.used?.value}}</span>
                 </li>
               </ul>
             </div>
           </Tab>
 
           <Tab :title="'disk2'">
-            <div class="rounded-lg border border-solid border-indigo-700 p-5">
+            <div class="rounded-lg border border-solid border-indigo-700 p-4">
               <ul class="uk-nav-default" uk-nav>
-                <li class="uk-parent" v-for="(item, index) in administrationStorage?.os_system_info?.system?.disk"
+                <li class="uk-parent" v-for="(item, index) in administrationStorage?.os_system_info?.disk_info?.volumes"
                 :key="index">
                     <a href="#" style="color: black;">{{item?.device?.value}} <span uk-nav-parent-icon></span></a>
                     <ul class="uk-nav-sub uk-list uk-list-divider text-sm">
@@ -564,13 +563,13 @@ export default {
   },
   data() {
     return {
-      
+      series: [76, 24],
       chartOptions: {
         chart: {
           height: 350,
           type: 'radialBar',
         },
-        colors: ['#BAA6FD', '#94D5FD'],
+        colors: ['#FF3B30', '#FFCC00'],
         plotOptions: {
           radialBar: {
             dataLabels: {
@@ -594,7 +593,7 @@ export default {
         stroke: {
           lineCap: 'round',
         },
-        labels: ['used', 'available'],
+        labels: ['свободно', 'занято'],
       },
 
 
@@ -604,7 +603,7 @@ export default {
           height: 350,
           type: 'radialBar',
         },
-        colors: ['#BAA6FD', '#94D5FD'],
+        colors: ['#480CA8', '#356C2D'],
         plotOptions: {
           radialBar: {
             dataLabels: {
@@ -628,56 +627,59 @@ export default {
         stroke: {
           lineCap: 'round',
         },
-        labels: ['used', 'available'],
+        labels: ['свободно', 'занято'],
       },
 
 
 
 
-
-      series3: [],
       chartOptions3: {
-        chart: {
-          height: 350,
-          type: 'line',
-          zoom: {
-            enabled: false
-          },
-          toolbar: {
-            show: false
-          },
-          animations: {
-            enabled: false,
-            // easing: 'linear',
-            // dynamicAnimation: {
-            //   speed: 0
-            // }
+          chart: {
+          type: 'bar',
+          height: 350
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '55%',
+            endingShape: 'rounded'
           },
         },
         dataLabels: {
           enabled: false
         },
         stroke: {
-          curve: 'smooth'
-        },
-        title: {
-          text: this.$t('cpu_realtime_performance'),
-          align: 'left'
-        },
-        yaxis: {
-          max: 100
+          show: true,
+          width: 2,
+          colors: ['transparents']
         },
         xaxis: {
-          // categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+          categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
         },
-        legend: {
-          position: 'top',
-          horizontalAlign: 'right',
-          floating: true,
-          offsetY: -25,
-          offsetX: -5
+        yaxis: {
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return "$ " + val + " thousands"
+            }
+          }
         }
-      },
+        },
+
+        series3: [{
+          name: 'СНГ',
+          data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+        }, {
+          name: 'Европа',
+          data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+        }, {
+          name: 'Азия',
+          data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
+        }],
       
       dataset: [],
       websocketData: {}

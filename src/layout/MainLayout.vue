@@ -138,7 +138,7 @@ function breadCrumbStart(newPath) {
     case "SystemInfo":
       BreadcrumbList.value = [
         { title: "Administration", active: false },
-        { title: "system", active: true },
+        { title: "info_about_system", active: true },
       ];
       break;
 

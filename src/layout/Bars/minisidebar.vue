@@ -285,7 +285,7 @@ let pagesList = ref([
     icon: "File",
   },
   {
-    name: "system",
+    name: "info_about_system",
     path: "/reference/system-info",
     icon: "File",
   },

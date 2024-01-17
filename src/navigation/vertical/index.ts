@@ -65,7 +65,7 @@ export default [
         permissions: ["admin"],
       },
       {
-        name: "system",
+        name: "info_about_system",
         path: "/reference/system-info",
         icon: "File",
         permissions: ["admin"],

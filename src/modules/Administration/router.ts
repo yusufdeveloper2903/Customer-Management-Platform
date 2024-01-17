@@ -29,7 +29,7 @@ export default [
   {
     path: "/reference/system-info",
     name: "SystemInfo",
-    component: () => import("@/modules/Administration/views/system_info/index.vue"),
+    component: () => import("@/modules/Administration/views/system_info/SystemInfo.vue"),
     meta: {
       layout: 'MainLayout',
       permissions: ['admin'],

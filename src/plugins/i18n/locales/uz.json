@@ -12,7 +12,8 @@
     "About Us": "Biz haqimizda",
     "Finance": "Moliya",
     "Statistics": "Statistika",
-    "staffs": "Xodimlar"
+    "staffs": "Xodimlar",
+    "contacts": "Kontaktlar"
   },
   "info_card": {
     "Time": "Vaqt",
@@ -233,7 +234,6 @@
   "info_about_system": "Tizim haqida ma'lumot",
   "processor": "Protsessor",
   "database": "Ma'lumotlar bazasi",
-  "disk2": "Disk",
   "date_and_time": "Sana va vaqt",
   "View order": "Buyurtmani ko'rish",
   "version_number": "Versiya raqami",
@@ -242,10 +242,21 @@
   "ram": "Tasodifiy kirish xotirasi",
   "disk": "Disk",
   "company": "Kompaniya",
-  "tech": "Texnologiya",
+  "tech": "Texnologiyalar",
   "products": "Mahsulotlar",
   "website": "Veb-sayt",
-  "licence": "Litsenziya"
+  "licence": "Litsenziya",
+  "available": "Mavjud",
+  "used": "Ishlatilgan",
+  "systems": "Tizimlar",
+  "frontend": "Frontend",
+  "backend": "Backend",
+  "ci_cd": "CI/CD",
+  "users_amount": "Foydalanuvchilar soni",
+  "system_modules": "Tizim modullari",
+  "district": "Tuman",
+  "mac_address": "MAC-manzil"
+
 
 
 }
