@@ -287,6 +287,8 @@
   "users_amount": "Количество пользователей",
   "system_modules": "Модули системы",
   "district": "Округ",
-  "mac_address": "MAC-адрес"
+  "mac_address": "MAC-адрес",
+  "Do you really want to unlink this card?": "Вы действительно хотите отвязать данную карту?",
+  "Unlinking the card": "Отвязка карты"
 
 }

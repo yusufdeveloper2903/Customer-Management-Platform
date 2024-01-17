@@ -255,8 +255,9 @@
   "users_amount": "Foydalanuvchilar soni",
   "system_modules": "Tizim modullari",
   "district": "Tuman",
-  "mac_address": "MAC-manzil"
-
+  "mac_address": "MAC-manzil",
+  "Do you really want to unlink this card?": "Haqiqatdan ham ushbu kartani mijozdan uzib qo'ymoqchimisiz?",
+  "Unlinking the card": "Kartani uzish"
 
 
 }

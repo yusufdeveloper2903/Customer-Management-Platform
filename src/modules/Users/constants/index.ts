@@ -20,3 +20,26 @@ export const fields = [
     value: "is_active",
   },
 ];
+
+export const fieldsUserDetail = [
+  {
+    text: "№",
+    value: "id",
+  },
+  {
+    text: "Создано",
+    value: "created",
+  },
+  {
+    text: "Номер карты",
+    value: "number_card"
+  },
+  {
+    text: "Устройство",
+    value: "device"
+  },
+  {
+    text: "Тип карты",
+    value: "type_card",
+  },
+];

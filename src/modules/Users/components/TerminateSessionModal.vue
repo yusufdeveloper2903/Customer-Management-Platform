@@ -43,7 +43,7 @@ const createTerminateId = async () => {
       <button class="uk-modal-close-default" type="button" uk-close />
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ $t("Terminate session") }}
+          {{ $t("Завершить сеанс") }}
         </h2>
       </div>
       <div class="uk-modal-body">
@@ -60,7 +60,7 @@ const createTerminateId = async () => {
           class="rounded-md btn-danger px-6 py-2 text-white duration-100 hover:opacity-90"
           @click="createTerminateId"
           >
-          {{ $t("Terminate") }}
+          {{ $t("Завершить") }}
         </button>
       </div>
     </div>
