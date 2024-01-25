@@ -5,7 +5,7 @@ import {useRouter} from "vue-router";
 import users from "../store/index";
 import { toast } from "vue3-toastify";
 import {formatPhoneNumber} from "../features";
-import type { ClickRowArgument } from "vue3-easy-data-table";
+import DoubleRight from "../img/double-right-chevron-svgrepo-com.svg"
 
 // import {useI18n} from "vue-i18n";
 
@@ -59,7 +59,7 @@ const searchByName = () => {
   }, 500);
 };
 
-const showDetailPage = (item: ClickRowArgument) => {
+const showDetailPage = (item) => {
   router.push({ name: 'user detail', params: { id: item.id } })
 };
 
@@ -107,7 +107,6 @@ onMounted(async () => {
           :loading="isLoading"
           :headers="fields"
           :items="usersList"
-          @click-row="showDetailPage"
       >
         <template #empty-message>
           <div class="dark:text-white">{{ $t("no_available_data") }}</div>
@@ -133,6 +132,10 @@ onMounted(async () => {
           {{ $t(header.text).toUpperCase() }}
         </template>
 
+        <template #header-detail="header">
+          {{ $t(header.text).toUpperCase() }}
+        </template>
+
 
         <template #item-phone="items">
           <span>
@@ -151,6 +154,10 @@ onMounted(async () => {
             <div
                 class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"/>
           </label>
+        </template>
+
+        <template #item-detail="item">
+          <button @click="showDetailPage(item)" class="btn-success btn-action my-1"><img :src="DoubleRight" alt="Icon"></button>
         </template>
       </EasyDataTable>
 

@@ -6,6 +6,7 @@ import SMSTemplate from "../components/SMSTemplate.vue";
 import NewsTemplate from "../components/NewsTemplate.vue";
 import NearbyPlaces from "../components/NearbyPlaces/NearbyPlaces.vue";
 import VersionControl from "../components/VersionControl.vue"
+import Products from "../components/Products.vue"
 </script>
 
 <template>
@@ -31,6 +32,10 @@ import VersionControl from "../components/VersionControl.vue"
 
       <Tab :title="$t('version_control')">
         <VersionControl />
+      </Tab>
+
+      <Tab :title="$t('products')">
+        <Products />
       </Tab>
     </Tabs>
   </div>

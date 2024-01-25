@@ -1,3 +1,4 @@
+
 export const categoryFields = [
   {
     text: "ID",
@@ -220,5 +221,28 @@ export const versionControlFields = [
   {
     text: "actions",
     value: "actions",
+  },
+]
+
+export const productsFields = [
+  {
+    text: "Number (multi-digit-code)",
+    value: "number"
+  },
+  {
+    text: "name",
+    value: "name"
+  },
+  {
+    text: "photo",
+    value: "photo"
+  },
+  {
+    text: "price",
+    value: "price"
+  },
+  {
+    text: "actions",
+    value: "actions"
   },
 ]

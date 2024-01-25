@@ -72,12 +72,22 @@ const showUntieCardModal = (item) => {
 
             <div class="flex justify-between">
               <div>Устройство </div>
+              <div><small><b>{{ item.device_model }}</b></small></div>
+            </div>
+
+            <div class="flex justify-between mt-2">
+              <div>Версия приложения</div>
               <div><small><b>{{ item.device_type }}</b></small></div>
             </div>
 
-            <div class="flex justify-between my-2">
+            <div class="flex justify-between mt-2">
               <div>IP-адресс </div>
               <div><small><b>{{ item.ip_address }}</b></small></div>
+            </div>
+
+            <div class="flex justify-between my-2">
+              <div>Дата создания</div>
+              <div><small><b>{{ item.created_date }}</b></small></div>
             </div>
 
             <div class="flex justify-between">
@@ -87,6 +97,7 @@ const showUntieCardModal = (item) => {
 
             <button class="mt-2 w-full rounded-md bg-danger text-white" @click="showTerminateModal(item)">
                 <small>Завершить</small>
+                
             </button>
 
           </li>
@@ -104,10 +115,18 @@ const showUntieCardModal = (item) => {
           theme-color="#7367f0"
           hide-footer
           :headers="fieldsUserDetail"
-          :items="items"
+          :items="[]"
       >
         <template #empty-message>
           <div class="dark:text-white">{{ $t("no_available_data") }}</div>
+        </template>
+
+        <template #item-created="item">
+          {{ item.created_date }}
+        </template>
+
+        <template #item-device="item">
+          {{ item.device_model }}
         </template>
       </EasyDataTable>
     </div>

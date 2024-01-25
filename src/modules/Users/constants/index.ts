@@ -19,6 +19,10 @@ export const fields = [
     text: "Status",
     value: "is_active",
   },
+  {
+    text: "Detail",
+    value: "detail",
+  },
 ];
 
 export const fieldsUserDetail = [

@@ -23,7 +23,7 @@ export interface User {
   modified_date: string;
   full_name: string | null;
   phone: string | null;
-  last_login: string
+  last_login: string,
 }
 
 export interface Sessions {
@@ -34,6 +34,7 @@ export interface Sessions {
   created_date: string;
   device_id: string;
   is_active: boolean;
+  device_model: string 
 }
 
 // roles

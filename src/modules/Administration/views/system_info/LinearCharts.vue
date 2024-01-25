@@ -14,51 +14,51 @@ const props = defineProps(['data'])
 const { t } = useI18n();
 const series = ref<any>([
     {
-        title: 'Core 1',
+        name: 'Core 1',
+        data: [10, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    {
+        name: 'Core 2',
+        data: [0, 0, 0, 0, 0, 50, 0, 0, 0, 0]
+    },
+    {
+        name: 'Core 3',
+        data: [0, 0, 0, 32, 0, 0, 0, 0, 0, 0]
+    },
+    {
+        name: 'Core 4',
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     {
-        title: 'Core 2',
+        name: 'Core 5',
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     {
-        title: 'Core 3',
+        name: 'Core 6',
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     {
-        title: 'Core 4',
+        name: 'Core 7',
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     {
-        title: 'Core 5',
+        name: 'Core 8',
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     {
-        title: 'Core 6',
+        name: 'Core 9',
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     {
-        title: 'Core 7',
+        name: 'Core 10',
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     {
-        title: 'Core 8',
+        name: 'Core 11',
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     {
-        title: 'Core 9',
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    },
-    {
-        title: 'Core 10',
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    },
-    {
-        title: 'Core 11',
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    },
-    {
-        title: 'Core 12',
+        name: 'Core 12',
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
 
@@ -117,7 +117,7 @@ watch(() => props.data, () => {
 
 const setSeries = () => {
     for (let i = 0; i < props.data.length; i++) {
-        series.value[i].title = props.data[i]?.title
+        series.value[i].name = props.data[i]?.title
         series.value[i].data.push(props.data[i].percentage)
         series.value[i].data.shift()
     }

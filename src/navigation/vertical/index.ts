@@ -72,4 +72,22 @@ export default [
       },
     ],
   },
+  {
+    name: "Discounts",
+    path: "/discounts",
+    icon: "File",
+    permissions: ["admin"],
+  },
+  {
+    name: "Promotions",
+    path: "/promotion",
+    icon: "File",
+    permissions: ["admin"],
+  },
+  {
+    name: "Transactions",
+    path: "/transactions",
+    icon: "File",
+    permissions: ["admin"],
+  },
 ];

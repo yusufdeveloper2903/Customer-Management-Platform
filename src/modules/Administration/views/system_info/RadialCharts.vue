@@ -61,7 +61,7 @@ const chartOptions1 = ref({
     stroke: {
         lineCap: 'round',
     },
-    labels: [t('used'), t('available')],
+    labels: [t('used'), t('available') ],
 })
 
 const chartOptions2 = ref({

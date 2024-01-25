@@ -191,13 +191,13 @@ function breadCrumbStart(newPath) {
       break;
     case "user detail":
       BreadcrumbList.value = [
-        { title: "sidebar.users", active: false },
+        { title: "nav.users", active: false },
         { title: "user_details", active: true },
       ];
       break;
     case "add user":
       BreadcrumbList.value = [
-        { title: "sidebar.users", active: false },
+        { title: "nav.users", active: false },
         { title: "user_add", active: true },
       ];
       break;

@@ -17,7 +17,6 @@ export default [
       permissions: ['admin'],
     },
   },
-
   {
     path: "/add-user",
     name: "add user",

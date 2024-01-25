@@ -22,7 +22,7 @@ const lineChartData = ref(null)
 //              FUNCTIONS                //
 
 onMounted(() => {
-    socket.value = new WebSocket('ws://192.168.31.111:4005');
+    socket.value = new WebSocket('ws://192.168.31.111:4005/');
 
     socket.value.addEventListener('open', () => {
         connected.value = true;
@@ -32,6 +32,7 @@ onMounted(() => {
     socket.value.addEventListener('message', (event) => {
         message.value = event.data;
         lineChartData.value = event.data
+        
     });
 
     socket.value.addEventListener('error', (event) => {

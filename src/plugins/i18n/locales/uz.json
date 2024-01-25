@@ -257,7 +257,8 @@
   "district": "Tuman",
   "mac_address": "MAC-manzil",
   "Do you really want to unlink this card?": "Haqiqatdan ham ushbu kartani mijozdan uzib qo'ymoqchimisiz?",
-  "Unlinking the card": "Kartani uzish"
-
+  "Unlinking the card": "Kartani uzish",
+  "created_successfully": "Muvaffaqiyatli yaratildi",
+  "user_details": "Foydalanuvchi tafsilotlari"
 
 }
