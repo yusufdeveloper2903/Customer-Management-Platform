@@ -229,8 +229,6 @@ const saveData = async () => {
       }
   }
 };
-
-
 </script>
 
 <template>

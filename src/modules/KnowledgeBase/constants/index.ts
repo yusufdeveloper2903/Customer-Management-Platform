@@ -227,15 +227,15 @@ export const versionControlFields = [
 export const productsFields = [
   {
     text: "Number (multi-digit-code)",
-    value: "number"
+    value: "code"
   },
   {
     text: "name",
-    value: "name"
+    value: "title"
   },
   {
     text: "photo",
-    value: "photo"
+    value: "image"
   },
   {
     text: "price",

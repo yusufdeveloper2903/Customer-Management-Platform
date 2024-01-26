@@ -40,9 +40,6 @@ const rules = computed(() => {
         required: helpers.withMessage("required", required),
       },
     },
-    // title_ru: {
-    //   required: helpers.withMessage("required", required),
-    // },
     description: {
       ru: {
         required: helpers.withMessage("required", required),
@@ -92,7 +89,7 @@ const updateDeal = async () => {
         file: file || "",
         ...rest,
       });
-      await store.updateNewsTemplate(fd).then(() => {
+      await store.updateProducts(fd).then(() => {
         setTimeout(() => {
           toast.success(t("updated_successfully"));
         }, 200);
@@ -265,7 +262,8 @@ const updateDeal = async () => {
             v-model="newsTemplateData.url"
           />
         </label>
-        <label for="nameUz"
+
+        <label
           >{{ $t('photo') }}
           <FileInput
             v-model="newsTemplateData.file"

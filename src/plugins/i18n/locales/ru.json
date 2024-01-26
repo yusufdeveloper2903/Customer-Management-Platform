@@ -291,6 +291,7 @@
   "Do you really want to unlink this card?": "Вы действительно хотите отвязать данную карту?",
   "Unlinking the card": "Отвязка карты",
   "created_successfully": "Создано успешно",
-  "user_details": "Данные пользователя"
-
+  "user_details": "Данные пользователя",
+  "Number (multi-digit-code)": "Номер (многозначный код)",
+  "updated_successfully": "Успешно Обновлено"
 }

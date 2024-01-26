@@ -75,7 +75,7 @@ const validationForm = async () => {
         <h2
           class="text-center text-4xl font-bold text-gray-700 dark:text-white"
         >
-          {{ $t("global.login") }}
+          {{ $t("Login") }}
         </h2>
       </div>
 
@@ -86,7 +86,7 @@ const validationForm = async () => {
               <label
                 for="login"
                 class="text-sm text-gray-600 dark:text-gray-200"
-                >{{ $t("global.login") }}</label
+                >{{ $t("Login") }}</label
               >
             </div>
             <input
@@ -112,7 +112,7 @@ const validationForm = async () => {
               <label
                 for="password"
                 class="text-sm text-gray-600 dark:text-gray-200"
-                >{{ $t("global.password") }}</label
+                >{{ $t("Password") }}</label
               >
             </div>
 
@@ -147,7 +147,7 @@ const validationForm = async () => {
 
           <div class="mt-12">
             <button type="submit" class="btn-primary w-full">
-              {{ $t("global.login") }}
+              {{ $t("Login") }}
             </button>
           </div>
         </form>

@@ -91,3 +91,16 @@ export interface VersionControl {
   created_date: string,
   modified_date: string
 }
+
+
+// products
+export interface Products {
+  id: number,
+  title: {
+    ru: string | null,
+    uz: string | null
+  },
+  price:null | number,
+  image: string | null,
+  code: string
+}

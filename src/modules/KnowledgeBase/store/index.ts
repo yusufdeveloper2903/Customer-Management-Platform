@@ -8,7 +8,8 @@ import {
   LocationPlace,
   LocationPlaceData,
   Regions,
-  VersionControl
+  VersionControl,
+  Products
 } from "../interfaces";
 
 export default defineStore("knowledgeBase", {
@@ -30,7 +31,12 @@ export default defineStore("knowledgeBase", {
 
       versionControlList: {
         results: [] as VersionControl[]
-      } as Results<VersionControl>
+      } as Results<VersionControl>,
+
+      // products
+      productsList: {
+        results: [] as Products[]
+      } as Results<Products>
     };
   },
   actions: {
@@ -119,6 +125,27 @@ export default defineStore("knowledgeBase", {
 
     deleteVersion(id: number) {
       return $axios.delete(`/versions/version/${id}/`);
+    },
+
+    // products
+    async getProducts(params) {
+      const { data } = await $axios.get('/products/products/', {params})
+      this.productsList = data
+    },
+
+    createProducts(data) {
+      return $axios.post(`/products/products/`, data);
+    },
+
+    updateProducts(data) {
+      return $axios.patch(
+        `/products/products/${data.id || data.get("id")}/`,
+        data
+      );
+    },
+
+    deleteProducts(id: number) {
+      return $axios.delete(`/products/products/${id}/`);
     },
   },
 });

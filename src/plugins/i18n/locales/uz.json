@@ -259,6 +259,8 @@
   "Do you really want to unlink this card?": "Haqiqatdan ham ushbu kartani mijozdan uzib qo'ymoqchimisiz?",
   "Unlinking the card": "Kartani uzish",
   "created_successfully": "Muvaffaqiyatli yaratildi",
-  "user_details": "Foydalanuvchi tafsilotlari"
+  "user_details": "Foydalanuvchi tafsilotlari",
+  "Number (multi-digit-code)": "Raqam (ko'p xonali kod)",
+  "updated_successfully": "Muvaffaqiyatli yangilandi"
 
 }

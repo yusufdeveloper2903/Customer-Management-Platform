@@ -38,6 +38,7 @@ const editData = ref<EditData>({
       ru: ""
     },
 })
+
 // filters
 const filterSmsTemplate = reactive({
   page_size: 10,

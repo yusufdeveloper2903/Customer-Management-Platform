@@ -31,12 +31,10 @@ var smsTemplateData = ref({
       uz: "",
       ru: ""
     },
-    // title_ru: "",
     description: {
       uz: "",
       ru: ""
     },
-    // description_ru: ""
 
 })
 
@@ -45,15 +43,9 @@ const rules = computed(() => {
     title: {
       required: helpers.withMessage("required", required),
     },
-    // title_ru: {
-    //   required: helpers.withMessage("required", required),
-    // },
     description: {
       required: helpers.withMessage("required", required),
     },
-    // description_ru: {
-    //   required: helpers.withMessage("required", required),
-    // }
   };
   
 });
@@ -61,7 +53,6 @@ const rules = computed(() => {
 const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
 
 const propData = defineProps<{editData: EditData}>();
-// const showModal = inject("showModal");
 
 
 function openModal(){
@@ -77,12 +68,6 @@ function openModal(){
      smsTemplateData.value.description.ru = ""
   }
 }
-
-// watch(showModal, onModalChange);
-
-// const clearModal = () => {
-//   details.value = "";
-// };
 
 const updateDeal = async () => {
   const success = await validate.value.$validate();
