@@ -103,10 +103,12 @@ watch(
 <template>
   <div class="card">
     <div class="flex justify-between items-end mb-10">
+
       <label for="search" class="w-1/4" >
         {{ $t('Search') }}
         <input type="text" class="form-input" :placeholder="$t('Search')" @input="searchByName" v-model="filterProducts.search"/>
       </label>
+
       <button class="btn-primary" uk-toggle="target: #create_products" @click="editData = {}">
         {{ $t("Add") }}
       </button>
@@ -176,13 +178,13 @@ watch(
           </button>
         </div>
       </template>
+
     </EasyDataTable>
 
     <TwPagination :total="store.productsList && store.productsList.count" class="mt-10 tw-pagination" :current="current" :per-page="10"
       :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')" @page-changed="changePagionation" />
 
     <CreateProducts :editData="editData" @saveProducts="saveProducts"/>
-     
 
     <ConfirmModal
         :title="$t('delete')"

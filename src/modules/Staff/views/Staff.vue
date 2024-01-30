@@ -9,7 +9,6 @@ import {toast} from "vue3-toastify";
 // import {useI18n} from "vue-i18n";
 
 // variables
-// const {locale} = useI18n();
 const store = staff();
 const router = useRouter();
 const userId = ref<number | null>(null);
@@ -17,7 +16,6 @@ const isLoading = ref(false);
 let usersList = ref<object[]>([]);
 const timeout = ref();
 const current = ref<number>(1);
-
 
 // filters
 const filterUsers = reactive({
@@ -91,7 +89,7 @@ watch(
 onMounted(async () => {
   await refresh(paginationFilter);
   await store.getUsersRolesList()
-});
+})
 </script>
 
 <template>
@@ -130,7 +128,9 @@ onMounted(async () => {
         </form>
         <button
             class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-            
+            @click="
+                router.push({ name: 'add staff'})
+              "
         >
           {{ $t("Add") }}
         </button>

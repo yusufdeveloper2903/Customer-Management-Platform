@@ -41,10 +41,20 @@ var smsTemplateData = ref({
 const rules = computed(() => {
   return {   
     title: {
-      required: helpers.withMessage("required", required),
+      uz: {
+        required: helpers.withMessage("validation.this_field_is_required", required),
+      },
+      ru: {
+        required: helpers.withMessage("validation.this_field_is_required", required),
+      }
     },
     description: {
-      required: helpers.withMessage("required", required),
+      uz: {
+        required: helpers.withMessage("validation.this_field_is_required", required),
+      },
+      ru: {
+        required: helpers.withMessage("validation.this_field_is_required", required),
+      }
     },
   };
   
@@ -140,10 +150,10 @@ const updateDeal = async () => {
                 class="form-input"
                 placeholder="Nomi"
                 v-model="smsTemplateData.title.uz"
-                :class="validate.title.$errors.length ? 'required-input' : ''"
+                :class="validate.title.uz.$errors.length ? 'required-input' : ''"
               />
               <p
-              v-for="error in validate.title.$errors"
+              v-for="error in validate.title.uz.$errors"
               :key="error.$uid"
               class="text-danger text-sm"
             >
@@ -159,10 +169,10 @@ const updateDeal = async () => {
                 class="form-input"
                 placeholder="Tavsif"
                 v-model="smsTemplateData.description.uz"
-                :class="validate.description.$errors.length ? 'required-input' : ''"
+                :class="validate.description.uz.$errors.length ? 'required-input' : ''"
               />
               <p
-              v-for="error in validate.description.$errors"
+              v-for="error in validate.description.uz.$errors"
               :key="error.$uid"
               class="text-danger text-sm"
             >
@@ -181,10 +191,10 @@ const updateDeal = async () => {
                 class="form-input"
                 placeholder="Заголовок"
                 v-model="smsTemplateData.title.ru"
-                :class="validate.title.$errors.length ? 'required-input' : ''"
+                :class="validate.title.ru.$errors.length ? 'required-input' : ''"
               />
               <p
-              v-for="error in validate.title.$errors"
+              v-for="error in validate.title.ru.$errors"
               :key="error.$uid"
               class="text-danger text-sm"
             >
@@ -199,10 +209,10 @@ const updateDeal = async () => {
                 class="form-input"
                 :placeholder="$t('description')"
                 v-model="smsTemplateData.description.ru"
-                :class="validate.description.$errors.length ? 'required-input' : ''"
+                :class="validate.description.ru.$errors.length ? 'required-input' : ''"
               />
               <p
-              v-for="error in validate.description.$errors"
+              v-for="error in validate.description.ru.$errors"
               :key="error.$uid"
               class="text-danger text-sm"
             >

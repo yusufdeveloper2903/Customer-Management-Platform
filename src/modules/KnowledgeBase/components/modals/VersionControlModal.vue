@@ -24,7 +24,7 @@ var versionControlData = ref({
 const rules = computed(() => {
   return {   
     number: {
-      required: helpers.withMessage("required", required),
+      required: helpers.withMessage("validation.this_field_is_required", required),
     },
   };
   
@@ -93,7 +93,7 @@ const updateDeal = async () => {
 
 <template>
 
-  <div id="version_control" class="uk-flex-top" uk-modal @shown="openModal">
+  <div id="version_control" class="uk-flex-top" uk-modal @shown="openModal" @hidden="validate.$reset()">
     <div
       class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
     >

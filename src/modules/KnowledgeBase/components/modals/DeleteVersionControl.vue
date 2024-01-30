@@ -19,17 +19,10 @@ const deleteVersion = async () => {
       toast.success(t("deleted_successfully"));
     });
   } catch (error: any) {
-    const warning = "Cannot delete some instances of model";
-
-    if (error.response.data.error.includes(warning)) {
-      toast.error(
-        "У пользователя есть сделки, поэтому вы не можете его удалить."
-      );
-    } else {
       toast.error(
         error.response.data.msg || error.response.data.error || "Error"
       );
-    }
+
   }
 };
 </script>
@@ -46,7 +39,7 @@ const deleteVersion = async () => {
         </h2>
       </div>
       <div class="uk-modal-body">
-        <p>{{ $t("are you really going to delete this user") }}</p>
+        <p>{{ $t("Are you sure?") }}</p>
       </div>
       <div
         class="uk-modal-footer flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"

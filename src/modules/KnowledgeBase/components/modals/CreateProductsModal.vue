@@ -49,6 +49,9 @@ const rules = computed(() => {
     },
     price: {
       required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    photo: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
     }
   };
   
@@ -87,6 +90,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           setTimeout(() => {
             toast.success(t("updated_successfully"));
           }, 200);
+          file.value = ""
         });
         isSubmitted.value = false;
       } catch (error: any) {
@@ -107,6 +111,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           setTimeout(() => {
             toast.success(t("created_successfully"));
           }, 200);
+          file.value = ""
         });
         isSubmitted.value = false;
       } catch (error: any) {
@@ -128,15 +133,13 @@ function openModal(){
     productsData.value.price = propData.editData.price
     productsData.value.photo = propData.editData.image
     productsData.value.code = propData.editData.code
-    console.log(propData.editData.image);
-    
-
   } else {
     productsData.value.title.uz = ""
     productsData.value.title.ru = ""
     productsData.value.price = null
     productsData.value.photo = ""
     productsData.value.code = ""
+    file.value = ""
   }
 }
 
@@ -144,7 +147,7 @@ function openModal(){
 
 <template>
     
-  <div id="create_products" class="uk-flex-top" uk-modal @shown="openModal">
+  <div id="create_products" class="uk-flex-top" uk-modal @shown="openModal" @hidden="validate.$reset()">
     <div
       class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
     >
@@ -220,7 +223,14 @@ function openModal(){
                 </div>
 
             <label class="mt-4 block" for="photo">{{ $t('photo') }}
-              <input @input="getFile" type="file" class="form-file-input p-1" />
+              <input @input="getFile" type="file" class="form-file-input p-1" :class="validate.photo.$errors.length ? 'required-input' : ''"/>
+              <p
+              v-for="error in validate.photo.$errors"
+              :key="error.$uid"
+              class="text-danger text-sm"
+            >
+              {{ $t(error.$message) }}
+            </p>
             </label>
 
             <label class="mt-4 block" for="price">{{ $t('price') }}
@@ -250,7 +260,7 @@ function openModal(){
           {{ $t("Cancel") }}
         </button>
 
-        <button :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal" :disabled="isSubmitted">
+        <button :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'" @click="updateDeal" :disabled="isSubmitted">
           <img
             src="@/assets/image/loading.svg"
             alt="loading.svg"

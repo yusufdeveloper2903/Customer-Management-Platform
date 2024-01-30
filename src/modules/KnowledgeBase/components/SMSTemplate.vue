@@ -119,6 +119,10 @@ watch(
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="locationFields"
       :items="smsTemplateList">
 
+      <template #empty-message>
+        <span class="dark:text-neutral-400">{{ $t('empty_text') }}</span>
+      </template>
+
       <template #header-title="header">
         {{ $t(header.text).toUpperCase() }}
       </template>

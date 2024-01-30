@@ -203,6 +203,10 @@ export const newsTemplateTable = [
 
 export const versionControlFields = [
   {
+    text: "ID",
+    value: "id"
+  },
+  {
     text: "date_and_time",
     value: "datetime"
   },
@@ -225,6 +229,10 @@ export const versionControlFields = [
 ]
 
 export const productsFields = [
+  {
+    text: "ID",
+    value: "id"
+  },
   {
     text: "Number (multi-digit-code)",
     value: "code"

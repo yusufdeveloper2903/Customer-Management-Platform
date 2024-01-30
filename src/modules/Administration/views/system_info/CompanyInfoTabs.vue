@@ -72,7 +72,7 @@ const database = ['PostgreSQL', 'MySQL', 'MongoDB', 'MariaDB']
                         {{ $t('systems') }}
                         <b class="flex justify-end flex-wrap">
                             <span v-for="system in systems" :key="system"
-                                class="inline-flex justify-end items-center m-1 px-2 py-1 bg-green-200 hover:bg-green-300 rounded-lg text-sm font-semibold text-green-600">
+                                class="inline-flex justify-end items-center m-1 px-2 py-1 bg-green-400 hover:bg-green-300 rounded-lg text-sm font-semibold text-green-600">
                                 <span class="ml-1">
                                     {{ system }}
                                 </span>
@@ -83,7 +83,7 @@ const database = ['PostgreSQL', 'MySQL', 'MongoDB', 'MariaDB']
                         {{ $t('frontend') }}
                         <b class="flex justify-end flex-wrap">
                             <span v-for="system in frontend" :key="system"
-                                class="inline-flex justify-end items-center m-1 px-2 py-1 bg-green-200 hover:bg-green-300 rounded-lg text-sm font-semibold text-green-600">
+                                class="inline-flex justify-end items-center m-1 px-2 py-1 bg-green-400 hover:bg-green-300 rounded-lg text-sm font-semibold text-green-600">
                                 <span class="ml-1">
                                     {{ system }}
                                 </span>
@@ -94,7 +94,7 @@ const database = ['PostgreSQL', 'MySQL', 'MongoDB', 'MariaDB']
                         {{ $t('backend') }}
                         <b class="flex justify-end flex-wrap">
                             <span v-for="system in backend" :key="system"
-                                class="inline-flex justify-end items-center m-1 px-2 py-1 bg-green-200 hover:bg-green-300 rounded-lg text-sm font-semibold text-green-600">
+                                class="inline-flex justify-end items-center m-1 px-2 py-1 bg-green-400 hover:bg-green-300 rounded-lg text-sm font-semibold text-green-600">
                                 <span class="ml-1">
                                     {{ system }}
                                 </span>
@@ -105,7 +105,7 @@ const database = ['PostgreSQL', 'MySQL', 'MongoDB', 'MariaDB']
                         {{ $t('ci_cd') }}
                         <b class="flex justify-end flex-wrap">
                             <span v-for="system in ci_cd" :key="system"
-                                class="inline-flex justify-end items-center m-1 px-2 py-1 bg-green-200 hover:bg-green-300 rounded-lg text-sm font-semibold text-green-600">
+                                class="inline-flex justify-end items-center m-1 px-2 py-1 bg-green-400 hover:bg-green-300 rounded-lg text-sm font-semibold text-green-600">
                                 <span class="ml-1">
                                     {{ system }}
                                 </span>
@@ -116,7 +116,7 @@ const database = ['PostgreSQL', 'MySQL', 'MongoDB', 'MariaDB']
                         {{ $t('database') }}
                         <b class="flex justify-end flex-wrap">
                             <span v-for="system in database" :key="system"
-                                class="inline-flex justify-end items-center m-1 px-2 py-1 bg-green-200 hover:bg-green-300 rounded-lg text-sm font-semibold text-green-600">
+                                class="inline-flex justify-end items-center m-1 px-2 py-1 bg-green-400 hover:bg-green-300 rounded-lg text-sm font-semibold text-green-600">
                                 <span class="ml-1">
                                     {{ system }}
                                 </span>

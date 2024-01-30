@@ -68,7 +68,7 @@ const showUntieCardModal = (item) => {
       <div class="card mt-4">
         <h2 class="text-success mb-3"><b>Активные сессии</b></h2>
         <ul class="uk-list uk-list-divider" v-if="store.user && store.user.sessions && store.user.sessions.length">
-          <li v-for="(item, index) in store.user.sessions" :key="index" class="card-bg p-3 rounded-md">
+          <li v-for="(item, index) in store.user.sessions" :key="index" class="dark:bg-secondary card-bg p-3 rounded-md">
 
             <div class="flex justify-between">
               <div>Устройство </div>
@@ -137,7 +137,7 @@ const showUntieCardModal = (item) => {
     <div class="md:w-3/12 sm:w-full card">
         <h2 class="text-success mb-3"><b>Карты</b></h2>
         <ul class="uk-list uk-list-divider">
-          <li  class="card-bg p-3 rounded-md">
+          <li  class="card-bg p-3 rounded-md dark:bg-secondary">
             <div class="flex justify-between ">
               <div>Имя </div>
               <div><small><b>Uzbekistan Bank</b></small></div>

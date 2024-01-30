@@ -25,8 +25,8 @@ const editData = ref<EditData>({
 // filters
 const filterVersionControl = reactive({
   page_size: 10,
-  start_time: "",
-  modified_date: ""
+  start_date: "",
+  end_date: ""
 });
 
 const paginationFilter = reactive({
@@ -45,7 +45,7 @@ const refresh = async (filter) => {
     await store.getVersionControl(filter);
   } catch (error: any) {
     toast.error(
-      error.response || "Error"
+      error.response?.data?.msg || error.response?.data?.error || "Error"
     );
   }
 
@@ -70,22 +70,22 @@ onMounted(async () => {
   await refresh(paginationFilter);
 });
 
-watch(
+// watch(
   
-    () => filterVersionControl.start_time , 
-    () => {
-      refresh(filterVersionControl);
+//     () => filterVersionControl.start_date , 
+//     () => {
+//       refresh(filterVersionControl);
       
-      if (store.versionControlList.results.length <= 10) {
-        current.value = 1;
-      }
-    },
+//       if (store.versionControlList.results.length <= 10) {
+//         current.value = 1;
+//       }
+//     },
 
-);
+// );
 
 watch(
   
-    () => filterVersionControl.modified_date , 
+    () => filterVersionControl.end_date , 
     () => {
       refresh(filterVersionControl);  
       
@@ -107,14 +107,14 @@ watch(
             <label for="from" class="dark:text-gray-300">
               {{ $t("from") }}
             </label>
-            <VueDatePicker v-model="filterVersionControl.start_time"></VueDatePicker>
+            <VueDatePicker v-model="filterVersionControl.start_date"></VueDatePicker>
           </div>
 
           <div class="md:w-1/2 md:m-0 mt-2">
             <label for="to" class="dark:text-gray-300">
               {{ $t("to") }}
             </label>
-            <VueDatePicker v-model="filterVersionControl.modified_date"></VueDatePicker>
+            <VueDatePicker v-model="filterVersionControl.end_date"></VueDatePicker>
           </div>
         </form>
         <button
@@ -127,6 +127,10 @@ watch(
 
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="versionControlFields"
       :items="store.versionControlList.results">
+
+      <template #empty-message>
+        <span class="dark:text-neutral-400">{{ $t('empty_text') }}</span>
+      </template>
 
       <template #header-datetime="header">
         {{ $t(header.text).toUpperCase() }}
