@@ -7,12 +7,13 @@ import NewsTemplate from "../components/NewsTemplate.vue";
 import NearbyPlaces from "../components/NearbyPlaces/NearbyPlaces.vue";
 import VersionControl from "../components/VersionControl.vue"
 import Products from "../components/Products.vue"
+import PrivacyPolicy from "../components/PrivacyPolicy.vue";
 </script>
 
 <template>
-  <div
+  <!-- <div
     class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm"
-  >
+  > -->
     <Tabs vertical pill>
       <Tab :title="$t('category')">
         <Categories />
@@ -37,6 +38,10 @@ import Products from "../components/Products.vue"
       <Tab :title="$t('products')">
         <Products />
       </Tab>
+
+      <Tab :title="$t('PrivacyPolicy')">
+        <PrivacyPolicy />
+      </Tab>
     </Tabs>
-  </div>
+  <!-- </div> -->
 </template>

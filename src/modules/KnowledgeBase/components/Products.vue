@@ -30,7 +30,6 @@ interface EditData {
       uz: string,
       ru: string
     },
-    price: number | null,
     image: null | string,
     code: string
 }
@@ -42,7 +41,6 @@ const editData = ref<EditData>({
       uz: "",
       ru: ""
     },
-    price: null,
     image: null,
     code: ""
 })
@@ -134,10 +132,6 @@ watch(
       </template>
 
       <template #header-actions="header">
-        {{ $t(header.text).toUpperCase() }}
-      </template>
-
-      <template #header-price="header">
         {{ $t(header.text).toUpperCase() }}
       </template>
 

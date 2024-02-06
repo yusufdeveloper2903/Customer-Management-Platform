@@ -15,10 +15,12 @@ const emits = defineEmits(["saveVersionControl"]);
 interface EditData {
     id: number | null
     number: string,
+    is_active: boolean
 }
 
 var versionControlData = ref({
-    number: ""
+    number: "",
+    is_active: false
 })
 
 const rules = computed(() => {
@@ -38,8 +40,10 @@ const propData = defineProps<{editData: EditData}>();
 function openModal(){
   if(propData.editData.id){
     versionControlData.value.number = propData.editData.number
+    versionControlData.value.is_active = propData.editData.is_active
   } else {
     versionControlData.value.number = ""
+    versionControlData.value.is_active = false
   }
 }
 
@@ -123,6 +127,16 @@ const updateDeal = async () => {
               {{ $t(error.$message) }}
             </p>
             </label>
+
+            <label class="relative inline-flex items-center cursor-pointer mt-3">
+            <input
+                type="checkbox"
+                v-model="versionControlData.is_active"
+                class="sr-only peer"
+            />
+            <div
+                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"/>
+          </label>
             </form>
       </div>
 
@@ -133,7 +147,7 @@ const updateDeal = async () => {
           {{ $t("Cancel") }}
         </button>
 
-        <button :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal" :disabled="isSubmitted">
+        <button :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'" @click="updateDeal" :disabled="isSubmitted">
           <img
             src="@/assets/image/loading.svg"
             alt="loading.svg"

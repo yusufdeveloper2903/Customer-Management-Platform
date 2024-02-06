@@ -15,11 +15,13 @@ const userId = ref<number | null>(null);
 interface EditData {
     id: number | null
     number: string,
+    is_active: boolean
 }
 
 const editData = ref<EditData>({
     id: null,
-    number: ""
+    number: "",
+    is_active: false
 })
 
 // filters

@@ -293,5 +293,8 @@
   "created_successfully": "Создано успешно",
   "user_details": "Данные пользователя",
   "Number (multi-digit-code)": "Номер (многозначный код)",
-  "updated_successfully": "Успешно Обновлено"
+  "updated_successfully": "Успешно Обновлено",
+  "deleted_successfully": "Успешно удалено",
+  "PrivacyPolicy": "Политика конфиденциальности"
+  
 }

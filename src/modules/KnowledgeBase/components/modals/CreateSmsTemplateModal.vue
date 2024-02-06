@@ -128,7 +128,7 @@ const updateDeal = async () => {
 </script>
 
 <template>
-  <div id="sms_template" class="uk-flex-top" uk-modal @shown="openModal">
+  <div id="sms_template" class="uk-flex-top" uk-modal @shown="openModal" @hidden="validate.$reset()">
     <div
       class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
     >

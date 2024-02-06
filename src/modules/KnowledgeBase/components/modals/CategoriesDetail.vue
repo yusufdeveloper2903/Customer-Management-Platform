@@ -106,7 +106,7 @@ const updateDeal = async () => {
           {{ $t("Cancel") }}
         </button>
 
-        <button class="btn-success" @click="updateDeal" :disabled="isSubmitted">
+        <button class="btn-success mr-2" @click="updateDeal" :disabled="isSubmitted">
           <img
             src="@/assets/image/loading.svg"
             alt="loading.svg"

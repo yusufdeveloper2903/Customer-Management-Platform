@@ -234,20 +234,16 @@ export const productsFields = [
     value: "id"
   },
   {
-    text: "Number (multi-digit-code)",
-    value: "code"
-  },
-  {
     text: "name",
     value: "title"
   },
   {
-    text: "photo",
-    value: "image"
+    text: "Number (multi-digit-code)",
+    value: "code"
   },
   {
-    text: "price",
-    value: "price"
+    text: "photo",
+    value: "image"
   },
   {
     text: "actions",

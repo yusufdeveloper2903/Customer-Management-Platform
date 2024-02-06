@@ -6,11 +6,12 @@ import { toast } from "vue3-toastify";
 import { helpers, required } from "@vuelidate/validators";
 import useVuelidate, { Validation } from "@vuelidate/core";
 import knowledgeBase from "../../store/index";
+import FileInput from "@/components/FileInput/FileInput.vue";
 
 const { t } = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase()
-const file = ref<string>("")
+// const file = ref<string>("")
 const emits = defineEmits(["saveProducts"]);
 
 interface EditData {
@@ -19,7 +20,6 @@ interface EditData {
       uz: string,
       ru: string
     },
-    price: number | null,
     image: null | string,
     code: string
 }
@@ -29,8 +29,7 @@ var productsData = ref({
       uz: "",
       ru: ""
     },
-    price: null,
-    photo: "",
+    photo: null,
     code: ""
 })
 
@@ -47,9 +46,6 @@ const rules = computed(() => {
     code: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
-    price: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
-    },
     photo: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     }
@@ -60,26 +56,20 @@ const rules = computed(() => {
 const propData = defineProps<{editData: EditData}>();
 const validate: Ref<Validation> = useVuelidate(rules, productsData);
 
-  const getFile = (e: any) => {
-    productsData.value.photo = e.target.files[0]
-    file.value = e.target.files[0]
-  }
+  // const getFile = (e: any) => {
+  //   productsData.value.photo = e.target.files[0]
+  //   file.value = e.target.files[0]
+  // }
 
   const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
 
   const formData = new FormData()
-  if(file.value){
     formData.append('title', JSON.stringify(productsData.value.title))
     formData.append('code', productsData.value.code)
-    formData.append('price', productsData.value.price)
     formData.append('image', productsData.value.photo)
-  } else {
-    formData.append('title', JSON.stringify(productsData.value.title))
-    formData.append('code', productsData.value.code)
-    formData.append('price', productsData.value.price)
-  }
+
 
   if (propData.editData.id) {    
     try {
@@ -90,7 +80,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           setTimeout(() => {
             toast.success(t("updated_successfully"));
           }, 200);
-          file.value = ""
         });
         isSubmitted.value = false;
       } catch (error: any) {
@@ -106,12 +95,12 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
   } else {
       try {
         await store.createProducts(formData).then(() => {
+
           UIkit.modal("#create_products").hide();
           emits("saveProducts");
           setTimeout(() => {
             toast.success(t("created_successfully"));
           }, 200);
-          file.value = ""
         });
         isSubmitted.value = false;
       } catch (error: any) {
@@ -130,16 +119,13 @@ function openModal(){
   if(propData.editData.id){
     productsData.value.title.uz = propData.editData.title.uz
     productsData.value.title.ru = propData.editData.title.ru
-    productsData.value.price = propData.editData.price
     productsData.value.photo = propData.editData.image
     productsData.value.code = propData.editData.code
   } else {
     productsData.value.title.uz = ""
     productsData.value.title.ru = ""
-    productsData.value.price = null
-    productsData.value.photo = ""
+    productsData.value.photo = null
     productsData.value.code = ""
-    file.value = ""
   }
 }
 
@@ -223,27 +209,12 @@ function openModal(){
                 </div>
 
             <label class="mt-4 block" for="photo">{{ $t('photo') }}
-              <input @input="getFile" type="file" class="form-file-input p-1" :class="validate.photo.$errors.length ? 'required-input' : ''"/>
+              <FileInput
+            v-model="productsData.photo"
+            @remove="productsData.photo = null"
+          />
               <p
               v-for="error in validate.photo.$errors"
-              :key="error.$uid"
-              class="text-danger text-sm"
-            >
-              {{ $t(error.$message) }}
-            </p>
-            </label>
-
-            <label class="mt-4 block" for="price">{{ $t('price') }}
-              <input
-                id="price"
-                type="number"
-                class="form-input"
-                :placeholder="$t('price')"
-                v-model="productsData.price"
-                :class="validate.price.$errors.length ? 'required-input' : ''"
-              />
-              <p
-              v-for="error in validate.price.$errors"
               :key="error.$uid"
               class="text-danger text-sm"
             >
