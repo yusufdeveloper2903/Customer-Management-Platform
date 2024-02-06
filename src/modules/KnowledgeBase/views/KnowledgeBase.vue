@@ -8,6 +8,7 @@ import NearbyPlaces from "../components/NearbyPlaces/NearbyPlaces.vue";
 import VersionControl from "../components/VersionControl.vue"
 import Products from "../components/Products.vue"
 import PrivacyPolicy from "../components/PrivacyPolicy.vue";
+import TermsAndConditions from "../components/TermsAndConditions.vue"
 </script>
 
 <template>
@@ -41,6 +42,10 @@ import PrivacyPolicy from "../components/PrivacyPolicy.vue";
 
       <Tab :title="$t('PrivacyPolicy')">
         <PrivacyPolicy />
+      </Tab>
+
+      <Tab :title="$t('Terms_and_conditions')">
+        <TermsAndConditions />
       </Tab>
     </Tabs>
   <!-- </div> -->

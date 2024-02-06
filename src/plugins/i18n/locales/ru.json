@@ -295,6 +295,7 @@
   "Number (multi-digit-code)": "Номер (многозначный код)",
   "updated_successfully": "Успешно Обновлено",
   "deleted_successfully": "Успешно удалено",
-  "PrivacyPolicy": "Политика конфиденциальности"
+  "PrivacyPolicy": "Политика конфиденциальности",
+  "Terms_and_conditions": "Условия и положения"
   
 }
