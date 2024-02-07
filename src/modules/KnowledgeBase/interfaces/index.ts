@@ -104,3 +104,12 @@ export interface Products {
   image: string | null,
   code: string
 }
+
+export interface Pages {
+  id: number,
+  text: {
+    ru: string,
+    uz: string,
+  },
+  type: string
+}

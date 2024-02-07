@@ -9,7 +9,8 @@ import {
   LocationPlaceData,
   Regions,
   VersionControl,
-  Products
+  Products,
+  Pages
 } from "../interfaces";
 
 export default defineStore("knowledgeBase", {
@@ -36,7 +37,11 @@ export default defineStore("knowledgeBase", {
       // products
       productsList: {
         results: [] as Products[]
-      } as Results<Products>
+      } as Results<Products>,
+
+      pagesList: {
+        results: [] as Pages[]
+      } as Results<Pages>
     };
   },
   actions: {
@@ -146,6 +151,17 @@ export default defineStore("knowledgeBase", {
 
     deleteProducts(id: number) {
       return $axios.delete(`/products/products/${id}/`);
+    },
+
+
+    // terms and condition
+    async getPages(params) {
+      const { data } = await $axios.get('/knowledge_base/pages/', {params})
+      this.pagesList = data
+    },
+
+    updatePages(data) {
+      return $axios.patch(`/knowledge_base/pages/${data.id}/`, data);
     },
   },
 });
