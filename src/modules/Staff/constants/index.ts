@@ -1,8 +1,5 @@
 export const fields = [
-  {
-    text: "№",
-    value: "id",
-  },
+
   {
     text: "photo",
     value: "photo",

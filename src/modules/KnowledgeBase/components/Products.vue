@@ -1,78 +1,84 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref, watch} from "vue";
+//Imported files
+import {reactive, ref} from "vue";
 import {toast} from "vue3-toastify";
 import {productsFields} from "../constants";
 import CreateProducts from "./modals/CreateProductsModal.vue";
-import ConfirmModal from "@/components/ConfirmModals/ConfirmModal.vue";
 import knowledgeBase from "../store/index"
 import UIkit from "uikit";
+import {watchDebounced} from "@vueuse/core";
+import {useI18n} from "vue-i18n";
 
+//Declared variables
+
+const {t} = useI18n()
 const current = ref<number>(1);
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
 const store = knowledgeBase()
-const timeout = ref();
-
-const paginationFilter = reactive({
+const params = reactive({
   page_size: 10,
   page: 1,
+  search: ''
 });
 
-// filters
-const filterProducts = reactive({
-  page_size: 10,
-  search: "",
-});
 
 interface EditData {
   id: number | null,
   title: {
-      uz: string,
-      ru: string
-    },
-    price: number | null,
-    image: null | string,
-    code: string
+    uz: string,
+    ru: string
+  },
+  description: {
+    uz: string,
+    ru: string
+  },
+  price: number | null,
+  image: null | string,
+  code: string,
+  measurement_type: string | null,
+  quantity: number | null
 }
 
 
 const editData = ref<EditData>({
-  id: null,
+  id: 0,
   title: {
-      uz: "",
-      ru: ""
-    },
-    price: null,
-    image: null,
-    code: ""
+    uz: "",
+    ru: ""
+  },
+  description: {
+    uz: "",
+    ru: ""
+  },
+  price: null,
+  image: null,
+  code: "",
+  measurement_type: '',
+  quantity: 0
 })
 
 const changePagionation = (e: number) => {
-  paginationFilter.page = e;
+  params.page = e;
   current.value = e;
-  refresh({...paginationFilter});
+  refresh(params);
 };
-
-const deleteProducts = () => {
-  store.deleteProducts(itemId.value).then(() => {
-    refresh(paginationFilter);
-    UIkit.modal("#poducts-delete").hide();
-  })
+const onPageSizeChanged = (e) => {
+  params.page_size = e
+  params.page = 1
+  refresh(params)
+}
+const handleDeleteModal = (id) => {
+  UIkit.modal("#product-delete-modal").show()
+  itemId.value = id
 };
 
 const saveProducts = () => {
-  refresh(filterProducts);
+  refresh(params);
 }
 
-const searchByName = () => {
-  clearTimeout(timeout.value);
-  timeout.value = setTimeout(() => {
-    refresh(filterProducts);
-  }, 500);
-};
 
-const refresh = async (filter) => {
-
+const refresh = async (filter: any) => {
   isLoading.value = true;
   try {
     await store.getProducts(filter)
@@ -81,22 +87,40 @@ const refresh = async (filter) => {
         error.response.data.msg || error.response.data.error || "Error"
     );
   }
-
   isLoading.value = false;
 };
+refresh(params)
+const deleteAction = async () => {
+  isLoading.value = true
+  try {
+    await store.deleteProducts(itemId.value)
+    UIkit.modal("#product-delete-modal").hide();
+    toast.success(t('deleted_successfully'));
+    if ((store.productsList.count - 1) % params.page_size == 0) {
+      if (params.page > 1) {
+        params.page = params.page - 1
+        refresh(params)
+      } else {
+        params.page = 1
+        refresh(params)
+      }
 
-onMounted(() => {
-  refresh(paginationFilter);
-});
-
-watch(
-  () => filterProducts.search,
-  () => {
-    if (store.productsList.results.length <= 10) {
-      current.value = 1;
     }
+    isLoading.value = false
+  } catch (error: any) {
+    toast.error(
+        error.response.data.msg || error.response.data.error || "Error"
+    );
   }
+};
+watchDebounced(
+    () => params.search,
+    async () => {
+      params.page = 1;
+      await refresh(params)
+    }, {deep: true, debounce: 500, maxWait: 5000}
 );
+
 
 </script>
 
@@ -104,9 +128,10 @@ watch(
   <div class="card">
     <div class="flex justify-between items-end mb-10">
 
-      <label for="search" class="w-1/4" >
+      <label for="search" class="w-1/4">
         {{ $t('Search') }}
-        <input type="text" class="form-input" :placeholder="$t('Search')" @input="searchByName" v-model="filterProducts.search"/>
+        <input type="text" class="form-input" :placeholder="$t('Search')"
+               v-model="params.search"/>
       </label>
 
       <button class="btn-primary" uk-toggle="target: #create_products" @click="editData = {}">
@@ -115,30 +140,30 @@ watch(
     </div>
 
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="productsFields"
-      :items="store.productsList.results">
+                   :items="store.productsList.results" show-index>
 
       <template #empty-message>
-        <span class="dark:text-neutral-400">{{ $t('empty_text') }}</span>
+        <span>{{ $t('empty_text') }}</span>
       </template>
 
       <template #header-code="header">
-        {{ $t(header.text).toUpperCase() }}
+        {{ $t(header.text) }}
       </template>
 
       <template #header-title="header">
-        {{ $t(header.text).toUpperCase() }}
+        {{ $t(header.text) }}
       </template>
 
       <template #header-image="header">
-        {{ $t(header.text).toUpperCase() }}
+        {{ $t(header.text) }}
       </template>
 
       <template #header-actions="header">
-        {{ $t(header.text).toUpperCase() }}
+        {{ $t(header.text) }}
       </template>
 
       <template #header-price="header">
-        {{ $t(header.text).toUpperCase() }}
+        {{ $t(header.text) }}
       </template>
 
       <template #item-title="item">
@@ -146,21 +171,21 @@ watch(
       </template>
 
       <template #item-image="item">
-        <div class="py-3 flex items-center gap-3">
-            <img v-if="item.image"
-                 class="w-[45px] h-[45px] rounded object-cover"
-                 :src="item.image"
-                 alt="Rounded avatar"
+        <div class="py-3 flex justify-center items-center gap-3">
+          <img v-if="item.image"
+               class="w-[45px] h-[45px] rounded object-cover"
+               :src="item.image"
+               alt="Rounded avatar"
+          />
+          <div
+              v-else
+              class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded"
+          >
+            <Icon
+                icon="Camera"
+                color="#356c2d"
             />
-            <div
-                v-else
-                class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded"
-            >
-              <Icon
-                  icon="Camera"
-                  color="#356c2d"
-              />
-            </div>
+          </div>
         </div>
       </template>
 
@@ -169,32 +194,27 @@ watch(
       </template>
 
       <template #item-actions="item">
-        <div class="flex my-4">
+        <div class="flex justify-center my-4">
           <button class="btn-warning btn-action" uk-toggle="target: #create_products" @click="editData = item">
-            <Icon icon="Pen New Square" color="#fff" size="16" />
+            <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>
-          <button class="ml-3 btn-danger btn-action" @click="itemId = item.id"   uk-toggle="target: #poducts-delete">         
-            <Icon icon="Trash Bin Trash" color="#fff" size="16" />
+          <button class="ml-3 btn-danger btn-action" @click="handleDeleteModal(item.id)"
+          >
+            <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
           </button>
         </div>
       </template>
-
     </EasyDataTable>
 
-    <TwPagination :total="store.productsList && store.productsList.count" class="mt-10 tw-pagination" :current="current" :per-page="10"
-      :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')" @page-changed="changePagionation" />
+    <DeleteModal @delete-action="deleteAction" :id="'product-delete-modal'"/>
+
+    <TwPagination :total="store.productsList.count" class="mt-10 tw-pagination"
+                  :current="params.page"
+                  :per-page="params.page_size"
+                  :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
+                  @page-changed="changePagionation" @per-page-changed="onPageSizeChanged"/>
 
     <CreateProducts :editData="editData" @saveProducts="saveProducts"/>
 
-    <ConfirmModal
-        :title="$t('delete')"
-        :cancel="$t('Cancel')"
-        :ok="$t('delete')"
-        id="poducts-delete"
-        @ok="deleteProducts"
-        @cancel="itemId = null"
-    >
-      <p>{{ $t('Are you sure?') }}</p>
-    </ConfirmModal>
   </div>
 </template>

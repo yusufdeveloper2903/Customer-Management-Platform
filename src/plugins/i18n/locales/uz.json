@@ -2,12 +2,18 @@
   "validation":{
     "this_field_is_required": "Ushbu qator to'ldirilishi shart"
   },
+  "pagination": {
+    "show_from": "1 dan",
+    "column": "qator"
+  },
+  "are_you_really_going_to_delete_this_user": "Ishonchingiz komilmi?",
+  "deleted_successfully": "Muvaffaqiyatli oʻchirildi",
   "nav": {
     "Admin Page": "Admin",
     "Homepage": "Bosh sahifa",
     "Staffs": "Xodimlar",
     "Students": "O`quvchilar",
-    "directory": "Ma'lumotlar",
+    "directory": "Ma'lumotnomalar",
     "Tariffs": "Tariflar",
     "About Us": "Biz haqimizda",
     "Finance": "Moliya",

@@ -1,5 +1,3 @@
-
-// sms template
 export interface Results<T> {
   count: number;
   next: number | null;
@@ -93,7 +91,6 @@ export interface VersionControl {
 }
 
 
-// products
 export interface Products {
   id: number,
   title: {

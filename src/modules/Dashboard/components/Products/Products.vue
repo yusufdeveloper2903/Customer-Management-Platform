@@ -1,7 +1,12 @@
 <script setup lang="ts">
+//Imported files
+
 import { reactive } from "vue";
 import { productsFields } from "../../constants/index";
 import { formatCurrency } from "@/mixins/features";
+
+
+//Declared variables
 
 const tableData = reactive([
   {

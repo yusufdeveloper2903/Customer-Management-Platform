@@ -1,22 +1,11 @@
 <script setup lang="ts">
-
-//              IMPORTS                //
-
 import { ref, onMounted } from 'vue'
 import { administrationStore } from '../../store/index'
-
-//              COMPONENTS                //
-
 import Tabs from '@/components/Tab/Tabs.vue'
 import Tab from '@/components/Tab/Tab.vue'
 import Accordion from './Accordion.vue'
-
-//              DECLORATIONS                //
-
 const store = administrationStore()
 const data = ref<any>([])
-
-//              FUNCTIONS                //
 
 onMounted(async () => {
    store.FETCH_OS_SYSTEM_INFO().then((response) => {
@@ -53,29 +42,10 @@ onMounted(async () => {
                 <div v-for="item in data.swmem_memory" class="border-b flex pb-2 flex justify-between items-center">
                     {{ item.title }}
                     <b>
-                        <!-- {{ item.value }} -->
-                        <!-- if item.value is array then get first element and show it else show item.value -->
                         {{ typeof item.value === 'object' ? item.value[0] + ' %' : item.value }}
                     </b>
                 </div>
-                <!-- <div class="border-b flex py-2 flex justify-between items-center">
-                    Percentage
-                    <b>
-                        75.90%
-                    </b>
-                </div>
-                <div class="border-b flex py-2 flex justify-between items-center">
-                    Total
-                    <b>
-                        2.30 KB
-                    </b>
-                </div>
-                <div class="flex pt-2 flex justify-between items-center">
-                    Used
-                    <b>
-                        2.30 KB
-                    </b>
-                </div> -->
+
             </div>
         </Tab>
 

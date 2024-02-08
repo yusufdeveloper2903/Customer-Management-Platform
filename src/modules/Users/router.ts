@@ -27,13 +27,4 @@ export default [
     },
   },
 
-  // {
-  //   path: "/profile",
-  //   name: "profiler",
-  //   component: () => import("@/modules/Users/pages/Profile.vue"),
-  //   meta: {
-  //     layout: "MainLayout",
-  //     permissions: ['agent', 'banker', 'seller', 'buyer', 'admin'],
-  //   },
-  // },
 ];

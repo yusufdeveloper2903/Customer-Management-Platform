@@ -1,24 +1,15 @@
 <script setup lang="ts">
-
-//              IMPORTS                    // 
+//Imported files
 
 import modules from '@/navigation/vertical/index'
-
-//              COMPONENTS                //
-
 import Tabs from '@/components/Tab/Tabs.vue'
 import Tab from '@/components/Tab/Tab.vue'
 import Logo from '@/assets/image/ZK.png'
-
-//              DECLORATIONS                //
-
 const systems = ['CRM', 'ERP', 'WMS', 'HRM', 'SRC']
 const frontend = ['Java Script', 'Vue', 'React', 'Angular']
 const backend = ['GO', 'Python', 'Laravel', 'PHP', 'Django', 'Iot', 'FastApi', 'Flask']
 const ci_cd = ['GitLab', 'Jenkins', 'Docker', 'Kubernetes']
 const database = ['PostgreSQL', 'MySQL', 'MongoDB', 'MariaDB']
-
-
 </script>
 
 <template>

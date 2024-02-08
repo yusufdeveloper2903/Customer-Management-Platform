@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+//Imported files
+
 import {onMounted, reactive, ref} from "vue";
 import {toast} from "vue3-toastify";
 import {categoryFields, categoryitems} from "../constants";
@@ -6,19 +9,19 @@ import CategoriesDetail from "./modals/CategoriesDetail.vue";
 import ConfirmModal from "@/components/ConfirmModals/ConfirmModal.vue";
 import {ICategory} from "../interfaces/index";
 
+
+//Declared variables
+
 const current = ref<number>(1);
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
-
 const paginationFilter = reactive({
   page_size: 10,
   page: 1,
 });
-
 const items = ref<ICategory[]>(categoryitems);
 const currentRow = ref<ICategory | null>(null);
-
-const dragStart = (item) => {
+const dragStart = (item: any) => {
   currentRow.value = item;
 };
 

@@ -36,7 +36,6 @@ export interface Results<T> {
     }
   }
 
-//   news
 export interface News {
     id: number;
     start_time: string;
@@ -68,7 +67,6 @@ export interface News {
     status: null | string
 }
 
-// sms sending
 export interface SmsSending {
     id: number;
     start_time: string | null
@@ -103,10 +101,8 @@ export interface SmsSending {
     }
 }
 
-// sms sending detail
 export interface Reseivers {
 id: number;
-// avatar: string | null;
 full_name: string | null;
 phone: string | null;
 created_date: string | null;
@@ -114,7 +110,6 @@ last_login: string | null;
 is_active: boolean
 }
 
-//   status
 export interface Status {
     id: number;
         title: {

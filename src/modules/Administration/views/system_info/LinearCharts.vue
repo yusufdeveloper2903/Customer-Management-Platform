@@ -1,16 +1,7 @@
 <script setup lang="ts">
-
-//              IMPORTS                //
-
 import { ref, watch } from 'vue'
 import { useI18n } from "vue-i18n";
-
-//              PROPS/EMITS                //
-
 const props = defineProps(['data'])
-
-//              DECLORATIONS                //
-
 const { t } = useI18n();
 const series = ref<any>([
     {
@@ -63,9 +54,6 @@ const series = ref<any>([
     },
 
 ])
-
-//              OPTIONS                //
-
 const chartOptions3 = ref({
     chart: {
         height: 350,
@@ -87,9 +75,6 @@ const chartOptions3 = ref({
     dataLabels: {
         enabled: false
     },
-    // stroke: {
-    //     curve: 'straight',
-    // },
     stroke: {
         show: true,
         curve: 'smooth',
@@ -103,18 +88,11 @@ const chartOptions3 = ref({
         align: 'left'
     },
 })
-
-//              COMPUTED                //
-
-// check there is props.data and if it is, start function to set series and array
 watch(() => props.data, () => {
     if (props.data) {
         setSeries()
     }
 })
-
-//              FUNCTIONS                //
-
 const setSeries = () => {
     for (let i = 0; i < props.data.length; i++) {
         series.value[i].name = props.data[i]?.title

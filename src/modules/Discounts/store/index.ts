@@ -1,6 +1,7 @@
+//Imported files
+
 import { defineStore } from "pinia";
 import $axios from "@/plugins/axios";
-
 import { IStaff, Results, UsersRoles, StaffDetails } from "../interfaces/index";
 
 export default defineStore("staff", {

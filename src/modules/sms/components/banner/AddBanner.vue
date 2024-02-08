@@ -1,7 +1,9 @@
 <script setup lang="ts">
+
+//Imported files
+
 import VueDatePicker from '@vuepic/vue-datepicker';
 import { useI18n } from 'vue-i18n'
-// import {Textarea} from "flowbite-vue";
 import type { Header } from "vue3-easy-data-table";
 import '@vuepic/vue-datepicker/dist/main.css'
 import { onMounted, ref, reactive, watch } from "vue";
@@ -10,6 +12,9 @@ import knowledgeBase from "../../store/index"
 import { useRoute, useRouter } from "vue-router";
 import clientsStore from "@/modules/Users/store/index"
 import referenceStore from "@/modules/KnowledgeBase/store/index"
+
+
+//Declared variables
 
 const file = ref<string>("")
 const templateStore = referenceStore()

@@ -1,95 +1,94 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref, watch} from "vue";
+//Imported files
+
+import {reactive, ref} from "vue";
 import staff from "../store/index";
 import {fields} from "../constants/index";
 import UIkit from "uikit";
-import DeleteUserModal from "../components/DeleteUserModal.vue";
 import {useRouter} from "vue-router";
 import {toast} from "vue3-toastify";
-// import {useI18n} from "vue-i18n";
+import {watchDebounced} from "@vueuse/core";
+import DeleteModal from "@/components/DeleteModal.vue";
+import {useI18n} from "vue-i18n";
 
-// variables
+const {t} = useI18n()
+//Declared files
+
 const store = staff();
 const router = useRouter();
 const userId = ref<number | null>(null);
 const isLoading = ref(false);
-let usersList = ref<object[]>([]);
-const timeout = ref();
-const current = ref<number>(1);
 
-// filters
 const filterUsers = reactive({
   page_size: 10,
+  page: 1,
   search: "",
   role: null,
 });
 
-const paginationFilter = reactive({
-  page_size: 10,
-  page: 1,
-});
 
-// functions
 const handleDeleteModal = (id: number) => {
+  UIkit.modal("#global-delete-modal").show();
   userId.value = id;
-  UIkit.modal("#staff-delete-modal").show();
 };
 
-const refresh = async (filter) => {
+const refresh = async (filter: any) => {
   isLoading.value = true;
   try {
     await store.getStaffs(filter);
-    usersList.value = store.staffsList.results;
+    isLoading.value = false;
   } catch (error: any) {
     toast.error(
         error.response.data.msg || error.response.data.error || "Error"
     );
   }
 
-  isLoading.value = false;
 };
+refresh(filterUsers);
+store.getUsersRolesList()
+const deleteAction = async () => {
+  isLoading.value = true
+  try {
+    await store.deleteStaff(userId.value)
+    UIkit.modal("#global-delete-modal").hide();
+    toast.success(t('deleted_successfully'));
+    if ((store.staffsList.count - 1) % filterUsers.page_size == 0) {
+      if (filterUsers.page > 1) {
+        filterUsers.page = filterUsers.page - 1
+        refresh(filterUsers)
+      } else {
+        filterUsers.page = 1
+        refresh(filterUsers)
+      }
 
-const deleteUser = () => {
-  refresh(filterUsers);
+    }
+    isLoading.value = false
+  } catch (error: any) {
+    toast.error(
+        error.response.data.msg || error.response.data.error || "Error"
+    );
+  }
 };
 
 const changePagionation = (e: number) => {
-  paginationFilter.page = e;
-  current.value = e;
-  refresh({...paginationFilter, ...filterUsers});
+  filterUsers.page = e;
+  refresh(filterUsers);
 };
 
-const searchByName = () => {
-  clearTimeout(timeout.value);
-  timeout.value = setTimeout(() => {
-    refresh(filterUsers);
-  }, 500);
+const filterByRole = () => {
+  filterUsers.page = 1
+  refresh(filterUsers)
+}
+
+watchDebounced(() => filterUsers.search, async function () {
+  filterUsers.page = 1
+  refresh(filterUsers)
+}, {deep: true, debounce: 500, maxWait: 5000,})
+const onPageSizeChanged = (event: number) => {
+  filterUsers.page = 1;
+  filterUsers.page_size = event;
+  refresh(filterUsers);
 };
-
-watch(
-    () => filterUsers.role,
-    () => {
-      refresh(filterUsers);
-
-      if (usersList.value.length <= 10) {
-        current.value = 1;
-      }
-    }
-);
-
-watch(
-    () => filterUsers.search,
-    () => {
-      if (usersList.value.length <= 10) {
-        current.value = 1;
-      }
-    }
-);
-
-onMounted(async () => {
-  await refresh(paginationFilter);
-  await store.getUsersRolesList()
-})
 </script>
 
 <template>
@@ -107,7 +106,6 @@ onMounted(async () => {
                 class="form-input"
                 :placeholder="$t('Search')"
                 v-model="filterUsers.search"
-                @input="searchByName"
             />
           </div>
 
@@ -118,12 +116,14 @@ onMounted(async () => {
             <v-select
                 :placeholder="$t('Role')"
                 :options="store.users_roles.results"
-                :getOptionLabel="(role) => role.name"
-                :reduce="(role) => role.id"
+                :getOptionLabel="(role:any) => role.name"
+                :reduce="(role:number) => role.id"
                 v-model="filterUsers.role"
+                @update:model-value="filterByRole"
             >
               <template #no-options> {{ $t("no_matching_options") }}</template>
             </v-select>
+
           </div>
         </form>
         <button
@@ -141,46 +141,47 @@ onMounted(async () => {
           hide-footer
           :loading="isLoading"
           :headers="fields"
-          :items="usersList"
+          :items="store.staffsList.results"
+          show-index
       >
         <template #empty-message>
           <div class="dark:text-white">{{ $t("no_available_data") }}</div>
         </template>
 
         <template #header-full_name="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
         <template #header-photo="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
         <template #header-username="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
         <template #header-phone="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
         <template #header-role="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
         <template #header-is_active="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
         <template #header-status="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
         <template #header-actions="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
         <template #item-photo="items">
-          <div class="py-3 flex items-center gap-3">
+          <div class="py-3 flex justify-center gap-3">
             <img
                 v-if="items && items.photo"
                 class="w-[45px] h-[45px] rounded object-cover"
@@ -203,7 +204,7 @@ onMounted(async () => {
 
         <template #item-role="items">
           <span
-          v-if="items.role"
+              v-if="items.role"
               class="rounded bg-primary px-4 p-1 pt-0.5 inline m-1 text-white"
           >
             {{ items.role.name }}
@@ -226,7 +227,7 @@ onMounted(async () => {
         </template>
 
         <template #item-actions="items">
-          <div class="flex">
+          <div class="flex justify-center">
             <button
                 class="btn-warning btn-action"
                 @click="
@@ -244,20 +245,21 @@ onMounted(async () => {
           </div>
         </template>
       </EasyDataTable>
-
       <TwPagination
-        :total="store.staffsList.count"
           class="mt-10 tw-pagination"
-          :current="current"
-          :per-page="10"
+          :current="filterUsers.page"
+          :total="store.staffsList.count"
+          :per-page='filterUsers.page_size'
           :text-before-input="$t('go_to_page')"
           :text-after-input="$t('forward')"
           @page-changed="changePagionation"
+          @per-page-changed="onPageSizeChanged"
+
       />
 
-      <DeleteUserModal
-          :userId="userId"
-          @deleteUser="deleteUser"
+      <DeleteModal
+          @delete-action="deleteAction"
+
       />
     </div>
   </div>

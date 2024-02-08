@@ -1,99 +1,93 @@
 <script setup lang="ts">
-import { versionControlFields } from "../constants";
+
+//Imported files
+
+import {versionControlFields} from "../constants";
 import knowledgeBase from ".././store/index"
-import { onMounted, reactive, ref, watch } from "vue";
-import { toast } from "vue3-toastify";
+import {reactive, ref, watch} from "vue";
+import {toast} from "vue3-toastify";
 import UIkit from "uikit";
-import DeleteVersionControl from "./modals/DeleteVersionControl.vue"
+import {useI18n} from "vue-i18n";
 import AddVersionControl from "./modals/VersionControlModal.vue"
 
+
+//Declared files
+const {t} = useI18n()
 const store = knowledgeBase()
 const isLoading = ref(false);
 const current = ref<number>(1);
 const userId = ref<number | null>(null);
 
 interface EditData {
-    id: number | null
-    number: string,
+  id: number | null
+  number: string,
 }
 
 const editData = ref<EditData>({
-    id: null,
-    number: ""
+  id: null,
+  number: ""
 })
 
-// filters
-const filterVersionControl = reactive({
+const params = reactive({
   page_size: 10,
   start_date: "",
-  end_date: ""
+  end_date: "",
+  page: 1
 });
 
-const paginationFilter = reactive({
-  page_size: 10,
-  page: 1,
-});
+const deleteAction = async () => {
+  isLoading.value = true
+  try {
+    await store.deleteVersion(userId.value)
+    UIkit.modal("#global-delete-modal").hide();
+    toast.success(t('deleted_successfully'));
+    if ((store.versionControlList.count - 1) % params.page_size == 0) {
+      if (params.page > 1) {
+        params.page = params.page - 1
+        await refresh(params)
+      } else {
+        params.page = 1
+        await refresh(params)
+      }
 
+    }
+    isLoading.value = false
+  } catch (error: any) {
+    toast.error(
+        error.response.data.msg || error.response.data.error || "Error"
+    );
+  }
+};
 const handleDeleteModal = (id: number) => {
   userId.value = id;
   UIkit.modal("#version-delete-modal").show();
 };
 
-const refresh = async (filter) => {
+const refresh = async (params: any) => {
   isLoading.value = true;
   try {
-    await store.getVersionControl(filter);
+    await store.getVersionControl(params);
   } catch (error: any) {
     toast.error(
-      error.response?.data?.msg || error.response?.data?.error || "Error"
+        error.response?.data?.msg || error.response?.data?.error || "Error"
     );
   }
-
   isLoading.value = false;
 };
 
 const changePagination = (e: number) => {
-  paginationFilter.page = e;
-  current.value = e;
-  refresh({ ...paginationFilter, ...filterVersionControl });
+  params.page = e;
+  refresh(params);
 };
 
-const deleteVersionControl = () => {
-  refresh(filterVersionControl);
-};
-
-const saveVersionControl = () => {
-  refresh(filterVersionControl);
-}
-
-onMounted(async () => {
-  await refresh(paginationFilter);
-});
-
-// watch(
-  
-//     () => filterVersionControl.start_date , 
-//     () => {
-//       refresh(filterVersionControl);
-      
-//       if (store.versionControlList.results.length <= 10) {
-//         current.value = 1;
-//       }
-//     },
-
-// );
 
 watch(
-  
-    () => filterVersionControl.end_date , 
+    () => params.end_date,
     () => {
-      refresh(filterVersionControl);  
-      
-      if (store.versionControlList.results.length <= 10) {
-        current.value = 1;
-      }
-    },
+      params.page = 1
+      refresh(params);
 
+    },
 );
 </script>
 
@@ -101,55 +95,55 @@ watch(
   <div class="card">
 
     <div class="md:flex items-center justify-between mb-5">
-        <form class="mb-4 md:flex items-center gap-5 md:w-9/12">
+      <form class="mb-4 md:flex items-center gap-5 md:w-9/12">
 
-          <div class="md:w-1/2 md:m-0 mt-2">
-            <label for="from" class="dark:text-gray-300">
-              {{ $t("from") }}
-            </label>
-            <VueDatePicker v-model="filterVersionControl.start_date"></VueDatePicker>
-          </div>
+        <div class="md:w-1/2 md:m-0 mt-2">
+          <label for="from" class="dark:text-gray-300">
+            {{ $t("from") }}
+          </label>
+          <VueDatePicker v-model="params.start_date"></VueDatePicker>
+        </div>
 
-          <div class="md:w-1/2 md:m-0 mt-2">
-            <label for="to" class="dark:text-gray-300">
-              {{ $t("to") }}
-            </label>
-            <VueDatePicker v-model="filterVersionControl.end_date"></VueDatePicker>
-          </div>
-        </form>
-        <button
-        class="btn-primary" uk-toggle="target: #version_control" @click="editData = {}"
-        >
-          {{ $t("Add") }}
-        </button>
+        <div class="md:w-1/2 md:m-0 mt-2">
+          <label for="to" class="dark:text-gray-300">
+            {{ $t("to") }}
+          </label>
+          <VueDatePicker v-model="params.end_date"></VueDatePicker>
+        </div>
+      </form>
+      <button
+          class="btn-primary" uk-toggle="target: #version_control" @click="editData = {}"
+      >
+        {{ $t("Add") }}
+      </button>
     </div>
 
 
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="versionControlFields"
-      :items="store.versionControlList.results">
+                   :items="store.versionControlList.results">
 
       <template #empty-message>
         <span class="dark:text-neutral-400">{{ $t('empty_text') }}</span>
       </template>
 
       <template #header-datetime="header">
-        {{ $t(header.text).toUpperCase() }}
+        {{ $t(header.text) }}
       </template>
-      
+
       <template #header-modified_date="header">
-        {{ $t(header.text).toUpperCase() }}
+        {{ $t(header.text) }}
       </template>
 
       <template #header-version_number="header">
-        {{ $t(header.text).toUpperCase() }}
+        {{ $t(header.text) }}
       </template>
 
       <template #header-is_active="header">
-        {{ $t(header.text).toUpperCase() }}
+        {{ $t(header.text) }}
       </template>
 
       <template #header-actions="header">
-        {{ $t(header.text).toUpperCase() }}
+        {{ $t(header.text) }}
       </template>
 
       <template #item-datetime="items">
@@ -161,41 +155,42 @@ watch(
       </template>
 
       <template #item-is_active="items">
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input
-                type="checkbox"
-                :checked="items.is_active"
-                disabled
-                class="sr-only peer"
-            />
-            <div
-                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"/>
-          </label>
-        </template>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+              type="checkbox"
+              :checked="items.is_active"
+              disabled
+              class="sr-only peer"
+          />
+          <div
+              class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"/>
+        </label>
+      </template>
 
       <template #item-actions="item">
-        <div class="flex my-4">
-          <button class="btn-warning btn-action" uk-toggle="target: #version_control" @click="editData = item" >
-            
-            <Icon icon="Pen New Square" color="#fff" size="16" />
+        <div class="flex my-4 justify-center">
+          <button class="btn-warning btn-action" uk-toggle="target: #version_control" @click="editData = item">
+
+            <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>
           <button class="ml-3 btn-danger btn-action" @click="handleDeleteModal(item.id)">
-            <Icon icon="Trash Bin Trash" color="#fff" size="16" />
+            <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
           </button>
         </div>
       </template>
 
     </EasyDataTable>
 
-    <TwPagination :total="store.versionControlList && store.versionControlList.count" class="mt-10 tw-pagination" :current="current" :per-page="10"
-      :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')" @page-changed="changePagination" />
+    <TwPagination :total=" store.versionControlList.count" class="mt-10 tw-pagination"
+                  :current="current" :per-page="10"
+                  :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
+                  @page-changed="changePagination"/>
 
   </div>
 
-    <DeleteVersionControl  :userId="userId"
-          @deleteVersionControl="deleteVersionControl"/>
+  <DeleteModal @delete-action="deleteAction"/>
 
 
-    <AddVersionControl @saveVersionControl="saveVersionControl" :editData="editData"/>
-          
+  <AddVersionControl @saveVersionControl="saveVersionControl" :editData="editData"/>
+
 </template>

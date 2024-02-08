@@ -1,5 +1,9 @@
 <script setup lang="ts">
+//Imported files
+
 import { reactive } from "vue";
+
+//Declared variables
 
 const activities = reactive([
   {

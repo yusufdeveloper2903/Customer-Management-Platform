@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 interface Props {
   title: string;
   cancel: string;
@@ -7,6 +8,7 @@ interface Props {
   okClass?: string;
   cancelClass?: string;
 }
+
 interface Emits {
   (event: "ok"): void;
   (event: "cancel"): void;

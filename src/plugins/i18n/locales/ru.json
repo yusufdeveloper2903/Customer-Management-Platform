@@ -2,6 +2,10 @@
   "validation": {
     "this_field_is_required": "Это поле обязательно к заполнению"
   },
+  "pagination": {
+    "show_from": "Показать от 1 до",
+    "column": "строк"
+  },
   "nav": {
     "advertising": "Объявление",
     "posts": "Посты",
@@ -52,6 +56,8 @@
     "audio": "Аудио"
   },
   "deactivate": "Деактивировать",
+  "are_you_really_going_to_delete_this_user": "Вы уверены?",
+  "deleted_successfully": "Удален успешно",
   "delete": "Удалить",
   "delete_all": "Удалить все",
   "address": "Адрес",

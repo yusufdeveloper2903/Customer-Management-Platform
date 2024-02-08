@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
-//              IMPORTS                //
+//Imported files
 
 import { useI18n } from "vue-i18n";
 import { ref } from 'vue'
 
-//              PROPS/EMITS                //
+//Props
 
 const props = defineProps({
     firstData: {
@@ -19,8 +19,7 @@ const props = defineProps({
         default: () => [90, 10]
     }
 })
-
-//            DECLORATIONS            //
+//Declared variables
 
 const { t } = useI18n();
 
@@ -46,7 +45,6 @@ const chartOptions1 = ref({
                     show: true,
                     label: t('used'),
                     formatter: function () {
-                        // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
                         return props.firstData[0] + '%'
                     }
                 }
@@ -86,7 +84,6 @@ const chartOptions2 = ref({
                     show: true,
                     label: t('used'),
                     formatter: function () {
-                        // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
                         return props.secondData[0] + '%'
                     }
                 }
@@ -106,7 +103,6 @@ const chartOptions2 = ref({
 </script>
 
 <template>
-    <!-- component -->
     <div class="grid gap-6 md:grid-cols-2 ">
         <div class="min-w-0 rounded-lg shadow-xs overflow-hidden bg-white dark:bg-gray-800">
             <div class="p-4 flex flex-col justify-center items-center">
