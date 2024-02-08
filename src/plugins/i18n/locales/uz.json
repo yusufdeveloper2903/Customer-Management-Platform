@@ -264,6 +264,15 @@
   "updated_successfully": "Muvaffaqiyatli yangilandi",
   "deleted_successfully": "Muvaffaqiyatli oʻchirildi",
   "PrivacyPolicy": "Maxfiylik siyosati",
-  "Terms_and_conditions": "Foydalanish shartlari"
+  "Terms_and_conditions": "Foydalanish shartlari",
+  "staff_details": "Xodimlar tafsilotlari",
+  "add_staff": "Xodimlarni qo'shish",
+  "edit sms sending": "SMS yuborishni tahrirlash",
+  "add_sms_sending": "SMS xabarnomani qo'shish",
+  "edit news": "Yangiliklarni tahrirlash",
+  "add news": "Yangiliklarni qo'shish",
+  "edit banner": "Bannerni tahrirlash",
+  "add banner": "Banner qo'shish",
+  "contacts": "Kontaktlar"
 
 }

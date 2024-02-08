@@ -250,3 +250,60 @@ export const productsFields = [
     value: "actions"
   },
 ]
+
+export const linksFields = [
+  {
+    text: "Index",
+    value: "index"
+  },
+  {
+    text: "Type",
+    value: "type"
+  },
+  {
+    text: "URL",
+    value: "url"
+  },
+  {
+    text: "actions",
+    value: "actions"
+  },
+]
+
+export const phoneNumberFields = [
+  {
+    text: "Index",
+    value: "index"
+  },
+  {
+    text: "Phone number",
+    value: "phone"
+  },
+  {
+    text: "actions",
+    value: "actions"
+  },
+]
+
+export const phoneNumberItems = [
+  {
+    index: 1,
+    phone: '998990076655'
+  },
+  {
+    index: 2,
+    phone: '998997076625'
+  },
+  {
+    index: 3,
+    phone: '998990546655'
+  },
+]
+
+export const linkItems = [
+  {
+    index: 1,
+    type: "Twitter",
+    url: "https://picsum.photos/300",
+  },
+];

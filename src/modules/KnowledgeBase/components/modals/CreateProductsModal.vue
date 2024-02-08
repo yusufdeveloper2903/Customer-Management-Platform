@@ -6,12 +6,11 @@ import { toast } from "vue3-toastify";
 import { helpers, required } from "@vuelidate/validators";
 import useVuelidate, { Validation } from "@vuelidate/core";
 import knowledgeBase from "../../store/index";
-import FileInput from "@/components/FileInput/FileInput.vue";
 
 const { t } = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase()
-// const file = ref<string>("")
+const file = ref<string | null>(null)
 const emits = defineEmits(["saveProducts"]);
 
 interface EditData {
@@ -56,19 +55,24 @@ const rules = computed(() => {
 const propData = defineProps<{editData: EditData}>();
 const validate: Ref<Validation> = useVuelidate(rules, productsData);
 
-  // const getFile = (e: any) => {
-  //   productsData.value.photo = e.target.files[0]
-  //   file.value = e.target.files[0]
-  // }
+  const getFile = (e: any) => {
+    productsData.value.photo = e.target.files[0]
+    file.value = e.target.files[0]
+  }
 
   const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
 
   const formData = new FormData()
+  if(file.value){
     formData.append('title', JSON.stringify(productsData.value.title))
     formData.append('code', productsData.value.code)
     formData.append('image', productsData.value.photo)
+  } else {
+    formData.append('title', JSON.stringify(productsData.value.title))
+    formData.append('code', productsData.value.code)
+  }
 
 
   if (propData.editData.id) {    
@@ -209,9 +213,12 @@ function openModal(){
                 </div>
 
             <label class="mt-4 block" for="photo">{{ $t('photo') }}
-              <FileInput
-            v-model="productsData.photo"
-            @remove="productsData.photo = null"
+              <input
+                id="photo"
+                type="file"
+                class="form-file-input"
+                @input="getFile"
+                @remove="productsData.photo = null, file = null"
           />
               <p
               v-for="error in validate.photo.$errors"

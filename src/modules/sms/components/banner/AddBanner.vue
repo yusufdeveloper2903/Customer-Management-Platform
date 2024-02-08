@@ -223,7 +223,7 @@ const saveData = async () => {
 <template>
   <div class="flex gap-6">
     <div class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm w-1/2">
-      <h1 class="font-semibold text-lg">{{ $t('news') }}</h1>
+      <h1 class="font-semibold text-lg">{{ $t('Banner') }}</h1>
 
       <div class="uk-margin">
         <label for="form-stacked-text">{{ $t('start_date') }}</label>

@@ -52,7 +52,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm">
+  <div class="card">
     <Tabs pill>
       <Tab :title="$t('UZ')">
         <Editor editorStyle="height: 320px" v-model="txt.text.uz" :readonly="is_disabledUz == false" />

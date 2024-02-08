@@ -280,7 +280,7 @@ const updateDeal = async () => {
         </button>
 
         <button
-          :class="propData.editData.id ? 'btn-warning' : 'btn-success'"
+          :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'"
           @click="updateDeal"
         >
           <img

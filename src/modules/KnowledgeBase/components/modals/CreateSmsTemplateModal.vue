@@ -231,7 +231,7 @@ const updateDeal = async () => {
           {{ $t("Cancel") }}
         </button>
 
-        <button :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal" :disabled="isSubmitted">
+        <button :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'" @click="updateDeal" :disabled="isSubmitted">
           <img
             src="@/assets/image/loading.svg"
             alt="loading.svg"

@@ -9,12 +9,13 @@ import VersionControl from "../components/VersionControl.vue"
 import Products from "../components/Products.vue"
 import PrivacyPolicy from "../components/PrivacyPolicy.vue";
 import TermsAndConditions from "../components/TermsAndConditions.vue"
+import Contacts from "../components/Contacts.vue";
 </script>
 
 <template>
-  <!-- <div
+  <div
     class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm"
-  > -->
+  >
     <Tabs vertical pill>
       <Tab :title="$t('category')">
         <Categories />
@@ -47,6 +48,10 @@ import TermsAndConditions from "../components/TermsAndConditions.vue"
       <Tab :title="$t('Terms_and_conditions')">
         <TermsAndConditions />
       </Tab>
+
+      <Tab :title="$t('contacts')">
+        <Contacts />
+      </Tab>
     </Tabs>
-  <!-- </div> -->
+  </div>
 </template>

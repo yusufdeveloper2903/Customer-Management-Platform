@@ -296,6 +296,15 @@
   "updated_successfully": "Успешно Обновлено",
   "deleted_successfully": "Успешно удалено",
   "PrivacyPolicy": "Политика конфиденциальности",
-  "Terms_and_conditions": "Условия и положения"
+  "Terms_and_conditions": "Условия и положения",
+  "staff_details": "Информация о персонале",
+  "add_staff": "Добавить персонал",
+  "edit sms sending": "Редактировать смс рассылки",
+  "add_sms_sending": "Добавить смс рассылку",
+  "edit news": "Редактировать новости",
+  "add news": "Добавить новость",
+  "edit banner": "Редактировать баннер",
+  "add banner": "Добавить баннер",
+  "contacts": "Контакты"
   
 }

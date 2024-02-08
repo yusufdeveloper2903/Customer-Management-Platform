@@ -117,6 +117,12 @@ function breadCrumbStart(newPath) {
       ];
       break;
 
+      case "dashboard":
+      BreadcrumbList.value = [
+        { title: "dashboard", active: true },
+      ];
+      break;
+
     case "Backup":
       BreadcrumbList.value = [
         { title: "Administration", active: false },
@@ -186,7 +192,7 @@ function breadCrumbStart(newPath) {
 
     case "users":
       BreadcrumbList.value = [
-        // {title: 'sidebar.users', active: true},
+        {title: 'nav.users', active: true},
       ];
       break;
     case "user detail":
@@ -201,6 +207,79 @@ function breadCrumbStart(newPath) {
         { title: "user_add", active: true },
       ];
       break;
+
+      case "knowledgeBase":
+      BreadcrumbList.value = [
+        { title: "nav.directory", active: true },
+      ];
+      break;
+
+      case "staff":
+      BreadcrumbList.value = [
+        { title: "nav.staffs", active: true },
+      ];
+      break;
+      case "staff detail":
+      BreadcrumbList.value = [
+        { title: "nav.staffs", active: false },
+        { title: "staff_details", active: true },
+      ];
+      break;
+      case "add staff":
+      BreadcrumbList.value = [
+        { title: "nav.staffs", active: false },
+        { title: "add_staff", active: true },
+      ];
+      break;
+
+      case "sms-template":
+      BreadcrumbList.value = [
+        { title: "Notifications", active: true },
+      ];
+      break;
+
+      case "add-sms":
+      BreadcrumbList.value = [
+        { title: "Notifications", active: false },
+        { title: "add_sms_sending", active: true },
+      ];
+      break;
+
+      case "sms-detail":
+      BreadcrumbList.value = [
+        { title: "Notifications", active: false },
+        { title: "edit sms sending", active: true },
+      ];
+      break;
+
+      case "news-detail":
+      BreadcrumbList.value = [
+        { title: "Notifications", active: false },
+        { title: "edit news", active: true },
+      ];
+      break;
+
+      case "add-news":
+      BreadcrumbList.value = [
+        { title: "Notifications", active: false },
+        { title: "add news", active: true },
+      ];
+      break;
+
+      case "banner-detail":
+      BreadcrumbList.value = [
+        { title: "Notifications", active: false },
+        { title: "edit banner", active: true },
+      ];
+      break;
+
+      case "add-banner":
+      BreadcrumbList.value = [
+        { title: "Notifications", active: false },
+        { title: "add banner", active: true },
+      ];
+      break;
+
 
     default:
       break;

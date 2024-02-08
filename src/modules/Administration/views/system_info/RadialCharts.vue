@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { useSidebarStore } from "@/stores/layoutConfig";
 
+const sidebar = useSidebarStore();
 //              IMPORTS                //
 
 import { useI18n } from "vue-i18n";
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 //              PROPS/EMITS                //
 
@@ -23,6 +25,18 @@ const props = defineProps({
 //            DECLORATIONS            //
 
 const { t } = useI18n();
+
+
+watch( async() => sidebar.currentTheme, () => {
+    if(sidebar.currentTheme === 'dark'){
+        chartOptions2.value.theme.mode = 'dark',
+        chartOptions2.value.chart.background = 'none'
+
+    } else {
+        chartOptions2.value.theme.mode = 'light',
+        chartOptions2.value.chart.background = '#000'
+    }
+})
 
 const chartOptions1 = ref({
     colors: ['#FF3B30', '#FFCC00'],
@@ -89,10 +103,17 @@ const chartOptions2 = ref({
                         // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
                         return props.secondData[0] + '%'
                     }
-                }
+                },
             },
         },
     },
+    theme: {
+      mode: 'dark', 
+      palette: 'palette2', 
+  },
+  chart: {
+    background: 'none',
+},
     legend: {
         show: true,
         position: 'bottom',
@@ -102,6 +123,7 @@ const chartOptions2 = ref({
         lineCap: 'round',
     },
     labels: [t('used'), t('available')],
+    
 })
 </script>
 
@@ -112,6 +134,7 @@ const chartOptions2 = ref({
             <div class="p-4 flex flex-col justify-center items-center">
                 <h2 class="text-2xl font-semibold dark:text-white">
                     {{ $t('disk') }}
+                    {{sidebar.currentTheme }}
                 </h2>
                 <div id="chart" class="dark:text-white">
                     <apexchart type="radialBar" width="450" :options="chartOptions1" :series="props.firstData"></apexchart>
