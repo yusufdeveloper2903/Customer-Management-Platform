@@ -273,6 +273,7 @@
   "add news": "Yangiliklarni qo'shish",
   "edit banner": "Bannerni tahrirlash",
   "add banner": "Banner qo'shish",
-  "contacts": "Kontaktlar"
+  "contacts": "Kontaktlar",
+  "The phone number must be entered in the format: '998 [XX] [XXX XX XX]": "Telefon raqami formatda kiritilishi kerak: '998 [XX] [XXX XX XX]"
 
 }

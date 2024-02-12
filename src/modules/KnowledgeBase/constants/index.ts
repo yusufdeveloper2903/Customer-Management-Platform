@@ -159,21 +159,6 @@ export const locationFields = [
   },
 ];
 
-export const locationItems = [
-  {
-    id: 1,
-    title: "Chilonzor",
-  },
-  {
-    id: 2,
-    title: "Olmazor",
-  },
-  {
-    id: 3,
-    title: "Shayxontoxur",
-  },
-];
-
 export const newsTemplateTable = [
   {
     text: "ID",
@@ -299,11 +284,3 @@ export const phoneNumberItems = [
     phone: '998990546655'
   },
 ]
-
-export const linkItems = [
-  {
-    index: 1,
-    type: "Twitter",
-    url: "https://picsum.photos/300",
-  },
-];

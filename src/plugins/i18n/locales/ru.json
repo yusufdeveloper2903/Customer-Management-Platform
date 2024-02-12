@@ -305,6 +305,7 @@
   "add news": "Добавить новость",
   "edit banner": "Редактировать баннер",
   "add banner": "Добавить баннер",
-  "contacts": "Контакты"
+  "contacts": "Контакты",
+  "The phone number must be entered in the format: '998 [XX] [XXX XX XX]": "Номер телефона необходимо вводить в формате: '998 [XX] [XXX XX XX]"
   
 }

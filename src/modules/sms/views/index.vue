@@ -3,7 +3,7 @@ import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
 import Message from '@/modules/sms/components/smsSending/index.vue'
 import News from '@/modules/sms/components/news/index.vue'
-import Banner from '@/modules/sms/components/banner/index.vue'
+// import Banner from '@/modules/sms/components/banner/index.vue'
 
 </script>
 <template>
@@ -15,9 +15,11 @@ import Banner from '@/modules/sms/components/banner/index.vue'
       <Tab :title="$t('directory.News')">
         <News/>
       </Tab>
-      <Tab :title="$t('Banner')">
-        <Banner/>
-      </Tab>
+
     </Tabs>
+<!-- 
+    <Tab :title="$t('Banner')">
+        <Banner/>
+      </Tab> -->
   </div>
 </template>
