@@ -2,6 +2,10 @@
   "validation": {
     "this_field_is_required": "This field is required"
   },
+  "pagination": {
+    "show_from": "Show from 1 to",
+    "column": "lines"
+  },
   "nav": {
     "advertising": "Advertising",
     "posts": "Posts",
@@ -213,4 +217,5 @@
   "progress": "Progress",
   "hour": "h",
   "minute": "m"
+  
 }

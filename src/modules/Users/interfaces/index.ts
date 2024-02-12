@@ -1,11 +1,11 @@
 // users
 export interface UserListResults {
   id: number;
-  name: string | null;
+  full_name: string | null;
   phone: string;
-  username: string | null;
+  last_login: string
   is_active: boolean;
-  role: Role[];
+  created_date: string;
 }
 
 export interface UserList {
@@ -15,31 +15,26 @@ export interface UserList {
   results: UserListResults[];
 }
 
-export interface CarShowroom {
-  name: string | null;
-  bank_requisite: string | null;
-  settlement_account: string | null;
-  inn: string | null;
-  mfo: string | null;
-  oked: string | null;
-  address: string | null;
-  company_name: string | null;
-}
 // single user
 export interface User {
   id: number | null;
-  name: string | null;
-  phone: string;
-  password: null;
-  username: string | null;
+  sessions: Sessions[];
+  created_date: string;
+  modified_date: string;
+  full_name: string | null;
+  phone: string | null;
+  last_login: string,
+}
+
+export interface Sessions {
+  operation_version: string;
+  ip_address: string;
+  last_visit: string;
+  device_type: string;
+  created_date: string;
+  device_id: string;
   is_active: boolean;
-  role: Role[] | any;
-  regions: any;
-  photo: string | null;
-  date_of_birth: string | null;
-  pinfl: string | null;
-  passport_data: string;
-  car_showroom: CarShowroom;
+  device_model: string 
 }
 
 // roles

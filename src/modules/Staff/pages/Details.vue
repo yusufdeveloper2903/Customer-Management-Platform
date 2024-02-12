@@ -1,41 +1,64 @@
 <script setup lang="ts">
-import { Ref, computed, reactive, ref } from "vue";
+import { Ref, computed, ref, onMounted } from "vue";
 import staff from "../store/index";
 import { useI18n } from "vue-i18n";
 import useVuelidate, { Validation } from "@vuelidate/core";
 import { helpers, minLength, required } from "@vuelidate/validators";
+import { useRoute, useRouter } from "vue-router";
+import { toast } from "vue3-toastify";
+import { objectToFormData } from "@/mixins/formmatter";
 
 // store
 const store = staff()
 
 // variables
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const imageUrl = ref<string>("")
 const isPasswordShown = ref<boolean>(false)
-
+const router = useRouter();
+const route = useRoute();
 
 // user's data
-const userData = reactive({
+let userData = ref({
   id: null,
-  name: "",
-  phoneNumber: "",
+  full_name: "",
+  phone: "",
   username: "",
   password: "",
   role: null,
   is_active: true,
-  photo: ""
+  photo: null
 })
+
+onMounted(async () => {
+  await store.getUsersRolesList()
+
+  if (route.params.id) {
+    store.getStaffById(Number(route.params.id)).then(() => {
+
+      userData.value = store.staff;
+      userData.value.password = store.staff.show_password
+
+      if (store.staff.photo) {
+        imageUrl.value = store.staff.photo;
+        userData.value.photo = null;
+      }
+    });
+  }
+});
+
 
 // required fields
 const rules = computed(() => {
   return {
-    phoneNumber: {
+   phone: {     
       required: helpers.withMessage("required", required),
       minLength: helpers.withMessage(
         "Номер телефона необходимо вводить в формате: '998 [XX] [XXX XX XX]",
         minLength(17)
       ),
     },
+    
     role: {
       required: helpers.withMessage("required", required),
     },
@@ -43,6 +66,7 @@ const rules = computed(() => {
       required: helpers.withMessage("required", required),
     }
   };
+  
 });
 
 const validate: Ref<Validation> = useVuelidate(rules, userData);
@@ -55,16 +79,74 @@ const handleFileUpload = (event) => {
 
   reader.onload = (event: any) => {
     imageUrl.value = event.target.result;
-    userData.photo = file;
+    userData.value.photo = file;
   };
   reader.readAsDataURL(file);
 };
 
 const deleteImage = () => {
   imageUrl.value = "";
-  userData.photo = "";
+  userData.value.photo = null;
 };
-const saveUser = () => {}
+
+function removeSpaces(str) {
+  return str.replace(/[\s+]/g, "");
+}
+
+const saveUser = async () => {
+  // isSubmitted.value = true;
+  const success = await validate.value.$validate();
+  if (!success) return;
+
+  if (userData.value.phone) {
+    userData.value.phone = removeSpaces(userData.value.phone);
+  }
+
+  if (typeof userData.value.password === "string" && !userData.value.password) {
+    userData.value.password = "";
+  }
+
+
+  const formData = objectToFormData(userData.value); 
+  if (route.params.id) {
+      try {
+        await store.updateStaff(formData).then(() => {
+          router.push("/staff");
+          setTimeout(() => {
+            toast.success(t("updated_successfully"));
+          }, 200);
+          // isSubmitted.value = false;
+        });
+      } catch (error: any) {
+        // isSubmitted.value = false;
+        if (error) {
+          toast.error(
+            t('error')
+          );
+        }
+      }
+    
+  } else {
+    // if (CorrectPassword.value)
+      try {
+        await store.createStaff(formData).then(() => {
+          setTimeout(() => {
+            toast.success(t("created_successfully"));
+          }, 200);
+          router.push("/staff");
+        });
+        // isSubmitted.value = false;
+      } catch (error: any) {
+        // isSubmitted.value = false;
+        if (error) {
+          toast.error(
+            t('error')
+          );
+        }
+      }
+  }
+};
+
 </script>
 
 
@@ -76,35 +158,36 @@ const saveUser = () => {}
           <div
             class="mb-5 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain"
           >
-            <span v-if="!imageUrl" class="font-medium dark:text-white">{{
-              $t("no_photo")
-            }}</span>
+          <span v-if="!imageUrl" class="font-medium dark:text-white">{{
+            $t("no_photo")
+          }}</span>
             <img
-              v-else
-              class="w-full h-full object-cover"
-              :src="imageUrl"
-              alt=""
+            v-else
+            class="w-full h-full object-cover"
+            :src="imageUrl"
+            alt=""
             />
           </div>
           <div class="flex gap-3 mb-0.5">
             <div class="w-full" :class="imageUrl && 'w-10/12'">
               <input
-                id="upload"
-                class="form-file-input"
-                type="file"
-                @change="handleFileUpload"
+              id="upload"
+              class="form-file-input"
+              type="file"
+              @change="handleFileUpload"
               />
             </div>
             <button
-              v-if="imageUrl"
-              class="btn-outline-danger btn-action float-right w-2/12 mt-1"
-              @click="deleteImage"
+            v-if="imageUrl"
+            class="btn-outline-danger btn-action float-right w-2/12 mt-1"
+            @click="deleteImage"
             >
-              <Icon icon="Trash Bin Trash" color="#ea5455" size="20" />
-            </button>
-          </div>
+            <Icon icon="Trash Bin Trash" color="#ea5455" size="20" />
+          </button>
+        </div>
       </div>
-
+      
+      
       <div class="md:w-6/12 sm:w-full card md:my-0 my-5">
         <form>
           <div class="mb-5 md:flex items-start gap-8">
@@ -144,14 +227,16 @@ const saveUser = () => {}
             </label>
           </div>
 
+          
           <label class="mt-5 mb-1 block text-xs"> {{ $t("Role") }}: 
             <v-select
               v-model="userData.role"
               :clearable="false"
-              :options="[]"
+              :options="store.users_roles.results"
               :getOptionLabel="
                 (role) => (role.name && role.name[locale]) || role.name
               "
+              :reduce="(v) => v.id"
               :placeholder="$t('Role')"
               :class="validate.role.$errors.length ? 'required-input' : ''"
             >
@@ -191,7 +276,7 @@ const saveUser = () => {}
                 type="text"
                 :placeholder="$t('Full Name')"
                 class="form-input"
-                v-model="userData.name"
+                v-model="userData.full_name"
               />
             </label>
 
@@ -199,15 +284,15 @@ const saveUser = () => {}
               {{ $t("phone_number") }}:
               <input
                 :placeholder="$t('phone_number')"
-                v-model="userData.phoneNumber"
+                v-model="userData.phone"
                 v-maska
                 data-maska="+998 ## ### ## ##"
                 class="form-input"
-                :class="validate.phoneNumber.$errors.length ? 'required-input' : ''"
+                :class="validate.phone.$errors.length ? 'required-input' : ''"
               />
 
               <p
-                v-for="error in validate.phoneNumber.$errors"
+                v-for="error in validate.phone.$errors"
                 :key="error.$uid"
                 class="text-danger text-sm"
               >
@@ -219,7 +304,7 @@ const saveUser = () => {}
 
         <div class="mt-8 flex flex-wrap justify-end gap-4">
           <button class="btn-danger" @click="$router.push('/staff')">
-            {{ $t("cancel2") }}
+            {{ $t("Cancel") }}
           </button>
           <button class="btn-success" @click="saveUser">
             {{ $route.params.id ? $t("Change") : $t("Add") }}

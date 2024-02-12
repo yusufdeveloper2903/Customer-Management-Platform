@@ -1,5 +1,9 @@
 <script setup lang="ts">
+//Imported files
+
 import { reactive } from "vue";
+
+//Declared variables
 
 const activities = reactive([
   {
@@ -83,7 +87,7 @@ const activities = reactive([
     </div>
     <div class="flex justify-center">
       <button class="btn-primary">
-        All
+        {{ $t('All') }}
       </button>
     </div>
   </div>

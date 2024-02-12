@@ -1,7 +1,12 @@
 <script setup lang="ts">
+//Imported files
+
 import { reactive } from "vue";
 import { productsFields } from "../../constants/index";
 import { formatCurrency } from "@/mixins/features";
+
+
+//Declared variables
 
 const tableData = reactive([
   {
@@ -62,12 +67,12 @@ const tableData = reactive([
         </div>
       </template>
       <template #item-view>
-        <button class="btn-secondary">View</button>
+        <button class="btn-secondary">{{ $t('View') }}</button>
       </template>
     </EasyDataTable>
 
     <div class="w-full flex justify-end mt-5">
-      <button class="btn-primary">View all</button>
+      <button class="btn-primary">{{ $t('directory.seeAll') }}</button>
     </div>
   </div>
 </template>

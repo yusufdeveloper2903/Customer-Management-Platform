@@ -1,56 +1,56 @@
 <template>
   <div>
-    <SideBar @isSideBarOpen="isSideBarOpen" />
+    <SideBar @isSideBarOpen="isSideBarOpen"/>
 
     <div
-      class="main-layout min-h-screen p-6 pr-7 dark:bg-darkLayoutMain bg-slate-200"
-      :class="checkSidebar()"
+        class="main-layout min-h-screen p-6 pr-7 dark:bg-darkLayoutMain bg-slate-200"
+        :class="checkSidebar()"
     >
       <BreadCrumb
-        BreadCrumb
-        :list="BreadcrumbList"
-        v-if="BreadcrumbList.length != 0"
+          BreadCrumb
+          :list="BreadcrumbList"
+          v-if="BreadcrumbList.length != 0"
       ></BreadCrumb>
-      <slot />
+      <slot/>
     </div>
 
     <div
-      class="right-sidebar shadow-2xl w-16 bg-primary dark:bg-darkLayoutStorm py-5 text-white"
-      :class="checkMiniSidebar()"
+        class="right-sidebar shadow-2xl w-16 bg-primary dark:bg-darkLayoutStorm py-5 text-white"
+        :class="checkMiniSidebar()"
     >
-      <Minisidebar />
+      <Minisidebar/>
     </div>
 
-    <ScrollToTop />
+    <ScrollToTop/>
   </div>
 </template>
 
 <script setup>
+//Imported files
+
 import "./Bars/sidebar.css";
 import SideBar from "./Bars/Sidebar.vue";
 import Minisidebar from "./Bars/minisidebar.vue";
-import { useSidebarStore } from "@/stores/layoutConfig.ts";
-import { onMounted, watch, ref, onBeforeUnmount } from "vue";
+import {useSidebarStore} from "@/stores/layoutConfig.ts";
+import {onMounted, watch, ref, onBeforeUnmount} from "vue";
 import BreadCrumb from "@/components/Breadcrumb/Index.vue";
-import { useRoute } from "vue-router";
+import {useRoute} from "vue-router";
 import ScrollToTop from '@/components/ScrollToTop.vue'
+
+//Declared variables
 
 const sidebar = useSidebarStore();
 const windowWidth = window.innerWidth;
-
 const checkMiniSidebar = () => {
   if (windowWidth <= 1000) {
-    // sidebar.toggleMiniSidebarState()
     return "horizontal";
   }
-
   if (sidebar.miniSidebar && sidebar.isSidebarOpen) {
     return "horizontal smaller";
   } else if (sidebar.miniSidebar && !sidebar.isSidebarOpen) {
     return "horizontal";
   }
 };
-
 const checkSidebar = () => {
   if (sidebar.miniSidebar && sidebar.isSidebarOpen) {
     return "open-sidebar pt-28";
@@ -62,146 +62,95 @@ const checkSidebar = () => {
     return "close-sidebar";
   }
 };
-
 let BreadcrumbList = ref([]);
-
 const route = useRoute();
 
-const routerChanged = watch(
-  () => route.name,
-  (newPath, oldPath) => {
-    breadCrumbStart(newPath);
-  }
-);
 
+watch(() => route.name, function (val) {
+  breadCrumbStart(route.name);
+
+})
 onMounted(() => {
+
   breadCrumbStart(route.name);
 });
 
 function breadCrumbStart(newPath) {
+  console.log(newPath, 'path')
   switch (newPath) {
-    case "Cars":
+    case "dashboard":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
-        { title: "sidebar.cars", active: true },
+        {title: "dashboard", active: true},
       ];
       break;
-    case "Regions":
+    case "users":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
-        { title: "regions", active: true },
-      ];
-      break;
-    case "Installment":
-      BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
-        { title: "installment_plan", active: true },
-      ];
-      break;
-    case "TechCertificates":
-      BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
-        { title: "sidebar.techCertificate", active: true },
-      ];
-      break;
-    case "Requisites":
-      BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
-        { title: "sidebar.requisites", active: true },
+        {title: 'Users', active: true},
       ];
       break;
 
-    case "Calculator":
+    case "knowledgeBase":
       BreadcrumbList.value = [
-        // {title: 'sidebar.calculator', active: false},
+        {title: 'nav.directory', active: true},
+      ];
+      break;
+
+    case "staff":
+      BreadcrumbList.value = [
+        {title: 'nav.staffs', active: true},
+      ];
+      break;
+    case "sms-template":
+      BreadcrumbList.value = [
+        {title: 'Notifications', active: true},
       ];
       break;
 
     case "Backup":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
-        { title: "administration.backups", active: true },
+        {title: "Administration", active: true},
+        {title: "backups", active: true},
       ];
       break;
     case "Logging":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
-        { title: "administration.journaling", active: true },
+        {title: "Administration", active: true},
+        {title: "journaling", active: true},
       ];
       break;
     case "DataArchive":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
-        { title: "administration.backup&archiving", active: true },
+        {title: "Administration", active: true},
+        {title: "backup&archiving", active: true},
       ];
       break;
     case "SystemInfo":
       BreadcrumbList.value = [
-        { title: "sidebar.reference", active: false },
-        { title: "administration.system", active: true },
+        {title: "Administration", active: true},
+        {title: "info_about_system", active: true},
       ];
       break;
-
-    case "Deals":
+    case "discounts":
       BreadcrumbList.value = [
-        // {title: 'sidebar.deals', active: true},
+        {title: "Discounts", active: true},
       ];
       break;
-    case "Download tech passport":
+    case "products":
       BreadcrumbList.value = [
-        { title: "sidebar.deals", active: false },
-        { title: "sidebar.deals", active: true },
+        {title: "products", active: true},
       ];
       break;
-    case "Checkout":
+    case "product-details":
       BreadcrumbList.value = [
-        { title: "sidebar.deals", active: false },
-        { title: "sidebar.deals", active: true },
+        {title: "products", active: false},
+        {title: "products detail", active: true},
       ];
       break;
-    case "Payment":
+    case "promotion":
       BreadcrumbList.value = [
-        { title: "sidebar.deals", active: false },
-        { title: "sidebar.deals", active: true },
+        {title: "Promotion", active: true},
       ];
       break;
-    case "confirm request":
-      BreadcrumbList.value = [
-        { title: "sidebar.deals", active: false },
-        { title: "sidebar.deals", active: true },
-      ];
-      break;
-    case "details":
-      BreadcrumbList.value = [
-        { title: "sidebar.deals", active: false },
-        { title: "sidebar.deals", active: true },
-      ];
-      break;
-
-    case "profiler":
-      BreadcrumbList.value = [
-        // {title: 'sidebar.profile', active: true},
-      ];
-      break;
-
-    case "users":
-      BreadcrumbList.value = [
-        // {title: 'sidebar.users', active: true},
-      ];
-      break;
-    case "user detail":
-      BreadcrumbList.value = [
-        { title: "sidebar.users", active: false },
-        { title: "user_details", active: true },
-      ];
-      break;
-    case "add user":
-      BreadcrumbList.value = [
-        { title: "sidebar.users", active: false },
-        { title: "user_add", active: true },
-      ];
-      break;
-
     default:
       break;
   }

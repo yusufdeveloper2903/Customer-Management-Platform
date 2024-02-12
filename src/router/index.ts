@@ -1,7 +1,4 @@
 import {createRouter, createWebHistory, RouteRecordRaw} from "vue-router";
-// import { canNavigate } from "@/layout/plugins/casl";
-import {isUserLoggedIn} from "./utils";
-// import registration from "./registration";main
 import users from "@/modules/Users/router";
 import administration from "@/modules/Administration/router";
 import staff from "@/modules/Staff/router";
@@ -9,18 +6,23 @@ import knowledgeBase from "@/modules/KnowledgeBase/router";
 import dashboard from "@/modules/Dashboard/router";
 import news from "@/modules/News/router";
 import sms from "@/modules/sms/router";
-// import { check } from "@/mixins/permissions";
+import discounts from "@/modules/Discounts/router"
+import promotion from "@/modules/Promotion/router"
+import transactions from "@/modules/Transactions/router"
+import promo_code from "@/modules/Products/router"
 
 const routes: Array<RouteRecordRaw> = [
-    // ...registration,
-    ...dashboard,
+    ...promo_code,
     ...users,
+    ...dashboard,
     ...staff,
     ...knowledgeBase,
     ...administration,
     ...news,
     ...sms,
-
+    ...discounts,
+    ...promotion,
+    ...transactions,
     {
         path: "/",
         redirect: () => {
@@ -64,17 +66,9 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, _, next) => {
-    const isLoggedIn = isUserLoggedIn();
 
     if (to.meta.loginNotRequired) return next();
 
-    // if (!isLoggedIn) {
-    //   return next({ name: "login" });
-    // }
-
-    // if (to.meta.permissions && !check(to?.meta?.permissions)) {
-    //   return next({ name: "error-404" });
-    // }
     next();
 });
 

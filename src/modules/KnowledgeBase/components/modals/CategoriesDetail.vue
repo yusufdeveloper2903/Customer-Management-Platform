@@ -62,7 +62,7 @@ const updateDeal = async () => {
       <button class="uk-modal-close-default" type="button" uk-close />
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ $t("edit_car") }}
+          {{ $t("Edit") }}
         </h2>
       </div>
 
@@ -103,10 +103,10 @@ const updateDeal = async () => {
         class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
       >
         <button uk-toggle="target: #categories" class="btn-secondary">
-          {{ $t("cancel2") }}
+          {{ $t("Cancel") }}
         </button>
 
-        <button class="btn-success" @click="updateDeal" :disabled="isSubmitted">
+        <button class="btn-success mr-2" @click="updateDeal" :disabled="isSubmitted">
           <img
             src="@/assets/image/loading.svg"
             alt="loading.svg"

@@ -1,15 +1,12 @@
 export const fields = [
-  {
-    text: "№",
-    value: "id",
-  },
+
   {
     text: "photo",
     value: "photo",
   },
   {
-    text: "full_name",
-    value: "name",
+    text: "Full Name",
+    value: "full_name",
   },
   {
     text: "username",
