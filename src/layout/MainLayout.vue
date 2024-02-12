@@ -65,12 +65,18 @@ const checkSidebar = () => {
 let BreadcrumbList = ref([]);
 const route = useRoute();
 
+
+watch(() => route.name, function (val) {
+  breadCrumbStart(route.name);
+
+})
 onMounted(() => {
+
   breadCrumbStart(route.name);
 });
 
 function breadCrumbStart(newPath) {
-  console.log(newPath , 'path')
+  console.log(newPath, 'path')
   switch (newPath) {
     case "dashboard":
       BreadcrumbList.value = [
@@ -132,6 +138,12 @@ function breadCrumbStart(newPath) {
     case "products":
       BreadcrumbList.value = [
         {title: "products", active: true},
+      ];
+      break;
+    case "product-details":
+      BreadcrumbList.value = [
+        {title: "products", active: false},
+        {title: "products detail", active: true},
       ];
       break;
     case "promotion":

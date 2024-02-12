@@ -15,17 +15,18 @@ import AddVersionControl from "./modals/VersionControlModal.vue"
 const {t} = useI18n()
 const store = knowledgeBase()
 const isLoading = ref(false);
-const current = ref<number>(1);
 const userId = ref<number | null>(null);
 
 interface EditData {
   id: number | null
   number: string,
+  description: string
 }
 
 const editData = ref<EditData>({
   id: null,
-  number: ""
+  number: "",
+  description: ""
 })
 
 const params = reactive({
@@ -39,23 +40,19 @@ const deleteAction = async () => {
   isLoading.value = true
   try {
     await store.deleteVersion(userId.value)
-    UIkit.modal("#global-delete-modal").hide();
+    UIkit.modal("#version-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.versionControlList.count - 1) % params.page_size == 0) {
+    if (((store.versionControlList.count - 1) % params.page_size) == 0) {
       if (params.page > 1) {
         params.page = params.page - 1
         await refresh(params)
-      } else {
-        params.page = 1
-        await refresh(params)
       }
-
+    } else {
+      await refresh(params)
     }
     isLoading.value = false
   } catch (error: any) {
-    toast.error(
-        error.response.data.msg || error.response.data.error || "Error"
-    );
+    toast.error(t('error'));
   }
 };
 const handleDeleteModal = (id: number) => {
@@ -68,18 +65,19 @@ const refresh = async (params: any) => {
   try {
     await store.getVersionControl(params);
   } catch (error: any) {
-    toast.error(
-        error.response?.data?.msg || error.response?.data?.error || "Error"
-    );
+    toast.error(t('error'));
   }
   isLoading.value = false;
 };
+refresh(params)
 
 const changePagination = (e: number) => {
   params.page = e;
   refresh(params);
 };
-
+const saveVersionControl = () => {
+  refresh(params)
+}
 
 watch(
     () => params.end_date,
@@ -89,6 +87,11 @@ watch(
 
     },
 );
+const onPageSizeChanged = (e) => {
+  params.page_size = e
+  params.page = 1
+  refresh(params)
+}
 </script>
 
 <template>
@@ -181,19 +184,14 @@ watch(
 
     </EasyDataTable>
 
-    <TwPagination :total=" store.versionControlList.count" class="mt-10 tw-pagination"
-                  :current="current" :per-page="10"
+    <TwPagination :total="store.versionControlList.count" class="mt-10 tw-pagination"
+                  :current="params.page" :per-page="params.page_size"
                   :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
-                  @page-changed="changePagination"/>
+                  @page-changed="changePagination" @per-page-changed="onPageSizeChanged"/>
 
   </div>
 
-
-
-
-
-  <DeleteModal @delete-action="deleteAction"/>
-
+  <DeleteModal @delete-action="deleteAction" :id="'version-delete-modal'"/>
 
 
   <AddVersionControl @saveVersionControl="saveVersionControl" :editData="editData"/>

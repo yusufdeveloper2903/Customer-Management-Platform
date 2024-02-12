@@ -25,7 +25,7 @@ export default [
         permissions: ["admin"],
     },
     {
-        name: "Products",
+        name: "products",
         icon: 'File',
         path: '/products',
         permissions: ['admin']

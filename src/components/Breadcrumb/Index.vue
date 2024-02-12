@@ -80,9 +80,10 @@ const router = useRouter();
 
 //Functions
 
-const onBefore = (val: any) => {
-  if (val.router) {
+const onBefore = (item: any) => {
+  if (!item.active) {
     router.go(-1);
+
   }
 };
 
