@@ -9,7 +9,11 @@ import {
     LocationPlaceData,
     Regions,
     VersionControl,
-    Products
+    Products,
+    Pages,
+    Link,
+    Phones
+
 } from "../interfaces";
 
 export default defineStore("knowledgeBase", {
@@ -34,7 +38,19 @@ export default defineStore("knowledgeBase", {
             } as Results<VersionControl>,
             productsList: {
                 results: [] as Products[]
-            } as Results<Products>
+            } as Results<Products>,
+            pagesList: {
+                results: [] as Pages[]
+            } as Results<Pages>,
+
+            linksList: {
+                results: [] as Link[]
+            } as Results<Link>,
+
+            phonesList: {
+                results: [] as Phones[]
+            } as Results<Phones>
+
         };
     },
     actions: {
@@ -77,6 +93,7 @@ export default defineStore("knowledgeBase", {
             return $axios.post("/knowledge_base/location/", data);
         },
 
+
         async getAllFormsList(params) {
             const {data} = await $axios.get("/knowledge_base/location/", {
                 params,
@@ -96,6 +113,7 @@ export default defineStore("knowledgeBase", {
             return this.regionsList;
         },
 
+        // version control
         async getVersionControl(params) {
             const {data} = await $axios.get('/versions/version_list/', {params})
             this.versionControlList = data
@@ -113,6 +131,7 @@ export default defineStore("knowledgeBase", {
             return $axios.delete(`/versions/version/${id}/`);
         },
 
+        // products
         async getProducts(params) {
             const {data} = await $axios.get('/products/products/', {params})
             this.productsList = data
@@ -132,5 +151,58 @@ export default defineStore("knowledgeBase", {
         deleteProducts(id: number) {
             return $axios.delete(`/products/products/${id}/`);
         },
+
+
+        // terms and condition
+        async getPages(params) {
+            const {data} = await $axios.get('/knowledge_base/pages/', {params})
+            this.pagesList = data
+        },
+
+        updatePages(data) {
+            return $axios.patch(`/knowledge_base/pages/${data.id}/`, data);
+        },
+
+        // phones
+        async getSocialMediaLinks(params) {
+            const {data} = await $axios.get('/knowledge_base/social_media_links/', {params})
+            this.linksList = data
+        },
+
+
+        create_drag_and_drop(data) {
+            return $axios.post(`/knowledge_base/social_media_links/drag_and_drop/`, data);
+        },
+
+        updateSocialMediaLinks(data) {
+            return $axios.patch(`/knowledge_base/social_media_links/${data.id}/`, data);
+        },
+
+        deleteSocialMediaLinks(id: number) {
+            return $axios.delete(`/knowledge_base/social_media_links/${id}/`);
+        },
+
+
+        async getPhones(params) {
+            const {data} = await $axios.get('/knowledge_base/phones/', {params})
+            this.phonesList = data
+        },
+
+        createPhones(data) {
+            return $axios.post(`/knowledge_base/phones/`, data);
+        },
+
+        create_phones_drag_and_drop(data) {
+            return $axios.post(`/knowledge_base/phones/drag_and_drop/`, data);
+        },
+
+        updatePhones(data) {
+            return $axios.patch(`/knowledge_base/phones/${data.id}/`, data);
+        },
+
+        deletePhones(id: number) {
+            return $axios.delete(`/knowledge_base/phones/${id}/`);
+        },
+
     },
 });

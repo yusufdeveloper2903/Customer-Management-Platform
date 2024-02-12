@@ -281,3 +281,18 @@ export const headerPlaces = [
     {text: "address", value: "address"},
     {text: "actions", value: "actions"},
 ]
+
+export const phoneNumberItems = [
+    {
+        index: 1,
+        phone: '998990076655'
+    },
+    {
+        index: 2,
+        phone: '998997076625'
+    },
+    {
+        index: 3,
+        phone: '998990546655'
+    },
+]
