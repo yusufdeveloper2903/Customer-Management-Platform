@@ -198,6 +198,10 @@ export const versionControlFields = [
         value: "version_number"
     },
     {
+        text: "description",
+        value: 'description'
+    },
+    {
         text: "Status",
         value: "is_active"
     },
@@ -226,8 +230,8 @@ export const productsFields = [
         value: "price"
     },
     {
-      text:'quantity',
-      value:'quantity'
+        text: 'quantity',
+        value: 'quantity'
     },
 
     {

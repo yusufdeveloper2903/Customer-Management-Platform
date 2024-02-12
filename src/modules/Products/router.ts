@@ -8,4 +8,13 @@ export default [
         permissions: ['admin'],
       },
     },
+    {
+        path: "/product-details",
+        name: "product-details",
+        component: () => import("@/modules/Products/pages/Details.vue"),
+        meta: {
+            layout: "MainLayout",
+            permissions: ['admin'],
+        },
+    },
   ];

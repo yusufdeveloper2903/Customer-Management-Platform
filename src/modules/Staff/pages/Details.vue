@@ -19,7 +19,7 @@ const router = useRouter();
 const route = useRoute();
 
 // user's data
-var userData = ref({
+let userData = ref({
   id: null,
   full_name: "",
   phone: "",
