@@ -188,7 +188,10 @@ watch(
 
   </div>
 
+
+
   <DeleteModal @delete-action="deleteAction"/>
+
 
 
   <AddVersionControl @saveVersionControl="saveVersionControl" :editData="editData"/>
