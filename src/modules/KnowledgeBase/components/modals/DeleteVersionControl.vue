@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { toast } from "vue3-toastify";
+import {toast} from "vue3-toastify";
 import knowledgeBase from "../../store/index";
-import { useI18n } from "vue-i18n";
+import {useI18n} from "vue-i18n";
 
 const store = knowledgeBase();
-const { t } = useI18n();
+const {t} = useI18n();
 
 interface PropsUser {
   userId: any;
@@ -19,9 +19,8 @@ const deleteVersion = async () => {
       toast.success(t("deleted_successfully"));
     });
   } catch (error: any) {
-      toast.error(
-        error.response.data.msg || error.response.data.error || "Error"
-      );
+    toast.error(t('error')
+    );
 
   }
 };
@@ -30,9 +29,9 @@ const deleteVersion = async () => {
 <template>
   <div id="version-delete-modal" class="uk-flex-top" uk-modal>
     <div
-      class="uk-modal-dialog uk-margin-auto-vertical uk-border-rounded overflow-hidden"
+        class="uk-modal-dialog uk-margin-auto-vertical uk-border-rounded overflow-hidden"
     >
-      <button class="uk-modal-close-default" type="button" uk-close />
+      <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
           {{ $t("delete") }}
@@ -42,15 +41,15 @@ const deleteVersion = async () => {
         <p>{{ $t("Are you sure?") }}</p>
       </div>
       <div
-        class="uk-modal-footer flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
+          class="uk-modal-footer flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
       >
         <button uk-toggle="target: #version-delete-modal" class="btn-secondary">
           {{ $t("Cancel") }}
         </button>
         <button
-          uk-toggle="target: #version-delete-modal"
-          class="rounded-md btn-danger px-6 py-2 text-white duration-100 hover:opacity-90"
-          @click="deleteVersion"
+            uk-toggle="target: #version-delete-modal"
+            class="rounded-md btn-danger px-6 py-2 text-white duration-100 hover:opacity-90"
+            @click="deleteVersion"
         >
           {{ $t("delete") }}
         </button>

@@ -8,10 +8,9 @@ import {categoryFields, categoryitems} from "../constants";
 import CategoriesDetail from "./modals/CategoriesDetail.vue";
 import ConfirmModal from "@/components/ConfirmModals/ConfirmModal.vue";
 import {ICategory} from "../interfaces/index";
-
-
+import {useI18n} from "vue-i18n";
 //Declared variables
-
+const {t} = useI18n()
 const current = ref<number>(1);
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
@@ -67,9 +66,7 @@ const refresh = async (filter) => {
   try {
     console.log(filter);
   } catch (error: any) {
-    toast.error(
-        error.response.data.msg || error.response.data.error || "Error"
-    );
+    toast.error(t('error'))
   }
 
   isLoading.value = false;

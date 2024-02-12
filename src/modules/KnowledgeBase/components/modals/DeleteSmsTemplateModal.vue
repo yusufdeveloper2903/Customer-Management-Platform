@@ -27,7 +27,7 @@ const deleteSmsTemplate = async () => {
       );
     } else {
       toast.error(
-        error.response.data.msg || error.response.data.error || "Error"
+        t('error')
       );
     }
   }

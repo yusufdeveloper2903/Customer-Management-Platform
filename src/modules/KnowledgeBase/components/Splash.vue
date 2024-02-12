@@ -30,7 +30,7 @@ const refresh = async (filter) => {
     console.log(filter);
   } catch (error: any) {
     toast.error(
-        error.response.data.msg || error.response.data.error || "Error"
+        t('error')
     );
   }
 

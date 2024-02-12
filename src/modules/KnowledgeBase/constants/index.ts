@@ -239,6 +239,40 @@ export const productsFields = [
         value: "actions"
     },
 ]
+export const phoneNumberFields = [
+    {
+        text: "Index",
+        value: "index"
+    },
+    {
+        text: "Phone number",
+        value: "phone"
+    },
+    {
+        text: "actions",
+        value: "actions"
+    },
+]
+
+export const linksFields = [
+    {
+        text: "Index",
+        value: "index"
+    },
+    {
+        text: "Type",
+        value: "type"
+    },
+    {
+        text: "URL",
+        value: "url"
+    },
+    {
+        text: "actions",
+        value: "actions"
+    },
+]
+
 export const headerPlaces = [
     {text: "id", value: "id"},
     {text: "title", value: "title"},

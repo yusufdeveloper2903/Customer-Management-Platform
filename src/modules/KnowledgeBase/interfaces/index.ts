@@ -101,3 +101,26 @@ export interface Products {
   image: string | null,
   code: string
 }
+
+export interface Pages {
+  id: number,
+  text: {
+    ru: string,
+    uz: string,
+  },
+  type: string
+}
+
+// contacts
+export interface Link {
+  id: number,
+  type: string,
+  url: string,
+  position: number
+}
+
+export interface Phones {
+  id: number,
+  number: string,
+  position: number
+}

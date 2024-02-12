@@ -107,7 +107,7 @@ const saveUser = async () => {
   }
 
 
-  const formData = objectToFormData(userData.value);
+  const formData = objectToFormData(userData.value); 
   if (route.params.id) {
       try {
         await store.updateStaff(formData).then(() => {
@@ -121,7 +121,7 @@ const saveUser = async () => {
         // isSubmitted.value = false;
         if (error) {
           toast.error(
-            error.response.data.msg || error.response.data.error || "Error"
+            t('error')
           );
         }
       }
@@ -140,7 +140,7 @@ const saveUser = async () => {
         // isSubmitted.value = false;
         if (error) {
           toast.error(
-            error.response.data.msg || error.response.data.error || "Error"
+            t('error')
           );
         }
       }

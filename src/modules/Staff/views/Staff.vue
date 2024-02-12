@@ -39,7 +39,7 @@ const refresh = async (filter: any) => {
     isLoading.value = false;
   } catch (error: any) {
     toast.error(
-        error.response.data.msg || error.response.data.error || "Error"
+        t('error')
     );
   }
 
@@ -65,7 +65,7 @@ const deleteAction = async () => {
     isLoading.value = false
   } catch (error: any) {
     toast.error(
-        error.response.data.msg || error.response.data.error || "Error"
+        t('error')
     );
   }
 };

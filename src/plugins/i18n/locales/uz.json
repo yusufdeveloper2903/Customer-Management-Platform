@@ -267,6 +267,19 @@
   "created_successfully": "Muvaffaqiyatli yaratildi",
   "user_details": "Foydalanuvchi tafsilotlari",
   "Number (multi-digit-code)": "Raqam (ko'p xonali kod)",
-  "updated_successfully": "Muvaffaqiyatli yangilandi"
+  "updated_successfully": "Muvaffaqiyatli yangilandi",
+  "deleted_successfully": "Muvaffaqiyatli oʻchirildi",
+  "PrivacyPolicy": "Maxfiylik siyosati",
+  "Terms_and_conditions": "Foydalanish shartlari",
+  "staff_details": "Xodimlar tafsilotlari",
+  "add_staff": "Xodimlarni qo'shish",
+  "edit sms sending": "SMS yuborishni tahrirlash",
+  "add_sms_sending": "SMS xabarnomani qo'shish",
+  "edit news": "Yangiliklarni tahrirlash",
+  "add news": "Yangiliklarni qo'shish",
+  "edit banner": "Bannerni tahrirlash",
+  "add banner": "Banner qo'shish",
+  "contacts": "Kontaktlar",
+  "The phone number must be entered in the format: '998 [XX] [XXX XX XX]": "Telefon raqami formatda kiritilishi kerak: '998 [XX] [XXX XX XX]"
 
 }

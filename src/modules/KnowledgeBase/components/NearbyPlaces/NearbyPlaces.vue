@@ -67,7 +67,7 @@ const deleteAction = async () => {
     loading.value = false
   } catch (error: any) {
     toast.error(
-        error.response.data.msg || error.response.data.error || "Error"
+        t('error')
     );
   }
 };

@@ -3,13 +3,14 @@ import {fields} from "../constants/index";
 import {onMounted, reactive, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import users from "../store/index";
-import { toast } from "vue3-toastify";
+import {toast} from "vue3-toastify";
 import {formatPhoneNumber} from "../features";
 import DoubleRight from "../img/double-right-chevron-svgrepo-com.svg"
-
+import {useI18n} from 'vue-i18n'
 // import {useI18n} from "vue-i18n";
 
 // const {locale} = useI18n();
+const {t} = useI18n()
 const store = users();
 let usersList = ref<object[]>([]);
 const isLoading = ref(false);
@@ -20,7 +21,6 @@ const filterUsers = reactive({
   search: "",
   role: null,
 });
-
 
 
 const paginationFilter = reactive({
@@ -36,7 +36,7 @@ const refresh = async (filter) => {
     usersList.value = store.usersList.results;
   } catch (error: any) {
     toast.error(
-        error.response.data.msg || error.response.data.error || "Error"
+        t('error')
     );
   }
 
@@ -62,7 +62,7 @@ const searchByName = () => {
 };
 
 const showDetailPage = (item) => {
-  router.push({ name: 'user detail', params: { id: item.id } })
+  router.push({name: 'user detail', params: {id: item.id}})
 };
 
 watch(
@@ -159,7 +159,8 @@ onMounted(async () => {
         </template>
 
         <template #item-detail="item">
-          <button @click="showDetailPage(item)" class="btn-success btn-action my-1"><img :src="DoubleRight" alt="Icon"></button>
+          <button @click="showDetailPage(item)" class="btn-success btn-action my-1"><img :src="DoubleRight" alt="Icon">
+          </button>
         </template>
       </EasyDataTable>
 

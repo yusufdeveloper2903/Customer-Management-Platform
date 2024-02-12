@@ -13,26 +13,7 @@
 // const props = defineProps<PropsUser>();
 // const emits = defineEmits(["deleteUser"]);
 
-// const createTerminateId = async () => {
-//   try {
-//     await store.createTerminateId({session_id: props.userId}).then(() => {
-//       emits("deleteUser");
-//       toast.success(t("created_successfully"));
-//     });
-//   } catch (error: any) {
-//     const warning = "Cannot delete some instances of model";
 
-//     if (error.response.data.error.includes(warning)) {
-//       toast.error(
-//         "У пользователя есть сделки, поэтому вы не можете его удалить."
-//       );
-//     } else {
-//       toast.error(
-//         error.response.data.msg || error.response.data.error || "Error"
-//       );
-//     }
-//   }
-// };
 </script>
 
 <template>

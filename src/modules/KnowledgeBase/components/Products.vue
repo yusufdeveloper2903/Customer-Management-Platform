@@ -84,7 +84,7 @@ const refresh = async (filter: any) => {
     await store.getProducts(filter)
   } catch (error: any) {
     toast.error(
-        error.response.data.msg || error.response.data.error || "Error"
+        t('error')
     );
   }
   isLoading.value = false;
@@ -109,7 +109,7 @@ const deleteAction = async () => {
     isLoading.value = false
   } catch (error: any) {
     toast.error(
-        error.response.data.msg || error.response.data.error || "Error"
+        t('error')
     );
   }
 };
