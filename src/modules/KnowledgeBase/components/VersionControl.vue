@@ -194,9 +194,6 @@ const onPageSizeChanged = (e) => {
   <DeleteModal @delete-action="deleteAction" :id="'version-delete-modal'"/>
 
 
-
-
-
   <AddVersionControl @saveVersionControl="saveVersionControl" :editData="editData"/>
 
 </template>
