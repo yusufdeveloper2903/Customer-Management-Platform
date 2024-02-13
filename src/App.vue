@@ -4,7 +4,12 @@ import EmptyLayout from "@/layout/EmptyLayout.vue";
 import MainLayout from "@/layout/MainLayout.vue";
 import LoginLayout from "@/layout/LoginLayout.vue";
 import {onMounted, ref, watch} from "vue";
+import knowledgeBase from "@/modules/KnowledgeBase/store/index"
+import {toast} from "vue3-toastify";
+import {useI18n} from "vue-i18n";
 
+const {t} = useI18n()
+const store = knowledgeBase()
 const sidebar = useSidebarStore();
 
 const layouts = {
@@ -27,8 +32,18 @@ watch(
       }
     }
 );
+const refresh = () => {
+  try {
+    store.getPages({type: 'term_and_condition'});
+    store.getPagesPolicy({type: 'privacy_policy'});
+  } catch (error: any) {
+    toast.error(t('error'));
+  }
+
+};
 
 onMounted(() => {
+  refresh()
   body.value?.classList.add(sidebar.currentTheme);
 });
 
@@ -156,7 +171,7 @@ onMounted(() => {
   border-radius: 0.357rem;
   position: absolute;
   top: 29px;
-  right: 30px;
+  right: 36px;
   box-shadow: 0 5px 20px 0 rgba(34, 41, 47, 0.1);
   opacity: 1;
   transition: all 0.25s;

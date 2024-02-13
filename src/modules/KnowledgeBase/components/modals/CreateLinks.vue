@@ -92,7 +92,7 @@ const updateDeal = async () => {
     
   } else {
       try {
-        await store.createProducts(editData.value).then(() => {
+        await store.createSocialMediaLinks(editData.value).then(() => {
 
           UIkit.modal("#links").hide();
           emits("saveContact");

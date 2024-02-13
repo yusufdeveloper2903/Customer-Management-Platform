@@ -111,7 +111,7 @@ onMounted(() => {
       <tr>
         <th
             v-for="field in phoneNumberFields"
-            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider"
+            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-center text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider"
         >
           {{ field.text }}
 
@@ -128,13 +128,13 @@ onMounted(() => {
           @dragover="dragOver"
           @drop="dragDrop(item)"
       >
-        <td class="px-6 whitespace-no-wrap">
+        <td class="px-6 whitespace-no-wrap text-center">
           {{ item.position }}
         </td>
 
-        <td class="px-6 whitespace-no-wrap">{{ item.number }}</td>
-        <td class="px-6 whitespace-no-wrap">
-          <div class="flex py-2">
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.number }}</td>
+        <td class="px-6 whitespace-no-wrap text-center">
+          <div class="flex py-2 justify-center">
             <button
                 class="btn-warning btn-action"
                 uk-toggle="target: #phones"

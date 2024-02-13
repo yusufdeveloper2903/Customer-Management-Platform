@@ -110,7 +110,7 @@ onMounted(() => {
       <thead>
       <tr>
         <th v-for="field in linksFields"
-            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
+            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-center text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
           {{ field.text }}
 
         </th>
@@ -120,11 +120,11 @@ onMounted(() => {
       <tr v-for="item in store.linksList?.results" :key="item.id"
           class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
           :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
-        <td class="px-6 whitespace-no-wrap">{{ item.position }}</td>
-        <td class="px-6 whitespace-no-wrap">{{ item.type }}</td>
-        <td class="px-6 whitespace-no-wrap">{{ item.url }}</td>
+        <td class="px-6 whitespace-no-wrap text-center ">{{ item.position }}</td>
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.type }}</td>
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.url }}</td>
         <td class="px-6 whitespace-no-wrap">
-          <div class="flex py-2">
+          <div class="flex py-2 justify-center">
             <button class="btn-warning btn-action" uk-toggle="target: #links" @click="editLink = item">
               <Icon icon="Pen New Square" color="#fff" size="16"/>
             </button>
@@ -150,7 +150,6 @@ onMounted(() => {
   </div>
 
 
-  <!-- PHONE NUMBER TABLE -->
   <div class="card mt-10">
     <PhoneNumbers/>
   </div>

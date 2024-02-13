@@ -11,6 +11,8 @@ import {useI18n} from 'vue-i18n'
 import productStore from '../store/index'
 import DoubleRight from "@/modules/Users/img/double-right-chevron-svgrepo-com.svg";
 import {useRouter} from "vue-router";
+import {linksFields} from "@/modules/KnowledgeBase/constants";
+import {Link} from "@/modules/KnowledgeBase/interfaces";
 //Declared variables
 const router = useRouter()
 const {t} = useI18n()
@@ -23,7 +25,7 @@ const params = reactive({
   page_size: 10
 })
 
-
+const currentRow = ref<Link | null>(null);
 const editData = ref({
   id: null,
   title: {
@@ -53,8 +55,6 @@ const handleDeleteModal = (id) => {
 const saveProducts = () => {
   refresh(params);
 }
-
-
 
 
 const refresh = async (params: any) => {
@@ -95,6 +95,20 @@ const showDetailPage = (item: any) => {
   router.push({name: 'product-details', params: {id: item.id}})
 };
 
+const dragStart = (item) => {
+  currentRow.value = item;
+};
+
+const dragOver = (e) => {
+  e.preventDefault();
+};
+
+const dragDrop = async (item: Link) => {
+  event?.preventDefault();
+  await productStorage.DRAG_DROP_PRODUCTS({id1: currentRow.value?.id, id2: item.id})
+  await refresh(params)
+  toast.success("ok");
+};
 </script>
 
 <template>
@@ -108,52 +122,64 @@ const showDetailPage = (item: any) => {
         {{ $t("Add") }}
       </button>
     </div>
+    <table class="min-w-full bg-white border border-gray-300 dark:border-gray-600">
+      <thead>
+      <tr>
+        <th v-for="field in headerProduct"
+            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-center text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
+          {{ field.text }}
 
+        </th>
+      </tr>
+      </thead>
 
-    <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="headerProduct"
-                   :items="productStorage.productListCategory.results">
-      <template #empty-message>
-        <span>{{ $t('empty_text') }}</span>
-      </template>
-      <template #header-title="header">
-        {{ $t(header.text) }}
-      </template>
-      <template #header-actions="header">
-        {{ $t(header.text) }}
-      </template>
-
-      <template #item-title="item">
-        {{ item.title[$i18n.locale] }}
-      </template>
-
-      <template #item-is_active="item">
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-              type="checkbox"
-              v-model="item.is_active"
-              class="sr-only peer"
-              disabled
-          />
-          <div
-              className="w-11 h-6 bg-gray-200 peer-focus:outline-none
+      <tbody>
+      <tr v-for="item in productStorage.productListCategory.results" :key="item.id" :loading="isLoading"
+          class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
+          :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
+        <td class="px-6 whitespace-no-wrap text-center ">{{ item.id }}</td>
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.title[$i18n.locale] }}</td>
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.active_products_count }}</td>
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.inactive_products_count }}</td>
+        <td class="px-6 whitespace-no-wrap text-center">
+          <label
+              className="relative inline-flex items-center cursor-pointer">
+            <input
+                type="checkbox"
+                v-model="item.is_active"
+                class="sr-only peer"
+                disabled
+            />
+            <div
+                className="w-11 h-6 bg-gray-200 peer-focus:outline-none
           rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-          ></div>
-        </label>
-      </template>
-      <template #item-actions="item">
-        <div class="flex my-4 justify-center">
-          <button @click="showDetailPage(item)" class="btn-success btn-action mr-2"><img :src="DoubleRight" alt="Icon">
-          </button>
+            ></div>
+          </label>
+        </td>
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.created_at }}</td>
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.updated_at }}</td>
 
-          <button class="btn-warning btn-action" uk-toggle="target: #create_and_edit_category" @click="editData = item">
-            <Icon icon="Pen New Square" color="#fff" size="16"/>
-          </button>
-          <button class="ml-2 btn-danger btn-action" @click="handleDeleteModal(item.id)">
-            <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
-          </button>
-        </div>
-      </template>
-    </EasyDataTable>
+
+        <td class="px-6 whitespace-no-wrap">
+          <div class="flex py-2 justify-center">
+            <button @click="showDetailPage(item)" class="btn-success btn-action mr-2">
+              <img :src="DoubleRight"
+                   alt="Icon">
+            </button>
+
+            <button class="btn-warning btn-action" uk-toggle="target: #create_and_edit_category"
+                    @click="editData = item">
+              <Icon icon="Pen New Square" color="#fff" size="16"/>
+            </button>
+            <button class="ml-2 btn-danger btn-action" @click="handleDeleteModal(item.id)">
+              <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
 
     <DeleteModal @delete-action="deleteAction" :id="'product-main-delete-modal'"/>
 

@@ -9,9 +9,10 @@ import {watchDebounced} from "@vueuse/core";
 import UIkit from "uikit";
 import {useI18n} from 'vue-i18n'
 import productStore from '../store/index'
-
+import {useRoute} from "vue-router";
 
 //Declared variables
+const route = useRoute()
 const {t} = useI18n()
 const productStorage = productStore()
 const isLoading = ref(false);
@@ -52,20 +53,20 @@ const handleDeleteModal = (id) => {
 };
 
 const saveProducts = () => {
-  refresh(params);
+  refresh();
 }
 
 
-const refresh = async (params: any) => {
+const refresh = async () => {
   isLoading.value = true;
   try {
-    await productStorage.getProductCards(params)
+    await productStorage.getProductCardsId(route.params.id)
   } catch (error: any) {
     toast.error(t('error'));
   }
   isLoading.value = false;
 };
-refresh(params)
+refresh()
 productStorage.getProductFromKnowledgeBase({page_size: 1000})
 productStorage.getProductList({page_size: 1000})
 const deleteAction = async () => {
@@ -76,9 +77,9 @@ const deleteAction = async () => {
     toast.success(t('deleted_successfully'));
     if (productStorage.productListCards.count - 1 && params.page > 1) {
       params.page = params.page - 1
-      refresh(params)
+      await refresh()
     } else {
-      refresh(params)
+      await refresh()
     }
     isLoading.value = false
   } catch (error: any) {
@@ -89,7 +90,7 @@ watchDebounced(
     () => params.search,
     async () => {
       params.page = 1;
-      await refresh(params)
+      await refresh( )
     }, {deep: true, debounce: 500, maxWait: 5000}
 );
 

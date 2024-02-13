@@ -17,7 +17,6 @@ import {
 } from "../interfaces";
 
 
-
 export default defineStore("knowledgeBase", {
     state: () => {
         return {
@@ -44,7 +43,9 @@ export default defineStore("knowledgeBase", {
             pagesList: {
                 results: [] as Pages[]
             } as Results<Pages>,
-
+            pagesListPolicy: {
+                results: [] as Pages[]
+            },
             linksList: {
                 results: [] as Link[]
             } as Results<Link>,
@@ -160,7 +161,10 @@ export default defineStore("knowledgeBase", {
             const {data} = await $axios.get('/knowledge_base/pages/', {params})
             this.pagesList = data
         },
-
+        async getPagesPolicy(params) {
+            const {data} = await $axios.get('/knowledge_base/pages/', {params})
+            this.pagesListPolicy = data
+        },
         updatePages(data) {
             return $axios.patch(`/knowledge_base/pages/${data.id}/`, data);
         },
@@ -192,6 +196,9 @@ export default defineStore("knowledgeBase", {
 
         createPhones(data) {
             return $axios.post(`/knowledge_base/phones/`, data);
+        },
+        createSocialMediaLinks(data) {
+            return $axios.post(`/knowledge_base/social_media_links/`, data)
         },
 
         create_phones_drag_and_drop(data) {

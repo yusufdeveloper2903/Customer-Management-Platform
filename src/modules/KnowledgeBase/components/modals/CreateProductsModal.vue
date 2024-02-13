@@ -81,7 +81,14 @@ const rules = computed(() => {
     },
     photo: {
       required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    quantity: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    measurement_type: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
     }
+
   };
 
 });
@@ -150,6 +157,7 @@ function openModal() {
     productsData.value.quantity = propData.editData.quantity
     productsData.value.price = propData.editData.price
     productsData.value.code = propData.editData.code
+    productsData.value.photo = propData.editData.image
   } else {
     productsData.value.title.uz = ""
     productsData.value.description.uz = ''
@@ -211,7 +219,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   class="form-input"
                   :placeholder="$t('Description')"
                   v-model="productsData.description.uz"
-                  :class="validate.code.$errors.length ? 'required-input' : ''"
               />
 
             </label>
@@ -239,7 +246,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   class="form-input"
                   :placeholder="$t('Description')"
                   v-model="productsData.description.ru"
-                  :class="validate.code.$errors.length ? 'required-input' : ''"
               />
 
             </label>
@@ -272,10 +278,10 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   class="form-input"
                   :placeholder="$t('Measurement type')"
                   v-model="productsData.measurement_type"
-                  :class="validate.code.$errors.length ? 'required-input' : ''"
+                  :class="validate.measurement_type.$errors.length ? 'required-input' : ''"
               />
               <p
-                  v-for="error in validate.code.$errors"
+                  v-for="error in validate.measurement_type.$errors"
                   :key="error.$uid"
                   class="text-danger text-sm"
               >
@@ -309,7 +315,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   class="form-input"
                   :placeholder="$t('Quantity')"
                   v-model="productsData.quantity"
-                  :class="validate.price.$errors.length ? 'required-input' : ''"
+                  :class="validate.quantity.$errors.length ? 'required-input' : ''"
               />
 
             </label>
@@ -319,7 +325,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
         <label class="mt-4 block" for="photo">{{ $t('photo') }}
           <input @change="getFile" id="fileInput" type="file"
                  class="form-file-input p-1"
-                 :class="validate.photo.$errors.length ? 'required-input' : ''"/>
+                 :class="validate.photo.$errors.length  ? 'required-input' : ''"/>
 
         </label>
         <div v-if="propData.editData.image || imageDiv">

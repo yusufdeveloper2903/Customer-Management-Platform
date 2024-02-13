@@ -10,10 +10,9 @@ import VueTailwindPagination from "@/components/Pagination.vue"
 import ability from "@/plugins/casl/ability";
 import {abilitiesPlugin} from "@casl/vue";
 import {createPinia} from "pinia";
-
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
-
+import {QuillEditor} from '@vueup/vue-quill'
 // table
 import Vue3EasyDataTable from "vue3-easy-data-table";
 import "./assets/style/vue3-easy-data-table.css";
@@ -35,7 +34,8 @@ import "@vuepic/vue-datepicker/dist/main.css";
 import UIkit from "uikit";
 import icons from "uikit/dist/js/uikit-icons";
 import {vMaska} from "maska";
-
+import '@vueup/vue-quill/dist/vue-quill.bubble.css'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import Paginate from "vuejs-paginate-next";
 import DeleteModal from "@/components/DeleteModal.vue";
 import LazySelect from "./components/LazySelect.vue";
@@ -44,6 +44,23 @@ import VueApexCharts from "vue3-apexcharts";
 import Icon from "@/components/Icons/Icon.vue";
 
 const app = createApp(App);
+QuillEditor.props.globalOptions.default = () => globalOptions
+
+
+// import VPagination from "@hennge/vue3-pagination";
+// import "@hennge/vue3-pagination/dist/vue3-pagination.css";
+
+
+const globalOptions = {
+    // debug: 'info',
+
+    // modules: {
+    //   toolbar: ['bold', 'italic', 'underline'],
+    // },
+    placeholder: 'Ma`lumot kiriting',
+    readOnly: false,
+    theme: 'snow',
+}
 
 app.use(createPinia());
 app.use(router);
@@ -66,7 +83,7 @@ app.use(abilitiesPlugin, ability, {
 app.use(i18n);
 UIkit.use(icons);
 app.use(Paginate);
-
+app.component('Editor', QuillEditor)
 app.component("Apexchart", VueApexCharts);
 app.component('DeleteModal', DeleteModal)
 app.component("Datepicker", Datepicker);
