@@ -108,6 +108,8 @@ const showDetailPage = (item: any) => {
         {{ $t("Add") }}
       </button>
     </div>
+
+
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="headerProduct"
                    :items="productStorage.productListCategory.results">
       <template #empty-message>
