@@ -132,6 +132,7 @@ const dragDrop = async (item: Link) => {
         </th>
       </tr>
       </thead>
+
       <tbody>
       <tr v-for="item in productStorage.productListCategory.results" :key="item.id" :loading="isLoading"
           class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
