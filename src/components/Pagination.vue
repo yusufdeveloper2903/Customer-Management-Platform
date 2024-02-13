@@ -33,7 +33,7 @@ export default defineComponent({
 
   data() {
     return {
-      input: "",
+      input: null,
       perPageOptions: [5, 10, 15],
     };
   },
@@ -45,11 +45,9 @@ export default defineComponent({
       }
     },
     toPage: function () {
-      if (this.input) {
-        return this.$emit('page-to', this.input)
-
+      if (this.input > 0 && this.input <= this.totalPages) {
+        return this.$emit('page-changed', this.input)
       }
-
     },
     hasFirst: function () {
       return this.rangeStart !== 1;
@@ -243,10 +241,10 @@ export default defineComponent({
           />
         </div>
         <div
-            @click.prevent="toPage"
+            @click="toPage"
             class="flex items-center pl-4 font-medium cursor-pointer"
         >
-          <span id="text-after-input" >
+          <span id="text-after-input">
             {{ textAfterInput }}
           </span>
           <svg
