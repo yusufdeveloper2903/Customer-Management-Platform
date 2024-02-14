@@ -148,7 +148,7 @@ function breadCrumbStart(newPath) {
       break;
     case "promotion":
       BreadcrumbList.value = [
-        {title: "Promotion", active: true},
+        {title: "Promotions", active: true},
       ];
       break;
     default:

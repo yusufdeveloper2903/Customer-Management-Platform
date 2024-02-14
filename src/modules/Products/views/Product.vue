@@ -73,7 +73,7 @@ const deleteAction = async () => {
     await productStorage.deleteProductItem(itemId.value)
     UIkit.modal("#product-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if (productStorage.productListCategory.count - 1 && params.page > 1) {
+    if ((productStorage.productListCategory.count - 1) % params.page > 0) {
       params.page = params.page - 1
       refresh(params)
     } else {
@@ -107,7 +107,7 @@ const dragDrop = async (item: Link) => {
   event?.preventDefault();
   await productStorage.DRAG_DROP_PRODUCTS({id1: currentRow.value?.id, id2: item.id})
   await refresh(params)
-  toast.success("ok");
+  toast.success(t("updated_successfully"));
 };
 </script>
 

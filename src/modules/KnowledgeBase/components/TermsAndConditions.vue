@@ -26,7 +26,6 @@ const is_disabledRu = ref(false)
 const {t} = useI18n()
 
 //Mounted
-
 txt.text.ru = store.pagesList.results[0]?.text.ru
 txt.text.uz = store.pagesList.results[0]?.text.uz
 txt.type = store.pagesList.results[0]?.type
@@ -43,6 +42,8 @@ const refresh = async () => {
   }
 
 };
+refresh()
+
 const updateText = () => {
   store.updatePages({...txt}).then(() => {
     setTimeout(() => {

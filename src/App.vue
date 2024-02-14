@@ -4,12 +4,7 @@ import EmptyLayout from "@/layout/EmptyLayout.vue";
 import MainLayout from "@/layout/MainLayout.vue";
 import LoginLayout from "@/layout/LoginLayout.vue";
 import {onMounted, ref, watch} from "vue";
-import knowledgeBase from "@/modules/KnowledgeBase/store/index"
-import {toast} from "vue3-toastify";
-import {useI18n} from "vue-i18n";
 
-const {t} = useI18n()
-const store = knowledgeBase()
 const sidebar = useSidebarStore();
 
 const layouts = {
@@ -32,18 +27,8 @@ watch(
       }
     }
 );
-const refresh = () => {
-  try {
-    store.getPages({type: 'term_and_condition'});
-    store.getPagesPolicy({type: 'privacy_policy'});
-  } catch (error: any) {
-    toast.error(t('error'));
-  }
-
-};
 
 onMounted(() => {
-  refresh()
   body.value?.classList.add(sidebar.currentTheme);
 });
 
