@@ -127,7 +127,7 @@ const dragDrop = async (item: Link) => {
       <tr>
         <th v-for="field in headerProductCard"
             class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-center text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
-          {{ field.text }}
+          {{ t(`${field.text}`) }}
 
         </th>
       </tr>
@@ -191,6 +191,7 @@ const dragDrop = async (item: Link) => {
       </tr>
       </tbody>
     </table>
+    <div class="empty_table" v-if="!productStorage.productListCards.results.length">{{ t("empty_text") }}</div>
 
     <DeleteModal @delete-action="deleteAction" :id="'product-card-delete-modal'"/>
 

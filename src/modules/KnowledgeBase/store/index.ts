@@ -10,7 +10,7 @@ import {
     Regions,
     VersionControl,
     Products,
-    Pages,
+    // Pages,
     Link,
     Phones
 
@@ -41,10 +41,20 @@ export default defineStore("knowledgeBase", {
                 results: [] as Products[]
             } as Results<Products>,
             pagesList: {
-                results: [] as Pages[]
-            } as Results<Pages>,
+                text: {
+                    uz: '',
+                    ru: ''
+                },
+                type: '',
+                id: null
+            },
             pagesListPolicy: {
-                results: [] as Pages[]
+                text: {
+                    uz: '',
+                    ru: ''
+                },
+                type: '',
+                id: null
             },
             linksList: {
                 results: [] as Link[]
@@ -158,11 +168,12 @@ export default defineStore("knowledgeBase", {
 
         // terms and condition
         async getPages(params) {
-            const {data} = await $axios.get('/knowledge_base/pages/', {params})
+            const {data} = await $axios.get('/knowledge_base/pages/get_current_page', {params})
             this.pagesList = data
         },
         async getPagesPolicy(params) {
-            const {data} = await $axios.get('/knowledge_base/pages/', {params})
+            const {data} = await $axios.get('/knowledge_base/pages/get_current_page', {params})
+            console.log(data, 'data')
             this.pagesListPolicy = data
         },
         updatePages(data) {

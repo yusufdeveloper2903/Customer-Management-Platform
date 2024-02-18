@@ -38,12 +38,12 @@ export const newsPromotionTable = [
     //     value: "period",
     // },
     {
-        text: "Created date",
-        value: "created_date",
+        text: "date_and_time",
+        value: "start_date",
     },
     {
-        text: "Updated date",
-        value: "modified_date",
+        text: "End date",
+        value: "end_date",
     },
     {
         text:"Status",

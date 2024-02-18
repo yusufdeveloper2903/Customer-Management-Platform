@@ -54,6 +54,7 @@ interface EditData {
     uz: string,
     ru: string
   }
+  is_active: boolean | null,
   is_published: boolean | null,
   background_photo: null | string,
   detail_photo: null | string,
@@ -211,6 +212,7 @@ const onHide = () => {
 
 }
 const validate: Ref<Validation> = useVuelidate(rules, productsData);
+
 </script>
 
 <template>
@@ -243,12 +245,12 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             >
               {{ $t(error.$message) }}
             </p>
-            <label for="number" class="block mt-4">{{ $t('Description') }}
+            <label for="number" class="block mt-4">{{ $t('description') }}
               <textarea
                   id="number"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('Description')"
+                  :placeholder="$t('description')"
                   v-model="productsData.description.uz"
                   :class="validate.description.uz.$errors.length ? 'required-input' : ''"
               />
@@ -278,12 +280,12 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             >
               {{ $t(error.$message) }}
             </p>
-            <label for="number" class="block mt-4">{{ $t('Description') }}
+            <label for="number" class="block mt-4">{{ $t('description') }}
               <textarea
                   id="number"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('Description')"
+                  :placeholder="$t('description')"
                   v-model="productsData.description.ru"
                   :class="validate.description.ru.$errors.length ? 'required-input' : ''"
               />

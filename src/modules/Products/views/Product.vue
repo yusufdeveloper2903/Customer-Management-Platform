@@ -127,7 +127,7 @@ const dragDrop = async (item: Link) => {
       <tr>
         <th v-for="field in headerProduct"
             class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-center text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
-          {{ field.text }}
+          {{ t(`${field.text}`) }}
 
         </th>
       </tr>
@@ -137,6 +137,7 @@ const dragDrop = async (item: Link) => {
       <tr v-for="item in productStorage.productListCategory.results" :key="item.id" :loading="isLoading"
           class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
           :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
+
         <td class="px-6 whitespace-no-wrap text-center ">{{ item.id }}</td>
         <td class="px-6 whitespace-no-wrap text-center">{{ item.title[$i18n.locale] }}</td>
         <td class="px-6 whitespace-no-wrap text-center">{{ item.active_products_count }}</td>
@@ -177,8 +178,11 @@ const dragDrop = async (item: Link) => {
           </div>
         </td>
       </tr>
+
       </tbody>
+
     </table>
+    <div class="empty_table" v-if="!productStorage.productListCategory.results.length">{{ t("empty_text") }}</div>
 
 
     <DeleteModal @delete-action="deleteAction" :id="'product-main-delete-modal'"/>

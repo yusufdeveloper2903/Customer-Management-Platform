@@ -9,6 +9,7 @@ export default defineStore("prmotionBase", {
                 count: 0,
                 results: [] as any[]
             },
+            promotionListId: {} as any[]
         };
     },
 
@@ -18,6 +19,11 @@ export default defineStore("prmotionBase", {
             console.log(data, 'data')
             this.promotionList = data;
         },
+        async getPromotionId(id: any) {
+            const {data} = await $axios.get(`/knowledge_base/promotions/${id}`);
+            this.promotionListId = data;
+        },
+
 
         createPromotion(data: object) {
             return $axios.post("/knowledge_base/promotions/", data);

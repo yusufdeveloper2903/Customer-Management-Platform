@@ -144,7 +144,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
       </div>
       <div class="uk-modal-body py-4">
         <label>
-          <p class=" mt-5 mb-1">{{ $t("Products") }}:</p>
+          <p class=" mt-5 mb-1">{{ $t("products") }}:</p>
           <v-select
               :options="productStorage.productFromKnowledgeBase.results"
               v-model="productsCategory.product"
@@ -162,7 +162,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
           </p>
         </label>
 
-        <p class=" mt-5 mb-1">{{ $t("Category") }}:</p>
+        <p class=" mt-5 mb-1">{{ $t("category") }}:</p>
         <v-select
             :options="productStorage.productListCategory.results"
             v-model="productsCategory.category"
@@ -175,7 +175,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
         <v-select
             :options="discountList"
             v-model="productsCategory.has_discount"
-            :getOptionLabel="(name) => name.title"
+            :getOptionLabel="(name) => t(`${name.title}`)"
             :reduce="(name) => name.value"
         >
           <template #no-options> {{ $t("no_matching_options") }}</template>
@@ -192,7 +192,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
           />
         </div>
 
-        <p class=" mt-5 mb-1">{{ $t("Price") }}:</p>
+        <p class=" mt-5 mb-1">{{ $t("price") }}:</p>
         <input
             type="text"
             class="form-input"

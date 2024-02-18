@@ -143,7 +143,7 @@ function breadCrumbStart(newPath) {
     case "product-details":
       BreadcrumbList.value = [
         {title: "products", active: false},
-        {title: "products detail", active: true},
+        {title: "product detail", active: true},
       ];
       break;
     case "promotion":

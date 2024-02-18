@@ -26,14 +26,11 @@ const is_disabledRu = ref(false)
 const {t} = useI18n()
 
 //Mounted
-txt.text.ru = store.pagesList.results[0]?.text.ru
-txt.text.uz = store.pagesList.results[0]?.text.uz
-txt.type = store.pagesList.results[0]?.type
-txt.id = store.pagesList.results[0]?.id
-
-
+txt.text.ru = store.pagesList?.text?.ru
+txt.text.uz = store.pagesList?.text?.uz
+txt.type = store.pagesList?.type
+txt.id = store.pagesList?.id
 //All Functions
-
 const refresh = async () => {
   try {
     await store.getPages({type: 'term_and_condition'});
@@ -44,22 +41,23 @@ const refresh = async () => {
 };
 refresh()
 
+
 const updateText = () => {
-  store.updatePages({...txt}).then(() => {
+  store.updatePages({...store.pagesList}).then(() => {
     setTimeout(() => {
       toast.success(t("updated_successfully"));
     }, 200);
     refresh()
-    is_disabledUz.value = true
+    is_disabledUz.value = false
   })
 }
 const updateText2 = () => {
-  store.updatePages({...txt}).then(() => {
+  store.updatePages({...store.pagesList}).then(() => {
     setTimeout(() => {
       toast.success(t("updated_successfully"));
     }, 200);
     refresh()
-    is_disabledRu.value = true
+    is_disabledRu.value = false
   })
 }
 
@@ -72,12 +70,13 @@ const updateText2 = () => {
       <Tab :title="$t('UZ')">
         <div :style="{'pointer-events': is_disabledUz ?  'auto' : 'none'}">
           <Editor
+              v-if="store.pagesList.text.uz"
               :placeholder="$t('enter_information')"
               content-type="html"
               toolbar="full"
               class="scrollbar rounded border"
               style="height: 45vh; overflow-y: auto;"
-              v-model:content="txt.text.uz"
+              v-model:content="store.pagesList.text.uz"
           >
           </Editor>
         </div>
@@ -95,11 +94,12 @@ const updateText2 = () => {
       <Tab :title="$t('RU')">
         <div :style="{'pointer-events': is_disabledRu ?  'auto' : 'none'}">
           <Editor
+              v-if="store.pagesList.text.ru"
               :placeholder="$t('enter_information')"
               content-type="html"
               toolbar="full"
               class="scrollbar rounded border"
-              style="height: 45vh; overflow-y: auto;" v-model:content="txt.text.ru"
+              style="height: 45vh; overflow-y: auto;" v-model:content="store.pagesList.text.ru"
           >
 
           </Editor>

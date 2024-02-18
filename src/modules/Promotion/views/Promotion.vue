@@ -13,7 +13,6 @@ const {t} = useI18n()
 const itemId = ref<number | null | undefined>(null);
 const promotionStorage = promotionBase()
 const isLoading = ref(false);
-const current = ref<number>(1);
 const params = reactive({
   page_size: 10,
   search: "",
@@ -106,6 +105,15 @@ const handleDeleteModal = (id) => {
   itemId.value = id
   UIkit.modal("#delete-promotion-item").show()
 };
+const onGetData = async (val) => {
+  try {
+    await promotionStorage.getPromotionId(val)
+    editData.value = promotionStorage.promotionListId
+
+  } catch (error) {
+    toast.error(t('error'));
+  }
+}
 </script>
 
 <template>
@@ -121,11 +129,23 @@ const handleDeleteModal = (id) => {
     </div>
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="newsPromotionTable"
                    :items="promotionStorage.promotionList.results">
+      <template #empty-message>
+        <span>{{ t("empty_text") }}</span>
+      </template>
 
       <template #header-title="header">
         {{ $t(header.text) }}
       </template>
       <template #header-actions="header">
+        {{ $t(header.text) }}
+      </template>
+      <template #header-start_date="header">
+        {{ $t(header.text) }}
+      </template>
+      <template #header-end_date="header">
+        {{ $t(header.text) }}
+      </template>
+      <template #header-is_active="header">
         {{ $t(header.text) }}
       </template>
       <template #item-title="item">
@@ -148,7 +168,7 @@ const handleDeleteModal = (id) => {
       </template>
       <template #item-actions="item">
         <div class="flex my-4 justify-center">
-          <button class="btn-warning btn-action" uk-toggle="target: #create_edit_promotion" @click="editData = item">
+          <button class="btn-warning btn-action" uk-toggle="target: #create_edit_promotion" @click="onGetData(item.id)">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>
           <button class="ml-3 btn-danger btn-action" @click="handleDeleteModal(item.id)">

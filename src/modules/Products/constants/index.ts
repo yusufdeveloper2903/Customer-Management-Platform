@@ -16,15 +16,15 @@ export const headerProduct = [
         value: "inactive_products_count"
     },
     {
-        text: "status",
+        text: "Status",
         value: "is_active"
     },
     {
-        text: "created date",
+        text: "date_and_time",
         value: "created_at"
     },
     {
-        text: "updated date",
+        text: "Modified date",
         value: "updated_at"
     },
     {
@@ -46,7 +46,7 @@ export const headerProductCard = [
         value: "price"
     },
     {
-        text: 'status',
+        text: 'Status',
         value: 'is_active'
     },
     {

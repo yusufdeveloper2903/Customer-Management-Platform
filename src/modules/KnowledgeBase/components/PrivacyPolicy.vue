@@ -4,7 +4,7 @@
 
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
-import {reactive, ref} from "vue";
+import {ref} from "vue";
 import knowledgeBase from ".././store/index"
 import {toast} from "vue3-toastify";
 import {useI18n} from "vue-i18n";
@@ -13,24 +13,13 @@ import {useI18n} from "vue-i18n";
 //Declared variables
 
 const store = knowledgeBase()
-const txt = reactive({
-  id: 0,
-  text: {
-    uz: '',
-    ru: ''
-  },
-  type: ''
-})
+
 const is_disabledUz = ref(false)
 const is_disabledRu = ref(false)
 const {t} = useI18n()
 
 
 //Mounted
-txt.text.ru = store.pagesListPolicy.results[0]?.text.ru
-txt.text.uz = store.pagesListPolicy.results[0]?.text.uz
-txt.type = store.pagesListPolicy.results[0]?.type
-txt.id = store.pagesListPolicy.results[0]?.id
 
 
 const refresh = async () => {
@@ -41,17 +30,26 @@ const refresh = async () => {
   }
 
 };
+refresh()
 
 const updateText = () => {
-  store.updatePages({...txt}).then(() => {
+  store.updatePages({...store.pagesListPolicy}).then(() => {
     setTimeout(() => {
       toast.success(t("updated_successfully"));
     }, 200);
     refresh()
   })
-  is_disabledRu.value = true
-  is_disabledUz.value = true
+  is_disabledUz.value = false
 
+}
+const updateText2 = () => {
+  store.updatePages({...store.pagesListPolicy}).then(() => {
+    setTimeout(() => {
+      toast.success(t("updated_successfully"));
+    }, 200);
+    refresh()
+    is_disabledRu.value = false
+  })
 }
 
 
@@ -63,11 +61,12 @@ const updateText = () => {
       <Tab :title="$t('UZ')">
         <div :style="{'pointer-events': is_disabledUz ?  'auto' : 'none'}">
           <Editor
+              v-if="store.pagesListPolicy.text.uz"
               :placeholder="$t('enter_information')"
               content-type="html"
               toolbar="full"
               class="scrollbar rounded border"
-              style="height: 45vh; overflow-y: auto;" v-model:content="txt.text.uz"
+              style="height: 45vh; overflow-y: auto;" v-model:content="store.pagesListPolicy.text.uz"
           >
 
           </Editor>
@@ -85,11 +84,12 @@ const updateText = () => {
       <Tab :title="$t('RU')">
         <div :style="{'pointer-events': is_disabledRu ?  'auto' : 'none'}">
           <Editor
+              v-if="store.pagesListPolicy.text.ru"
               :placeholder="$t('enter_information')"
               content-type="html"
               toolbar="full"
               class="scrollbar rounded border"
-              style="height: 45vh; overflow-y: auto;" v-model:content="txt.text.ru"
+              style="height: 45vh; overflow-y: auto;" v-model:content="store.pagesListPolicy.text.ru"
           >
 
           </Editor>
@@ -98,7 +98,7 @@ const updateText = () => {
         <div class="flex justify-end mt-2">
           <button v-if="is_disabledRu == false" class="btn-warning" @click="is_disabledRu = true">Edit</button>
 
-          <button v-if="is_disabledRu == true" class="btn-success" @click="updateText">Add</button>
+          <button v-if="is_disabledRu == true" class="btn-success" @click="updateText2">Add</button>
         </div>
       </Tab>
     </Tabs>
