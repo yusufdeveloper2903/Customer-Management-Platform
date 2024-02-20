@@ -86,7 +86,7 @@ const handleFileUpload = (event) => {
 
 const deleteImage = () => {
   imageUrl.value = "";
-  userData.value.photo = null;
+  userData.value.photo = '';
 };
 
 function removeSpaces(str) {

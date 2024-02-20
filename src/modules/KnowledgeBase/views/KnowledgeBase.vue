@@ -10,13 +10,17 @@ import PrivacyPolicy from "../components/PrivacyPolicy.vue";
 import TermsAndConditions from "../components/TermsAndConditions.vue"
 import Contacts from "../components/Links.vue";
 
+
+const selectedTitle = (val) => {
+  localStorage.setItem('knowledgeBase', val)
+}
 </script>
 
 <template>
   <div
       class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm"
   >
-    <Tabs vertical pill>
+    <Tabs vertical pill @selectedTitle="selectedTitle" unique="unique">
 
       <Tab :title="'sms_template'">
         <SMSTemplate/>

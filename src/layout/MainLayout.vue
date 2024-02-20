@@ -76,7 +76,7 @@ onMounted(() => {
 });
 
 function breadCrumbStart(newPath) {
-  console.log(newPath, 'path')
+  localStorage.setItem('sidebar', newPath)
   switch (newPath) {
     case "dashboard":
       BreadcrumbList.value = [

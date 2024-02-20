@@ -36,6 +36,10 @@ export default {
       type: Boolean,
       required: false,
     },
+    unique: {
+      type: String,
+      required: false
+    },
     pill: {
       type: Boolean,
       required: false,
@@ -46,15 +50,20 @@ export default {
   },
   setup(props, {slots, emit}) {
     const {locale, t} = useI18n();
-
     const tabTitles = ref(
         slots.default().map((tab) => tab.props && tab.props.title)
     );
     const selectedTitle = ref(tabTitles.value[0]);
 
+    const storeData = localStorage.getItem('knowledgeBase')
+    const storedModule = localStorage.getItem('sidebar')
+    if (storeData && storedModule === 'knowledgeBase' && props.unique === 'unique') {
+      selectedTitle.value = storeData
+    }
     provide("selectedTitle", selectedTitle);
 
     function onTitleSelected(title) {
+      // console.log(title, 'title')
       selectedTitle.value = title;
       emit("selectedTitle", selectedTitle.value);
     }

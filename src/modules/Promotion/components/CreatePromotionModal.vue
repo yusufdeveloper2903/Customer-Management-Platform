@@ -157,16 +157,19 @@ const updateDeal = async () => {
 watch(
     () => dateConfig.value,
     (value: any) => {
-      let started_date = JSON.parse(JSON.stringify(value))[0]
-      let end_date = JSON.parse(JSON.stringify(value))[1]
-      if (!value) {
-        productsData.value.start_date = ""
-        productsData.value.end_date = ""
-      } else {
-        productsData.value.start_date = started_date.toLocaleString('it-IT')
-        productsData.value.end_date = end_date.toLocaleString('it-IT')
+      if (value) {
+        let started_date = JSON.parse(JSON.stringify(value))[0]
+        let end_date = JSON.parse(JSON.stringify(value))[1]
+        if (!value) {
+          productsData.value.start_date = ""
+          productsData.value.end_date = ""
+        } else {
+          productsData.value.start_date = started_date.toLocaleString('it-IT')
+          productsData.value.end_date = end_date.toLocaleString('it-IT')
+        }
       }
-    },
+
+    }
 )
 
 function openModal() {
@@ -176,7 +179,7 @@ function openModal() {
     productsData.value.description.ru = propData.editData.description?.ru
     productsData.value.description.uz = propData.editData.description?.uz
     productsData.value.background_photo = propData.editData.background_photo
-    productsData.value.is_published = propData.editData.is_active
+    productsData.value.is_published = propData.editData.is_published
     productsData.value.detail_photo = propData.editData.detail_photo
     dateConfig.value = [propData.editData.start_date, propData.editData.end_date]
   } else {

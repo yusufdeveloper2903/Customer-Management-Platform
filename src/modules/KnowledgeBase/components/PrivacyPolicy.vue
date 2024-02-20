@@ -58,10 +58,11 @@ const updateText2 = () => {
 <template>
   <div class="card">
     <Tabs pill>
-      <Tab :title="$t('UZ')">
-        <div :style="{'pointer-events': is_disabledUz ?  'auto' : 'none'}">
+
+      <Tab :title="$t('UZ')" >
+        <div v-if="store.pagesListPolicy.text.uz" :style="{'pointer-events': is_disabledUz ?  'auto' : 'none'}">
           <Editor
-              v-if="store.pagesListPolicy.text.uz"
+
               :placeholder="$t('enter_information')"
               content-type="html"
               toolbar="full"

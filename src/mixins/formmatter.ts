@@ -12,6 +12,7 @@ export const objectToFormData = (obj, form?, namespace?) => {
 
       // if the property is an object, but not a File,
       // use recursivity.
+
       if (Array.isArray(obj[property])) {
         obj[property].forEach((e) => {
           fd.append(property, e);
