@@ -1,7 +1,6 @@
 <template>
   <div>
     <SideBar @isSideBarOpen="isSideBarOpen"/>
-
     <div
         class="main-layout min-h-screen p-6 pr-7 dark:bg-darkLayoutMain bg-slate-200"
         :class="checkSidebar()"
