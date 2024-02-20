@@ -1,7 +1,6 @@
 <template>
   <div>
     <SideBar @isSideBarOpen="isSideBarOpen"/>
-
     <div
         class="main-layout min-h-screen p-6 pr-7 dark:bg-darkLayoutMain bg-slate-200"
         :class="checkSidebar()"
@@ -95,11 +94,6 @@ function breadCrumbStart(newPath) {
       ];
       break;
 
-    case "staff":
-      BreadcrumbList.value = [
-        {title: 'nav.staffs', active: true},
-      ];
-      break;
     case "sms-template":
       BreadcrumbList.value = [
         {title: 'Notifications', active: true},

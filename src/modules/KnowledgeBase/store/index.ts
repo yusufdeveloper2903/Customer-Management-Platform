@@ -127,7 +127,7 @@ export default defineStore("knowledgeBase", {
             return $axios.patch(`/versions/version/${data.id}/`, data);
         },
 
-        deleteVersion(id: number) {
+        deleteVersion(id: number | null) {
             return $axios.delete(`/versions/version/${id}/`);
         },
 

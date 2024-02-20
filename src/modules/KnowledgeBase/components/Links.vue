@@ -100,7 +100,7 @@ onMounted(() => {
 <template>
   <div class="card">
     <div class="flex justify-between items-center mb-5">
-      <h1 class="font-semibold text-lg mb-4 text-success">{{ $t('Links') }}</h1>
+      <h1 class="font-semibold text-lg mb-4 text-success">{{ $t('nav.social_links') }}</h1>
       <button class="btn-primary" uk-toggle="target: #links" @click="editLink = {}">
         {{ $t("Add") }}
       </button>

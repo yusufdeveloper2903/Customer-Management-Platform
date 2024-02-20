@@ -260,7 +260,7 @@ export const linksFields = [
         value: "index"
     },
     {
-        text: "Type",
+        text: "type",
         value: "type"
     },
     {
