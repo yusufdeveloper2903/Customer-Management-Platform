@@ -149,8 +149,8 @@ function openModal() {
         </label>
 
 
-        <label for="url">URL</label>
-        <input id="url" type="text" class="form-input" placeholder="Url"
+        <label for="url">{{ $t('url') }}:</label>
+        <input id="url" type="text" class="form-input" :placeholder="$t('url')"
           :class="validate.url.$errors.length ? 'required-input' : ''" v-model="editData.url" />
         <p v-for="error in validate.url.$errors" :key="error.$uid" class="text-danger text-sm">
           {{ $t(error.$message) }}

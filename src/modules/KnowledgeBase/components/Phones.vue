@@ -100,7 +100,7 @@ onMounted(() => {
 <template>
   <div>
     <div class="flex justify-between items-center mb-5">
-      <h1 class="font-semibold text-lg mb-4 text-success">{{ $t('Phone numbers') }}</h1>
+      <h1 class="font-semibold text-lg mb-4 text-success">{{ $t('phone_numbers') }}</h1>
       <button class="btn-primary" uk-toggle="target: #phones" @click="editPhone = {}">
         {{ $t("Add") }}
       </button>
@@ -113,7 +113,7 @@ onMounted(() => {
             v-for="field in phoneNumberFields"
             class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider"
         >
-          {{ field.text }}
+          {{  $t(field.text) }}
 
         </th>
       </tr>

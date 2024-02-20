@@ -111,7 +111,7 @@ onMounted(() => {
       <tr>
         <th v-for="field in linksFields"
             class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
-          {{ field.text }}
+          {{  $t(field.text)}}
 
         </th>
       </tr>
