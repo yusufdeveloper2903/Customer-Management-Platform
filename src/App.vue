@@ -80,8 +80,20 @@ onMounted(() => {
   background-color: white;
 }
 
+.empty_table {
+  text-align: center;
+  color: #6e6b7b !important;
+  font-size: var(--easy-table-message-font-size);
+  padding: var(--easy-table-message-padding);
+}
+
 .vue3-easy-data-table__header {
   text-transform: uppercase !important;
+}
+
+.vue3-easy-data-table__header tr th span {
+  font-weight: 500 !important;
+  color: #6e6b7b !important;
 }
 
 .vue3-easy-data-table th {
@@ -156,7 +168,7 @@ onMounted(() => {
   border-radius: 0.357rem;
   position: absolute;
   top: 29px;
-  right: 30px;
+  right: 36px;
   box-shadow: 0 5px 20px 0 rgba(34, 41, 47, 0.1);
   opacity: 1;
   transition: all 0.25s;

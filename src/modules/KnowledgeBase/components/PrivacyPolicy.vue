@@ -1,61 +1,77 @@
 <script setup lang="ts">
+
+//Imported files
+
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
-import Editor from 'primevue/editor';
-import { onMounted, ref } from "vue";
+import {ref} from "vue";
 import knowledgeBase from ".././store/index"
-import { toast } from "vue3-toastify";
-import { useI18n } from "vue-i18n";
+import {toast} from "vue3-toastify";
+import {useI18n} from "vue-i18n";
+
+
+//Declared variables
 
 const store = knowledgeBase()
-const txt = ref({
-  id: 0,
-  text: {
-    uz: '',
-    ru: ''
-  },
-  type: ''
-})
+
 const is_disabledUz = ref(false)
 const is_disabledRu = ref(false)
+const {t} = useI18n()
 
-const { t } = useI18n()
+
+//Mounted
+
 
 const refresh = async () => {
   try {
-    await store.getPages({ type: 'privacy_policy' });
-    store.pagesList.results.forEach(element => {
-      txt.value = element
-
-    });
+    await store.getPagesPolicy({type: 'privacy_policy'});
   } catch (error: any) {
-    toast.error(
-      error.response || "Error"
-    );
+    toast.error(t('error'));
   }
 
 };
+refresh()
 
 const updateText = () => {
-  store.updatePages({ ...txt.value }).then(() => {
+  store.updatePages({...store.pagesListPolicy}).then(() => {
     setTimeout(() => {
       toast.success(t("updated_successfully"));
     }, 200);
     refresh()
   })
+  is_disabledUz.value = false
+
+}
+const updateText2 = () => {
+  store.updatePages({...store.pagesListPolicy}).then(() => {
+    setTimeout(() => {
+      toast.success(t("updated_successfully"));
+    }, 200);
+    refresh()
+    is_disabledRu.value = false
+  })
 }
 
-onMounted(async () => {
-  refresh()
-});
 
 </script>
 
 <template>
   <div class="card">
     <Tabs pill>
-      <Tab :title="$t('UZ')">
-        <Editor editorStyle="height: 320px" v-model="txt.text.uz" :readonly="is_disabledUz == false" />
+
+      <Tab :title="$t('UZ')" >
+        <div v-if="store.pagesListPolicy.text.uz" :style="{'pointer-events': is_disabledUz ?  'auto' : 'none'}">
+          <Editor
+
+              :placeholder="$t('enter_information')"
+              content-type="html"
+              toolbar="full"
+              class="scrollbar rounded border"
+              style="height: 45vh; overflow-y: auto;" v-model:content="store.pagesListPolicy.text.uz"
+          >
+
+          </Editor>
+        </div>
 
         <div class="flex justify-end mt-2">
           <button v-if="is_disabledUz == false" class="btn-warning" @click="is_disabledUz = true">Edit</button>
@@ -66,15 +82,24 @@ onMounted(async () => {
       </Tab>
 
 
-
-
-
       <Tab :title="$t('RU')">
-        <Editor editorStyle="height: 320px" v-model="txt.text.ru" :readonly="is_disabledRu == false" />
+        <div :style="{'pointer-events': is_disabledRu ?  'auto' : 'none'}">
+          <Editor
+              v-if="store.pagesListPolicy.text.ru"
+              :placeholder="$t('enter_information')"
+              content-type="html"
+              toolbar="full"
+              class="scrollbar rounded border"
+              style="height: 45vh; overflow-y: auto;" v-model:content="store.pagesListPolicy.text.ru"
+          >
+
+          </Editor>
+        </div>
+
         <div class="flex justify-end mt-2">
           <button v-if="is_disabledRu == false" class="btn-warning" @click="is_disabledRu = true">Edit</button>
 
-          <button v-if="is_disabledRu == true" class="btn-success" @click="updateText">Add</button>
+          <button v-if="is_disabledRu == true" class="btn-success" @click="updateText2">Add</button>
         </div>
       </Tab>
     </Tabs>

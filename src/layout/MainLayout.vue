@@ -75,7 +75,7 @@ onMounted(() => {
 });
 
 function breadCrumbStart(newPath) {
-  console.log(newPath, 'path')
+  localStorage.setItem('sidebar', newPath)
   switch (newPath) {
     case "dashboard":
       BreadcrumbList.value = [
@@ -94,6 +94,11 @@ function breadCrumbStart(newPath) {
       ];
       break;
 
+    case "staff":
+      BreadcrumbList.value = [
+        {title: 'nav.staffs', active: true},
+      ];
+      break;
     case "sms-template":
       BreadcrumbList.value = [
         {title: 'Notifications', active: true},
@@ -137,12 +142,12 @@ function breadCrumbStart(newPath) {
     case "product-details":
       BreadcrumbList.value = [
         {title: "products", active: false},
-        {title: "products detail", active: true},
+        {title: "product detail", active: true},
       ];
       break;
     case "promotion":
       BreadcrumbList.value = [
-        {title: "Promotion", active: true},
+        {title: "Promotions", active: true},
       ];
       break;
     default:

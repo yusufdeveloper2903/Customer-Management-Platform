@@ -6,7 +6,7 @@ export default defineStore("productStore", {
         return {
             productListCategory: {
                 count: 0,
-                results: []
+                results: [] as any[]
             },
             productFromKnowledgeBase: {
                 count: 0,
@@ -14,11 +14,18 @@ export default defineStore("productStore", {
             },
             productListCards: {
                 count: 0,
-                results: []
+                results: [] as any[]
             }
         };
     },
     actions: {
+        DRAG_DROP_PRODUCTS(data: any) {
+            return $axios.post(`/products/categories/drag_and_drop/`, data);
+        },
+        DRAG_DROP_PRODUCTS_CARDS(data: any) {
+            return $axios.post('/products/product_cards/drag_and_drop/', data)
+        },
+
         async getProductList(params: any) {
 
             const {data} = await $axios.get("products/categories/", {params});
@@ -46,9 +53,8 @@ export default defineStore("productStore", {
         deleteProductCard(id: number | null | undefined) {
             return $axios.delete(`/products/product_cards/${id}/`,)
         },
-        async getProductCards(params: any) {
-
-            const {data} = await $axios.get("products/product_cards/", {params});
+        async getProductCardsId(params: any) {
+            const {data} = await $axios.get(`products/product_cards`, {params});
             this.productListCards = data;
         },
 

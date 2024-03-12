@@ -9,44 +9,49 @@ import Products from "../components/Products.vue"
 import PrivacyPolicy from "../components/PrivacyPolicy.vue";
 import TermsAndConditions from "../components/TermsAndConditions.vue"
 import Contacts from "../components/Links.vue";
+
+
+const selectedTitle = (val) => {
+  localStorage.setItem('knowledgeBase', val)
+}
 </script>
 
 <template>
   <div
-    class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm"
+      class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm"
   >
-    <Tabs vertical pill>
+    <Tabs vertical pill @selectedTitle="selectedTitle" unique="unique">
 
-      <Tab :title="$t('sms_template')">
-        <SMSTemplate />
+      <Tab :title="'sms_template'">
+        <SMSTemplate/>
       </Tab>
 
-      <Tab :title="$t('News template')">
-        <NewsTemplate />
+      <Tab :title="'News template'">
+        <NewsTemplate/>
       </Tab>
 
-      <Tab :title="$t('Locations')">
-        <NearbyPlaces />
+      <Tab :title="'Locations'">
+        <NearbyPlaces/>
       </Tab>
 
-      <Tab :title="$t('version_control')">
-        <VersionControl />
+      <Tab :title="'version_control'">
+        <VersionControl/>
       </Tab>
 
-      <Tab :title="$t('products')">
-        <Products />
+      <Tab :title="'products'">
+        <Products/>
       </Tab>
 
-      <Tab :title="$t('PrivacyPolicy')">
-        <PrivacyPolicy />
+      <Tab :title="'PrivacyPolicy'">
+        <PrivacyPolicy/>
       </Tab>
 
-      <Tab :title="$t('Terms_and_conditions')">
-        <TermsAndConditions />
+      <Tab :title="'Terms_and_conditions'">
+        <TermsAndConditions/>
       </Tab>
 
-      <Tab :title="$t('contacts')">
-        <Contacts />
+      <Tab :title="'contacts'">
+        <Contacts/>
       </Tab>
     </Tabs>
   </div>

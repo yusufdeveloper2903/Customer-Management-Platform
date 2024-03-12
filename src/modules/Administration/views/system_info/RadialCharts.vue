@@ -1,12 +1,12 @@
 <script setup lang="ts">
 
 //Imported files
-
+import {useSidebarStore} from "@/stores/layoutConfig";
 import { useI18n } from "vue-i18n";
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 //Props
-
+const sidebar = useSidebarStore()
 const props = defineProps({
     firstData: {
         type: Array,
@@ -64,6 +64,13 @@ const chartOptions1 = ref({
 
 const chartOptions2 = ref({
     colors: ['#480CA8', '#17183B'],
+//     chart: {
+//     background: 'none'
+// },
+
+//     theme: {
+//       mode: 'dark', 
+//   },
     plotOptions: {
         radialBar: {
             size: 100,
@@ -100,6 +107,23 @@ const chartOptions2 = ref({
     },
     labels: [t('used'), t('available')],
 })
+
+// watch(
+//     () => sidebar.currentTheme,
+//     () => {
+//       if (sidebar.currentTheme === "light") {
+//         chartOptions2.value.theme.mode = "light"    
+//         chartOptions2.value.chart.background = "gray"
+//         console.log(chartOptions2.value.theme.mode, 'light');
+        
+//       } else {
+//         chartOptions2.value.theme.mode = "dark",
+//         chartOptions2.value.chart.background = "none"
+//         console.log(chartOptions2.value.theme.mode, 'dark');
+        
+//       }
+//     }
+// );
 </script>
 
 <template>
@@ -109,7 +133,7 @@ const chartOptions2 = ref({
                 <h2 class="text-2xl font-semibold dark:text-white">
                     {{ $t('disk') }}
                 </h2>
-                <div id="chart" class="dark:text-white">
+                <div id="chart">
                     <apexchart type="radialBar" width="450" :options="chartOptions1" :series="props.firstData"></apexchart>
                 </div>
             </div>
@@ -119,7 +143,7 @@ const chartOptions2 = ref({
                 <h2 class="text-2xl font-semibold dark:text-white">
                     {{ $t('ram') }}
                 </h2>
-                <div id="chart" class="dark:text-white">
+                <div id="chart">
                     <apexchart type="radialBar" width="450" :options="chartOptions2" :series="secondData"></apexchart>
                 </div>
             </div>

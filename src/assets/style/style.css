@@ -344,6 +344,13 @@ pre[class*="language-"] {
   fill: #fff !important;
 }
 
+.dark .apexcharts-legend-text{
+  color:white !important
+}
+.apexcharts-legend-text{
+  color: gray !important;
+}
+
 
 .tooltip-variant {
   background: #ff6058 !important;

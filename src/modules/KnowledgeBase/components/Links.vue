@@ -11,7 +11,6 @@ import PhoneNumbers from "./Phones.vue"
 import {useI18n} from "vue-i18n";
 
 const {t} = useI18n()
-const current = ref<number>(1);
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
 const store = KnowledgeBase()
@@ -30,7 +29,7 @@ const filter = ref({
 
 interface EditLink {
   id: null | number,
-  type: string,
+  type: string | number,
   url: string
 }
 
@@ -66,9 +65,14 @@ const saveContact = () => {
 
 const changePagionation = (e: number) => {
   paginationFilter.page = e;
-  current.value = e;
-  refresh({...paginationFilter});
+  refresh(paginationFilter);
 };
+
+const onPageSizeChanged = (e) => {
+  paginationFilter.page_size = e
+  paginationFilter.page = 1
+  refresh(paginationFilter)
+}
 
 const deleteLinks = () => {
   store.deleteSocialMediaLinks(itemId.value).then(() => {
@@ -100,7 +104,7 @@ onMounted(() => {
 <template>
   <div class="card">
     <div class="flex justify-between items-center mb-5">
-      <h1 class="font-semibold text-lg mb-4 text-success">{{ $t('nav.social_links') }}</h1>
+      <h1 class="font-semibold text-lg mb-4 text-success">{{ $t('Links') }}</h1>
       <button class="btn-primary" uk-toggle="target: #links" @click="editLink = {}">
         {{ $t("Add") }}
       </button>
@@ -111,8 +115,7 @@ onMounted(() => {
       <tr>
         <th v-for="field in linksFields"
             class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
-          {{  $t(field.text)}}
-
+          {{ $t(field.text)}}
         </th>
       </tr>
       </thead>
@@ -120,11 +123,11 @@ onMounted(() => {
       <tr v-for="item in store.linksList?.results" :key="item.id"
           class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
           :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
-        <td class="px-6 whitespace-no-wrap">{{ item.position }}</td>
-        <td class="px-6 whitespace-no-wrap">{{ item.type }}</td>
-        <td class="px-6 whitespace-no-wrap">{{ item.url }}</td>
+        <td class="px-6 whitespace-no-wrap text-center ">{{ item.position }}</td>
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.type }}</td>
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.url }}</td>
         <td class="px-6 whitespace-no-wrap">
-          <div class="flex py-2">
+          <div class="flex py-2 justify-center">
             <button class="btn-warning btn-action" uk-toggle="target: #links" @click="editLink = item">
               <Icon icon="Pen New Square" color="#fff" size="16"/>
             </button>
@@ -136,10 +139,18 @@ onMounted(() => {
       </tr>
       </tbody>
     </table>
+    <div class="empty_table" v-if="!store.linksList.results.length">{{ $t("empty_text") }}</div>
 
-    <TwPagination class="mt-10 tw-pagination" :current="current" :total="5" :per-page="10"
-                  :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
-                  @page-changed="changePagionation"/>
+    <TwPagination
+        class="mt-10 tw-pagination"
+        :current="paginationFilter.page"
+        :total="store.linksList.count"
+        :per-page="paginationFilter.page_size"
+        :text-before-input="$t('go_to_page')"
+        :text-after-input="$t('forward')"
+        @page-changed="changePagionation"
+        @per-page-changed="onPageSizeChanged"
+    />
 
     <ConfirmModal :title="$t('delete')" :cancel="$t('Cancel')" :ok="$t('delete')" id="links-delete" @ok="deleteLinks"
                   @cancel="itemId = null">
@@ -150,7 +161,6 @@ onMounted(() => {
   </div>
 
 
-  <!-- PHONE NUMBER TABLE -->
   <div class="card mt-10">
     <PhoneNumbers/>
   </div>

@@ -1,37 +1,40 @@
-import { defineStore } from "pinia";
+import {defineStore} from "pinia";
 import $axios from "@/plugins/axios";
 
-import { INews, INewsList } from "../../";
 
-export default defineStore("news", {
+export default defineStore("prmotionBase", {
     state: () => {
         return {
-            newsList: {} as INewsList,
-            news: {} as INews,
+            promotionList: {
+                count: 0,
+                results: [] as any[]
+            },
+            promotionListId: {} as any[]
         };
     },
 
     actions: {
-        async getNewsLis(params) {
-            const { data } = await $axios.get("/news/news/", { params });
-            this.newsList = data;
+        async getPromotionList(params) {
+            const {data} = await $axios.get("/knowledge_base/promotions/", {params});
+            console.log(data, 'data')
+            this.promotionList = data;
+        },
+        async getPromotionId(id: any) {
+            const {data} = await $axios.get(`/knowledge_base/promotions/${id}`);
+            this.promotionListId = data;
         },
 
-        async getNewsById(id: number) {
-            const { data } = await $axios.get(`/news/news/${id}`);
-            this.news = data;
+
+        createPromotion(data: object) {
+            return $axios.post("/knowledge_base/promotions/", data);
         },
 
-        createNews(data: object) {
-            return $axios.post("/news/news/", data);
+        updatePromotion(data) {
+            return $axios.patch(`/knowledge_base/promotions/${data.get("id")}/`, data);
         },
 
-        updateNews(data) {
-            return $axios.patch(`/news/news/${data.get("id")}/`, data);
-        },
-
-        deleteNews(id: number) {
-            return $axios.delete(`/news/news/${id}/`);
+        deletePromotion(id: number) {
+            return $axios.delete(`/knowledge_base/promotions/${id}/`);
         },
     },
 });

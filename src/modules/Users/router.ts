@@ -10,7 +10,7 @@ export default [
   },
   {
     path: "/user-detail/:id",
-    name: "user-detail",
+    name: "user detail",
     component: () => import("@/modules/Users/pages/Details.vue"),
     meta: {
       layout: "MainLayout",

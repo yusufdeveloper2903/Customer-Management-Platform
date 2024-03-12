@@ -55,6 +55,7 @@
     "question": "Question",
     "audio": "Audio"
   },
+  "Promotions": "Promotions",
   "deactivate": "Deactivate",
   "delete": "Delete",
   "delete_all": "Delete all",

@@ -9,9 +9,12 @@ import {watchDebounced} from "@vueuse/core";
 import UIkit from "uikit";
 import {useI18n} from 'vue-i18n'
 import productStore from '../store/index'
-
+import {useRoute} from "vue-router";
+import {Link} from "@/modules/KnowledgeBase/interfaces";
 
 //Declared variables
+const currentRow = ref<Link | null>(null);
+const route = useRoute()
 const {t} = useI18n()
 const productStorage = productStore()
 const isLoading = ref(false);
@@ -39,12 +42,12 @@ const editData = ref({
 
 const changePagionation = (e: number) => {
   params.page = e;
-  refresh(params);
+  refresh();
 };
 const onPageSizeChanged = (e) => {
   params.page_size = e
   params.page = 1
-  refresh(params)
+  refresh()
 }
 const handleDeleteModal = (id) => {
   itemId.value = id
@@ -52,20 +55,18 @@ const handleDeleteModal = (id) => {
 };
 
 const saveProducts = () => {
-  refresh(params);
+  refresh();
 }
-
-
-const refresh = async (params: any) => {
+const refresh = async () => {
   isLoading.value = true;
   try {
-    await productStorage.getProductCards(params)
+    await productStorage.getProductCardsId({...params, category: route.params.id})
   } catch (error: any) {
     toast.error(t('error'));
   }
   isLoading.value = false;
 };
-refresh(params)
+refresh()
 productStorage.getProductFromKnowledgeBase({page_size: 1000})
 productStorage.getProductList({page_size: 1000})
 const deleteAction = async () => {
@@ -74,11 +75,11 @@ const deleteAction = async () => {
     await productStorage.deleteProductCard(itemId.value)
     UIkit.modal("#product-card-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if (productStorage.productListCards.count - 1 && params.page > 1) {
+    if ((productStorage.productListCards.count - 1) % params.page > 0) {
       params.page = params.page - 1
-      refresh(params)
+      await refresh()
     } else {
-      refresh(params)
+      await refresh()
     }
     isLoading.value = false
   } catch (error: any) {
@@ -89,10 +90,25 @@ watchDebounced(
     () => params.search,
     async () => {
       params.page = 1;
-      await refresh(params)
+      await refresh()
     }, {deep: true, debounce: 500, maxWait: 5000}
 );
 
+
+const dragStart = (item) => {
+  currentRow.value = item;
+};
+
+const dragOver = (e) => {
+  e.preventDefault();
+};
+
+const dragDrop = async (item: Link) => {
+  event?.preventDefault();
+  await productStorage.DRAG_DROP_PRODUCTS_CARDS({id1: currentRow.value?.id, id2: item.id, category_id: route.params.id})
+  await refresh()
+  toast.success(t("updated_successfully"));
+};
 </script>
 
 <template>
@@ -106,62 +122,76 @@ watchDebounced(
         {{ $t("Add") }}
       </button>
     </div>
-    <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="headerProductCard"
-                   :items="productStorage.productListCards.results">
-      <template #empty-message>
-        <span>{{ $t('empty_text') }}</span>
-      </template>
-      <template #header-title="header">
-        {{ $t(header.text) }}
-      </template>
-      <template #header-actions="header">
-        {{ $t(header.text) }}
-      </template>
+    <table class="min-w-full bg-white border border-gray-300 dark:border-gray-600">
+      <thead>
+      <tr>
+        <th v-for="field in headerProductCard"
+            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-center text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
+          {{ t(`${field.text}`) }}
 
-      <template #item-product="item">
-        {{ item.product.title[$i18n.locale] }}
-      </template>
+        </th>
+      </tr>
+      </thead>
 
-      <template #item-is_active="item">
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-              type="checkbox"
-              v-model="item.is_active"
-              class="sr-only peer"
-              disabled
-          />
-          <div
-              className="w-11 h-6 bg-gray-200 peer-focus:outline-none
+      <tbody>
+      <tr v-for="item in productStorage.productListCards.results" :key="item.id" :loading="isLoading"
+          class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
+          :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
+        <td class="px-6 whitespace-no-wrap text-center ">{{ item.id }}</td>
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.product.title[$i18n.locale] }}</td>
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.price }}</td>
+        <td class="px-6 whitespace-no-wrap text-center">
+          <label
+              className="relative inline-flex items-center cursor-pointer">
+            <input
+                type="checkbox"
+                v-model="item.is_active"
+                class="sr-only peer"
+                disabled
+            />
+            <div
+                className="w-11 h-6 bg-gray-200 peer-focus:outline-none
           rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-          ></div>
-        </label>
-      </template>
-      <template #item-has_discount="item">
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-              type="checkbox"
-              v-model="item.has_discount"
-              class="sr-only peer"
-              disabled
-          />
-          <div
-              className="w-11 h-6 bg-gray-200 peer-focus:outline-none
+            ></div>
+          </label>
+        </td>
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.category }}</td>
+
+        <td class="px-6 whitespace-no-wrap text-center">
+          <label
+              className="relative inline-flex items-center cursor-pointer">
+            <input
+                type="checkbox"
+                v-model="item.has_discount"
+                class="sr-only peer"
+                disabled
+            />
+            <div
+                className="w-11 h-6 bg-gray-200 peer-focus:outline-none
           rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-          ></div>
-        </label>
-      </template>
-      <template #item-actions="item">
-        <div class="flex my-4 justify-center">
-          <button class="btn-warning btn-action" uk-toggle="target: #create_and_edit_product_detail"
-                  @click="editData = item">
-            <Icon icon="Pen New Square" color="#fff" size="16"/>
-          </button>
-          <button class="ml-2 btn-danger btn-action" @click="handleDeleteModal(item.id)">
-            <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
-          </button>
-        </div>
-      </template>
-    </EasyDataTable>
+            ></div>
+          </label>
+        </td>
+        <td class="px-6 whitespace-no-wrap text-center">{{ item.discount_percentage }}</td>
+
+
+        <td class="px-6 whitespace-no-wrap">
+          <div class="flex py-2 justify-center">
+            <div class="flex my-4 justify-center">
+              <button class="btn-warning btn-action" uk-toggle="target: #create_and_edit_product_detail"
+                      @click="editData = item">
+                <Icon icon="Pen New Square" color="#fff" size="16"/>
+              </button>
+              <button class="ml-2 btn-danger btn-action" @click="handleDeleteModal(item.id)">
+                <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
+              </button>
+            </div>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="empty_table" v-if="!productStorage.productListCards.results.length">{{ t("empty_text") }}</div>
 
     <DeleteModal @delete-action="deleteAction" :id="'product-card-delete-modal'"/>
 

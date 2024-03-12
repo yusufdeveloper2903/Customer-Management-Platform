@@ -12,7 +12,6 @@ import {useI18n} from "vue-i18n";
 //Declared variables
 
 const {t} = useI18n()
-const current = ref<number>(1);
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
 const store = knowledgeBase()
@@ -60,7 +59,6 @@ const editData = ref<EditData>({
 
 const changePagionation = (e: number) => {
   params.page = e;
-  current.value = e;
   refresh(params);
 };
 const onPageSizeChanged = (e) => {
@@ -68,6 +66,7 @@ const onPageSizeChanged = (e) => {
   params.page = 1
   refresh(params)
 }
+
 const handleDeleteModal = (id) => {
   UIkit.modal("#product-delete-modal").show()
   itemId.value = id
@@ -134,7 +133,7 @@ watchDebounced(
                v-model="params.search"/>
       </label>
 
-      <button class="btn-primary" uk-toggle="target: #create_products" @click="editData = {}">
+      <button class="btn-primary" uk-toggle="target: #create_products" @click="editData = <EditData>{}">
         {{ $t("Add") }}
       </button>
     </div>

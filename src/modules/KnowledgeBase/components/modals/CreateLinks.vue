@@ -12,31 +12,36 @@ const store = knowledgeBase()
 const isSubmitted = ref<boolean>(false);
 const emits = defineEmits(["saveContact"]);
 
-
 const linktype = [
   {
     id: 1,
-    type: "Website"
+    type: "website",
+    name: "Website"
   },
   {
     id: 2,
-    type: "Telegram"
+    type: "telegram",
+    name: "Telegram"
   },
   {
     id: 3,
-    type: "Instagram"
+    type: "instagram",
+    name: "Instagram"
   },
   {
     id: 4,
-    type: "Facebook"
+    type: "facebook",
+    name: "Facebook"
   },
   {
     id: 5,
-    type: "Twitter"
+    type: "twitter",
+    name: "Twitter"
   },
   {
-    id: 5,
-    type: "Tiktok"
+    id: 6,
+    type: "tiktok",
+    name: "TikTok"
   },
 ]
 
@@ -92,7 +97,7 @@ const updateDeal = async () => {
 
   } else {
     try {
-      await store.createProducts(editData.value).then(() => {
+      await store.createSocialMediaLinks(editData.value).then(() => {
 
         UIkit.modal("#links").hide();
         emits("saveContact");
@@ -138,8 +143,8 @@ function openModal() {
         <!-- <form> -->
         <label>
           <p class=" mt-5 mb-1">{{ $t("type") }}:</p>
-          <v-select id="type" :options="linktype" :get-option-label="(name) => name.type" :placeholder="$t('type')"
-            class="mb-4" :class="validate.type.$errors.length ? 'required-input' : ''" :reduce="name => name.id"
+          <v-select id="type" :options="linktype" :get-option-label="(name) => name.name" :placeholder="$t('type')"
+            class="mb-4" :class="validate.type.$errors.length ? 'required-input' : ''" :reduce="name => name.type"
             v-model="editData.type">
             <template #no-options> {{ $t("no_matching_options") }}</template>
           </v-select>

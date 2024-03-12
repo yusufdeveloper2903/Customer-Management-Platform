@@ -4,7 +4,7 @@
       <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <Icon
             icon="Home"
-            :color="store.currentTheme == 'light' ? '#1a4b75' : '#1a4b75'"
+            :color="store.currentTheme == 'light' ? '#356c2d' : '#356c2d'"
             size="20"
             class="mb-1"
             style="cursor: pointer"
@@ -90,6 +90,6 @@ const onBefore = (item: any) => {
 </script>
 <style>
 .breadcolor {
-  color: #1a4b75;
+  color: #356c2d
 }
 </style>

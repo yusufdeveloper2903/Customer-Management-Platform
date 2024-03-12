@@ -1,40 +1,44 @@
 <template>
   <div :class="vertical && 'flex gap-5'" class="tabs__main">
     <ul
-      class="font-base mb-5 border-0 text-sm text-gray-500"
-      :class="vertical ? 'w-1/6' : 'flex flex-wrap'"
+        class="font-base mb-5 border-0 text-sm text-gray-500"
+        :class="vertical ? 'w-1/6' : 'flex flex-wrap'"
     >
       <li
-        v-for="title in tabTitles"
-        :key="title"
-        class="mr-2 cursor-pointer px-5 py-2"
-        :class="
-          t(title) == t(selectedTitle)
+          v-for="title in tabTitles"
+          :key="title"
+          class="mr-2 cursor-pointer px-5 py-2"
+          :class="
+          (title) == (selectedTitle)
             ? !pill
               ? 'border-b-[3px] border-primary text-primary'
               : 'bg-primary active shadow shadow-primary text-white rounded'
             : ''
         "
-        @click="onTitleSelected(title)"
+          @click="onTitleSelected(title)"
       >
         <span class="dark:text-gray-400">{{ t(title) }}</span>
       </li>
     </ul>
     <div :class="vertical && 'w-5/6'" class="tabs__main__body">
-      <slot />
+      <slot/>
     </div>
   </div>
 </template>
 
 <script>
-import { provide, ref } from "vue";
-import { useI18n } from "vue-i18n";
+import {provide, ref} from "vue";
+import {useI18n} from "vue-i18n";
 
 export default {
   props: {
     vertical: {
       type: Boolean,
       required: false,
+    },
+    unique: {
+      type: String,
+      required: false
     },
     pill: {
       type: Boolean,
@@ -44,17 +48,22 @@ export default {
       },
     },
   },
-  setup(props, { slots, emit }) {
-    const { locale, t } = useI18n();
-
+  setup(props, {slots, emit}) {
+    const {locale, t} = useI18n();
     const tabTitles = ref(
-      slots.default().map((tab) => tab.props && tab.props.title)
+        slots.default().map((tab) => tab.props && tab.props.title)
     );
     const selectedTitle = ref(tabTitles.value[0]);
 
+    const storeData = localStorage.getItem('knowledgeBase')
+    const storedModule = localStorage.getItem('sidebar')
+    if (storeData && storedModule === 'knowledgeBase' && props.unique === 'unique') {
+      selectedTitle.value = storeData
+    }
     provide("selectedTitle", selectedTitle);
 
     function onTitleSelected(title) {
+      // console.log(title, 'title')
       selectedTitle.value = title;
       emit("selectedTitle", selectedTitle.value);
     }
@@ -72,6 +81,7 @@ export default {
 <style lang="scss">
 .active {
   box-shadow: 0 4px 18px -4px rgba(70, 171, 70, 0.65);
+
   span {
     color: white !important;
   }

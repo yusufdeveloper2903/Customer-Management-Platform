@@ -62,7 +62,7 @@ const searchByName = () => {
 };
 
 const showDetailPage = (item) => {
-  router.push({name: 'user-detail', params: {id: item.id}})
+  router.push({name: 'user detail', params: {id: item.id}})
 };
 
 watch(

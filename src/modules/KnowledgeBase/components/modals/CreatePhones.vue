@@ -83,6 +83,10 @@ const updateDeal = async () => {
         }
     }
 };
+function hideModal() {
+    editData.value.number = ""
+    validate.value.$reset()
+}
 
 function openModal() {
     if (propData.editData.id) {
@@ -94,7 +98,7 @@ function openModal() {
 </script>
 
 <template>
-    <div id="phones" class="uk-flex-top" uk-modal @shown="openModal" @hidden="validate.$reset()">
+    <div id="phones" class="uk-flex-top" uk-modal @shown="openModal" @hidden="hideModal">
         <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden">
             <button class="uk-modal-close-default" type="button" uk-close />
             <div class="uk-modal-header">

@@ -52,8 +52,9 @@ const saveData = async () => {
   if (propData.editData.id) {
     try {
       await productStorage.updateProductCategory(productsCategory.value)
-      emits("saveProducts");
       UIkit.modal("#create_and_edit_category").hide();
+      emits("saveProducts");
+
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
