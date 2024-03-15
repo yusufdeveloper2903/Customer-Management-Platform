@@ -181,7 +181,7 @@ export default defineStore("knowledgeBase", {
             return $axios.patch(`/knowledge_base/pages/${data.id}/`, data);
         },
 
-        // phones
+        // links
         async getSocialMediaLinks(params) {
             const {data} = await $axios.get('/knowledge_base/social_media_links/', {params})
             this.linksList = data
@@ -192,15 +192,19 @@ export default defineStore("knowledgeBase", {
             return $axios.post(`/knowledge_base/social_media_links/drag_and_drop/`, data);
         },
 
+        createSocialMediaLinks(data) {
+            return $axios.post(`/knowledge_base/social_media_links/`, data)
+        },
+
         updateSocialMediaLinks(data) {
             return $axios.patch(`/knowledge_base/social_media_links/${data.id}/`, data);
         },
 
-        deleteSocialMediaLinks(id: number) {
+        deleteSocialMediaLinks(id: number | null) {
             return $axios.delete(`/knowledge_base/social_media_links/${id}/`);
         },
 
-
+        // phones
         async getPhones(params) {
             const {data} = await $axios.get('/knowledge_base/phones/', {params})
             this.phonesList = data
@@ -209,9 +213,7 @@ export default defineStore("knowledgeBase", {
         createPhones(data) {
             return $axios.post(`/knowledge_base/phones/`, data);
         },
-        createSocialMediaLinks(data) {
-            return $axios.post(`/knowledge_base/social_media_links/`, data)
-        },
+        
 
         create_phones_drag_and_drop(data) {
             return $axios.post(`/knowledge_base/phones/drag_and_drop/`, data);
@@ -221,7 +223,7 @@ export default defineStore("knowledgeBase", {
             return $axios.patch(`/knowledge_base/phones/${data.id}/`, data);
         },
 
-        deletePhones(id: number) {
+        deletePhones(id: number | null) {
             return $axios.delete(`/knowledge_base/phones/${id}/`);
         },
 

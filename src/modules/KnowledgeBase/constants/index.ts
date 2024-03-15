@@ -241,11 +241,11 @@ export const productsFields = [
 ]
 export const phoneNumberFields = [
     {
-        text: "Index",
+        text: "#",
         value: "index"
     },
     {
-        text: "Phone number",
+        text: "Phone Number",
         value: "phone"
     },
     {
@@ -256,7 +256,7 @@ export const phoneNumberFields = [
 
 export const linksFields = [
     {
-        text: "Index",
+        text: "#",
         value: "index"
     },
     {

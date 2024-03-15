@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref, watch} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {toast} from "vue3-toastify";
 import {linksFields} from "../constants";
 import ConfirmModal from "@/components/ConfirmModals/ConfirmModal.vue";
@@ -11,7 +11,6 @@ import PhoneNumbers from "./Phones.vue"
 import {useI18n} from "vue-i18n";
 
 const {t} = useI18n()
-const current = ref<number>(1);
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
 const store = KnowledgeBase()
@@ -27,18 +26,10 @@ const paginationFilter = reactive({
 const filter = ref({
   page_size: 10,
 })
-const props = defineProps<{
-  knowledge: string
-}>();
-
-let toRefresh = ref(false)
-watch(() => props.knowledge, function () {
-  toRefresh.value = !toRefresh.value
-})
 
 interface EditLink {
   id: null | number,
-  type: string,
+  type: string | number,
   url: string
 }
 
@@ -74,9 +65,14 @@ const saveContact = () => {
 
 const changePagionation = (e: number) => {
   paginationFilter.page = e;
-  current.value = e;
-  refresh({...paginationFilter});
+  refresh(paginationFilter);
 };
+
+const onPageSizeChanged = (e) => {
+  paginationFilter.page_size = e
+  paginationFilter.page = 1
+  refresh(paginationFilter)
+}
 
 const deleteLinks = () => {
   store.deleteSocialMediaLinks(itemId.value).then(() => {
@@ -119,8 +115,7 @@ onMounted(() => {
       <tr>
         <th v-for="field in linksFields"
             class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-center text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
-          {{ field.text }}
-
+          {{ $t(field.text)}}
         </th>
       </tr>
       </thead>
@@ -144,10 +139,18 @@ onMounted(() => {
       </tr>
       </tbody>
     </table>
+    <div class="empty_table" v-if="!store.linksList.results.length">{{ $t("empty_text") }}</div>
 
-    <TwPagination :restart="toRefresh" class="mt-10 tw-pagination" :current="current" :total="5" :per-page="10"
-                  :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
-                  @page-changed="changePagionation"/>
+    <TwPagination
+        class="mt-10 tw-pagination"
+        :current="paginationFilter.page"
+        :total="store.linksList.count"
+        :per-page="paginationFilter.page_size"
+        :text-before-input="$t('go_to_page')"
+        :text-after-input="$t('forward')"
+        @page-changed="changePagionation"
+        @per-page-changed="onPageSizeChanged"
+    />
 
     <ConfirmModal :title="$t('delete')" :cancel="$t('Cancel')" :ok="$t('delete')" id="links-delete" @ok="deleteLinks"
                   @cancel="itemId = null">
@@ -159,6 +162,6 @@ onMounted(() => {
 
 
   <div class="card mt-10">
-    <PhoneNumbers :restart="toRefresh"/>
+    <PhoneNumbers/>
   </div>
 </template>

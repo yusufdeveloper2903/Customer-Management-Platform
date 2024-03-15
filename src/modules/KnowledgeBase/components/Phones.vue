@@ -4,22 +4,19 @@ import {toast} from "vue3-toastify";
 import {phoneNumberFields} from "../constants";
 import ConfirmModal from "@/components/ConfirmModals/ConfirmModal.vue";
 import KnowledgeBase from "../store/index";
-import {Link, Phones} from "../interfaces/index";
+import {Phones} from "../interfaces/index";
 import UIkit from "uikit";
 import CreatePhones from "./modals/CreatePhones.vue";
 import {useI18n} from "vue-i18n";
 
 const {t} = useI18n()
-const current = ref<number>(1);
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
 const store = KnowledgeBase()
 const items = ref<Phones[]>([]);
-const currentRow = ref<Link | null>(null);
+const currentRow = ref<Phones | null>(null);
 
-const props = defineProps<{
-  restart: boolean
-}>();
+
 const paginationFilter = reactive({
   page_size: 10,
   page: 1,
@@ -47,7 +44,7 @@ const dragOver = (e) => {
   e.preventDefault();
 };
 
-const dragDrop = (item: Link) => {
+const dragDrop = (item: Phones) => {
   event?.preventDefault();
   store.create_phones_drag_and_drop({id1: currentRow.value?.id, id2: item.id}).then(() => {
     refresh(paginationFilter);
@@ -65,9 +62,13 @@ const saveContact = () => {
 
 const changePagionation = (e: number) => {
   paginationFilter.page = e;
-  current.value = e;
-  refresh({...paginationFilter});
+  refresh(paginationFilter);
 };
+const onPageSizeChanged = (e) => {
+  paginationFilter.page_size = e
+  paginationFilter.page = 1
+  refresh(paginationFilter)
+}
 
 const deletePhone = () => {
   store.deletePhones(itemId.value).then(() => {
@@ -102,7 +103,7 @@ onMounted(() => {
 <template>
   <div>
     <div class="flex justify-between items-center mb-5">
-      <h1 class="font-semibold text-lg mb-4 text-success">{{ $t('Phone numbers') }}</h1>
+      <h1 class="font-semibold text-lg mb-4 text-success">{{ $t('phone_numbers') }}</h1>
       <button class="btn-primary" uk-toggle="target: #phones" @click="editPhone = {}">
         {{ $t("Add") }}
       </button>
@@ -115,7 +116,7 @@ onMounted(() => {
             v-for="field in phoneNumberFields"
             class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-center text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider"
         >
-          {{ field.text }}
+          {{ $t(field.text) }}
 
         </th>
       </tr>
@@ -156,16 +157,18 @@ onMounted(() => {
       </tr>
       </tbody>
     </table>
+    <div class="empty_table" v-if="!store.phonesList.results.length">{{ $t("empty_text") }}</div>
+
 
     <TwPagination
         class="mt-10 tw-pagination"
-        :restart="props.restart"
-        :current="current"
-        :total="5"
-        :per-page="10"
+        :current="paginationFilter.page"
+        :total="store.phonesList.count"
+        :per-page="paginationFilter.page_size"
         :text-before-input="$t('go_to_page')"
         :text-after-input="$t('forward')"
         @page-changed="changePagionation"
+        @per-page-changed="onPageSizeChanged"
     />
 
 

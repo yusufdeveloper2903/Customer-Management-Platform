@@ -49,9 +49,9 @@ const database = ['PostgreSQL', 'MySQL', 'MongoDB', 'MariaDB']
                     <div class="flex pt-2 flex justify-between items-center">
                         {{ $t('address') }}
                         <b>
-                            Узбекистан, Ташкент, Чиланзарский р-н, с. Чиланзор, 1 кв./4
+                            Узбекистан, Ташкент, Чиланзарский р-н, с. Чиланзар, 1 кв./4
                         </b>
-                    </div>
+                    </div>  
                 </div>
             </div>
         </Tab>
@@ -131,7 +131,7 @@ const database = ['PostgreSQL', 'MySQL', 'MongoDB', 'MariaDB']
                         {{ $t('system_modules') }}
                         <b class="flex justify-end flex-wrap">
                             <span v-for="item in modules" :key="item"
-                                class="inline-flex justify-end items-center m-1 px-2 py-1 bg-green-200 hover:bg-green-300 rounded-lg text-sm font-semibold text-green-600">
+                                class="inline-flex justify-end items-center m-1 px-2 py-1 bg-green-400 hover:bg-green-300 rounded-lg text-sm font-semibold text-green-600">
                                 <span class="ml-1">
                                     {{ $t(item.name) }}
                                 </span>

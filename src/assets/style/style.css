@@ -1,116 +1,116 @@
 @import url("https://fonts.googleapis.com/css2?family=Heebo&family=Inter&family=Lobster&family=Lora&family=Montserrat&family=Nunito&family=Poppins&display=swap");
 
 * {
-  outline: none !important;
+    outline: none !important;
 }
 
 /* width */
 body::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 html,
 body {
-  font-family: 'Heebo', sans-serif;
-  /* font-family: 'Inter', sans-serif; */
-  /* font-family: 'Lobster', cursive; */
-  /* font-family: 'Lora', serif; */
-  /* font-family: 'Montserrat', sans-serif; */
-  /* font-family: 'Nunito', sans-serif; */
-  /* font-family: 'Poppins', sans-serif; */
+    font-family: 'Heebo', sans-serif;
+    /* font-family: 'Inter', sans-serif; */
+    /* font-family: 'Lobster', cursive; */
+    /* font-family: 'Lora', serif; */
+    /* font-family: 'Montserrat', sans-serif; */
+    /* font-family: 'Nunito', sans-serif; */
+    /* font-family: 'Poppins', sans-serif; */
 }
 
 html,
 body {
-  font-family: "Heebo", sans-serif;
-  /* font-family: 'Inter', sans-serif; */
-  /* font-family: 'Lobster', cursive; */
-  /* font-family: 'Lora', serif; */
-  /* font-family: 'Montserrat', sans-serif; */
-  /* font-family: 'Nunito', sans-serif; */
-  /* font-family: 'Poppins', sans-serif; */
+    font-family: "Heebo", sans-serif;
+    /* font-family: 'Inter', sans-serif; */
+    /* font-family: 'Lobster', cursive; */
+    /* font-family: 'Lora', serif; */
+    /* font-family: 'Montserrat', sans-serif; */
+    /* font-family: 'Nunito', sans-serif; */
+    /* font-family: 'Poppins', sans-serif; */
 }
 
 /* ======================== STYLES OF ACCORDION ======================== */
 :root {
-  --acco-border-radius: 0px;
-  --acco-light: #eeeeee;
-  --acco-lightest: inherit;
-  --acco-dark: #9e9e9e;
-  --acco-darkest: #000000cc;
-  --acco-active: #6002ee;
+    --acco-border-radius: 0px;
+    --acco-light: #eeeeee;
+    --acco-lightest: inherit;
+    --acco-dark: #9e9e9e;
+    --acco-darkest: #000000cc;
+    --acco-active: #6002ee;
 }
 
 .accordion-list {
-  width: 100%;
-  background: var(--acco-lightest);
+    width: 100%;
+    background: var(--acco-lightest);
 }
 
 .accordion-list .accordion-item {
-  margin-top: 6px;
-  --content-height: 0px;
-  /* background-color: var(--acco-light); */
-  border-radius: var(--acco-border-radius);
-  height: calc(var(--summary-height) + 26px);
-  overflow: hidden;
-  transition: height 300ms ease-in-out;
-  border-top: 1px solid rgba(51, 51, 51, 0.08);
+    margin-top: 6px;
+    --content-height: 0px;
+    /* background-color: var(--acco-light); */
+    border-radius: var(--acco-border-radius);
+    height: calc(var(--summary-height) + 26px);
+    overflow: hidden;
+    transition: height 300ms ease-in-out;
+    border-top: 1px solid rgba(51, 51, 51, 0.08);
 }
 
 .accordion-list .accordion-item:first-child {
-  border: none !important;
+    border: none !important;
 }
 
-.accordion-list .accordion-item>.accordion-item__summary {
-  padding: 12px;
-  cursor: pointer;
-  color: var(--acco-darkest);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 400;
-  font-size: 1.1rem;
-  line-height: 24px;
-  transition: color 300ms ease-in-out;
+.accordion-list .accordion-item > .accordion-item__summary {
+    padding: 12px;
+    cursor: pointer;
+    color: var(--acco-darkest);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 24px;
+    transition: color 300ms ease-in-out;
 }
 
 .hover-accordion .accordion-item:hover {
-  height: calc(var(--summary-height) + var(--content-height) + 51px);
+    height: calc(var(--summary-height) + var(--content-height) + 51px);
 }
 
-.hover-accordion .accordion-item:hover .accordion-list>details {
-  display: block !important;
+.hover-accordion .accordion-item:hover .accordion-list > details {
+    display: block !important;
 }
 
 .hover-accordion .accordion-item:hover .accordion-item__summary-icon {
-  transform: rotate(180deg) !important;
+    transform: rotate(180deg) !important;
 }
 
-.accordion-list .accordion-item>.accordion-item__summary>.accordion-item__summary-icon {
-  transition: transform 300ms ease-in-out;
+.accordion-list .accordion-item > .accordion-item__summary > .accordion-item__summary-icon {
+    transition: transform 300ms ease-in-out;
 }
 
-.accordion-list .accordion-item>.accordion-item__summary>.accordion-item__summary-icon--default::before {
-  content: url(../../../src/assets/icons/36.\ Arrows/Alt\ Arrow\ Down.svg);
+.accordion-list .accordion-item > .accordion-item__summary > .accordion-item__summary-icon--default::before {
+    content: url(../../../src/assets/icons/36.\ Arrows/Alt\ Arrow\ Down.svg);
 }
 
 .accordion-list .accordion-item--open {
-  height: calc(var(--summary-height) + var(--content-height) + 51px);
+    height: calc(var(--summary-height) + var(--content-height) + 51px);
 }
 
-.accordion-list .accordion-item--open>.accordion-item__summary>.accordion-item__summary-icon {
-  transform: rotate(180deg);
+.accordion-list .accordion-item--open > .accordion-item__summary > .accordion-item__summary-icon {
+    transform: rotate(180deg);
 }
 
-.accordion-list .accordion-item--disabled>.accordion-item__summary {
-  color: var(--acco-dark);
-  cursor: default;
+.accordion-list .accordion-item--disabled > .accordion-item__summary {
+    color: var(--acco-dark);
+    cursor: default;
 }
 
-.accordion-list .accordion-item>.accordion-item__content {
-  background-color: var(--acco-lightest);
-  border-top: none;
-  padding: 12px;
+.accordion-list .accordion-item > .accordion-item__content {
+    background-color: var(--acco-lightest);
+    border-top: none;
+    padding: 12px;
 }
 
 /* ======================== STYLES OF ACCORDION ======================== */
@@ -124,56 +124,56 @@ body {
 
 code[class*="language-"],
 pre[class*="language-"] {
-  color: #ccc;
-  background: none;
-  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
-  font-size: 1em;
-  text-align: left;
-  white-space: pre;
-  word-spacing: normal;
-  word-break: normal;
-  word-wrap: normal;
-  line-height: 1.5;
+    color: #ccc;
+    background: none;
+    font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    font-size: 1em;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
 
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
 
-  -webkit-hyphens: none;
-  -moz-hyphens: none;
-  -ms-hyphens: none;
-  hyphens: none;
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
 }
 
 /* Code blocks */
 pre[class*="language-"] {
-  padding: 1em;
-  margin: 0.5em 0;
-  overflow: auto;
-  border-radius: 5px;
-  font-size: 0.9rem;
+    padding: 1em;
+    margin: 0.5em 0;
+    overflow: auto;
+    border-radius: 5px;
+    font-size: 0.9rem;
 }
 
 pre[class*="language-"]::-webkit-scrollbar {
-  height: 6px;
-  margin-bottom: 20px;
+    height: 6px;
+    margin-bottom: 20px;
 }
 
 pre[class*="language-"]::-webkit-scrollbar-thumb {
-  background: rgb(201, 201, 201);
-  border-radius: 30px;
+    background: rgb(201, 201, 201);
+    border-radius: 30px;
 }
 
-:not(pre)>code[class*="language-"],
+:not(pre) > code[class*="language-"],
 pre[class*="language-"] {
-  background-color: #27253b;
+    background-color: #27253b;
 }
 
 /* Inline code */
-:not(pre)>code[class*="language-"] {
-  padding: 0.1em;
-  border-radius: 0.3em;
-  white-space: normal;
+:not(pre) > code[class*="language-"] {
+    padding: 0.1em;
+    border-radius: 0.3em;
+    white-space: normal;
 }
 
 .token.comment,
@@ -181,38 +181,38 @@ pre[class*="language-"] {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-  color: #999;
+    color: #999;
 }
 
 .token.punctuation {
-  color: #ccc;
+    color: #ccc;
 }
 
 .token.tag,
 .token.namespace,
 .token.deleted {
-  color: #eb626f;
+    color: #eb626f;
 }
 
 .token.function-name {
-  color: #6196cc;
+    color: #6196cc;
 }
 
 .token.literal-property.property {
-  color: #cfcfcf;
+    color: #cfcfcf;
 }
 
 .token.boolean,
 .token.number,
 .token.function {
-  color: #f08d49;
+    color: #f08d49;
 }
 
 .token.property,
 .token.class-name,
 .token.constant,
 .token.symbol {
-  color: #f8c555;
+    color: #f8c555;
 }
 
 .token.selector,
@@ -220,7 +220,7 @@ pre[class*="language-"] {
 .token.atrule,
 .token.keyword,
 .token.builtin {
-  color: #cc99cd;
+    color: #cc99cd;
 }
 
 .token.string,
@@ -228,95 +228,92 @@ pre[class*="language-"] {
 .token.attr-value,
 .token.regex,
 .token.variable {
-  color: #92ecca;
+    color: #92ecca;
 }
 
 .token.attr-name {
-  color: #d897ec !important;
+    color: #d897ec !important;
 }
 
 .token.operator,
 .token.entity,
 .token.url {
-  color: #67cdcc;
+    color: #67cdcc;
 }
 
 .token.important,
 .token.bold {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .token.italic {
-  font-style: italic;
+    font-style: italic;
 }
 
 .token.entity {
-  cursor: help;
+    cursor: help;
 }
 
 .token.inserted {
-  color: green;
+    color: green;
 }
 
 /* ======================== STYLES OF PRISMJS ======================== */
 
 /* toltip */
 .avatar-tooltip {
-  position: relative;
-  display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
 .avatar-tooltip .avatar-tooltiptext {
-  visibility: hidden;
-  width: initial;
-  background-color: #3a3a3a;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0;
-  transition: opacity 0.3s;
+    visibility: hidden;
+    width: initial;
+    background-color: #3a3a3a;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
 .avatar-tooltip .avatar-tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #3a3a3a transparent transparent transparent;
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #3a3a3a transparent transparent transparent;
 }
 
 .avatar-tooltip:hover .avatar-tooltiptext {
-  visibility: visible;
-  opacity: 1;
+    visibility: visible;
+    opacity: 1;
 }
 
 /* toast */
 .Toastify__toast {
-  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1), 0 2px 15px 0 rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1), 0 2px 15px 0 rgba(0, 0, 0, 0.05);
 }
 
 /* ============================= sidebar ============================= */
 .open-sidebar {
-  margin-left: 230px;
-  transition: all 0.3s ease;
+    margin-left: 230px;
+    transition: all 0.3s ease;
 }
 
 .close-sidebar {
-  margin-left: 75px;
-  transition: all 0.3s ease;
+    margin-left: 75px;
+    transition: all 0.3s ease;
 }
-
-
-
 
 
 /* #app .dark .uk-modal-header{
@@ -337,32 +334,50 @@ pre[class*="language-"] {
  */
 
 
-
-
 .dark .apexcharts-title-text {
-  color: #fff !important;
-  fill: #fff !important;
+    color: #fff !important;
+    fill: #fff !important;
+}
+
+.dark .apexcharts-legend-text {
+    color: white !important
+}
+.dark .apexcharts-datalabel-label {
+    fill: white
+}
+
+.dark .apexcharts-datalabel-value {
+
+    fill: white
+}
+
+.dark .apexcharts-yaxis-label {
+    fill: white
+}
+
+.apexcharts-legend-text {
+    color: gray !important;
 }
 
 
 .tooltip-variant {
-  background: #ff6058 !important;
-  color: #ffffff !important;
-  padding: 3px 10px;
-  border-radius: 5px;
-  width: fit-content;
-  position: absolute;
-  top: -8px;
-  left: -3px;
+    background: #ff6058 !important;
+    color: #ffffff !important;
+    padding: 3px 10px;
+    border-radius: 5px;
+    width: fit-content;
+    position: absolute;
+    top: -8px;
+    left: -3px;
 }
 
 .tooltip-variant::after {
-  content: '';
-  width: 10px;
-  height: 10px;
-  background: #ff6058;
-  position: absolute;
-  bottom: -5px;
-  left: 20px;
-  transform: rotate(45deg);
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: #ff6058;
+    position: absolute;
+    bottom: -5px;
+    left: 20px;
+    transform: rotate(45deg);
 }

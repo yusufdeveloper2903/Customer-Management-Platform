@@ -11,8 +11,8 @@ import {useI18n} from 'vue-i18n'
 import productStore from '../store/index'
 import DoubleRight from "@/modules/Users/img/double-right-chevron-svgrepo-com.svg";
 import {useRouter} from "vue-router";
-import {linksFields} from "@/modules/KnowledgeBase/constants";
 import {Link} from "@/modules/KnowledgeBase/interfaces";
+
 //Declared variables
 const router = useRouter()
 const {t} = useI18n()

@@ -141,7 +141,7 @@ watchDebounced(
                v-model="params.search"/>
       </label>
 
-      <button class="btn-primary" uk-toggle="target: #create_products" @click="editData = {}">
+      <button class="btn-primary" uk-toggle="target: #create_products" @click="editData = <EditData>{}">
         {{ $t("Add") }}
       </button>
     </div>
