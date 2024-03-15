@@ -3,7 +3,7 @@
 
 import {locationFields} from "../constants";
 import knowledgeBase from ".././store/index"
-import {reactive, ref} from "vue";
+import {reactive, ref, watch} from "vue";
 import {toast} from "vue3-toastify";
 import UIkit from "uikit";
 import CreateSmsTemplate from "./modals/CreateSmsTemplateModal.vue"
@@ -16,6 +16,14 @@ const store = knowledgeBase()
 const isLoading = ref(false);
 let smsTemplateList = ref<object[]>([]);
 const userId = ref<number | null>(null);
+const props = defineProps<{
+  knowledge: string
+}>();
+
+let toRefresh = ref(false)
+watch(() => props.knowledge, function () {
+  toRefresh.value = !toRefresh.value
+})
 
 interface EditData {
   id: number | null,
@@ -41,7 +49,6 @@ const editData = ref<EditData>({
     ru: ""
   },
 })
-
 
 const params = reactive({
   page_size: 10,
@@ -165,6 +172,7 @@ const saveSmsTemplate = () => {
       </template>
     </EasyDataTable>
     <TwPagination :total="store.smsTemplateList.count" class="mt-10 tw-pagination"
+                  :restart="toRefresh"
                   :current="params.page" :per-page="params.page_size"
                   :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
                   @page-changed="changePagionation" @per-page-changed="onPageSizeChanged"/>

@@ -3,7 +3,7 @@
 //Imported files
 
 import knowledgeStore from "@/modules/KnowledgeBase/store";
-import {nextTick, ref} from "vue";
+import {nextTick, ref, watch} from "vue";
 import {useI18n} from "vue-i18n";
 import AddEditNearbyPlaces from "./components/AddEditNearbyPlaces.vue";
 import {formatPhoneNumber} from "@/mixins/features";
@@ -31,7 +31,14 @@ const openModal = (data?) => {
     UIKit.modal("#location-modal").show();
   });
 };
+const props = defineProps<{
+  knowledge: string
+}>();
 
+let toRefresh = ref(false)
+watch(() => props.knowledge, function () {
+  toRefresh.value = !toRefresh.value
+})
 const changePagination = (page: any) => {
   pagination.value.page = page;
   getListForm(pagination)
@@ -146,6 +153,7 @@ const deleteAction = async () => {
         </template>
       </EasyDataTable>
       <TwPagination
+          :restart="toRefresh"
           :total="store.locationList.count"
           class="mt-10 tw-pagination"
           :current="pagination.page"

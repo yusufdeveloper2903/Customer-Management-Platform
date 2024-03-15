@@ -1,6 +1,6 @@
 <script setup lang="ts">
 //Imported files
-import {reactive, ref} from "vue";
+import {reactive, ref, watch} from "vue";
 import {toast} from "vue3-toastify";
 import {productsFields} from "../constants";
 import CreateProducts from "./modals/CreateProductsModal.vue";
@@ -21,6 +21,14 @@ const params = reactive({
   search: ''
 });
 
+const props = defineProps<{
+  knowledge: string
+}>();
+
+let toRefresh = ref(false)
+watch(() => props.knowledge, function () {
+  toRefresh.value = !toRefresh.value
+})
 
 interface EditData {
   id: number | null,
@@ -207,7 +215,7 @@ watchDebounced(
 
     <DeleteModal @delete-action="deleteAction" :id="'product-delete-modal'"/>
 
-    <TwPagination :total="store.productsList.count" class="mt-10 tw-pagination"
+    <TwPagination :restart="toRefresh" :total="store.productsList.count" class="mt-10 tw-pagination"
                   :current="params.page"
                   :per-page="params.page_size"
                   :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"

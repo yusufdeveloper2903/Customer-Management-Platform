@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {toast} from "vue3-toastify";
 import {linksFields} from "../constants";
 import ConfirmModal from "@/components/ConfirmModals/ConfirmModal.vue";
@@ -26,6 +26,14 @@ const paginationFilter = reactive({
 
 const filter = ref({
   page_size: 10,
+})
+const props = defineProps<{
+  knowledge: string
+}>();
+
+let toRefresh = ref(false)
+watch(() => props.knowledge, function () {
+  toRefresh.value = !toRefresh.value
 })
 
 interface EditLink {
@@ -137,7 +145,7 @@ onMounted(() => {
       </tbody>
     </table>
 
-    <TwPagination class="mt-10 tw-pagination" :current="current" :total="5" :per-page="10"
+    <TwPagination :restart="toRefresh" class="mt-10 tw-pagination" :current="current" :total="5" :per-page="10"
                   :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
                   @page-changed="changePagionation"/>
 
@@ -151,6 +159,6 @@ onMounted(() => {
 
 
   <div class="card mt-10">
-    <PhoneNumbers/>
+    <PhoneNumbers :restart="toRefresh"/>
   </div>
 </template>

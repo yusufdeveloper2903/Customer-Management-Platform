@@ -9,10 +9,13 @@ import Products from "../components/Products.vue"
 import PrivacyPolicy from "../components/PrivacyPolicy.vue";
 import TermsAndConditions from "../components/TermsAndConditions.vue"
 import Contacts from "../components/Links.vue";
+import {ref} from 'vue'
 
+const knowledge = ref('')
 
 const selectedTitle = (val) => {
   localStorage.setItem('knowledgeBase', val)
+  knowledge.value = val
 }
 </script>
 
@@ -23,23 +26,23 @@ const selectedTitle = (val) => {
     <Tabs vertical pill @selectedTitle="selectedTitle" unique="unique">
 
       <Tab :title="'sms_template'">
-        <SMSTemplate/>
+        <SMSTemplate :knowledge="knowledge"/>
       </Tab>
 
       <Tab :title="'News template'">
-        <NewsTemplate/>
+        <NewsTemplate :knowledge="knowledge"/>
       </Tab>
 
       <Tab :title="'Locations'">
-        <NearbyPlaces/>
+        <NearbyPlaces :knowledge="knowledge"/>
       </Tab>
 
       <Tab :title="'version_control'">
-        <VersionControl/>
+        <VersionControl :knowledge="knowledge"/>
       </Tab>
 
       <Tab :title="'products'">
-        <Products/>
+        <Products :knowledge="knowledge"/>
       </Tab>
 
       <Tab :title="'PrivacyPolicy'">
@@ -51,7 +54,7 @@ const selectedTitle = (val) => {
       </Tab>
 
       <Tab :title="'contacts'">
-        <Contacts/>
+        <Contacts :knowledge="knowledge"/>
       </Tab>
     </Tabs>
   </div>

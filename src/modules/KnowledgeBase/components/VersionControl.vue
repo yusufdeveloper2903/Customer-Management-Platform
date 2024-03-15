@@ -35,7 +35,14 @@ const params = reactive({
   end_date: "",
   page: 1
 });
+const props = defineProps<{
+  knowledge: string
+}>();
 
+let toRefresh = ref(false)
+watch(() => props.knowledge, function () {
+  toRefresh.value = !toRefresh.value
+})
 const deleteAction = async () => {
   isLoading.value = true
   try {
@@ -132,7 +139,9 @@ const onPageSizeChanged = (e) => {
       <template #header-datetime="header">
         {{ $t(header.text) }}
       </template>
-
+      <template #header-description="header">
+        {{ $t(header.text) }}
+      </template>
       <template #header-modified_date="header">
         {{ $t(header.text) }}
       </template>
@@ -184,7 +193,7 @@ const onPageSizeChanged = (e) => {
 
     </EasyDataTable>
 
-    <TwPagination :total="store.versionControlList.count" class="mt-10 tw-pagination"
+    <TwPagination :restart="toRefresh" :total="store.versionControlList.count" class="mt-10 tw-pagination"
                   :current="params.page" :per-page="params.page_size"
                   :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
                   @page-changed="changePagination" @per-page-changed="onPageSizeChanged"/>

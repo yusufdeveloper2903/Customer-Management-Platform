@@ -3,7 +3,7 @@
 
 import {newsTemplateTable} from "../constants";
 import knowledgeBase from ".././store/index";
-import {nextTick, reactive, ref} from "vue";
+import {nextTick, reactive, ref, watch} from "vue";
 import {useI18n} from "vue-i18n";
 import UIKit from "uikit";
 import NewsTemplateModal from "../components/modals/NewsTemplateModal.vue";
@@ -37,6 +37,14 @@ const params = reactive({
 })
 
 //Functions
+const props = defineProps<{
+  knowledge: string
+}>();
+
+let toRefresh = ref(false)
+watch(() => props.knowledge, function () {
+  toRefresh.value = !toRefresh.value
+})
 
 const refresh = async (params: any) => {
   await store.getNewsTemplate(params);
@@ -180,6 +188,7 @@ const handleDeleteModal = (id) => {
         :total="store.newTemplate.count"
         class="mt-10 tw-pagination"
         :current="params.page"
+        :restart="toRefresh"
         :per-page="params.page_size"
         :text-before-input="$t('go_to_page')"
         :text-after-input="$t('forward')"

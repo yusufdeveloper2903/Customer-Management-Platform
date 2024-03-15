@@ -4,6 +4,10 @@ import {defineComponent} from "vue";
 export default defineComponent({
   name: "Vue Tailwind Pagination",
   props: {
+    restart: {
+      type: Boolean,
+      default: false,
+    },
     current: {
       type: Number,
       default: 1,
@@ -64,6 +68,13 @@ export default defineComponent({
     changePerPage: function (val: any) {
       this.$emit("per-page-changed", val.target.value);
     },
+  },
+  watch: {
+    restart(val) {
+      if (val) {
+        this.input = null
+      }
+    }
   },
   computed: {
     pages: function () {

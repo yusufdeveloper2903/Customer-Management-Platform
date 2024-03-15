@@ -17,7 +17,9 @@ const store = KnowledgeBase()
 const items = ref<Phones[]>([]);
 const currentRow = ref<Link | null>(null);
 
-
+const props = defineProps<{
+  restart: boolean
+}>();
 const paginationFilter = reactive({
   page_size: 10,
   page: 1,
@@ -157,6 +159,7 @@ onMounted(() => {
 
     <TwPagination
         class="mt-10 tw-pagination"
+        :restart="props.restart"
         :current="current"
         :total="5"
         :per-page="10"

@@ -20,6 +20,7 @@ import {
 export default defineStore("knowledgeBase", {
     state: () => {
         return {
+            knowledge: '',
             smsTemplateList: {
                 count: 0,
                 results: [] as SmsTemplate[],

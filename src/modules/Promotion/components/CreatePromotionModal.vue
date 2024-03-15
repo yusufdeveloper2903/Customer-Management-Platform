@@ -309,7 +309,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           </label>
           <VueDatePicker auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
         </div>
-        <p class=" mt-5 mb-1">{{ $t("Status") }}:</p>
+        <p class=" mt-5 mb-1">{{ $t("Published") }}:</p>
         <label className="relative inline-flex items-center cursor-pointer">
           <input
               type="checkbox"
