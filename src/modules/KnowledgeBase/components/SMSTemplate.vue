@@ -3,7 +3,7 @@
 
 import {locationFields} from "../constants";
 import knowledgeBase from ".././store/index"
-import {reactive, ref, watch} from "vue";
+import {nextTick, reactive, ref, watch} from "vue";
 import {toast} from "vue3-toastify";
 import UIkit from "uikit";
 import CreateSmsTemplate from "./modals/CreateSmsTemplateModal.vue"
@@ -60,18 +60,15 @@ const deleteAction = async () => {
   isLoading.value = true
   try {
     await store.deleteSmsTemplate(userId.value);
-    UIkit.modal("#global-delete-modal").hide();
+    UIkit.modal("#sms-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.smsTemplateList.count - 1) % params.page_size == 0) {
-      if (params.page > 1) {
-        params.page = params.page - 1
-        await refresh(params)
-      } else {
-        params.page = 1
-        await refresh(params)
-      }
-
+    if ((store.smsTemplateList.count - 1) % params.page > 0) {
+      params.page = params.page - 1
+      await refresh(params)
+    } else {
+      await refresh(params)
     }
+
     isLoading.value = false
   } catch (error: any) {
     toast.error(
@@ -79,12 +76,11 @@ const deleteAction = async () => {
     );
   }
 }
+
 const handleDeleteModal = (id) => {
-  UIkit.modal("#global-delete-modal").show();
-  userId.value = id;
-
+  userId.value = id
+  UIkit.modal("#sms-main-delete-modal").show()
 };
-
 
 watchDebounced(() => params.search, async function () {
   params.page = 1
@@ -178,8 +174,8 @@ const saveSmsTemplate = () => {
                   @page-changed="changePagionation" @per-page-changed="onPageSizeChanged"/>
   </div>
 
-  <DeleteModal
-      @delete-action="deleteAction"/>
+  <DeleteModal @delete-action="deleteAction" :id="'sms-main-delete-modal'"
+  />
 
   <CreateSmsTemplate @saveSmsTemplate="saveSmsTemplate" :editData="editData"/>
 </template>

@@ -60,7 +60,7 @@ const updateText2 = () => {
     <Tabs pill>
 
       <Tab :title="$t('UZ')" >
-        <div v-if="store.pagesListPolicy.text.uz" :style="{'pointer-events': is_disabledUz ?  'auto' : 'none'}">
+        <div v-if="store.pagesListPolicy.text.uz" >
           <Editor
 
               :placeholder="$t('enter_information')"
@@ -83,7 +83,7 @@ const updateText2 = () => {
 
 
       <Tab :title="$t('RU')">
-        <div :style="{'pointer-events': is_disabledRu ?  'auto' : 'none'}">
+        <div >
           <Editor
               v-if="store.pagesListPolicy.text.ru"
               :placeholder="$t('enter_information')"

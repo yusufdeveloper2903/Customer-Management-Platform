@@ -57,6 +57,7 @@ export default defineStore("knowledgeBase", {
                 type: '',
                 id: null
             },
+            image:'',
             linksList: {
                 results: [] as Link[]
             } as Results<Link>,

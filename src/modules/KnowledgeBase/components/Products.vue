@@ -103,16 +103,13 @@ const deleteAction = async () => {
     await store.deleteProducts(itemId.value)
     UIkit.modal("#product-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.productsList.count - 1) % params.page_size == 0) {
-      if (params.page > 1) {
-        params.page = params.page - 1
-        refresh(params)
-      } else {
-        params.page = 1
-        refresh(params)
-      }
-
+    if ((store.productsList.count - 1) % params.page > 0) {
+      params.page = params.page - 1
+      await refresh(params)
+    } else {
+      await refresh(params)
     }
+
     isLoading.value = false
   } catch (error: any) {
     toast.error(

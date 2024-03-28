@@ -178,7 +178,7 @@ onMounted(() => {
 
       <div class="uk-modal-body py-4">
         <form>
-          <div class="modal-body">
+          <div >
             <div class="flex gap-4">
               <div class="w-1/2">
                 <div class="flex items-center gap-4 mb-4">

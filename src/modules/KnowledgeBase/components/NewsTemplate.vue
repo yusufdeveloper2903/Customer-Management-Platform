@@ -10,8 +10,23 @@ import NewsTemplateModal from "../components/modals/NewsTemplateModal.vue";
 import {NewsTemplate} from "../interfaces";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
+import ShowFileModal from "./ShowImageModal.vue";
+import UIkit from "uikit";
 
+interface Emits {
+  (event: "update:modelValue", value: File | File[]): void;
 
+  (event: "remove", value: ReturnValue | string): void;
+
+  (event: "show", value: ReturnValue | string): void;
+}
+
+interface ReturnValue {
+  item: string;
+  index: number;
+}
+
+const emit = defineEmits<Emits>();
 //Declared variables
 const {t} = useI18n()
 const store = knowledgeBase();
@@ -69,6 +84,16 @@ const openModal = (isEdit?: boolean, data?: NewsTemplate) => {
   }
   nextTick(() => {
     UIKit.modal("#news_template").show();
+  });
+};
+const image = ref<string>("");
+const imageCard = ref();
+const onShowFile = (item: any) => {
+  image.value = item;
+  nextTick(() => {
+    UIkit.modal("#file-modal-image").show();
+
+    emit("show", item);
   });
 };
 const deleteAction = async () => {
@@ -159,6 +184,7 @@ const handleDeleteModal = (id) => {
               class="w-[45px] h-[45px] rounded object-cover"
               :src="file"
               alt="Rounded avatar"
+              @click="onShowFile(file)"
           />
           <div
               v-else
@@ -198,4 +224,5 @@ const handleDeleteModal = (id) => {
   </div>
   <DeleteModal @delete-action="deleteAction"/>
   <NewsTemplateModal :edit-data="dataToEdit" @refresh="refresh"/>
+  <ShowFileModal :image="image" ref="imageCard"/>
 </template>

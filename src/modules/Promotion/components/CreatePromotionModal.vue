@@ -134,6 +134,7 @@ const updateDeal = async () => {
       await store.updatePromotion(formData)
       emits("saveProducts");
       UIkit.modal("#create_edit_promotion").hide();
+      toast.success(t("updated_successfully"));
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
@@ -233,7 +234,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
       <div class="uk-modal-body py-4">
         <Tabs>
           <Tab title="UZ">
-            <label>{{ $t('name') }}</label>
+            <label>{{ $t('name') + ' '+ $t('UZ') }}</label>
             <input
                 type="text"
                 class="form-input"
@@ -248,7 +249,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             >
               {{ $t(error.$message) }}
             </p>
-            <label for="number" class="block mt-4">{{ $t('description') }}
+            <label for="number" class="block mt-4">{{ $t('description') + ' '+ $t('UZ') }}
               <textarea
                   id="number"
                   type="text"
@@ -268,7 +269,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             </label>
           </Tab>
           <Tab title="RU">
-            <label>{{ $t('name') }}</label>
+            <label>{{ $t('name') + ' '+ $t('RU') }}</label>
             <input
                 type="text"
                 class="form-input"
@@ -283,7 +284,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             >
               {{ $t(error.$message) }}
             </p>
-            <label for="number" class="block mt-4">{{ $t('description') }}
+            <label for="number" class="block mt-4">{{ $t('description') + ' '+ $t('RU') }}
               <textarea
                   id="number"
                   type="text"

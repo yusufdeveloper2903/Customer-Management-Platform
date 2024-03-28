@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { Ref, ref, computed, watch } from "vue";
+import {Ref, ref, computed, watch} from "vue";
 import UIkit from "uikit";
-import { useI18n } from "vue-i18n";
-import { toast } from "vue3-toastify";
-import { helpers, required } from "@vuelidate/validators";
-import useVuelidate, { Validation } from "@vuelidate/core";
+import {useI18n} from "vue-i18n";
+import {toast} from "vue3-toastify";
+import {helpers, required} from "@vuelidate/validators";
+import useVuelidate, {Validation} from "@vuelidate/core";
 import knowledgeBase from "../../store/index";
 
-const { t } = useI18n();
+const {t} = useI18n();
 const store = knowledgeBase()
 const isSubmitted = ref<boolean>(false);
 const emits = defineEmits(["saveContact"]);
@@ -77,7 +77,7 @@ const updateDeal = async () => {
   if (!success) return;
   if (propData.editData.id) {
     try {
-      await store.updateSocialMediaLinks({ id: propData.editData.id, data: editData.value }).then(() => {
+      await store.updateSocialMediaLinks({id: propData.editData.id, url: editData.value.url, type: editData.value.type}).then(() => {
         emits("saveContact");
         UIkit.modal("#links").hide();
         setTimeout(() => {
@@ -89,8 +89,7 @@ const updateDeal = async () => {
       isSubmitted.value = false;
       if (error) {
         toast.error(
-          error.response.message || "Error"
-
+            error.response.message || "Error"
         );
       }
     }
@@ -110,7 +109,7 @@ const updateDeal = async () => {
       isSubmitted.value = false;
       if (error) {
         toast.error(
-          error.response.message || "Error"
+            error.response.message || "Error"
         );
       }
     }
@@ -119,7 +118,7 @@ const updateDeal = async () => {
 
 function openModal() {
   if (propData.editData.id) {
-    editData.value.type = propData.editData.id
+    editData.value.type = propData.editData.type
     editData.value.url = propData.editData.url
   } else {
     editData.value.type = ""
@@ -131,7 +130,7 @@ function openModal() {
 <template>
   <div id="links" class="uk-flex-top" uk-modal @shown="openModal" @hidden="validate.$reset()">
     <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden">
-      <button class="uk-modal-close-default" type="button" uk-close />
+      <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
           {{ propData.editData.id ? $t("Change") : $t('Add') }}
@@ -144,8 +143,9 @@ function openModal() {
         <label>
           <p class=" mt-5 mb-1">{{ $t("type") }}:</p>
           <v-select id="type" :options="linktype" :get-option-label="(name) => name.name" :placeholder="$t('type')"
-            class="mb-4" :class="validate.type.$errors.length ? 'required-input' : ''" :reduce="name => name.type"
-            v-model="editData.type">
+                    class="mb-4" :class="validate.type.$errors.length ? 'required-input' : ''"
+                    :reduce="name => name.type"
+                    v-model="editData.type">
             <template #no-options> {{ $t("no_matching_options") }}</template>
           </v-select>
           <p v-for="error in validate.type.$errors" :key="error.$uid" class="text-danger text-sm">
@@ -156,7 +156,7 @@ function openModal() {
 
         <label for="url">{{ $t('url') }}:</label>
         <input id="url" type="text" class="form-input" :placeholder="$t('url')"
-          :class="validate.url.$errors.length ? 'required-input' : ''" v-model="editData.url" />
+               :class="validate.url.$errors.length ? 'required-input' : ''" v-model="editData.url"/>
         <p v-for="error in validate.url.$errors" :key="error.$uid" class="text-danger text-sm">
           {{ $t(error.$message) }}
         </p>
@@ -169,9 +169,9 @@ function openModal() {
         </button>
 
         <button :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'" @click="updateDeal"
-          :disabled="isSubmitted">
+                :disabled="isSubmitted">
           <img src="@/assets/image/loading.svg" alt="loading.svg" class="inline w-4 h-4 text-white animate-spin mr-2"
-            v-if="isSubmitted" />
+               v-if="isSubmitted"/>
           <span>{{ propData.editData.id ? $t("Change") : $t('Add') }}</span>
         </button>
       </div>

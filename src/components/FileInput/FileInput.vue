@@ -75,7 +75,7 @@ const onInputFile = (value) => {
     :multiple="multiple"
   />
   <template v-if="typeof inputValue === 'string'">
-    <div class="flex justify-between items-center mt-3 mx-5">
+    <div class="flex justify-between items-center mt-3 mx-5" @click.prevent>
       <span class="rounded bg-primary px-4 pb-0.5 text-white">{{
         inputValue.length < 26
           ? inputValue.split("/").at(-1)
@@ -86,7 +86,7 @@ const onInputFile = (value) => {
         <Icon
           v-if="props.eye"
           icon="Eye"
-          @click="onShowFile(inputValue)"
+          @click.prevent="onShowFile(inputValue)"
           class="cursor-pointer"
           color="#909498"
         /><Icon

@@ -49,7 +49,7 @@ const dragDrop = (item: Phones) => {
   store.create_phones_drag_and_drop({id1: currentRow.value?.id, id2: item.id}).then(() => {
     refresh(paginationFilter);
     setTimeout(() => {
-      toast.success("ok");
+      toast.success(t("updated_successfully"));
     }, 200);
   })
 
@@ -74,6 +74,7 @@ const deletePhone = () => {
   store.deletePhones(itemId.value).then(() => {
     refresh(paginationFilter);
     UIkit.modal("#phone-delete").hide();
+    toast.success(t("deleted_successfully"));
   })
 };
 

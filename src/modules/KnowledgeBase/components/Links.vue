@@ -52,7 +52,7 @@ const dragDrop = (item: Link) => {
   store.create_drag_and_drop({id1: currentRow.value?.id, id2: item.id}).then(() => {
     refresh(paginationFilter);
     setTimeout(() => {
-      toast.success("ok");
+      toast.success(t("updated_successfully"));
     }, 200);
   })
 
@@ -78,6 +78,7 @@ const deleteLinks = () => {
   store.deleteSocialMediaLinks(itemId.value).then(() => {
     refresh(paginationFilter);
     UIkit.modal("#links-delete").hide();
+    toast.success(t("deleted_successfully"));
   })
 };
 
@@ -104,7 +105,7 @@ onMounted(() => {
 <template>
   <div class="card">
     <div class="flex justify-between items-center mb-5">
-      <h1 class="font-semibold text-lg mb-4 text-success">{{ $t('Links') }}</h1>
+      <h1 class="font-semibold text-lg mb-4 text-success">{{ $t('social_links') }}</h1>
       <button class="btn-primary" uk-toggle="target: #links" @click="editLink = {}">
         {{ $t("Add") }}
       </button>
@@ -115,7 +116,7 @@ onMounted(() => {
       <tr>
         <th v-for="field in linksFields"
             class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-center text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
-          {{ $t(field.text)}}
+          {{ $t(field.text) }}
         </th>
       </tr>
       </thead>

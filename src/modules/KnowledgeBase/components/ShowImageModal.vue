@@ -13,7 +13,7 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-  <div id="file-modal" class="uk-flex-top" uk-modal>
+  <div id="file-modal-image" class="uk-flex-top" uk-modal>
     <div
         class="uk-modal-dialog uk-margin-auto-vertical rounded-md overflow-hidden"
     >
