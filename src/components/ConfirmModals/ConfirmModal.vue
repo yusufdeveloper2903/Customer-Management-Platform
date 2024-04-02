@@ -37,7 +37,7 @@ const emit = defineEmits<Emits>();
       >
         <button
           :uk-toggle="`target: #${props.id || 'confirm-modal'}`"
-          :class="props.cancelClass || 'btn-small btn-danger'"
+          :class="props.cancelClass || 'btn-small btn-success'"
           class="mr-2"
           @click="emit('cancel')"
         >
@@ -45,7 +45,7 @@ const emit = defineEmits<Emits>();
         </button>
         <button
           @click="emit('ok')"
-          :class="props.okClass || 'btn-small btn-success'"
+          :class="props.okClass || 'btn-small btn-danger'"
         >
           {{ props.ok }}
         </button>
