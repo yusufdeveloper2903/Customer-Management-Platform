@@ -107,7 +107,7 @@ onMounted(() => {
 }
 
 .vue3-easy-data-table__body tr td {
-  text-align: center !important;
+  text-align: left !important;
 }
 
 #text-after-input {

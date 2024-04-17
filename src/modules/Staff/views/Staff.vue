@@ -1,7 +1,7 @@
 <script setup lang="ts">
 //Imported files
 
-import {reactive, ref} from "vue";
+import {nextTick, reactive, ref} from "vue";
 import staff from "../store/index";
 import {fields} from "../constants/index";
 import UIkit from "uikit";
@@ -10,6 +10,7 @@ import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
 import DeleteModal from "@/components/DeleteModal.vue";
 import {useI18n} from "vue-i18n";
+import ShowFileModal from "@/modules/KnowledgeBase/components/ShowImageModal.vue";
 
 const {t} = useI18n()
 //Declared files
@@ -28,7 +29,7 @@ const filterUsers = reactive({
 
 
 const handleDeleteModal = (id: number) => {
-  UIkit.modal("#global-delete-modal").show();
+  UIkit.modal("#staff-main-delete-modal").show();
   userId.value = id;
 };
 
@@ -50,7 +51,7 @@ const deleteAction = async () => {
   isLoading.value = true
   try {
     await store.deleteStaff(userId.value)
-    UIkit.modal("#global-delete-modal").hide();
+    UIkit.modal("#staff-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
     if ((store.staffsList.count - 1) % filterUsers.page_size == 0) {
       if (filterUsers.page > 1) {
@@ -89,13 +90,22 @@ const onPageSizeChanged = (event: number) => {
   filterUsers.page_size = event;
   refresh(filterUsers);
 };
+const image = ref<string>("");
+const imageCard = ref();
+const onShowFile = (item: any) => {
+  image.value = item;
+  nextTick(() => {
+    UIkit.modal("#file-show-staff-image").show();
+    emit("show", item);
+  });
+};
 </script>
 
 <template>
   <div>
     <div class="card">
-      <div class="md:flex items-center justify-between mb-5">
-        <form class="mb-4 md:flex items-center gap-5 md:w-5/12">
+      <div class="md:flex items-end justify-between mb-7">
+        <form class="md:flex items-center gap-5 md:w-5/12">
           <div class="md:w-1/2">
             <label for="search" class="dark:text-gray-300">
               {{ $t("Search") }}
@@ -142,7 +152,6 @@ const onPageSizeChanged = (event: number) => {
           :loading="isLoading"
           :headers="fields"
           :items="store.staffsList.results"
-          show-index
       >
         <template #empty-message>
           <div class="dark:text-white">{{ $t("no_available_data") }}</div>
@@ -181,12 +190,13 @@ const onPageSizeChanged = (event: number) => {
         </template>
 
         <template #item-photo="items">
-          <div class="py-3 flex justify-center gap-3">
+          <div class="py-3 flex justify-left gap-3">
             <img
                 v-if="items && items.photo"
                 class="w-[45px] h-[45px] rounded object-cover"
                 :src="items.photo"
                 alt="Rounded avatar"
+                @click="onShowFile(items.photo)"
             />
             <div
                 v-else
@@ -227,7 +237,7 @@ const onPageSizeChanged = (event: number) => {
         </template>
 
         <template #item-actions="items">
-          <div class="flex justify-center">
+          <div class="flex justify-left">
             <button
                 class="btn-warning btn-action"
                 @click="
@@ -256,11 +266,9 @@ const onPageSizeChanged = (event: number) => {
           @per-page-changed="onPageSizeChanged"
 
       />
+      <DeleteModal @delete-action="deleteAction" :id="'staff-main-delete-modal'"/>
 
-      <DeleteModal
-          @delete-action="deleteAction"
-
-      />
     </div>
   </div>
+  <ShowFileModal :image="image" ref="imageCard" id="file-show-staff-image"/>
 </template>

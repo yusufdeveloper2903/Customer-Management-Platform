@@ -30,7 +30,7 @@ export const newsPromotionTable = [
         value: "id",
     },
     {
-        text: "title",
+        text: "name",
         value: "title",
     },
     // {

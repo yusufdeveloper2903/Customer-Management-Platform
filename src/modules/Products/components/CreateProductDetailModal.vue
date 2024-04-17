@@ -8,10 +8,10 @@ import useVuelidate, {Validation} from "@vuelidate/core";
 import {useI18n} from 'vue-i18n'
 import {toast} from "vue3-toastify";
 import UIkit from "uikit";
-
+import {useRoute} from "vue-router";
 //Props and Emits
 
-
+const route = useRoute();
 const propData = defineProps<{
   editData: EditData
 }>();
@@ -101,6 +101,8 @@ function openModal() {
     productsCategory.value.has_discount = propData.editData.has_discount
     productsCategory.value.discount_percentage = propData.editData.discount_percentage
     productsCategory.value.id = propData.editData.id
+  } else {
+    productsCategory.value.category = route.params.id
   }
 }
 
@@ -161,16 +163,18 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
             {{ $t(error.$message) }}
           </p>
         </label>
+        <div v-if="propData.editData.id">
+          <p class=" mt-5 mb-1">{{ $t("category") }}:</p>
+          <v-select
+              :options="productStorage.productListCategory.results"
+              v-model="productsCategory.category"
+              :getOptionLabel="(name) => name.title[$i18n.locale]"
+              :reduce="(name) => name.id"
+          >
+            <template #no-options> {{ $t("no_matching_options") }}</template>
+          </v-select>
+        </div>
 
-        <p class=" mt-5 mb-1">{{ $t("category") }}:</p>
-        <v-select
-            :options="productStorage.productListCategory.results"
-            v-model="productsCategory.category"
-            :getOptionLabel="(name) => name.title[$i18n.locale]"
-            :reduce="(name) => name.id"
-        >
-          <template #no-options> {{ $t("no_matching_options") }}</template>
-        </v-select>
         <p class=" mt-5 mb-1">{{ $t("Discount") }}:</p>
         <v-select
             :options="discountList"

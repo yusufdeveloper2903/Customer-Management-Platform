@@ -100,17 +100,13 @@ const deleteAction = async () => {
   isLoading.value = true
   try {
     await store.deleteNewsTemplate(itemToDelete.value)
-    UIKit.modal("#global-delete-modal").hide();
+    UIKit.modal("#newstemplate-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.newTemplate.count - 1) % params.page_size == 0) {
-      if (params.page > 1) {
-        params.page = params.page - 1
-        await refresh(params)
-      } else {
-        params.page = 1
-        await refresh(params)
-      }
-
+    if ((store.newTemplate.count - 1) % params.page > 0) {
+      params.page = params.page - 1
+      await refresh(params)
+    } else {
+      await refresh(params)
     }
     isLoading.value = false
   } catch (error: any) {
@@ -135,7 +131,7 @@ watchDebounced(() => params.search, function () {
 }, {deep: true, debounce: 500, maxWait: 500,})
 const handleDeleteModal = (id) => {
   itemToDelete.value = id
-  UIKit.modal("#global-delete-modal").show()
+  UIKit.modal("#newstemplate-main-delete-modal").show()
 };
 
 
@@ -143,17 +139,18 @@ const handleDeleteModal = (id) => {
 
 <template>
   <div class="card">
-    <div class="flex justify-between items-end mb-10">
+    <div class="flex justify-between items-end mb-7">
       <label for="search" class="w-1/4">
         {{ $t('Search') }}
         <input
             v-model="params.search"
             type="text"
             class="form-input"
-            placeholder="Search"
+            :placeholder="$t('Search')"
         />
       </label>
-      <button class="btn-primary" @click="openModal(false)">
+      <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
+              @click="openModal(false)">
         {{ $t("Add") }}
       </button>
     </div>
@@ -222,7 +219,7 @@ const handleDeleteModal = (id) => {
         @per-page-changed="onPageSizeChanged"
     />
   </div>
-  <DeleteModal @delete-action="deleteAction"/>
+  <DeleteModal @delete-action="deleteAction" :id="'newstemplate-main-delete-modal'"/>
   <NewsTemplateModal :edit-data="dataToEdit" @refresh="refresh"/>
-  <ShowFileModal :image="image" ref="imageCard"/>
+  <ShowFileModal :image="image" id="file-modal-image" ref="imageCard"/>
 </template>

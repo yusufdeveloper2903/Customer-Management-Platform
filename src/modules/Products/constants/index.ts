@@ -4,7 +4,7 @@ export const headerProduct = [
         value: "id",
     },
     {
-        text: "title",
+        text: "name",
         value: "title",
     },
     {
@@ -53,10 +53,10 @@ export const headerProductCard = [
         text: 'category',
         value: 'category'
     },
-    {
-        text: "has discount",
-        value: "has_discount"
-    },
+    // {
+    //     text: "has discount",
+    //     value: "has_discount"
+    // },
     {
         text: "discount percentage",
         value: "discount_percentage"

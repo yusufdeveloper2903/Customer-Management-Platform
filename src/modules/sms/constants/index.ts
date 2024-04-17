@@ -36,7 +36,7 @@ export const bannerFields = [
     },
     {
       text: "photo",
-      value: "photo",
+      value: "file",
     },
     {
       text: "Status",
@@ -62,8 +62,8 @@ export const bannerFields = [
       value: "title",
     },
     {
-      text: "Status",
-      value: "status",
+      text: "description",
+      value: "description",
     },
     {
       text: "planned for(publish date)",

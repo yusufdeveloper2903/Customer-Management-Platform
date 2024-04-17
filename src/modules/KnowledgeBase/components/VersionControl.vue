@@ -9,6 +9,7 @@ import {toast} from "vue3-toastify";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import AddVersionControl from "./modals/VersionControlModal.vue"
+import {formatDate} from "@/mixins/features";
 
 
 //Declared files
@@ -104,8 +105,8 @@ const onPageSizeChanged = (e) => {
 <template>
   <div class="card">
 
-    <div class="md:flex items-center justify-between mb-5">
-      <form class="mb-4 md:flex items-center gap-5 md:w-9/12">
+    <div class="md:flex items-end justify-between mb-7">
+      <form class=" md:flex items-center gap-5 md:w-9/12">
 
         <div class="md:w-1/2 md:m-0 mt-2">
           <label for="from" class="dark:text-gray-300">
@@ -122,7 +123,7 @@ const onPageSizeChanged = (e) => {
         </div>
       </form>
       <button
-          class="btn-primary" uk-toggle="target: #version_control" @click="editData = {}"
+          class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full" uk-toggle="target: #version_control" @click="editData = {}"
       >
         {{ $t("Add") }}
       </button>
@@ -159,9 +160,11 @@ const onPageSizeChanged = (e) => {
       </template>
 
       <template #item-datetime="items">
-        {{ items.created_date }}
+        {{ formatDate(items.created_date) }}
       </template>
-
+      <template #item-modified_date="items">
+        {{ formatDate(items.modified_date) }}
+      </template>
       <template #item-version_number="items">
         {{ items.number }}
       </template>

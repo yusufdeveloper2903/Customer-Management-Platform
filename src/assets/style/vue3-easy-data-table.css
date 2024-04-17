@@ -491,10 +491,14 @@
     box-shadow: inset 6px 0 5px -3px #0003
 }
 
+
+
 .vue3-easy-data-table__main.fixed-header th[data-v-19cc4b1b] {
     position: sticky;
     top: 0;
-    z-index: 1
+    z-index: 1;
+    text-align: left;
+    padding: 10px !important;
 }
 
 .vue3-easy-data-table__main.hoverable tr:hover td[data-v-19cc4b1b] {

@@ -170,7 +170,7 @@ const onPageSizeChangedRight = async (event: number) => {
 
             <div class="flex items-start gap-10 w-full">
               <div class="w-full">
-                <div class="flex items-center justify-between flex-wrap mb-4">
+                <div class="flex items-end justify-between flex-wrap mb-7">
                   <div class="flex items-center justify-between">
                     <form>
                       <label
@@ -230,7 +230,7 @@ const onPageSizeChangedRight = async (event: number) => {
 
                     </div>
                   </div>
-                  <button class="btn-success mt-4" @click="downloadExcel()">
+                  <button class="btn-success " @click="downloadExcel()">
                           <span
                               class="block cursor-pointer mr-1"
                               uk-icon="download"
@@ -241,7 +241,6 @@ const onPageSizeChangedRight = async (event: number) => {
                 <EasyDataTable
 
                     theme-color="#7367f0"
-                    show-index
                     buttons-pagination
                     :headers="headerLoggingLeft"
                     :loading="isLoading"
@@ -257,13 +256,13 @@ const onPageSizeChangedRight = async (event: number) => {
                     {{ $t(header.text) }}
                   </template>
 
-                  <template #header-region="header">
-                    {{ $t(header.text) }}
-                  </template>
+<!--                  <template #header-region="header">-->
+<!--                    {{ $t(header.text) }}-->
+<!--                  </template>-->
 
-                  <template #header-district="header">
-                    {{ $t(header.text) }}
-                  </template>
+<!--                  <template #header-district="header">-->
+<!--                    {{ $t(header.text) }}-->
+<!--                  </template>-->
 
                   <template #header-ip_address="header">
                     {{ $t(header.text) }}
@@ -279,37 +278,37 @@ const onPageSizeChangedRight = async (event: number) => {
 
 
                   <template #item-user="items">
-                    <div class="flex justify-center" style="overflow-wrap: anywhere;">
+                    <div class="flex justify-left" style="overflow-wrap: anywhere;">
                       {{ items.user.username }}
                     </div>
                   </template>
 
-                  <template #item-region="items">
-                    <div class="flex justify-center" style="overflow-wrap: anywhere;">
-                      {{ items.user.region_parent && items.user.region_parent[locale] }}
-                    </div>
-                  </template>
+<!--                  <template #item-region="items">-->
+<!--                    <div class="flex justify-left" style="overflow-wrap: anywhere;">-->
+<!--                      {{ items.user.region_parent && items.user.region_parent[locale] }}-->
+<!--                    </div>-->
+<!--                  </template>-->
 
-                  <template #item-district="items">
-                    <div class="flex justify-center" style="overflow-wrap: anywhere;">
-                      {{ items.user.region && items.user.region[locale] }}
-                    </div>
-                  </template>
+<!--                  <template #item-district="items">-->
+<!--                    <div class="flex justify-left" style="overflow-wrap: anywhere;">-->
+<!--                      {{ items.user.region && items.user.region[locale] }}-->
+<!--                    </div>-->
+<!--                  </template>-->
 
                   <template #item-ip_address="items">
-                    <div class="flex justify-center" style="overflow-wrap: anywhere;">
+                    <div class="flex justify-left" style="overflow-wrap: anywhere;">
                       {{ items.ip_address }}
                     </div>
                   </template>
 
                   <template #item-mac_address="items">
-                    <div class="flex justify-center" style="overflow-wrap: anywhere;">
+                    <div class="flex justify-left" style="overflow-wrap: anywhere;">
                       {{ items.mac_address }}
                     </div>
                   </template>
 
                   <template #item-datetime="items">
-                    <div class="flex justify-center" style="overflow-wrap: anywhere;">
+                    <div class="flex justify-left" style="overflow-wrap: anywhere;">
                       {{ dayjs(items.datetime).format("DD-MM-YYYY HH:mm") }}
                     </div>
                   </template>
@@ -341,7 +340,7 @@ const onPageSizeChangedRight = async (event: number) => {
 
             <div class="flex items-start gap-10 w-full">
               <div class="w-full">
-                <div class="flex items-center justify-between flex-wrap mb-4">
+                <div class="flex items-end justify-between flex-wrap mb-7">
                   <div class="flex items-center justify-between">
                     <form>
                       <label
@@ -401,7 +400,7 @@ const onPageSizeChangedRight = async (event: number) => {
 
                     </div>
                   </div>
-                  <button class="btn-success mt-4" @click="downloadExcel2()">
+                  <button class="btn-success" @click="downloadExcel2()">
                           <span
                               class="block cursor-pointer mr-1"
                               uk-icon="download"
@@ -411,7 +410,6 @@ const onPageSizeChangedRight = async (event: number) => {
                 </div>
                 <EasyDataTable
                     theme-color="#7367f0"
-                    show-index
                     buttons-pagination
                     :headers="headerLoggingRight"
                     :loading="isLoading2"
@@ -432,13 +430,13 @@ const onPageSizeChangedRight = async (event: number) => {
                     {{ $t(header.text) }}
                   </template>
 
-                  <template #header-region="header">
-                    {{ $t(header.text) }}
-                  </template>
+<!--                  <template #header-region="header">-->
+<!--                    {{ $t(header.text) }}-->
+<!--                  </template>-->
 
-                  <template #header-district="header">
-                    {{ $t(header.text) }}
-                  </template>
+<!--                  <template #header-district="header">-->
+<!--                    {{ $t(header.text) }}-->
+<!--                  </template>-->
 
                   <template #header-ip_address="header">
                     {{ $t(header.text) }}
@@ -454,37 +452,37 @@ const onPageSizeChangedRight = async (event: number) => {
 
 
                   <template #item-user="items">
-                    <div class="flex justify-center" style="overflow-wrap: anywhere;">
+                    <div class="flex justify-left" style="overflow-wrap: anywhere;">
                       {{ items.user.username }}
                     </div>
                   </template>
 
-                  <template #item-region="items">
-                    <div class="flex justify-center" style="overflow-wrap: anywhere;">
-                      {{ items.user.region_parent }}
-                    </div>
-                  </template>
+<!--                  <template #item-region="items">-->
+<!--                    <div class="flex justify-left" style="overflow-wrap: anywhere;">-->
+<!--                      {{ items.user.region_parent }}-->
+<!--                    </div>-->
+<!--                  </template>-->
 
-                  <template #item-district="items">
-                    <div class="flex justify-center" style="overflow-wrap: anywhere;">
-                      {{ items.user.region && items.user.region[locale] }}
-                    </div>
-                  </template>
+<!--                  <template #item-district="items">-->
+<!--                    <div class="flex justify-left" style="overflow-wrap: anywhere;">-->
+<!--                      {{ items.user.region && items.user.region[locale] }}-->
+<!--                    </div>-->
+<!--                  </template>-->
 
                   <template #item-ip_address="items">
-                    <div class="flex justify-center" style="overflow-wrap: anywhere;">
+                    <div class="flex justify-left" style="overflow-wrap: anywhere;">
                       {{ items.ip_address }}
                     </div>
                   </template>
 
                   <template #item-mac_address="items">
-                    <div class="flex justify-center" style="overflow-wrap: anywhere;">
+                    <div class="flex justify-left" style="overflow-wrap: anywhere;">
                       {{ items.mac_address }}
                     </div>
                   </template>
 
                   <template #item-datetime="items">
-                    <div class="flex justify-center" style="overflow-wrap: anywhere;">
+                    <div class="flex justify-left" style="overflow-wrap: anywhere;">
                       {{ dayjs(items.datetime).format("DD-MM-YYYY HH:mm") }}
                     </div>
                   </template>

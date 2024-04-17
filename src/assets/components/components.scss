@@ -122,7 +122,7 @@ input.form-file-input::file-selector-button {
 
 // card
 .card {
-  @apply p-5 bg-white dark:bg-darkLayoutStorm rounded-md shadow-lg;
+  @apply p-5 bg-white dark:bg-darkLayoutStorm rounded-md shadow-lg rounded-[10px];
 }
 
 // date picker

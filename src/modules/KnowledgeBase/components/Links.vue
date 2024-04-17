@@ -104,9 +104,9 @@ onMounted(() => {
 
 <template>
   <div class="card">
-    <div class="flex justify-between items-center mb-5">
-      <h1 class="font-semibold text-lg mb-4 text-success">{{ $t('social_links') }}</h1>
-      <button class="btn-primary" uk-toggle="target: #links" @click="editLink = {}">
+    <div class="flex justify-between items-end mb-7">
+      <h1 class="font-semibold text-lg text-success">{{ $t('social_links') }}</h1>
+      <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full " uk-toggle="target: #links" @click="editLink = {}">
         {{ $t("Add") }}
       </button>
     </div>
@@ -115,7 +115,7 @@ onMounted(() => {
       <thead>
       <tr>
         <th v-for="field in linksFields"
-            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-center text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
+            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
           {{ $t(field.text) }}
         </th>
       </tr>
@@ -124,11 +124,11 @@ onMounted(() => {
       <tr v-for="item in store.linksList?.results" :key="item.id"
           class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
           :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
-        <td class="px-6 whitespace-no-wrap text-center ">{{ item.position }}</td>
-        <td class="px-6 whitespace-no-wrap text-center">{{ item.type }}</td>
-        <td class="px-6 whitespace-no-wrap text-center">{{ item.url }}</td>
+        <td class="px-6 whitespace-no-wrap text-left ">{{ item.id }}</td>
+        <td class="px-6 whitespace-no-wrap text-left">{{ item.type }}</td>
+        <td class="px-6 whitespace-no-wrap text-left">{{ item.url }}</td>
         <td class="px-6 whitespace-no-wrap">
-          <div class="flex py-2 justify-center">
+          <div class="flex py-2 justify-left">
             <button class="btn-warning btn-action" uk-toggle="target: #links" @click="editLink = item">
               <Icon icon="Pen New Square" color="#fff" size="16"/>
             </button>

@@ -140,14 +140,31 @@ export const splashItems = [
 ];
 
 export const locationFields = [
-
     {
-        text: "title",
+        text: "ID",
+        value: "id",
+    },
+    {
+        text: "name",
         value: "title",
     },
     {
         text: "description",
         value: "description",
+    },
+    {
+        text: "actions",
+        value: "actions",
+    },
+];
+export const Regions = [
+    {
+        text: "ID",
+        value: "id",
+    },
+    {
+        text: "name",
+        value: "name",
     },
     {
         text: "actions",
@@ -162,7 +179,7 @@ export const newsTemplateTable = [
         value: "id",
     },
     {
-        text: "title",
+        text: "name",
         value: "title",
     },
     {
@@ -212,7 +229,10 @@ export const versionControlFields = [
 ]
 
 export const productsFields = [
-
+    {
+        text: "ID",
+        value: 'id'
+    },
     {
         text: "Number (multi-digit-code)",
         value: "code"
@@ -230,7 +250,7 @@ export const productsFields = [
         value: "price"
     },
     {
-        text: 'quantity',
+        text: 'Quantity',
         value: 'quantity'
     },
 
@@ -241,8 +261,8 @@ export const productsFields = [
 ]
 export const phoneNumberFields = [
     {
-        text: "#",
-        value: "index"
+        text: "ID",
+        value: "id"
     },
     {
         text: "Phone Number",
@@ -256,8 +276,8 @@ export const phoneNumberFields = [
 
 export const linksFields = [
     {
-        text: "#",
-        value: "index"
+        text: "ID",
+        value: "id"
     },
     {
         text: "type",
@@ -275,7 +295,7 @@ export const linksFields = [
 
 export const headerPlaces = [
     {text: "id", value: "id"},
-    {text: "title", value: "title"},
+    {text: "name", value: "title"},
     {text: "phones", value: "phones"},
     {text: "region", value: "region"},
     {text: "address", value: "address"},

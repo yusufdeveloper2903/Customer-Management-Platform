@@ -8,6 +8,7 @@ import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
 import UIkit from "uikit";
+import {formatDate} from "@/mixins/features";
 //Declared variables
 const {t} = useI18n()
 const itemId = ref<number | null | undefined>(null);
@@ -118,12 +119,13 @@ const onGetData = async (val) => {
 
 <template>
   <div class="card">
-    <div class="flex justify-between items-end mb-10">
+    <div class="flex justify-between items-end mb-7">
       <label for="search" class="w-1/4">
         {{ $t('Search') }}
-        <input type="text" class="form-input" placeholder="Search" v-model="params.search"/>
+        <input type="text" class="form-input" :placeholder="$t('Search')" v-model="params.search"/>
       </label>
-      <button class="btn-primary" uk-toggle="target: #create_edit_promotion" @click="editData={}">
+      <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
+              uk-toggle="target: #create_edit_promotion" @click="editData={}">
         {{ $t("Add") }}
       </button>
     </div>
@@ -154,9 +156,15 @@ const onGetData = async (val) => {
       <template #item-title="item">
         {{ item.title[$i18n.locale] }}
       </template>
+      <template #item-start_date="item">
+        {{ formatDate(item.start_date) }}
+      </template>
+      <template #item-end_date="item">
+        {{ formatDate(item.end_date) }}
+      </template>
       <template #item-is_published="item">
         <label
-            className="relative inline-flex items-center cursor-pointer">
+            className="relative inline-flex items-left cursor-pointer">
           <input
               type="checkbox"
               v-model="item.is_published"
@@ -171,7 +179,7 @@ const onGetData = async (val) => {
       </template>
       <template #item-is_active="item">
         <label
-            className="relative inline-flex items-center cursor-pointer">
+            className="relative inline-flex items-left cursor-pointer">
           <input
               type="checkbox"
               v-model="item.is_active"
@@ -185,7 +193,7 @@ const onGetData = async (val) => {
         </label>
       </template>
       <template #item-actions="item">
-        <div class="flex my-4 justify-center">
+        <div class="flex my-4 justify-left">
           <button class="btn-warning btn-action" uk-toggle="target: #create_edit_promotion" @click="onGetData(item.id)">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>

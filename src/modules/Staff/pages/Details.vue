@@ -52,7 +52,7 @@ onMounted(async () => {
 const rules = computed(() => {
   return {
     phone: {
-      required: helpers.withMessage("required", required),
+      required: helpers.withMessage("validation.this_field_is_required", required),
       minLength: helpers.withMessage(
           "Номер телефона необходимо вводить в формате: '998 [XX] [XXX XX XX]",
           minLength(17)
@@ -60,10 +60,13 @@ const rules = computed(() => {
     },
 
     role: {
-      required: helpers.withMessage("required", required),
+      required: helpers.withMessage(
+          "validation.this_field_is_required",
+          required
+      ),
     },
     password: {
-      required: helpers.withMessage("required", required),
+      required: helpers.withMessage("validation.this_field_is_required", required),
     }
   };
 
@@ -153,9 +156,12 @@ const saveUser = async () => {
 <template>
   <div>
     <div class="md:flex sm:block items-start gap-5 dark:text-white h-fit">
-      <div class="card mb-5">
+      <div class="card mb-5"
+      >
         <div
             class="mb-5 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain"
+            style="width:300px"
+
         >
           <span v-if="!imageUrl" class="font-medium dark:text-white">{{
               $t("no_photo")
@@ -165,7 +171,6 @@ const saveUser = async () => {
               class="w-full h-full object-cover"
               :src="imageUrl"
               alt=""
-              style="width:300px;object-fit:cover"
           />
         </div>
         <div class="flex gap-3 mb-0.5">

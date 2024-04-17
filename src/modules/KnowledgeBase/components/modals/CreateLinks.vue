@@ -88,9 +88,7 @@ const updateDeal = async () => {
     } catch (error: any) {
       isSubmitted.value = false;
       if (error) {
-        toast.error(
-            error.response.message || "Error"
-        );
+        toast.error(t("error"));
       }
     }
 
@@ -108,9 +106,13 @@ const updateDeal = async () => {
     } catch (error: any) {
       isSubmitted.value = false;
       if (error) {
-        toast.error(
-            error.response.message || "Error"
-        );
+        if (error.response.data.message == '{\'type\': [ErrorDetail(string=\'social media link with this type already exists.\', code=\'unique\')]}') {
+          toast.error(t("social_media_exists"));
+        } else {
+          toast.error(t("error"));
+
+        }
+
       }
     }
   }

@@ -20,7 +20,7 @@ const {t} = useI18n();
 const rules = computed(() => {
   return {
     phone: {
-      required: helpers.withMessage("required", required),
+      required: helpers.withMessage("validation.this_field_is_required", required),
       minLength: helpers.withMessage(
           "must be +998 XX XXX XX XX form",
           minLength(17)

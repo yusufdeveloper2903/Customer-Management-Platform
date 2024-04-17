@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { smsFields } from "../../constants/index"
+import {useI18n} from "vue-i18n";
+import {smsFields} from "../../constants/index"
 import knowledgeBase from "../../store/index"
-import { onMounted, ref, reactive, watch } from "vue";
-import { toast } from "vue3-toastify";
+import {onMounted, ref, reactive, watch} from "vue";
+import {toast} from "vue3-toastify";
 import DeleteSmsSendingModal from "./DeleteSmsSending.vue";
 import UIkit from "uikit";
 import {useRouter} from "vue-router";
+import {formatDate} from "@/mixins/features";
 
-const { t } = useI18n()
+const {t} = useI18n()
 const router = useRouter()
 const store = knowledgeBase()
 const smsSendingList = ref<object[]>([]);
@@ -29,26 +30,34 @@ const filterSmsSending = reactive({
   start_time: null,
 
 });
+const props = defineProps<{
+  sms: string
+}>();
+
+let toRefresh = ref(false)
+watch(() => props.sms, function () {
+  toRefresh.value = !toRefresh.value
+})
 
 interface EditData {
   id: number | null,
   title: {
     uz: string,
     ru: string
-  } 
-    start_time: string,
-    status: string
+  }
+  start_time: string,
+  status: string
 }
 
 
 const editData = ref<EditData>({
   id: null,
-    title: {
-      uz: "",
-      ru: ""
-    },
-    start_time: "",
-    status: ""
+  title: {
+    uz: "",
+    ru: ""
+  },
+  start_time: "",
+  status: ""
 })
 
 const refresh = async (filter) => {
@@ -58,7 +67,7 @@ const refresh = async (filter) => {
     smsSendingList.value = store.smsSendingList.results;
   } catch (error: any) {
     toast.error(
-      error.response.message || "Error"
+        error.response.message || "Error"
     );
   }
 
@@ -74,7 +83,7 @@ onMounted(async () => {
 const changePagionation = (e: number) => {
   paginationFilter.page = e;
   current.value = e;
-  refresh({ ...paginationFilter, ...filterSmsSending });
+  refresh({...paginationFilter, ...filterSmsSending});
 };
 
 const searchByTitle = () => {
@@ -99,38 +108,34 @@ const deleteSms = () => {
 
 
 watch(
-  () => filterSmsSending.search,
-  () => {
-    if (smsSendingList.value.length <= 10) {
-      current.value = 1;
+    () => filterSmsSending.search,
+    () => {
+      if (smsSendingList.value.length <= 10) {
+        current.value = 1;
+      }
     }
-  }
 );
 
 watch(
-  
-    () => filterSmsSending.start_time , 
+    () => filterSmsSending.start_time,
     () => {
       refresh(filterSmsSending);
-      
+
       if (smsSendingList.value.length <= 10) {
         current.value = 1;
       }
     },
-
 );
 
 watch(
-  
-    () => filterSmsSending.status , 
+    () => filterSmsSending.status,
     () => {
       refresh(filterSmsSending);
-      
+
       if (smsSendingList.value.length <= 10) {
         current.value = 1;
       }
     },
-
 );
 
 
@@ -140,51 +145,51 @@ watch(
   <div>
 
 
-      <div class="md:flex items-center justify-between mb-5">
-        <form class="mb-4 md:flex items-center gap-5 md:w-9/12">
-          <div class="md:w-1/2">
-            <label for="search" class="dark:text-gray-300">
-              {{ $t("Search") }}
-            </label>
-            <input
-                id="search"
-                type="text"
-                class="form-input"
-                :placeholder="$t('Search')"
-                v-model="filterSmsSending.search"
-                @input="searchByTitle"
-            />
-          </div>
+    <div class="md:flex items-end justify-between mb-7">
+      <form class="md:flex items-center gap-5 md:w-9/12">
+        <div class="md:w-1/3">
+          <label for="search" class="dark:text-gray-300">
+            {{ $t("Search") }}
+          </label>
+          <input
+              id="search"
+              type="text"
+              class="form-input"
+              :placeholder="$t('Search')"
+              v-model="filterSmsSending.search"
+              @input="searchByTitle"
+          />
+        </div>
 
-          <div class="md:w-1/2 md:m-0 mt-2">
-            <label for="role" class="dark:text-gray-300">
-              {{ $t("Status") }}
-            </label>
-            <v-select
-                :placeholder="$t('Status')"
-                :options="store.statusList && store.statusList.results"
-                v-model="filterSmsSending.status"
-                :getOptionLabel="(name) => name.title[$i18n.locale]"  
-                :reduce="(name) => name.id"
-                >
-              <template #no-options> {{ $t("no_matching_options") }}</template>
-            </v-select>
-          </div>
+        <!--          <div class="md:w-1/2 md:m-0 mt-2">-->
+        <!--            <label for="role" class="dark:text-gray-300">-->
+        <!--              {{ $t("Status") }}-->
+        <!--            </label>-->
+        <!--            <v-select-->
+        <!--                :placeholder="$t('Status')"-->
+        <!--                :options="store.statusList && store.statusList.results"-->
+        <!--                v-model="filterSmsSending.status"-->
+        <!--                :getOptionLabel="(name) => name.title[$i18n.locale]"  -->
+        <!--                :reduce="(name) => name.id"-->
+        <!--                >-->
+        <!--              <template #no-options> {{ $t("no_matching_options") }}</template>-->
+        <!--            </v-select>-->
+        <!--          </div>-->
 
-          <div class="md:w-1/2 md:m-0 mt-2">
-            <label for="from" class="dark:text-gray-300">
-              {{ $t("from") }}
-            </label>
-            <VueDatePicker v-model="filterSmsSending.start_time"></VueDatePicker>
-          </div>
+        <div class="md:w-1/3 md:m-0 mt-2">
+          <label for="from" class="dark:text-gray-300">
+            {{ $t("from") }}
+          </label>
+          <VueDatePicker model-type="yyyy-MM-dd" :enable-time-picker="false" v-model="filterSmsSending.start_time"></VueDatePicker>
+        </div>
 
-        </form>
-        <button
-            class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-            @click="router.push('/add-sms')"
-        >
-          {{ $t("Add") }}
-        </button>
+      </form>
+      <button
+          class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
+          @click="router.push('/add-sms')"
+      >
+        {{ $t("Add") }}
+      </button>
     </div>
 
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="smsFields" :items="smsSendingList">
@@ -194,21 +199,25 @@ watch(
       </template>
 
       <template #header="data">
-        {{ t(data.text).toUpperCase() }}
+        {{ $t(data.text).toUpperCase() }}
       </template>
 
       <template #item-title="item">
-        {{ item.template && item.template.title && item.template.title[$i18n.locale] }}
+        {{ item.title }}
+      </template>
+      <template #header-description="data">
+        {{ $t(data.text).toUpperCase() }}
       </template>
 
       <template #item-status="item">
         <span
-          :class="item.status.unique_name == 'not_sent' ? 'rounded-md bg-danger px-4 pb-0.5 text-white' : item.status.unique_name == 'in_progress' ? 'rounded-md bg-warning px-4 pb-0.5 text-white' : 'rounded-md bg-primary px-4 pb-0.5 text-white'">{{
-            item.status.title[$i18n.locale] }}</span>
+            :class="item.status.unique_name == 'not_sent' ? 'rounded-md bg-danger px-4 pb-0.5 text-white' : item.status.unique_name == 'in_progress' ? 'rounded-md bg-warning px-4 pb-0.5 text-white' : 'rounded-md bg-primary px-4 pb-0.5 text-white'">{{
+            item.status.title[$i18n.locale]
+          }}</span>
       </template>
-
+<!--      formatDate-->
       <template #item-from_to="item">
-        <div>{{ item.start_time }}</div>
+        <div>{{ (item.start_time) }}</div>
       </template>
 
 
@@ -217,19 +226,21 @@ watch(
           <button class="btn-warning btn-action" @click="
                 router.push(`/sms-detail/${items.id}`)
               ">
-            <Icon icon="Pen New Square" color="#fff" size="16" />
+            <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>
           <button class="ml-3 btn-danger btn-action" @click="handleDeleteModal(items.id)">
-            <Icon icon="Trash Bin Trash" color="#fff" size="16" />
+            <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
           </button>
         </div>
       </template>
     </EasyDataTable>
 
-    <TwPagination class="mt-10 tw-pagination" :current="current" :total="store.smsSendingList && store.smsSendingList.count" :per-page="10"
-      :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')" @page-changed="changePagionation" />
+    <TwPagination :restart="toRefresh" class="mt-10 tw-pagination" :current="current"
+                  :total="store.smsSendingList && store.smsSendingList.count" :per-page="10"
+                  :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
+                  @page-changed="changePagionation"/>
 
-    <AddEditModal  :editData="editData" @saveNews="saveNews"/>
-    <DeleteSmsSendingModal  @deleteSms="deleteSms" :smsId="smsId"/>
+    <AddEditModal :editData="editData" @saveNews="saveNews"/>
+    <DeleteModal @delete-action="deleteSms" :id="'sms_sending-delete-modal'"/>
   </div>
 </template>

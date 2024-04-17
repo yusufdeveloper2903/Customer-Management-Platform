@@ -57,7 +57,7 @@ export default defineStore("knowledgeBase", {
                 type: '',
                 id: null
             },
-            image:'',
+            image: '',
             linksList: {
                 results: [] as Link[]
             } as Results<Link>,
@@ -87,7 +87,9 @@ export default defineStore("knowledgeBase", {
         deleteSmsTemplate(id: number) {
             return $axios.delete(`/knowledge_base/sms_template/${id}/`);
         },
-
+        deleteRegion(id: number) {
+            return $axios.delete(`/knowledge_base/region/${id}/`);
+        },
         async getNewsTemplate(params: Params) {
             const {data} = await $axios.get(`/knowledge_base/news_template/`, {
                 params,
@@ -97,6 +99,9 @@ export default defineStore("knowledgeBase", {
 
         createNewsTemplate(data: NewsTemplate) {
             return $axios.post(`/knowledge_base/news_template/`, data);
+        },
+        updateNewsTemplate(data) {
+            return $axios.patch(`/knowledge_base/news_template/${data.get("id")}/`, data);
         },
 
 
@@ -109,23 +114,29 @@ export default defineStore("knowledgeBase", {
         },
 
 
-        async getAllFormsList(params) {
-            const {data} = await $axios.get("/knowledge_base/location/", {
-                params,
-            });
+        async getAllFormsList(params: any) {
+            const {data} = await $axios.get("/knowledge_base/location/", {params});
             this.locationList = data;
             return this.locationList;
         },
 
-        updateOneForm(data: LocationPlaceData) {
-            return $axios.patch(`/knowledge_base/location/${data.id}/`, data);
+        updateOneForm(data: LocationPlaceData, id: number) {
+            return $axios.patch(`/knowledge_base/location/${id}/`, data);
         },
-
+        deleteLokation(id: number) {
+            return $axios.delete(`/knowledge_base/location/${id}/`);
+        },
 
         async getRegions(params) {
             const {data} = await $axios.get(`/knowledge_base/region/`, params);
             this.regionsList = data;
             return this.regionsList;
+        },
+        createRegions(data: object) {
+            return $axios.post('knowledge_base/region/', data)
+        },
+        updateRegions(data: any) {
+            return $axios.patch(`knowledge_base/region/${data.id}/`, data)
         },
 
         // version control
@@ -214,7 +225,7 @@ export default defineStore("knowledgeBase", {
         createPhones(data) {
             return $axios.post(`/knowledge_base/phones/`, data);
         },
-        
+
 
         create_phones_drag_and_drop(data) {
             return $axios.post(`/knowledge_base/phones/drag_and_drop/`, data);

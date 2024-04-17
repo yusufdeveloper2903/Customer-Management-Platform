@@ -17,7 +17,7 @@ const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase();
 const emit = defineEmits(["refresh"]);
 
-var newsTemplateData = ref<NewsTemplate>({
+let newsTemplateData = ref<NewsTemplate>({
   title: {
     uz: null,
     ru: null,
@@ -90,7 +90,7 @@ const updateDeal = async () => {
         file: file || "",
         ...rest,
       });
-      await store.updateProducts(fd).then(() => {
+      await store.updateNewsTemplate(fd).then(() => {
         setTimeout(() => {
           toast.success(t("updated_successfully"));
         }, 200);
@@ -151,7 +151,7 @@ const updateDeal = async () => {
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? $t("edit") : $t("Add") }}
+          {{ propData.editData.id ? $t("Edit") : $t("Add") }}
         </h2>
       </div>
 
@@ -160,12 +160,12 @@ const updateDeal = async () => {
           <Tab title="Uz">
             <form>
               <label for="nameUz"
-              >Nomi
+              >{{ $t('name') + ' ' + $t('UZ') }}
                 <input
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    placeholder="Nomi"
+                    :placeholder="$t('name')"
                     v-model="newsTemplateData.title.uz"
                     :class="
                     validate.title.uz.$errors.length ? 'required-input' : ''
@@ -181,12 +181,12 @@ const updateDeal = async () => {
               </label>
 
               <label class="mt-4 block" for="descriptionUz"
-              >Tavsif
+              >{{ $t('description') + ' ' + $t('UZ') }}
                 <input
                     id="descriptionUz"
                     type="text"
                     class="form-input"
-                    placeholder="Tavsif"
+                    :placeholder="$t('description')"
                     v-model="newsTemplateData.description.uz"
                     :class="
                     validate.description.uz.$errors.length
@@ -208,12 +208,12 @@ const updateDeal = async () => {
           <Tab title="Ru">
             <form>
               <label for="nameRu"
-              >Заголовок
+              >{{ $t('name') + ' ' + $t('RU') }}
                 <input
                     id="nameRu"
                     type="text"
                     class="form-input"
-                    placeholder="Заголовок"
+                    :placeholder="$t('name')"
                     v-model="newsTemplateData.title.ru"
                     :class="
                     validate.title.ru.$errors.length ? 'required-input' : ''
@@ -229,12 +229,12 @@ const updateDeal = async () => {
               </label>
 
               <label class="mt-4 block" for="descriptionRu"
-              >Описание
+              >{{ $t('description') + ' ' + $t('RU') }}
                 <input
                     id="descriptionRu"
                     type="text"
                     class="form-input"
-                    placeholder="Описание"
+                    :placeholder="$t('description')"
                     v-model="newsTemplateData.description.ru"
                     :class="
                     validate.description.ru.$errors.length
@@ -259,7 +259,7 @@ const updateDeal = async () => {
               id="nameUz"
               type="text"
               class="form-input mb-4"
-              placeholder="Nomi"
+              :placeholder="$t('Link')"
               v-model="newsTemplateData.url"
           />
         </label>
@@ -269,6 +269,8 @@ const updateDeal = async () => {
           <FileInput
               v-model="newsTemplateData.file"
               @remove="newsTemplateData.file = null"
+              :typeModal="propData.editData.id"
+              name="news-template"
           />
         </label>
       </div>
@@ -291,7 +293,7 @@ const updateDeal = async () => {
               v-if="isSubmitted"
           />
           <span>{{
-              propData.editData.id ? $t("edit") : $t("Add")
+              propData.editData.id ? $t("Edit") : $t("Add")
             }}</span>
         </button>
       </div>

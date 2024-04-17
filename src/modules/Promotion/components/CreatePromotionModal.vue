@@ -11,7 +11,7 @@ import useVuelidate, {Validation} from "@vuelidate/core";
 import prmotionBase from "../store/index";
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
-
+import FileInput from '@/components/FileInput/FileInput.vue'
 
 //Declared variables
 
@@ -122,10 +122,10 @@ const updateDeal = async () => {
   formData.append('is_published', productsData.value.is_published)
   formData.append('start_date', productsData.value.start_date)
   formData.append('end_date', productsData.value.end_date)
-  if (imageDiv.value) {
+  if (typeof productsData.value.detail_photo == 'object' || productsData.value.detail_photo == '') {
     formData.append('detail_photo', productsData.value.detail_photo)
   }
-  if (imageDivBackground.value) {
+  if (typeof productsData.value.background_photo == 'object' ||  productsData.value.background_photo =='' ) {
     formData.append('background_photo', productsData.value.background_photo)
   }
   if (propData.editData.id) {
@@ -234,7 +234,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
       <div class="uk-modal-body py-4">
         <Tabs>
           <Tab title="UZ">
-            <label>{{ $t('name') + ' '+ $t('UZ') }}</label>
+            <label>{{ $t('name') + ' ' + $t('UZ') }}</label>
             <input
                 type="text"
                 class="form-input"
@@ -249,7 +249,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             >
               {{ $t(error.$message) }}
             </p>
-            <label for="number" class="block mt-4">{{ $t('description') + ' '+ $t('UZ') }}
+            <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('UZ') }}
               <textarea
                   id="number"
                   type="text"
@@ -269,7 +269,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             </label>
           </Tab>
           <Tab title="RU">
-            <label>{{ $t('name') + ' '+ $t('RU') }}</label>
+            <label>{{ $t('name') + ' ' + $t('RU') }}</label>
             <input
                 type="text"
                 class="form-input"
@@ -284,7 +284,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             >
               {{ $t(error.$message) }}
             </p>
-            <label for="number" class="block mt-4">{{ $t('description') + ' '+ $t('RU') }}
+            <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('RU') }}
               <textarea
                   id="number"
                   type="text"
@@ -310,6 +310,34 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           </label>
           <VueDatePicker auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
         </div>
+
+        <div>
+
+          <label class="mt-4 block" for="photo">{{ $t('Detail photo') }}
+            <FileInput
+                v-model="productsData.detail_photo"
+                @remove="productsData.detail_photo = ''"
+                :typeModal="propData.editData.id"
+                name="promotion-modal"
+            />
+
+
+          </label>
+
+        </div>
+        <div>
+          <label class="mt-4 block" for="photo">{{ $t('Background photo') }}
+            <FileInput
+                v-model="productsData.background_photo"
+                @remove="productsData.background_photo = ''"
+                :typeModal="propData.editData.id"
+                name="second-promotion"
+            />
+
+
+          </label>
+
+        </div>
         <p class=" mt-5 mb-1">{{ $t("Published") }}:</p>
         <label className="relative inline-flex items-center cursor-pointer">
           <input
@@ -322,51 +350,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
           ></div>
         </label>
-        <div>
-
-          <label class="mt-4 block" for="photo">{{ $t('Detail photo') }}
-            <input @change="getFile" id="fileInput" type="file"
-                   class="form-file-input p-1"
-            />
-
-          </label>
-          <div v-if="propData.editData.detail_photo || imageDiv">
-            <img v-if="propData.editData.detail_photo && !imageDiv"
-                 class="w-[100%] h-[200px] rounded object-contain mt-3"
-                 :src="propData.editData.detail_photo "
-                 alt="Rounded avatar"
-            />
-            <img v-else
-                 class="w-[100%] h-[200px] rounded object-contain mt-3"
-                 :src="imageDiv"
-                 alt="Rounded avatar"
-            />
-
-          </div>
-        </div>
-        <div>
-
-          <label class="mt-4 block" for="photo">{{ $t('Background photo') }}
-            <input @change="getFileBackground" id="fileInputback" type="file"
-                   class="form-file-input p-1"
-            />
-
-          </label>
-          <div v-if="propData.editData.background_photo || imageDivBackground">
-            <img v-if="propData.editData.background_photo && !imageDivBackground"
-                 class="w-[100%] h-[200px] rounded object-contain mt-3"
-                 :src="propData.editData.background_photo "
-                 alt="Rounded avatar"
-            />
-            <img v-else
-                 class="w-[100%] h-[200px] rounded object-contain mt-3"
-                 :src="imageDivBackground"
-                 alt="Rounded avatar"
-            />
-
-          </div>
-        </div>
-
       </div>
 
       <div

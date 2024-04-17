@@ -84,12 +84,12 @@ const updateDeal = async () => {
           </Tab>
           <Tab title="Ru">
             <form>
-              <label for="nameRu">Заголовок</label>
+              <label for="nameRu">{{ $t('name') }}</label>
               <input
                 id="nameRu"
                 type="text"
                 class="form-input"
-                placeholder="Заголовок"
+                :placeholder="$t('name')"
               />
 
               <label class="mt-4 block" for="fileRu">Файл</label>

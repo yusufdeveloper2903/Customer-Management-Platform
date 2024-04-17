@@ -75,6 +75,7 @@ onMounted(() => {
 });
 
 function breadCrumbStart(newPath) {
+  // console.log(newPath, 'newpath')
   localStorage.setItem('sidebar', newPath)
   switch (newPath) {
     case "dashboard":
@@ -87,7 +88,24 @@ function breadCrumbStart(newPath) {
         {title: 'Users', active: true},
       ];
       break;
+    case "user detail":
+      BreadcrumbList.value = [
+        {title: 'Users', active: false},
+        {title: 'user_details', active: true},
+      ];
+      break;
+    case "transactions":
+      BreadcrumbList.value = [
+        {title: 'Transactions', active: true},
+      ];
+      break;
 
+    case "add-sms":
+      BreadcrumbList.value = [
+        {title: 'Notifications', active: false},
+        {title: 'addNotification', active: true},
+      ];
+      break;
     case "knowledgeBase":
       BreadcrumbList.value = [
         {title: 'nav.directory', active: true},
@@ -99,9 +117,35 @@ function breadCrumbStart(newPath) {
         {title: 'nav.staffs', active: true},
       ];
       break;
+
+    case "staff detail":
+      BreadcrumbList.value = [
+        {title: 'nav.staffs', active: false},
+        {title: 'staff_details', active: true},
+      ];
+      break;
     case "sms-template":
       BreadcrumbList.value = [
         {title: 'Notifications', active: true},
+      ];
+      break;
+    case "news-detail":
+      BreadcrumbList.value = [
+        {title: 'Notifications', active: false},
+        {title: 'detailNews', active: true}
+      ]
+      break;
+    case "add-news":
+      BreadcrumbList.value = [
+        {title: 'Notifications', active: false},
+        {title: 'addNews', active: true}
+      ]
+      break;
+
+    case "sms-detail":
+      BreadcrumbList.value = [
+        {title: 'Notifications', active: false},
+        {title: 'detailNotification', active: true},
       ];
       break;
 
@@ -136,13 +180,13 @@ function breadCrumbStart(newPath) {
       break;
     case "products":
       BreadcrumbList.value = [
-        {title: "products", active: true},
+        {title: "productsCategory", active: true},
       ];
       break;
     case "product-details":
       BreadcrumbList.value = [
-        {title: "products", active: false},
-        {title: "product detail", active: true},
+        {title: "productsCategory", active: false},
+        {title: "products", active: true},
       ];
       break;
     case "promotion":

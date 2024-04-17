@@ -1,7 +1,8 @@
 <script setup lang="ts">
 
 //Imported files
-
+import UIkit from "uikit";
+import {watchDebounced} from '@vueuse/core';
 import knowledgeStore from "@/modules/KnowledgeBase/store";
 import {nextTick, ref, watch} from "vue";
 import {useI18n} from "vue-i18n";
@@ -21,10 +22,12 @@ const itemForDelete = ref<number>();
 const pagination = ref({
   page: 1,
   page_size: 10,
+  search: ''
 });
 const oldData = ref<LocationPlace>();
 
 const openModal = (data?) => {
+  console.log(data, 'datra')
   if (data) oldData.value = data;
   else oldData.value = undefined;
   nextTick(() => {
@@ -48,28 +51,28 @@ const onPageSizeChanged = (e: any) => {
   pagination.value.page = 1
   getListForm(pagination)
 }
-
+watchDebounced(() => pagination.value.search, async function () {
+  getListForm(pagination)
+}, {deep: true, debounce: 500, maxWait: 5000,})
 async function getListForm(pagination: any) {
   loading.value = true;
-  await store.getAllFormsList(pagination);
+  await store.getAllFormsList(pagination.value);
   loading.value = false;
 }
+
+getListForm(pagination)
 
 const deleteAction = async () => {
   loading.value = true
   try {
-    await store.deleteVersion(userId.value)
-    UIkit.modal("#global-delete-modal").hide();
+    await store.deleteLokation(itemForDelete.value)
+    UIkit.modal("#location-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.locationList.count - 1) % pagination.value.page_size == 0) {
-      if (pagination.value.page > 1) {
-        pagination.value.page = pagination.value.page - 1
-        await getListForm(pagination)
-      } else {
-        pagination.page = 1
-        await getListForm(pagination)
-      }
-
+    if ((store.locationList.count - 1) % pagination.page > 0) {
+      pagination.value.page = pagination.value.page - 1
+      getListForm(pagination)
+    } else {
+      getListForm(pagination)
     }
     loading.value = false
   } catch (error: any) {
@@ -83,7 +86,7 @@ const deleteAction = async () => {
 
 <template>
   <div class="card">
-    <div class="flex items-end gap-2 mb-6">
+    <div class="flex items-end gap-2 mb-7 justify-between">
       <div class="w-1/4">
         <label for="search" class="dark:text-gray-300">
           {{ t("Search") }}
@@ -92,16 +95,17 @@ const deleteAction = async () => {
               type="text"
               class="form-input"
               :placeholder="t('Search')"
+              v-model="pagination.search"
           />
         </label>
       </div>
 
 
-      <button class="btn-success ml-auto" @click="openModal()">
+      <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full "
+              @click="openModal()">
         {{ t("Add") }}
       </button>
     </div>
-
     <div>
       <EasyDataTable
           hide-footer
@@ -113,23 +117,30 @@ const deleteAction = async () => {
         <template #empty-message>
           <span>{{ t("empty_text") }}</span>
         </template>
-
-        <template #header="data">
-          {{ t(data.text) }}
+        <template #header-title="item">
+          {{ $t(item.text) }}
         </template>
-
+        <template #header-phones="item">
+          {{ $t(item.text) }}
+        </template>
+        <template #header-region="item">
+          {{ $t(item.text) }}
+        </template>
+        <template #header-address="item">
+          {{ $t(item.text) }}
+        </template>
+        <template #header-actions="item">
+          {{ $t(item.text) }}
+        </template>
         <template #item-title="item">
           {{ item.title[locale] }}
         </template>
-
         <template #item-region="item">
           {{ item.region.name[locale] }}
         </template>
-
         <template #item-address="item">
           {{ item.address[locale] }}
         </template>
-
         <template #item-phones="item">
           <div v-for="phone in item.phones">
             {{ formatPhoneNumber(phone) }}
@@ -144,7 +155,7 @@ const deleteAction = async () => {
             <button
                 class="ml-3 btn-danger btn-action"
                 @click="
-                (itemForDelete = item.id), UIKit.modal('#delete-form').show()
+                (itemForDelete = item.id), UIKit.modal('#location-delete-modal').show()
               "
             >
               <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
@@ -166,7 +177,7 @@ const deleteAction = async () => {
     </div>
 
     <AddEditNearbyPlaces :oldData="oldData" @refresh="getListForm"/>
-    <DeleteModal @delete-action="deleteAction"/>
+    <DeleteModal @delete-action="deleteAction" id="location-delete-modal"/>
   </div>
 </template>
 

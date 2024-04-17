@@ -1,5 +1,10 @@
 export const headerBackUp = [
     {
+        text: "ID",
+        value: 'id'
+    },
+    {
+
         text: "Author",
         value: "author",
     },
@@ -19,6 +24,10 @@ export const headerBackUp = [
 ]
 export const headerDataArchive = [
     {
+        text: "ID",
+        value: 'id'
+    },
+    {
         text: "Author",
         value: "author",
     },
@@ -36,18 +45,23 @@ export const headerDataArchive = [
     },
 ]
 export const headerLoggingLeft = [
+
+    {
+        text: "ID",
+        value: "id"
+    },
     {
         text: "Login",
         value: "user",
     },
-    {
-        text: "region",
-        value: "region",
-    },
-    {
-        text: "district",
-        value: "district",
-    },
+    // {
+    //     text: "region",
+    //     value: "region",
+    // },
+    // {
+    //     text: "district",
+    //     value: "district",
+    // },
     {
         text: "ip_address",
         value: "ip_address",
@@ -63,6 +77,10 @@ export const headerLoggingLeft = [
 ]
 export const headerLoggingRight = [
     {
+        text: "ID",
+        value: "id"
+    },
+    {
         text: "actions",
         value: "request",
     },
@@ -70,14 +88,14 @@ export const headerLoggingRight = [
         text: "Login",
         value: "user",
     },
-    {
-        text: "region",
-        value: "region",
-    },
-    {
-        text: "district",
-        value: "district",
-    },
+    // {
+    //     text: "region",
+    //     value: "region",
+    // },
+    // {
+    //     text: "district",
+    //     value: "district",
+    // },
     {
         text: "ip_address",
         value: "ip_address",

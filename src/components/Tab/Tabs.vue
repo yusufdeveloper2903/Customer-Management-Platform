@@ -56,14 +56,16 @@ export default {
     const selectedTitle = ref(tabTitles.value[0]);
 
     const storeData = localStorage.getItem('knowledgeBase')
+    const storeData2 = localStorage.getItem('sms')
     const storedModule = localStorage.getItem('sidebar')
     if (storeData && storedModule === 'knowledgeBase' && props.unique === 'unique') {
       selectedTitle.value = storeData
+    } else if (storeData2 && storedModule === 'sms-template' && props.unique === 'unique') {
+      selectedTitle.value = storeData2
     }
     provide("selectedTitle", selectedTitle);
 
     function onTitleSelected(title) {
-      // console.log(title, 'title')
       selectedTitle.value = title;
       emit("selectedTitle", selectedTitle.value);
     }

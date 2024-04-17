@@ -9,6 +9,7 @@ import Products from "../components/Products.vue"
 import PrivacyPolicy from "../components/PrivacyPolicy.vue";
 import TermsAndConditions from "../components/TermsAndConditions.vue"
 import Contacts from "../components/Links.vue";
+import CreateRegions from '../components/Regions.vue'
 import {ref} from 'vue'
 
 const knowledge = ref('')
@@ -47,6 +48,9 @@ const selectedTitle = (val) => {
 
       <Tab :title="'PrivacyPolicy'">
         <PrivacyPolicy/>
+      </Tab>
+      <Tab :title="'region'">
+        <CreateRegions :knowledge="knowledge"/>
       </Tab>
 
       <Tab :title="'Terms_and_conditions'">

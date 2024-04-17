@@ -28,10 +28,10 @@ let formData = reactive<Login>({
 const rules = computed(() => {
   return {
     username: {
-      required: helpers.withMessage("required", required),
+      required: helpers.withMessage("validation.this_field_is_required", required),
     },
     password: {
-      required: helpers.withMessage("required", required),
+      required: helpers.withMessage("validation.this_field_is_required", required),
     },
   };
 });

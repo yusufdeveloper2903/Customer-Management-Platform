@@ -36,11 +36,11 @@ const sms_code = ref<string>("");
 const rules = computed(() => {
   return {
     number: {
-      required: helpers.withMessage("required", required),
+      required: helpers.withMessage("validation.this_field_is_required", required),
       minLength: helpers.withMessage("mustbe no less than 16", minLength(19)),
     },
     exp_date: {
-      required: helpers.withMessage("required", required),
+      required: helpers.withMessage("validation.this_field_is_required", required),
       minLength: helpers.withMessage("mustbe no less than 4", minLength(5)),
     },
   };

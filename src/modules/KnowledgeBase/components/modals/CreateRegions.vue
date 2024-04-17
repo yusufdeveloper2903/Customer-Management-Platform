@@ -16,24 +16,30 @@ const emits = defineEmits(["saveSmsTemplate"]);
 
 interface EditData {
   id: number | null,
-  title: string,
-  description: string,
+  name: {
+    ru: string | null
+    uz: string | null
+  },
 }
 
 let smsTemplateData = ref({
-  title: '',
-  description: '',
+  name: {
+    ru: '',
+    uz: ''
+  },
 
 })
 
 const rules = computed(() => {
   return {
-    title: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
+    name: {
+      ru: {
+        required: helpers.withMessage("validation.this_field_is_required", required),
 
-    },
-    description: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
+      },
+      uz: {
+        required: helpers.withMessage("validation.this_field_is_required", required),
+      }
     },
   };
 
@@ -46,17 +52,18 @@ const propData = defineProps<{ editData: EditData }>();
 
 function openModal() {
   if (propData.editData.id) {
-    smsTemplateData.value.title = propData.editData.title
-    smsTemplateData.value.description = propData.editData.description
+    smsTemplateData.value.name.uz = propData.editData.name.uz
+    smsTemplateData.value.name.ru = propData.editData.name.ru
+
   } else {
-    smsTemplateData.value.title = ""
-    smsTemplateData.value.description = ""
+    smsTemplateData.value.name.uz = ""
+    smsTemplateData.value.name.ru = ""
   }
 }
 
 function clearData() {
-  smsTemplateData.value.title = ""
-  smsTemplateData.value.description = ""
+  smsTemplateData.value.name.ru = ""
+  smsTemplateData.value.name.uz = ""
 }
 
 const updateDeal = async () => {
@@ -65,10 +72,10 @@ const updateDeal = async () => {
 
   if (propData.editData.id) {
     try {
-      await store.updateSmsTemplate({id: propData.editData.id, ...smsTemplateData.value})
+      await store.updateRegions({id: propData.editData.id, ...smsTemplateData.value})
       emits("saveSmsTemplate");
       toast.success(t("updated_successfully"));
-      UIkit.modal("#sms_template").hide();
+      UIkit.modal("#regions").hide();
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
@@ -79,12 +86,12 @@ const updateDeal = async () => {
 
   } else {
     try {
-      await store.createSmsTemplate(smsTemplateData.value).then(() => {
+      await store.createRegions(smsTemplateData.value).then(() => {
         emits("saveSmsTemplate");
         setTimeout(() => {
           toast.success(t("created_successfully"));
         }, 200);
-        UIkit.modal("#sms_template").hide();
+        UIkit.modal("#regions").hide();
 
       });
       isSubmitted.value = false;
@@ -92,7 +99,6 @@ const updateDeal = async () => {
       isSubmitted.value = false;
       if (error) {
         toast.error(
-            // error.response || error.response.data.msg || error.response.data.error || "Error"
             error.response || "Error"
         );
       }
@@ -102,7 +108,7 @@ const updateDeal = async () => {
 </script>
 
 <template>
-  <div id="sms_template" class="uk-flex-top" uk-modal @shown="openModal" @hidden="validate.$reset()">
+  <div id="regions" class="uk-flex-top" uk-modal @shown="openModal" @hidden="validate.$reset()">
     <div
         class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
     >
@@ -113,53 +119,60 @@ const updateDeal = async () => {
         </h2>
       </div>
       <div class="uk-modal-body py-4">
-
-        <form>
-          <label for="nameUz">{{ $t('name') }}
-            <input
-                id="nameUz"
-                type="text"
-                class="form-input"
-                :placeholder="$t('name')"
-                v-model="smsTemplateData.title"
-                :class="validate.title.$errors.length ? 'required-input' : ''"
-            />
-            <p
-                v-for="error in validate.title.$errors"
-                :key="error.$uid"
-                class="text-danger text-sm"
-            >
-              {{ $t(error.$message) }}
-            </p>
-          </label>
-
-
-          <label class="mt-4 block" for="descriptionUz">{{ $t('description') }}
-            <textarea
-                id="descriptionUz"
-                type="text"
-                class="form-input"
-                :placeholder="$t('description')"
-                v-model="smsTemplateData.description"
-                :class="validate.description.$errors.length ? 'required-input' : ''"
-            />
-            <p
-                v-for="error in validate.description.$errors"
-                :key="error.$uid"
-                class="text-danger text-sm"
-            >
-              {{ $t(error.$message) }}
-            </p>
-          </label>
-        </form>
+        <Tabs class="mb-4">
+          <Tab title="UZ">
+            <form>
+              <label for="nameUz">{{ $t('name') + ' ' + $t('UZ') }}
+                <input
+                    id="nameUz"
+                    type="text"
+                    class="form-input"
+                    :placeholder="$t('name')"
+                    v-model="smsTemplateData.name.uz"
+                    :class="validate.name.uz.$errors.length ? 'required-input' : ''"
+                />
+                <p
+                    v-for="error in validate.name.uz.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ $t(error.$message) }}
+                </p>
+              </label>
 
 
+            </form>
+          </Tab>
+          <Tab title="RU">
+            <form>
+              <label for="nameUz">{{ $t('name') + ' ' + $t('RU') }}
+                <input
+                    id="nameUz"
+                    type="text"
+                    class="form-input"
+                    :placeholder="$t('name')"
+                    v-model="smsTemplateData.name.ru"
+                    :class="validate.name.ru.$errors.length ? 'required-input' : ''"
+                />
+                <p
+                    v-for="error in validate.name.ru.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ $t(error.$message) }}
+                </p>
+              </label>
+
+
+            </form>
+          </Tab>
+        </Tabs>
       </div>
 
       <div
           class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
       >
-        <button uk-toggle="target: #sms_template" class="btn-secondary" @click="clearData">
+        <button uk-toggle="target: #regions" class="btn-secondary" @click="clearData">
           {{ $t("Cancel") }}
         </button>
 

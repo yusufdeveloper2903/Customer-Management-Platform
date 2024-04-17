@@ -120,7 +120,7 @@ axiosIns.interceptors.response.use(
         error.response.data &&
         error.response.data.message
       ) {
-        toast.error(error.response.data.message);
+        // toast.error(error.response.data.message);
       }
     } else if (error.response.status === 500) {
       toast.error("Error from server!");

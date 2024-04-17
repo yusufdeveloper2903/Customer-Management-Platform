@@ -7,6 +7,7 @@ import {toast} from "vue3-toastify";
 import {formatPhoneNumber} from "../features";
 import DoubleRight from "../img/double-right-chevron-svgrepo-com.svg"
 import {useI18n} from 'vue-i18n'
+import {formatDate} from "@/mixins/features";
 // import {useI18n} from "vue-i18n";
 
 // const {locale} = useI18n();
@@ -83,8 +84,8 @@ onMounted(async () => {
 <template>
   <div>
     <div class="card">
-      <div class="md:flex items-center justify-between mb-5">
-        <form class="mb-4 md:flex items-center gap-5 md:w-5/12">
+      <div class="md:flex items-center justify-between mb-9">
+        <form class=" md:flex items-center gap-5 md:w-5/12">
           <div class="md:w-1/2">
             <label for="search" class="dark:text-gray-300">
               {{ $t("Search") }}
@@ -138,10 +139,24 @@ onMounted(async () => {
           {{ $t(header.text).toUpperCase() }}
         </template>
 
-
+        <template #item-id="items">
+          <span>
+            {{ items.id }}
+          </span>
+        </template>
         <template #item-phone="items">
           <span>
             {{ formatPhoneNumber(items.phone) }}
+          </span>
+        </template>
+        <template #item-created_date="data">
+          <span>
+            {{ formatDate(data.created_date) }}
+          </span>
+        </template>
+        <template #item-last_login="data">
+          <span>
+            {{ formatDate(data.last_login) }}
           </span>
         </template>
 

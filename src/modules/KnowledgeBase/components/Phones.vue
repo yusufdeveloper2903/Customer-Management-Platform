@@ -103,9 +103,9 @@ onMounted(() => {
 
 <template>
   <div>
-    <div class="flex justify-between items-center mb-5">
-      <h1 class="font-semibold text-lg mb-4 text-success">{{ $t('phone_numbers') }}</h1>
-      <button class="btn-primary" uk-toggle="target: #phones" @click="editPhone = {}">
+    <div class="flex justify-between items-end mb-7">
+      <h1 class="font-semibold text-lg text-success">{{ $t('phone_numbers') }}</h1>
+      <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full " uk-toggle="target: #phones" @click="editPhone = {}">
         {{ $t("Add") }}
       </button>
     </div>
@@ -115,7 +115,7 @@ onMounted(() => {
       <tr>
         <th
             v-for="field in phoneNumberFields"
-            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-center text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider"
+            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider"
         >
           {{ $t(field.text) }}
 
@@ -132,13 +132,13 @@ onMounted(() => {
           @dragover="dragOver"
           @drop="dragDrop(item)"
       >
-        <td class="px-6 whitespace-no-wrap text-center">
-          {{ item.position }}
+        <td class="px-6 whitespace-no-wrap text-left">
+          {{ item.id }}
         </td>
 
-        <td class="px-6 whitespace-no-wrap text-center">{{ item.number }}</td>
-        <td class="px-6 whitespace-no-wrap text-center">
-          <div class="flex py-2 justify-center">
+        <td class="px-6 whitespace-no-wrap text-left">{{ item.number }}</td>
+        <td class="px-6 whitespace-no-wrap text-left">
+          <div class="flex py-2 justify-left">
             <button
                 class="btn-warning btn-action"
                 uk-toggle="target: #phones"

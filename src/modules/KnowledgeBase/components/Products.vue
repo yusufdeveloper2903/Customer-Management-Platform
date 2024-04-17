@@ -1,6 +1,6 @@
 <script setup lang="ts">
 //Imported files
-import {reactive, ref, watch} from "vue";
+import {nextTick, reactive, ref, watch} from "vue";
 import {toast} from "vue3-toastify";
 import {productsFields} from "../constants";
 import CreateProducts from "./modals/CreateProductsModal.vue";
@@ -8,7 +8,7 @@ import knowledgeBase from "../store/index"
 import UIkit from "uikit";
 import {watchDebounced} from "@vueuse/core";
 import {useI18n} from "vue-i18n";
-
+import ShowFileModal from "@/modules/KnowledgeBase/components/ShowImageModal.vue";
 //Declared variables
 
 const {t} = useI18n()
@@ -47,6 +47,15 @@ interface EditData {
   quantity: number | null
 }
 
+interface Emits {
+  (event: "update:modelValue", value: File | File[]): void;
+
+  (event: "remove", value: ReturnValue | string): void;
+
+  (event: "show", value: ReturnValue | string): void;
+}
+
+const emit = defineEmits<Emits>();
 
 const editData = ref<EditData>({
   id: 0,
@@ -124,13 +133,20 @@ watchDebounced(
       await refresh(params)
     }, {deep: true, debounce: 500, maxWait: 5000}
 );
-
-
+const image = ref<string>("");
+const imageCard = ref();
+const onShowFile = (item: any) => {
+  image.value = item;
+  nextTick(() => {
+    UIkit.modal("#file-show-image").show();
+    emit("show", item);
+  });
+};
 </script>
 
 <template>
   <div class="card">
-    <div class="flex justify-between items-end mb-10">
+    <div class="flex justify-between items-end mb-7">
 
       <label for="search" class="w-1/4">
         {{ $t('Search') }}
@@ -138,13 +154,14 @@ watchDebounced(
                v-model="params.search"/>
       </label>
 
-      <button class="btn-primary" uk-toggle="target: #create_products" @click="editData = <EditData>{}">
+      <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
+              uk-toggle="target: #create_products" @click="editData = <EditData>{}">
         {{ $t("Add") }}
       </button>
     </div>
 
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="productsFields"
-                   :items="store.productsList.results" show-index>
+                   :items="store.productsList.results">
 
       <template #empty-message>
         <span>{{ $t('empty_text') }}</span>
@@ -169,17 +186,25 @@ watchDebounced(
       <template #header-price="header">
         {{ $t(header.text) }}
       </template>
+      <template #item-price="data">
+        {{ (`${data.price}`).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' Som' }}
+      </template>
+      <template #header-quantity="header">
+        {{ $t(header.text) }}
+      </template>
 
       <template #item-title="item">
         {{ item.title[$i18n.locale] }}
       </template>
 
+
       <template #item-image="item">
-        <div class="py-3 flex justify-center items-center gap-3">
+        <div class="py-3 flex justify-left items-center gap-3">
           <img v-if="item.image"
                class="w-[45px] h-[45px] rounded object-cover"
                :src="item.image"
                alt="Rounded avatar"
+               @click="onShowFile(item.image)"
           />
           <div
               v-else
@@ -198,7 +223,7 @@ watchDebounced(
       </template>
 
       <template #item-actions="item">
-        <div class="flex justify-center my-4">
+        <div class="flex justify-left my-4">
           <button class="btn-warning btn-action" uk-toggle="target: #create_products" @click="editData = item">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>
@@ -219,6 +244,6 @@ watchDebounced(
                   @page-changed="changePagionation" @per-page-changed="onPageSizeChanged"/>
 
     <CreateProducts :editData="editData" @saveProducts="saveProducts"/>
-
+    <ShowFileModal :image="image" ref="imageCard" id="file-show-image"/>
   </div>
 </template>
