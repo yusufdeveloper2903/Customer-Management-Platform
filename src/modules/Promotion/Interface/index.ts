@@ -1,5 +1,19 @@
-export interface Params {
-    page?: number;
-    page_size?: number;
-    search?: string;
+export interface EditData {
+    id: number | null,
+    title_ru: string,
+    title_uz: string,
+    title_kr: string,
+    description_ru: string,
+    description_uz: string,
+    description_kr: string,
+    is_active: boolean,
+    background_photo: string,
+    detail_photo: string,
+    start_date: string,
+    end_date: string,
+    description: string,
+    title: string,
+    is_published: boolean,
+    modified_date: string
+
 }

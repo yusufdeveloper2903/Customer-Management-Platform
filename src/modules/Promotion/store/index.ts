@@ -33,7 +33,7 @@ export default defineStore("prmotionBase", {
             return $axios.patch(`/knowledge_base/promotions/${data.get("id")}/`, data);
         },
 
-        deletePromotion(id: number) {
+        deletePromotion(id: any) {
             return $axios.delete(`/knowledge_base/promotions/${id}/`);
         },
     },

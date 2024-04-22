@@ -1,57 +1,42 @@
 <script lang="ts" setup>
+
+
+//IMPORTED FILES
 import {Ref, ref, computed} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
-import Tabs from "@/components/Tab/Tabs.vue";
-import Tab from "@/components/Tab/Tab.vue";
 import knowledgeBase from "../../store/index";
+import {EditCreate} from '../../interfaces/index'
 
+
+//DECLARED VARIABLES
 const {t} = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase()
 const emits = defineEmits(["saveSmsTemplate"]);
-
-interface EditData {
-  id: number | null,
-  title: string,
-  description: string,
-}
-
+const propData = defineProps<{ editData: EditCreate }>();
 let smsTemplateData = ref({
   title: '',
   description: '',
 
 })
 
-const rules = computed(() => {
-  return {
-    title: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
 
-    },
-    description: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
-    },
-  };
-
-});
-
-const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
-
-const propData = defineProps<{ editData: EditData }>();
-
-
+//FUNCTIONS
 function openModal() {
   if (propData.editData.id) {
     smsTemplateData.value.title = propData.editData.title
     smsTemplateData.value.description = propData.editData.description
-  } else {
-    smsTemplateData.value.title = ""
-    smsTemplateData.value.description = ""
   }
+}
+
+const hideModal = () => {
+  validate.value.$reset()
+  smsTemplateData.value.title = ""
+  smsTemplateData.value.description = ""
 }
 
 function clearData() {
@@ -79,30 +64,40 @@ const updateDeal = async () => {
 
   } else {
     try {
-      await store.createSmsTemplate(smsTemplateData.value).then(() => {
-        emits("saveSmsTemplate");
-        setTimeout(() => {
-          toast.success(t("created_successfully"));
-        }, 200);
-        UIkit.modal("#sms_template").hide();
-
-      });
+      await store.createSmsTemplate(smsTemplateData.value)
+      emits("saveSmsTemplate");
+      toast.success(t("created_successfully"));
+      UIkit.modal("#sms_template").hide();
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
       if (error) {
-        toast.error(
-            // error.response || error.response.data.msg || error.response.data.error || "Error"
-            error.response || "Error"
-        );
+        toast.error(error.response || "Error");
       }
     }
   }
 };
+
+
+//COMPUTED
+const rules = computed(() => {
+  return {
+    title: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+
+    },
+    description: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+  };
+
+});
+
+const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
 </script>
 
 <template>
-  <div id="sms_template" class="uk-flex-top" uk-modal @shown="openModal" @hidden="validate.$reset()">
+  <div id="sms_template" class="uk-flex-top" uk-modal @shown="openModal" @hidden="hideModal">
     <div
         class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
     >

@@ -1,17 +1,21 @@
 <script setup lang="ts">
+
+//IMPORTED FILES
+
 import {toast} from "vue3-toastify";
 import users from "../store/index";
 import {useI18n} from "vue-i18n";
+//DECLARED VARIABLES
 
 const store = users();
 const {t} = useI18n();
-
-interface PropsUser {
-  userId: any;
-}
-
-const props = defineProps<PropsUser>();
+const props = defineProps<{
+  userId: number
+}>();
 const emits = defineEmits(["deleteUser"]);
+
+
+//FUNCTIONS
 
 const createTerminateId = async () => {
   try {

@@ -3,64 +3,84 @@ export interface Results<T> {
     next: number | null;
     previous: number | null;
     results: T[];
-  }
+}
 
-  export interface Banner {
-    id: number;
-    start_time: string | null;
-    end_time: string | null;
+export interface EditData {
+    id: number | null,
     title: {
-        ru: string | null;
-        uz: string | null
-    };
-    description: {
-        ru: string | null;
-        uz: string | null
-    };
-    file: string | null;
+        uz: string,
+        ru: string
+    }
+    file: string,
+    start_time: string,
+    status: string
+}
+
+export interface NewsData {
+    start_time: any;
     url: string | null;
+    status: string | null,
+    title_ru: string,
+    title_uz: string,
+    title_kr: string,
+    title: string,
+    description_ru: string,
+    description_uz: string,
+    description_kr: string,
+    description: string,
+    photo: string | null,
+    receivers: number[],
+    template: object,
+    enable_push_notify: boolean
+}
+
+export interface SmsSendingData {
+    start_time: string | null;
     template: {
-        id: number;
-        title: {
-            ru: string | null;
-            uz: string | null
-        }
+        id: number | null;
+        title: string
+        description: string
     }
-    status: {
-        id: number;
-        title: {
-            ru: string | null;
-            uz: string | null
-        }
-        unique_name: string
+    description: string
+    receivers: number[]
+    title: string
+}
+
+export interface EditData {
+    id: number | null,
+    title: {
+        uz: string,
+        ru: string
     }
-  }
+    start_time: string,
+}
+
 
 export interface News {
     id: number;
     start_time: string;
-    title: {
-        ru: string;
-        uz: string;
-    },
-    description: {
-        ru: string;
-        uz: string;
-    };
+    title: string,
+    title_uz: string,
+    title_ru: string,
+    title_kr: string,
+    description: string;
+    description_uz: string;
+    description_ru: string;
+    description_kr: string;
     file: string | null;
     url_title: null | string,
     url: string | null,
     enable_push_notify: boolean;
     template: {
         id: number;
-        title: {
-            ru: string;
-            uz: string;
-        }
-        description: {
-            ru: string;
-            uz: string;
-        };
+        title: string,
+        title_ru: string,
+        title_uz: string,
+        title_kr: string,
+        description: string,
+        description_ru: string,
+        description_uz: string,
+        description_kr: string,
         file: string | null;
         url: string | null;
     }
@@ -70,26 +90,12 @@ export interface News {
 export interface SmsSending {
     id: number;
     start_time: string | null
-    title: {
-        ru: string;
-        uz: string;
-    },
-    description: {
-        ru: string;
-        uz: string;
-    };
+    title: string,
+    description: string;
     template: {
         id: number;
-        title: {
-            ru: string;
-            uz: string;
-        }
-        description: {
-            ru: string;
-            uz: string;
-        };
-        file: string | null;
-        url: string | null;
+        title: string
+        description: string
     }
     status: {
         id: number;
@@ -102,19 +108,19 @@ export interface SmsSending {
 }
 
 export interface Reseivers {
-id: number;
-full_name: string | null;
-phone: string | null;
-created_date: string | null;
-last_login: string | null;
-is_active: boolean
+    id: number;
+    full_name: string | null;
+    phone: string | null;
+    created_date: string | null;
+    last_login: string | null;
+    is_active: boolean
 }
 
 export interface Status {
     id: number;
-        title: {
-            ru: string | null;
-            uz: string | null
-        }
+    title: {
+        ru: string | null;
+        uz: string | null
+    }
     unique_name: string
 }

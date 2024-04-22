@@ -38,28 +38,6 @@ export const categoryitems = [
     },
 ];
 
-export const introFields = [
-    {
-        text: "ID",
-        value: "id",
-    },
-    {
-        text: "photo",
-        value: "photo",
-    },
-    {
-        text: "Заголовок",
-        value: "name",
-    },
-    {
-        text: "Описания",
-        value: "description",
-    },
-    {
-        text: "actions",
-        value: "actions",
-    },
-];
 
 export const introItems = [
     {
@@ -292,27 +270,62 @@ export const linksFields = [
         value: "actions"
     },
 ]
-
+export const linkType = [
+    {
+        id: 1,
+        type: "website",
+        name: "Website"
+    },
+    {
+        id: 2,
+        type: "telegram",
+        name: "Telegram"
+    },
+    {
+        id: 3,
+        type: "instagram",
+        name: "Instagram"
+    },
+    {
+        id: 4,
+        type: "facebook",
+        name: "Facebook"
+    },
+    {
+        id: 5,
+        type: "twitter",
+        name: "Twitter"
+    },
+    {
+        id: 6,
+        type: "tiktok",
+        name: "TikTok"
+    },
+]
 export const headerPlaces = [
-    {text: "id", value: "id"},
-    {text: "name", value: "title"},
-    {text: "phones", value: "phones"},
-    {text: "region", value: "region"},
-    {text: "address", value: "address"},
-    {text: "actions", value: "actions"},
+    {
+        text: "id",
+        value: "id"
+    },
+    {
+        text: "name",
+        value: "title"
+    },
+    {
+        text: "phones",
+        value: "phones"
+    },
+    {
+        text: "region",
+        value: "region"
+    },
+    {
+        text: "address",
+        value: "address"
+    },
+    {
+        text: "actions",
+        value: "actions"
+    },
 ]
 
-export const phoneNumberItems = [
-    {
-        index: 1,
-        phone: '998990076655'
-    },
-    {
-        index: 2,
-        phone: '998997076625'
-    },
-    {
-        index: 3,
-        phone: '998990546655'
-    },
-]

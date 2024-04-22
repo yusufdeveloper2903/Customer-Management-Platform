@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+
+//IMPORTED FILES
 import {Ref, computed, ref, onMounted} from "vue";
 import staff from "../store/index";
 import {useI18n} from "vue-i18n";
@@ -8,17 +11,13 @@ import {useRoute, useRouter} from "vue-router";
 import {toast} from "vue3-toastify";
 import {objectToFormData} from "@/mixins/formmatter";
 
-// store
+//DECLARED VARIABLES
 const store = staff()
-
-// variables
 const {locale, t} = useI18n();
 const imageUrl = ref<string>("")
 const isPasswordShown = ref<boolean>(false)
 const router = useRouter();
 const route = useRoute();
-
-// user's data
 let userData = ref({
   id: null,
   full_name: "",
@@ -30,15 +29,14 @@ let userData = ref({
   photo: null
 })
 
+
+//MOUNTED LIFE CYCLE
 onMounted(async () => {
   await store.getUsersRolesList()
-
   if (route.params.id) {
     store.getStaffById(Number(route.params.id)).then(() => {
-
       userData.value = store.staff;
       userData.value.password = store.staff.show_password
-
       if (store.staff.photo) {
         imageUrl.value = store.staff.photo;
         userData.value.photo = null;
@@ -48,7 +46,74 @@ onMounted(async () => {
 });
 
 
-// required fields
+// FUNCTIONS
+const handleFileUpload = (event: any) => {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = (event: any) => {
+    imageUrl.value = event.target.result;
+    userData.value.photo = file;
+  };
+  reader.readAsDataURL(file);
+};
+
+const deleteImage = () => {
+  imageUrl.value = "";
+  userData.value.photo = null;
+};
+
+function removeSpaces(str) {
+  return str.replace(/[\s+]/g, "");
+}
+
+const saveUser = async () => {
+  const success = await validate.value.$validate();
+  if (!success) return;
+
+  if (userData.value.phone) {
+    userData.value.phone = removeSpaces(userData.value.phone);
+  }
+
+  if (typeof userData.value.password === "string" && !userData.value.password) {
+    userData.value.password = "";
+  }
+
+
+  const formData = objectToFormData(userData.value);
+  if (route.params.id) {
+    try {
+      await store.updateStaff(formData)
+      await router.push("/staff");
+      toast.success(t("updated_successfully"));
+    } catch (error: any) {
+      if (error) {
+        toast.error(t('error'))
+      }
+    }
+
+  } else {
+    try {
+      await store.createStaff(formData)
+      await router.push("/staff");
+      toast.success(t("created_successfully"));
+    } catch (error: any) {
+
+      if (error.response.data.message == '{\'username\': [ErrorDetail(string=\'Пользователь с таким именем уже существует.\', code=\'unique\')]}') {
+        if (error) {
+          toast.error(t('User with that username already exists!'))
+        }
+      } else {
+        if (error) {
+          toast.error(t('error'))
+        }
+      }
+
+    }
+  }
+};
+
+
+//COMPUTED
 const rules = computed(() => {
   return {
     phone: {
@@ -75,97 +140,16 @@ const rules = computed(() => {
 const validate: Ref<Validation> = useVuelidate(rules, userData);
 
 
-// functions
-const handleFileUpload = (event) => {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-
-  reader.onload = (event: any) => {
-    imageUrl.value = event.target.result;
-    userData.value.photo = file;
-  };
-  reader.readAsDataURL(file);
-};
-
-const deleteImage = () => {
-  imageUrl.value = "";
-  userData.value.photo = '';
-};
-
-function removeSpaces(str) {
-  return str.replace(/[\s+]/g, "");
-}
-
-const saveUser = async () => {
-  // isSubmitted.value = true;
-  const success = await validate.value.$validate();
-  if (!success) return;
-
-  if (userData.value.phone) {
-    userData.value.phone = removeSpaces(userData.value.phone);
-  }
-
-  if (typeof userData.value.password === "string" && !userData.value.password) {
-    userData.value.password = "";
-  }
-
-
-  const formData = objectToFormData(userData.value);
-  if (route.params.id) {
-    try {
-      await store.updateStaff(formData).then(() => {
-        router.push("/staff");
-        setTimeout(() => {
-          toast.success(t("updated_successfully"));
-        }, 200);
-        // isSubmitted.value = false;
-      });
-    } catch (error: any) {
-      // isSubmitted.value = false;
-      if (error) {
-        toast.error(
-            t('error')
-        );
-      }
-    }
-
-  } else {
-    // if (CorrectPassword.value)
-    try {
-      await store.createStaff(formData).then(() => {
-        setTimeout(() => {
-          toast.success(t("created_successfully"));
-        }, 200);
-        router.push("/staff");
-      });
-      // isSubmitted.value = false;
-    } catch (error: any) {
-      // isSubmitted.value = false;
-      if (error) {
-        toast.error(
-            t('error')
-        );
-      }
-    }
-  }
-};
-
 </script>
 
 
 <template>
   <div>
-    <div class="md:flex sm:block items-start gap-5 dark:text-white h-fit">
-      <div class="card mb-5"
-      >
+    <div class="md:flex gap-5 dark:text-white">
+      <div class="md:w-3/12  card sm:w-full">
         <div
-            class="mb-5 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain"
-            style="width:300px"
-
-        >
-          <span v-if="!imageUrl" class="font-medium dark:text-white">{{
-              $t("no_photo")
-            }}</span>
+            class="mb-5 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
+          <span v-if="!imageUrl" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
           <img
               v-else
               class="w-full h-full object-cover"
@@ -193,9 +177,9 @@ const saveUser = async () => {
       </div>
 
 
-      <div class="md:w-6/12 sm:w-full card md:my-0 my-5">
+      <div class="md:w-6/12 sm:w-full card">
         <form>
-          <div class="mb-5 md:flex items-start gap-8">
+          <div class=" md:flex items-start gap-8">
             <label for="loginDetail" class="w-6/12 text-xs">
               {{ $t("Login") }}:
               <input
@@ -271,51 +255,48 @@ const saveUser = async () => {
         </form>
       </div>
 
-      <div class="md:w-3/12 sm:w-full">
-        <div class="w-full card mb-5">
-          <form>
-            <label for="login" class="block text-xs">
-              {{ $t("Full Name") }}:
-              <input
-                  id="login"
-                  type="text"
-                  :placeholder="$t('Full Name')"
-                  class="form-input"
-                  v-model="userData.full_name"
-              />
-            </label>
+      <div class="md:w-3/12 card sm:w-full">
 
-            <label for="phoneNumber" class="my-5 block text-xs">
-              {{ $t("phone_number") }}:
-              <input
-                  :placeholder="$t('phone_number')"
-                  v-model="userData.phone"
-                  v-maska
-                  data-maska="+998 ## ### ## ##"
-                  class="form-input"
-                  :class="validate.phone.$errors.length ? 'required-input' : ''"
-              />
+        <label for="login" class="block text-xs">
+          {{ $t("Full Name") }}:
+        </label>
+        <input
+            id="login"
+            type="text"
+            :placeholder="$t('Full Name')"
+            class="form-input"
+            v-model="userData.full_name"
+        />
 
-              <p
-                  v-for="error in validate.phone.$errors"
-                  :key="error.$uid"
-                  class="text-danger text-sm"
-              >
-                {{ $t(error.$message) }}
-              </p>
-            </label>
-          </form>
-        </div>
+        <label for="phoneNumber" class="mt-4 block text-xs">
+          {{ $t("phone_number") }}:
+        </label>
+        <input
+            :placeholder="$t('phone_number')"
+            v-model="userData.phone"
+            v-maska
+            data-maska="+998 ## ### ## ##"
+            class="form-input"
+            :class="validate.phone.$errors.length ? 'required-input' : ''"
+        />
+        <p
+            v-for="error in validate.phone.$errors"
+            :key="error.$uid"
+            class="text-danger text-sm"
+        >
+          {{ $t(error.$message) }}
+        </p>
 
-        <div class="mt-8 flex flex-wrap justify-end gap-4">
-          <button class="btn-danger" @click="$router.push('/staff')">
-            {{ $t("Cancel") }}
-          </button>
-          <button class="btn-success" @click="saveUser">
-            {{ $route.params.id ? $t("Change") : $t("Add") }}
-          </button>
-        </div>
+
       </div>
+    </div>
+    <div class="mt-5 flex justify-end gap-4">
+      <button class="btn-secondary" @click="$router.push('/staff')">
+        {{ $t("Cancel") }}
+      </button>
+      <button class="btn-success" @click="saveUser">
+        {{ route.params.id ? $t("Change") : $t("Add") }}
+      </button>
     </div>
   </div>
 </template>

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+
+//IMPORTED FILES
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
 import SMSTemplate from "../components/SMSTemplate.vue";
@@ -12,9 +15,16 @@ import Contacts from "../components/Links.vue";
 import CreateRegions from '../components/Regions.vue'
 import {ref} from 'vue'
 
+
+//DECLARED VARIABLES
 const knowledge = ref('')
 
-const selectedTitle = (val) => {
+
+
+
+
+//FUNCTIONS
+const selectedTitle = (val: any) => {
   localStorage.setItem('knowledgeBase', val)
   knowledge.value = val
 }
@@ -26,38 +36,38 @@ const selectedTitle = (val) => {
   >
     <Tabs vertical pill @selectedTitle="selectedTitle" unique="unique">
 
-      <Tab :title="'sms_template'">
+      <Tab title="sms_template">
         <SMSTemplate :knowledge="knowledge"/>
       </Tab>
 
-      <Tab :title="'News template'">
+      <Tab title="News template">
         <NewsTemplate :knowledge="knowledge"/>
       </Tab>
 
-      <Tab :title="'Locations'">
+      <Tab title="Locations">
         <NearbyPlaces :knowledge="knowledge"/>
       </Tab>
 
-      <Tab :title="'version_control'">
+      <Tab title="version_control">
         <VersionControl :knowledge="knowledge"/>
       </Tab>
 
-      <Tab :title="'products'">
+      <Tab title="products">
         <Products :knowledge="knowledge"/>
       </Tab>
 
-      <Tab :title="'PrivacyPolicy'">
-        <PrivacyPolicy/>
+      <Tab title="PrivacyPolicy">
+        <PrivacyPolicy :knowledge="knowledge"/>
       </Tab>
-      <Tab :title="'region'">
+      <Tab title="Region">
         <CreateRegions :knowledge="knowledge"/>
       </Tab>
 
-      <Tab :title="'Terms_and_conditions'">
-        <TermsAndConditions/>
+      <Tab title="Terms_and_conditions">
+        <TermsAndConditions :knowledge="knowledge"/>
       </Tab>
 
-      <Tab :title="'contacts'">
+      <Tab title="contacts">
         <Contacts :knowledge="knowledge"/>
       </Tab>
     </Tabs>

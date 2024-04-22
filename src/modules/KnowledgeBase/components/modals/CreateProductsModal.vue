@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 
-//Imported files
-
+//IMPORTED FILES
 import {Ref, ref, computed} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
@@ -11,67 +10,141 @@ import useVuelidate, {Validation} from "@vuelidate/core";
 import knowledgeBase from "../../store/index";
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
+import {EditDataProductModal} from '../../interfaces/index'
 
 
-//Declared variables
-
+//DECLARED VARIABLES
 const propData = defineProps<{
-  editData: EditData
+  editData: EditDataProductModal
 }>();
 const imageDiv = ref<string | undefined | null | object>('')
 const {t} = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase()
-const file = ref<string>("")
 const emits = defineEmits(["saveProducts"]);
 let productsData = ref({
-  title: {
-    uz: "",
-    ru: "",
-  },
-  description: {
-    uz: "",
-    ru: ""
-  },
+  title: '',
+  title_uz: '',
+  title_kr: '',
+  title_ru: '',
+  description: '',
+  description_uz: '',
+  description_kr: '',
+  description_ru: '',
   quantity: "",
-  price: 0,
-  photo: null,
+  price: '',
+  photo: '',
   code: "",
   measurement_type: ''
 })
 
-//Declared type
 
-interface EditData {
-  id: number | null,
-  title: {
-    uz: string,
-    ru: string
-  },
-  description: {
-    uz: string,
-    ru: string
+//FUNCTIONS
+const getFile = (event: any) => {
+  productsData.value.photo = event.target.files[0]
+  let input = event.target;
+  if (input.files && input.files[0]) {
+    let reader = new FileReader();
+    reader.onload = (e) => {
+      imageDiv.value = e?.target?.result;
+    }
+    reader.readAsDataURL(input.files[0]);
   }
-  price: number | null,
-  image: null | string,
-  code: string;
-  quantity: number | null;
-  measurement_type: string | null;
+}
+const updateDeal = async () => {
+  const success = await validate.value.$validate();
+  if (!success) return;
+  const formData = new FormData()
+  formData.append('title', productsData.value.title)
+  formData.append('title_uz', productsData.value.title_uz)
+  formData.append('title_kr', productsData.value.title_kr)
+  formData.append('title_ru', productsData.value.title_ru)
+  formData.append('code', productsData.value.code)
+  formData.append('quantity', productsData.value.quantity)
+  formData.append('measurement_type', productsData.value.measurement_type)
+  formData.append('price', productsData.value.price)
+  formData.append('description', productsData.value.description)
+  formData.append('description_uz', productsData.value.description_uz)
+  formData.append('description_kr', productsData.value.description_kr)
+  formData.append('description_ru', productsData.value.description_ru)
+  if (imageDiv.value) {
+    formData.append('image', productsData.value.photo)
+  }
+  if (propData.editData.id) {
+    try {
+      formData.append('id', propData.editData.id)
+      await store.updateProducts(formData)
+      await UIkit.modal("#create_products").hide();
+      emits("saveProducts");
+      toast.success(t("updated_successfully"));
+      isSubmitted.value = false;
+    } catch (error: any) {
+      isSubmitted.value = false;
+      toast.error(t('error'))
+    }
 
+  } else {
+    try {
+      await store.createProducts(formData)
+      await UIkit.modal("#create_products").hide();
+      toast.success(t("created_successfully"));
+      emits("saveProducts");
+      isSubmitted.value = false;
+    } catch (error: any) {
+      isSubmitted.value = false;
+      toast.error(t('error'))
+    }
+  }
+};
+
+
+function openModal() {
+  if (propData.editData.id) {
+    productsData.value.title_uz = propData.editData.title_uz
+    productsData.value.title_ru = propData.editData.title_ru
+    productsData.value.title_kr = propData.editData.title_kr
+    productsData.value.description_ru = propData.editData.description_ru
+    productsData.value.description_uz = propData.editData.description_uz
+    productsData.value.description_kr = propData.editData.description_kr
+    productsData.value.measurement_type = propData.editData.measurement_type
+    productsData.value.quantity = propData.editData.quantity
+    productsData.value.price = propData.editData.price
+    productsData.value.code = propData.editData.code
+    productsData.value.photo = propData.editData.image
+  }
 }
 
 
-//Declared Validate rules
+const onHide = () => {
+  validate.value.$reset()
+  productsData.value.title_uz = ""
+  productsData.value.description_uz = ''
+  productsData.value.description_ru = ''
+  productsData.value.description_kr = ''
+  productsData.value.measurement_type = ''
+  productsData.value.quantity = ''
+  productsData.value.title_ru = ""
+  productsData.value.title_kr = ""
+  productsData.value.price = ''
+  productsData.value.photo = ""
+  imageDiv.value = ""
+  productsData.value.code = ""
+  imageDiv.value = ''
+  productsData.value.photo = ""
+}
 
+
+//COMPUTED
 const rules = computed(() => {
   return {
-    title: {
-      uz: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-      },
-      ru: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-      }
+    title_uz: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    title_kr: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    title_ru: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
     },
     code: {
       required: helpers.withMessage("validation.this_field_is_required", required),
@@ -93,92 +166,6 @@ const rules = computed(() => {
 
 });
 
-
-//All Function
-
-const getFile = (event: any) => {
-  productsData.value.photo = event.target.files[0]
-  let input = event.target;
-  if (input.files && input.files[0]) {
-    let reader = new FileReader();
-    reader.onload = (e) => {
-      imageDiv.value = e?.target?.result;
-    }
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-const updateDeal = async () => {
-  const success = await validate.value.$validate();
-  if (!success) return;
-  const formData = new FormData()
-  formData.append('title', JSON.stringify(productsData.value.title))
-  formData.append('code', productsData.value.code)
-  formData.append('quantity', productsData.value.quantity)
-  formData.append('measurement_type', productsData.value.measurement_type)
-  formData.append('price', productsData.value.price)
-  formData.append('description', JSON.stringify(productsData.value.description))
-  if (imageDiv.value) {
-    formData.append('image', productsData.value.photo)
-  }
-  if (propData.editData.id) {
-    try {
-      formData.append('id', propData.editData.id)
-      await store.updateProducts(formData)
-      emits("saveProducts");
-      UIkit.modal("#create_products").hide();
-      isSubmitted.value = false;
-    } catch (error: any) {
-      isSubmitted.value = false;
-      toast.error(t('error'))
-    }
-
-  } else {
-    try {
-      await store.createProducts(formData)
-      UIkit.modal("#create_products").hide();
-      emits("saveProducts");
-      toast.success(t("created_successfully"));
-      isSubmitted.value = false;
-    } catch (error: any) {
-      isSubmitted.value = false;
-      toast.error(t('error'))
-    }
-  }
-};
-
-
-function openModal() {
-  if (propData.editData.id) {
-    productsData.value.title.uz = propData.editData.title?.uz
-    productsData.value.title.ru = propData.editData.title?.ru
-    productsData.value.description.ru = propData.editData.description?.ru
-    productsData.value.description.uz = propData.editData.description?.uz
-    productsData.value.measurement_type = propData.editData.measurement_type
-    productsData.value.quantity = propData.editData.quantity
-    productsData.value.price = propData.editData.price
-    productsData.value.code = propData.editData.code
-    productsData.value.photo = propData.editData.image
-  } else {
-    productsData.value.title.uz = ""
-    productsData.value.description.uz = ''
-    productsData.value.description.ru = ''
-    productsData.value.measurement_type = ''
-    productsData.value.quantity = ''
-    productsData.value.title.ru = ""
-    productsData.value.price = null
-    productsData.value.photo = ""
-    imageDiv.value = ""
-    productsData.value.code = ""
-  }
-}
-
-
-const onHide = () => {
-  validate.value.$reset()
-  imageDiv.value = ''
-  productsData.value.photo = ""
-  document.getElementById('fileInput').value = ''
-}
 const validate: Ref<Validation> = useVuelidate(rules, productsData);
 </script>
 
@@ -202,11 +189,11 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 type="text"
                 class="form-input"
                 :placeholder="$t('name')"
-                v-model="productsData.title.uz"
-                :class="validate.title.uz.$errors.length ? 'required-input' : ''"
+                v-model="productsData.title_uz"
+                :class="validate.title_uz.$errors.length ? 'required-input' : ''"
             />
             <p
-                v-for="error in validate.title.uz.$errors"
+                v-for="error in validate.title_uz.$errors"
                 :key="error.$uid"
                 class="text-danger text-sm"
             >
@@ -218,7 +205,34 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   type="text"
                   class="form-input"
                   :placeholder="$t('description')"
-                  v-model="productsData.description.uz"
+                  v-model="productsData.description_uz"
+              />
+
+            </label>
+          </Tab>
+          <Tab title="KR">
+            <label>{{ $t('name') + ' ' + $t('KR') }}</label>
+            <input
+                type="text"
+                class="form-input"
+                :placeholder="$t('name')"
+                v-model="productsData.title_kr"
+                :class="validate.title_kr.$errors.length ? 'required-input' : ''"
+            />
+            <p
+                v-for="error in validate.title_kr.$errors"
+                :key="error.$uid"
+                class="text-danger text-sm"
+            >
+              {{ $t(error.$message) }}
+            </p>
+            <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('KR') }}
+              <textarea
+                  id="number"
+                  type="text"
+                  class="form-input"
+                  :placeholder="$t('description')"
+                  v-model="productsData.description_kr"
               />
 
             </label>
@@ -229,11 +243,11 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 type="text"
                 class="form-input"
                 :placeholder="$t('name')"
-                v-model="productsData.title.ru"
-                :class="validate.title.ru.$errors.length ? 'required-input' : ''"
+                v-model="productsData.title_ru"
+                :class="validate.title_ru.$errors.length ? 'required-input' : ''"
             />
             <p
-                v-for="error in validate.title.ru.$errors"
+                v-for="error in validate.title_ru.$errors"
                 :key="error.$uid"
                 class="text-danger text-sm"
             >
@@ -245,7 +259,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   type="text"
                   class="form-input"
                   :placeholder="$t('description')"
-                  v-model="productsData.description.ru"
+                  v-model="productsData.description_ru"
               />
 
             </label>

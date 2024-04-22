@@ -1,11 +1,11 @@
 <template>
   <div v-show="(title) == (selectedTitle) ">
-    <slot/>
+      <slot/>
   </div>
 </template>
 
 <script>
-import {inject, ref} from "vue";
+import {inject} from "vue";
 import {useI18n} from "vue-i18n";
 
 export default {

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-//Imported files
+//IMPORTED FILES
 import productStore from '../store/index'
 import {Ref, ref, computed} from "vue";
 import {helpers, required} from "@vuelidate/validators";
@@ -10,41 +10,27 @@ import Tab from "@/components/Tab/Tab.vue";
 import {useI18n} from 'vue-i18n'
 import {toast} from "vue3-toastify";
 import UIkit from "uikit";
+import {EditDataFirst} from '../Interfaces/index'
 
-//Props and Emits
 
-
+//DECLARED VARIABLES
 const propData = defineProps<{
-  editData: EditData
+  editData: EditDataFirst
 }>();
 const emits = defineEmits(["saveProducts"]);
-
-
-//Declared variables
 const productStorage = productStore()
 const {t} = useI18n()
 const isSubmitted = ref<boolean>(false);
-
-interface EditData {
-  id: number | null,
-  title: {
-    uz: string,
-    ru: string
-  },
-  is_active: boolean
-
-}
-
 let productsCategory = ref({
-  title: {
-    uz: "",
-    ru: ""
-  },
-  id: null,
+  title_uz: '',
+  title_ru: '',
+  title_kr: '',
+  id: '',
   is_active: false
 })
 
 
+//FUNCTIONS
 const saveData = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
@@ -54,7 +40,7 @@ const saveData = async () => {
       await productStorage.updateProductCategory(productsCategory.value)
       UIkit.modal("#create_and_edit_category").hide();
       emits("saveProducts");
-
+      toast.success(t('updated_successfully'))
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
@@ -78,14 +64,16 @@ const saveData = async () => {
 
 function openModal() {
   if (propData.editData.id) {
-    productsCategory.value.title.uz = propData.editData.title?.uz
-    productsCategory.value.title.ru = propData.editData.title?.ru
+    productsCategory.value.title_uz = propData.editData.title_uz
+    productsCategory.value.title_ru = propData.editData.title_ru
+    productsCategory.value.title_kr = propData.editData.title_kr
     productsCategory.value.is_active = propData.editData.is_active
-    productsCategory.value.id = propData.editData.id
+    productsCategory.value.id = String(propData.editData.id)
   } else {
-    productsCategory.value.title.uz = ""
-    productsCategory.value.title.ru = ""
-    productsCategory.value.id = null
+    productsCategory.value.title_uz = ""
+    productsCategory.value.title_ru = ""
+    productsCategory.value.title_kr = ""
+    productsCategory.value.id = ''
     productsCategory.value.is_active = false
 
   }
@@ -93,28 +81,29 @@ function openModal() {
 
 
 const onHide = () => {
-  productsCategory.value.title.uz = ""
-  productsCategory.value.title.ru = ""
-  productsCategory.value.id = null
+  productsCategory.value.title_uz = ""
+  productsCategory.value.title_ru = ""
+  productsCategory.value.title_kr = ""
+  productsCategory.value.id = ''
   productsCategory.value.is_active = false
   validate.value.$reset()
 
 }
 
+
+//COMPUTED
 const rules = computed(() => {
   return {
-    title: {
-      uz: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-      },
-      ru: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-      }
+    title_ru: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
     },
-
-
+    title_uz: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    title_kr: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
   };
-
 });
 
 const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
@@ -137,46 +126,63 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
         <Tabs>
           <Tab title="UZ">
             <form>
-              <label>{{ t('name') }}
-                <input
-                    type="text"
-                    class="form-input"
-                    v-model="productsCategory.title.uz"
-                    :class="validate.title.uz.$errors.length ? 'required-input' : ''"
-                />
+              <label>{{ t('name') + ' ' + t('UZ') }} </label>
+              <input
+                  type="text"
+                  class="form-input"
+                  v-model="productsCategory.title_uz"
+                  :class="validate.title_uz.$errors.length ? 'required-input' : ''"
+              />
+              <p
+                  v-for="error in validate.title_uz.$errors"
+                  :key="error.$uid"
+                  class="text-danger text-sm"
+              >
+                {{ $t(error.$message) }}
+              </p>
 
-                <p
-                    v-for="error in validate.title.uz.$errors"
-                    :key="error.$uid"
-                    class="text-danger text-sm"
-                >
-                  {{ $t(error.$message) }}
-                </p>
-              </label>
+
+            </form>
+          </Tab>
+          <Tab title="KR">
+            <form>
+              <label>{{ t('name') + ' ' + t('KR') }}</label>
+              <input
+                  type="text"
+                  class="form-input"
+                  v-model="productsCategory.title_kr"
+                  :class="validate.title_kr.$errors.length ? 'required-input' : ''"
+              />
+              <p
+                  v-for="error in validate.title_kr.$errors"
+                  :key="error.$uid"
+                  class="text-danger text-sm"
+              >
+                {{ $t(error.$message) }}
+              </p>
 
 
             </form>
           </Tab>
 
+
           <Tab title="RU">
             <form>
-              <label for="nameRu">{{ t('name') }}
-                <input
-                    id="nameRu"
-                    type="text"
-                    class="form-input"
-                    v-model="productsCategory.title.ru"
-                    :class="validate.title.ru.$errors.length ? 'required-input' : ''"
-                />
-                <p
-                    v-for="error in validate.title.ru.$errors"
-                    :key="error.$uid"
-                    class="text-danger text-sm"
-                >
-                  {{ $t(error.$message) }}
-                </p>
-              </label>
-
+              <label for="nameRu">{{ t('name') + ' ' + t('RU') }}</label>
+              <input
+                  id="nameRu"
+                  type="text"
+                  class="form-input"
+                  v-model="productsCategory.title_ru"
+                  :class="validate.title_ru.$errors.length ? 'required-input' : ''"
+              />
+              <p
+                  v-for="error in validate.title_ru.$errors"
+                  :key="error.$uid"
+                  class="text-danger text-sm"
+              >
+                {{ $t(error.$message) }}
+              </p>
             </form>
           </Tab>
         </Tabs>

@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+
+
+//IMPORTED FILES
 import {Ref, ref, computed} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
@@ -12,97 +15,68 @@ import {NewsTemplate} from "../../interfaces";
 import FileInput from "@/components/FileInput/FileInput.vue";
 import {objectToFormData} from "@/mixins/formmatter";
 
+
+//DECLARED VARIABLES
 const {t} = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase();
 const emit = defineEmits(["refresh"]);
-
+const propData = defineProps<{ editData: NewsTemplate }>();
 let newsTemplateData = ref<NewsTemplate>({
-  title: {
-    uz: null,
-    ru: null,
-  },
-  description: {
-    uz: null,
-    ru: null,
-  },
+  id: null,
+  title: '',
+  title_ru: '',
+  title_uz: '',
+  title_kr: '',
+  description: '',
+  description_ru: '',
+  description_kr: '',
+  description_uz: '',
   file: null,
   url: "",
 });
 
-const rules = computed(() => {
-  return {
-    title: {
-      ru: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-      },
-      uz: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-      },
-    },
-    description: {
-      ru: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-      },
-      uz: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-      },
-    },
-  };
-});
 
-const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
-
-const propData = defineProps<{ editData: NewsTemplate }>();
-
-// const showModal = inject("showModal");
-
+//FUNCTIONS
 function openModal() {
-  // это не правильный код !!!!
   if (propData.editData.id) {
     newsTemplateData.value = propData.editData;
-  } else {
-    newsTemplateData.value = {
-      title: {
-        uz: null,
-        ru: null,
-      },
-      description: {
-        uz: null,
-        ru: null,
-      },
-      file: null,
-      url: "",
-    };
   }
 }
 
+const hideModal = () => {
+  validate.value.$reset()
+  newsTemplateData.value.title = ''
+  newsTemplateData.value.title_ru = ''
+  newsTemplateData.value.title_uz = ''
+  newsTemplateData.value.title_kr = ''
+  newsTemplateData.value.description = ''
+  newsTemplateData.value.description_ru = ''
+  newsTemplateData.value.description_kr = ''
+  newsTemplateData.value.description_uz = ''
+  newsTemplateData.value.file = null
+  newsTemplateData.value.url = ""
+}
 const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
 
-  const {title, description, file, ...rest} = newsTemplateData.value;
+  const {file, ...rest} = newsTemplateData.value;
   if (propData.editData.id) {
     try {
       const fd = objectToFormData({
-        title: JSON.stringify(title),
-        description: JSON.stringify(description),
         file: file || "",
         ...rest,
       });
-      await store.updateNewsTemplate(fd).then(() => {
-        setTimeout(() => {
-          toast.success(t("updated_successfully"));
-        }, 200);
-        emit("refresh");
-        UIkit.modal("#news_template").hide();
-      });
+      await store.updateNewsTemplate(fd)
+      toast.success(t("updated_successfully"));
+      emit("refresh");
+      UIkit.modal("#news_template").hide();
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
       if (error) {
         toast.error(
-            // error.response.data.msg || error.response.data.error || "Error"
             error.response || "Error"
         );
       }
@@ -110,31 +84,51 @@ const updateDeal = async () => {
   } else {
     try {
       const fd = objectToFormData({
-        title: JSON.stringify(title),
-        description: JSON.stringify(description),
         file: file || "",
         ...rest,
       });
-
-      await store.createNewsTemplate(fd).then(() => {
-        setTimeout(() => {
-          toast.success(t("created_successfully"));
-        }, 200);
-        emit("refresh");
-        UIkit.modal("#news_template").hide();
-      });
+      await store.createNewsTemplate(fd)
+      toast.success(t("created_successfully"));
+      emit("refresh");
+      UIkit.modal("#news_template").hide();
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
       if (error) {
         toast.error(
-            // error.response || error.response.data.msg || error.response.data.error || "Error"
             error.response || "Error"
         );
       }
     }
   }
 };
+
+//COMPUTED
+const rules = computed(() => {
+  return {
+    title_ru: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    title_kr: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    title_uz: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    description_ru: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    description_kr: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    description_uz: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+  };
+});
+
+const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
+
 </script>
 
 <template>
@@ -143,7 +137,7 @@ const updateDeal = async () => {
       class="uk-flex-top"
       uk-modal
       @shown="openModal"
-      @hidden="validate.$reset()"
+      @hidden="hideModal"
   >
     <div
         class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
@@ -157,7 +151,7 @@ const updateDeal = async () => {
 
       <div class="uk-modal-body py-4">
         <Tabs class="mb-4">
-          <Tab title="Uz">
+          <Tab title="UZ">
             <form>
               <label for="nameUz"
               >{{ $t('name') + ' ' + $t('UZ') }}
@@ -166,13 +160,11 @@ const updateDeal = async () => {
                     type="text"
                     class="form-input"
                     :placeholder="$t('name')"
-                    v-model="newsTemplateData.title.uz"
-                    :class="
-                    validate.title.uz.$errors.length ? 'required-input' : ''
-                  "
+                    v-model="newsTemplateData.title_uz"
+                    :class="validate.title_uz.$errors.length ? 'required-input' : ''"
                 />
                 <p
-                    v-for="error in validate.title.uz.$errors"
+                    v-for="error in validate.title_uz.$errors"
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
@@ -187,15 +179,58 @@ const updateDeal = async () => {
                     type="text"
                     class="form-input"
                     :placeholder="$t('description')"
-                    v-model="newsTemplateData.description.uz"
-                    :class="
-                    validate.description.uz.$errors.length
+                    v-model="newsTemplateData.description_uz"
+                    :class="validate.description_uz.$errors.length
                       ? 'required-input'
                       : ''
                   "
                 />
                 <p
-                    v-for="error in validate.description.uz.$errors"
+                    v-for="error in validate.description_uz.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ $t(error.$message) }}
+                </p>
+              </label>
+            </form>
+          </Tab>
+          <Tab title="KR">
+            <form>
+              <label for="nameUz"
+              >{{ $t('name') + ' ' + $t('KR') }}
+                <input
+                    id="nameUz"
+                    type="text"
+                    class="form-input"
+                    :placeholder="$t('name')"
+                    v-model="newsTemplateData.title_kr"
+                    :class="validate.title_kr.$errors.length ? 'required-input' : ''"
+                />
+                <p
+                    v-for="error in validate.title_kr.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ $t(error.$message) }}
+                </p>
+              </label>
+
+              <label class="mt-4 block" for="descriptionUz"
+              >{{ $t('description') + ' ' + $t('KR') }}
+                <input
+                    id="descriptionUz"
+                    type="text"
+                    class="form-input"
+                    :placeholder="$t('description')"
+                    v-model="newsTemplateData.description_kr"
+                    :class="validate.description_kr.$errors.length
+                      ? 'required-input'
+                      : ''
+                  "
+                />
+                <p
+                    v-for="error in validate.description_kr.$errors"
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
@@ -214,13 +249,12 @@ const updateDeal = async () => {
                     type="text"
                     class="form-input"
                     :placeholder="$t('name')"
-                    v-model="newsTemplateData.title.ru"
-                    :class="
-                    validate.title.ru.$errors.length ? 'required-input' : ''
+                    v-model="newsTemplateData.title_ru"
+                    :class="validate.title_ru.$errors.length ? 'required-input' : ''
                   "
                 />
                 <p
-                    v-for="error in validate.title.ru.$errors"
+                    v-for="error in validate.title_ru.$errors"
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
@@ -235,15 +269,14 @@ const updateDeal = async () => {
                     type="text"
                     class="form-input"
                     :placeholder="$t('description')"
-                    v-model="newsTemplateData.description.ru"
-                    :class="
-                    validate.description.ru.$errors.length
+                    v-model="newsTemplateData.description_ru"
+                    :class=" validate.description_ru.$errors.length
                       ? 'required-input'
                       : ''
                   "
                 />
                 <p
-                    v-for="error in validate.description.ru.$errors"
+                    v-for="error in validate.description_ru.$errors"
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >

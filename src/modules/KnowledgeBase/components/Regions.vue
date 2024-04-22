@@ -1,17 +1,17 @@
 <script setup lang="ts">
-//Imported files
-
+//IMPORTED FILES
 import {Regions} from "../constants";
 import knowledgeBase from ".././store/index"
-import {reactive, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {toast} from "vue3-toastify";
 import UIkit from "uikit";
 import CreateRegions from "./modals/CreateRegions.vue"
 import {useI18n} from "vue-i18n";
 import {watchDebounced} from "@vueuse/core";
+import {EditRegion} from '../interfaces/index'
 
 
-//Declared variables
+//DECLARED VARIABLES
 const {t} = useI18n()
 const store = knowledgeBase()
 const isLoading = ref(false);
@@ -20,93 +20,91 @@ const userId = ref<number | null>(null);
 const props = defineProps<{
   knowledge: string
 }>();
-
 let toRefresh = ref(false)
-watch(() => props.knowledge, function () {
-  toRefresh.value = !toRefresh.value
+const editData = ref<EditRegion>({
+  id: '',
+  title: '',
+  title_ru: '',
+  title_uz: '',
+  title_kr: '',
 })
-
-interface EditData {
-  id: number | null,
-  title: {
-    uz: string,
-    ru: string
-  },
-}
-
-
-const editData = ref<EditData>({
-  id: null,
-  title: {
-    uz: "",
-    ru: ""
-  },
-})
-
 const params = reactive({
   page_size: 10,
-  search: "",
+  search: null,
   page: 1
 });
 
+
+//MOUNTED LIFE CYCLE
+onMounted(async () => {
+  let knowledgeBase = localStorage.getItem('knowledgeBase')
+  if (knowledgeBase == 'Region') {
+    await refresh()
+  }
+})
+
+
+//WATCHERS
+watch(() => props.knowledge, async function (val) {
+  toRefresh.value = !toRefresh.value
+  if (val == 'Region') {
+    await refresh()
+  }
+})
+
+watchDebounced(() => params.search, async function () {
+  params.page = 1
+  await refresh()
+}, {deep: true, debounce: 500, maxWait: 5000,})
+
+
+//FUNCTIONS
 const deleteAction = async () => {
   isLoading.value = true
   try {
     await store.deleteRegion(userId.value);
-    UIkit.modal("#region-main-delete-modal").hide();
+    await UIkit.modal("#region-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.regionsList.count - 1) % params.page > 0) {
+    if ((store.regionsList.count - 1) % params.page_size == 0) {
       params.page = params.page - 1
-      await refresh(params)
+      await refresh()
     } else {
-      await refresh(params)
+      await refresh()
     }
-
     isLoading.value = false
   } catch (error: any) {
-    toast.error(
-        t('error')
-    );
+    toast.error(t('error'));
   }
 }
 
-const handleDeleteModal = (id) => {
+const handleDeleteModal = (id: any) => {
   userId.value = id
   UIkit.modal("#region-main-delete-modal").show()
 };
-
-watchDebounced(() => params.search, async function () {
-  params.page = 1
-  await refresh(params)
-}, {deep: true, debounce: 500, maxWait: 5000,})
-
-
-const refresh = async (filter: any) => {
+const refresh = async () => {
   isLoading.value = true;
   try {
-    await store.getRegions(filter);
+    await store.getRegions(params);
     regionList.value = store.regionsList.results;
   } catch (error: any) {
-    toast.error(
-        error.response || "Error"
-    );
+    toast.error(t("error"));
   }
-
   isLoading.value = false;
 };
-refresh(params)
 
-const changePagionation = (e: number) => {
+
+const changePagination = (e: number) => {
   params.page = e;
-  refresh(params);
+  refresh();
+
 };
 const onPageSizeChanged = (e: number) => {
   params.page_size = e
   params.page = 1
-  refresh(params)
+  refresh()
 }
 const saveSmsTemplate = () => {
-  refresh(params)
+  refresh()
 }
 </script>
 
@@ -140,9 +138,8 @@ const saveSmsTemplate = () => {
       </template>
 
       <template #item-name="item">
-        {{ item.name[$i18n.locale] }}
+        {{ item['name_' + $i18n.locale] }}
       </template>
-
 
 
       <template #item-actions="item">
@@ -160,7 +157,7 @@ const saveSmsTemplate = () => {
                   :restart="toRefresh"
                   :current="params.page" :per-page="params.page_size"
                   :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
-                  @page-changed="changePagionation" @per-page-changed="onPageSizeChanged"/>
+                  @page-changed="changePagination" @per-page-changed="onPageSizeChanged"/>
   </div>
 
   <DeleteModal @delete-action="deleteAction" :id="'region-main-delete-modal'"

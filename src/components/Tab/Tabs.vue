@@ -17,7 +17,7 @@
         "
           @click="onTitleSelected(title)"
       >
-        <span class="dark:text-gray-400">{{ t(title) }}</span>
+        <span class="dark:text-gray-400">{{ $t(title) }}</span>
       </li>
     </ul>
     <div :class="vertical && 'w-5/6'" class="tabs__main__body">
@@ -49,7 +49,7 @@ export default {
     },
   },
   setup(props, {slots, emit}) {
-    const {locale, t} = useI18n();
+    const { t} = useI18n();
     const tabTitles = ref(
         slots.default().map((tab) => tab.props && tab.props.title)
     );
@@ -90,9 +90,6 @@ export default {
 }
 
 @media (min-width: 0px) and (max-width: 480px) {
-  /* .tw-pagination > section > div{
-      flex-wrap: wrap !important;
-    } */
   .tabs__main {
     display: flex;
     flex-direction: column;

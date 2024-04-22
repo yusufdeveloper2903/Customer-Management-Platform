@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+
+//IMPORTED FILES
 import {Ref, ref, computed} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
@@ -8,111 +10,100 @@ import useVuelidate, {Validation} from "@vuelidate/core";
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
 import knowledgeBase from "../../store/index";
+import {editRegionModal} from '../../interfaces/index'
 
+
+//DECLARED VARIABLES
 const {t} = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase()
 const emits = defineEmits(["saveSmsTemplate"]);
-
-interface EditData {
-  id: number | null,
-  name: {
-    ru: string | null
-    uz: string | null
-  },
-}
-
+const propData = defineProps<{
+  editData: editRegionModal
+}>();
 let smsTemplateData = ref({
-  name: {
-    ru: '',
-    uz: ''
-  },
-
+  name: '',
+  name_ru: '',
+  name_uz: '',
+  name_kr: '',
 })
-
-const rules = computed(() => {
-  return {
-    name: {
-      ru: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-
-      },
-      uz: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-      }
-    },
-  };
-
-});
-
-const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
-
-const propData = defineProps<{ editData: EditData }>();
 
 
 function openModal() {
   if (propData.editData.id) {
-    smsTemplateData.value.name.uz = propData.editData.name.uz
-    smsTemplateData.value.name.ru = propData.editData.name.ru
-
-  } else {
-    smsTemplateData.value.name.uz = ""
-    smsTemplateData.value.name.ru = ""
+    smsTemplateData.value.name_uz = propData.editData.name_uz
+    smsTemplateData.value.name_ru = propData.editData.name_ru
+    smsTemplateData.value.name_kr = propData.editData.name_kr
   }
 }
 
-function clearData() {
-  smsTemplateData.value.name.ru = ""
-  smsTemplateData.value.name.uz = ""
+function hideModal() {
+  validate.value.$reset()
+  smsTemplateData.value.name_uz = ''
+  smsTemplateData.value.name_ru = ''
+  smsTemplateData.value.name_kr = ''
 }
 
 const updateDeal = async () => {
+  smsTemplateData.value.name = smsTemplateData.value.name_uz
   const success = await validate.value.$validate();
   if (!success) return;
 
   if (propData.editData.id) {
     try {
       await store.updateRegions({id: propData.editData.id, ...smsTemplateData.value})
+      await UIkit.modal("#regions").hide();
       emits("saveSmsTemplate");
       toast.success(t("updated_successfully"));
-      UIkit.modal("#regions").hide();
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
-      toast.error(
-          error.response || "Error"
-      );
+      toast.error(t("error"));
     }
 
   } else {
     try {
-      await store.createRegions(smsTemplateData.value).then(() => {
-        emits("saveSmsTemplate");
-        setTimeout(() => {
-          toast.success(t("created_successfully"));
-        }, 200);
-        UIkit.modal("#regions").hide();
-
-      });
+      await store.createRegions(smsTemplateData.value)
+      await UIkit.modal("#regions").hide();
+      emits("saveSmsTemplate");
+      toast.success(t("created_successfully"));
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
       if (error) {
-        toast.error(
-            error.response || "Error"
-        );
+        toast.error(t("error"));
       }
     }
   }
 };
+
+
+//COMPUTED
+const rules = computed(() => {
+  return {
+    name_uz: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    name_kr: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    name_ru: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+
+  };
+
+});
+
+const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
 </script>
 
 <template>
-  <div id="regions" class="uk-flex-top" uk-modal @shown="openModal" @hidden="validate.$reset()">
+  <div id="regions" class="uk-flex-top" uk-modal @shown="openModal" @hidden="hideModal">
     <div
         class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
     >
-      <button class="uk-modal-close-default" @click="clearData" type="button" uk-close/>
+      <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
           {{ propData.editData.id ? $t("Change") : $t('Add') }}
@@ -128,11 +119,34 @@ const updateDeal = async () => {
                     type="text"
                     class="form-input"
                     :placeholder="$t('name')"
-                    v-model="smsTemplateData.name.uz"
-                    :class="validate.name.uz.$errors.length ? 'required-input' : ''"
+                    v-model="smsTemplateData.name_uz"
+                    :class="validate.name_uz.$errors.length ? 'required-input' : ''"
                 />
                 <p
-                    v-for="error in validate.name.uz.$errors"
+                    v-for="error in validate.name_uz.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ $t(error.$message) }}
+                </p>
+              </label>
+
+
+            </form>
+          </Tab>
+          <Tab title="KR">
+            <form>
+              <label for="nameUz">{{ $t('name') + ' ' + $t('KR') }}
+                <input
+                    id="nameUz"
+                    type="text"
+                    class="form-input"
+                    :placeholder="$t('name')"
+                    v-model="smsTemplateData.name_kr"
+                    :class="validate.name_kr.$errors.length ? 'required-input' : ''"
+                />
+                <p
+                    v-for="error in validate.name_kr.$errors"
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
@@ -151,11 +165,11 @@ const updateDeal = async () => {
                     type="text"
                     class="form-input"
                     :placeholder="$t('name')"
-                    v-model="smsTemplateData.name.ru"
-                    :class="validate.name.ru.$errors.length ? 'required-input' : ''"
+                    v-model="smsTemplateData.name_ru"
+                    :class="validate.name_ru.$errors.length ? 'required-input' : ''"
                 />
                 <p
-                    v-for="error in validate.name.ru.$errors"
+                    v-for="error in validate.name_ru.$errors"
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
@@ -172,7 +186,7 @@ const updateDeal = async () => {
       <div
           class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
       >
-        <button uk-toggle="target: #regions" class="btn-secondary" @click="clearData">
+        <button uk-toggle="target: #regions" class="btn-secondary">
           {{ $t("Cancel") }}
         </button>
 

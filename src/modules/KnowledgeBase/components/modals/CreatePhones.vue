@@ -1,76 +1,51 @@
 <script lang="ts" setup>
-import {Ref, ref, computed, watch} from "vue";
+
+//IMPORTED FILES
+import {Ref, ref, computed} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
 import {helpers, minLength, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import knowledgeBase from "../../store/index";
+import {EditPhone} from '../../interfaces/index'
 
+
+//DECLARED VARIABLES
 const {t} = useI18n();
 const store = knowledgeBase()
 const isSubmitted = ref<boolean>(false);
 const emits = defineEmits(["saveContact"]);
-
-
-const rules = computed(() => {
-  return {
-    number: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
-      minLength: helpers.withMessage(
-          "The phone number must be entered in the format: '998 [XX] [XXX XX XX]",
-          minLength(17)
-      ),
-    },
-  };
-});
-
-
-interface EditPhone {
-  id: null | number,
-  number: string,
-}
-
+const propData = defineProps<{ editData: EditPhone }>();
 const editData = ref({
   number: "",
 })
 
-const propData = defineProps<{ editData: EditPhone }>();
-const validate: Ref<Validation> = useVuelidate(rules, editData);
 
-
+//FUNCTIONS
 const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
   if (propData.editData.id) {
     try {
-      await store.updatePhones({id: propData.editData.id, ...editData.value}).then(() => {
-        emits("saveContact");
-        UIkit.modal("#phones").hide();
-        setTimeout(() => {
-          toast.success(t("updated_successfully"));
-        }, 200);
-      });
+      await store.updatePhones({id: propData.editData.id, ...editData.value})
+      await UIkit.modal("#phones").hide();
+      emits("saveContact");
+      toast.success(t("updated_successfully"));
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
       if (error) {
-        toast.error(
-            error.response.message || "Error"
-        );
+        toast.error(t("error"));
       }
     }
 
   } else {
     try {
-      await store.createPhones(editData.value).then(() => {
-
-        UIkit.modal("#phones").hide();
-        emits("saveContact");
-        setTimeout(() => {
-          toast.success(t("created_successfully"));
-        }, 200);
-      });
+      await store.createPhones(editData.value)
+      await UIkit.modal("#phones").hide();
+      emits("saveContact");
+      toast.success(t("created_successfully"));
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
@@ -80,7 +55,6 @@ const updateDeal = async () => {
         } else {
           toast.error(t("error"))
         }
-
 
       }
     }
@@ -95,10 +69,24 @@ function hideModal() {
 function openModal() {
   if (propData.editData.id) {
     editData.value.number = propData.editData.number
-  } else {
-    editData.value.number = ""
   }
 }
+
+
+//COMPUTED
+const rules = computed(() => {
+  return {
+    number: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+      minLength: helpers.withMessage(
+          "The phone number must be entered in the format: '998 [XX] [XXX XX XX]",
+          minLength(17)
+      ),
+    },
+  };
+});
+const validate: Ref<Validation> = useVuelidate(rules, editData);
+
 </script>
 
 <template>

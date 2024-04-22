@@ -1,79 +1,111 @@
 export const bannerFields = [
     {
-      text: "ID",
-      value: "id",
+        text: "ID",
+        value: "id",
     },
     {
-      text: "name",
-      value: "title",
+        text: "name",
+        value: "title",
     },
     {
-      text: "photo",
-      value: "photo",
+        text: "photo",
+        value: "photo",
     },
     {
-      text: "Status",
-      value: "status",
+        text: "Status",
+        value: "status",
     },
     {
-      text: "start time/ end time",
-      value: "from_to",
+        text: "start time/ end time",
+        value: "from_to",
     },
     {
-      text: "actions",
-      value: "actions",
+        text: "actions",
+        value: "actions",
     },
-  ];
+];
+export const addFields = [
+    {
+        text: "",
+        value: "check"
+    },
+    {
+        text: "ID",
+        value: "id"
+    },
+    {
+        text: "Full Name",
+        value: "full_name"
+    },
+    {
+        text: "phone_number",
+        value: "phone"
+    },
+]
+export const newsHeader = [
 
-  export const newsFields = [
     {
-      text: "ID",
-      value: "id",
+        text: "ID",
+        value: "id"
     },
     {
-      text: "name",
-      value: "title",
+        text: "Full Name",
+        value: "fio"
     },
     {
-      text: "photo",
-      value: "file",
+        text: "phone_number",
+        value: "phone"
+    },
+];
+export const newsFields = [
+    {
+        text: "ID",
+        value: "id",
     },
     {
-      text: "Status",
-      value: "status",
+        text: "name",
+        value: "title",
     },
     {
-      text: "planned for(publish date)",
-      value: "from_to",
+        text: "photo",
+        value: "file",
     },
     {
-      text: "actions",
-      value: "actions",
+        text: "Status",
+        value: "status",
     },
-  ];
+    {
+        text: "planned for(publish date)",
+        value: "from_to",
+    },
+    {
+        text: "actions",
+        value: "actions",
+    },
+];
 
-  export const smsFields = [
+export const smsFields = [
     {
-      text: "ID",
-      value: "id",
+        text: "ID",
+        value: "id",
     },
     {
-      text: "name",
-      value: "title",
+        text: "name",
+        value: "title",
     },
     {
-      text: "description",
-      value: "description",
+        text: "description",
+        value: "description",
     },
     {
-      text: "planned for(publish date)",
-      value: "from_to",
+        text: "planned for(publish date)",
+        value: "from_to",
     },
     {
-      text: "actions",
-      value: "actions",
+        text: "actions",
+        value: "actions",
     },
-  ]
+]
   
 
   

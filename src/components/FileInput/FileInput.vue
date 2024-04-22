@@ -18,7 +18,7 @@ interface Emits {
 
 interface Props {
   modelValue: string | string[] | null;
-  typeModal: number | null | undefined;
+  typeModal: number | null | undefined | string | object;
   eye?: boolean;
   minus?: boolean;
   class?: string;

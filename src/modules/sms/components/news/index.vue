@@ -1,48 +1,36 @@
 <script setup lang="ts">
+
+//IMPORTED FILES
+
 import {useI18n} from "vue-i18n";
 import {newsFields} from "../../constants/index"
 import knowledgeBase from "../../store/index"
 import {onMounted, ref, reactive, watch, nextTick} from "vue";
 import {toast} from "vue3-toastify";
-import DeleteNewsModal from "./DeleteNewsModal.vue";
 import UIkit from "uikit";
 import {useRouter} from "vue-router";
 import ShowFileModal from "@/modules/KnowledgeBase/components/ShowImageModal.vue";
+import {EditData} from '../../interfaces'
+import {watchDebounced} from "@vueuse/core";
+
+//DECLARED VARIABLES
 
 const {t} = useI18n()
 const router = useRouter()
 const store = knowledgeBase()
 const newsList = ref<object[]>([]);
 const isLoading = ref(false);
-const timeout = ref();
-const current = ref<number>(1);
 const newsId = ref<number | null>(null)
-
-const paginationFilter = reactive({
+const params = reactive({
   page_size: 10,
   page: 1,
-});
-
-const filterNews = reactive({
-  page_size: 10,
   search: "",
   status: null,
   start_time: null,
 
 });
-
-interface EditData {
-  id: number | null,
-  title: {
-    uz: string,
-    ru: string
-  }
-  file: string,
-  start_time: string,
-  status: string
-}
-
-
+const image = ref<string>("");
+const imageCard = ref();
 const editData = ref<EditData>({
   id: null,
   title: {
@@ -56,95 +44,105 @@ const editData = ref<EditData>({
 const props = defineProps<{
   sms: string
 }>();
-
 let toRefresh = ref(false)
-watch(() => props.sms, function () {
-  toRefresh.value = !toRefresh.value
-})
-const refresh = async (filter) => {
+
+
+//MOUNTED LIFE CYCLE
+onMounted(async () => {
+  let sms = localStorage.getItem('sms')
+  if (sms == 'directory.News') {
+    await refresh();
+    await store.getStatus()
+  }
+});
+
+
+//FUNCTIONS
+const refresh = async () => {
   isLoading.value = true;
   try {
-    await store.getNews(filter)
+    await store.getNews(params)
     newsList.value = store.newsList.results;
   } catch (error: any) {
     toast.error(
         error.response.message || "Error"
     );
   }
-
   isLoading.value = false;
 };
 
-const changePagionation = (e: number) => {
-  paginationFilter.page = e;
-  current.value = e;
-  refresh({...paginationFilter, ...filterNews});
+const changePagination = (e: number) => {
+  params.page = e;
+  refresh();
 };
-
-const searchByTitle = () => {
-  clearTimeout(timeout.value);
-  timeout.value = setTimeout(() => {
-    refresh(filterNews);
-  }, 500);
-};
-
-const saveNews = () => {
-  refresh(filterNews);
+const changePageSize = (event: number) => {
+  params.page = 1
+  params.page_size = event
+  refresh()
 }
 
-const handleDeleteModal = (id: number) => {
-  newsId.value = id;
-  UIkit.modal("#news-delete-modal").show();
-};
-const image = ref<string>("");
-const imageCard = ref();
+const saveNews = () => {
+  refresh();
+}
 const onShowFile = (item: any) => {
   image.value = item;
   nextTick(() => {
     UIkit.modal("#news-show-image").show();
-    // emit("show", item);
   });
 };
-const deleteNews = () => {
-  refresh(filterNews);
+const handleDeleteModal = (id: number) => {
+  newsId.value = id;
+  UIkit.modal("#news-delete-modal").show();
+};
+const deleteNews = async () => {
+  isLoading.value = true
+  try {
+    await store.deleteNews(newsId.value)
+    UIkit.modal("#news-delete-modal").hide();
+    toast.success(t('deleted_successfully'));
+    if ((store.newsList.count - 1) % params.page_size == 0) {
+      params.page = params.page - 1
+      await refresh()
+    } else {
+      await refresh()
+    }
+    isLoading.value = false
+  } catch (error: any) {
+    toast.error(t('error'));
+  }
 };
 
-watch(
-    () => filterNews.search,
+watchDebounced(
+    () => params.search,
     () => {
-      if (newsList.value.length <= 10) {
-        current.value = 1;
-      }
-    }
+      params.page = 1
+      refresh()
+    }, {deep: true, debounce: 500, maxWait: 5000}
+);
+watchDebounced(
+    () => params.status,
+    () => {
+      params.page = 1
+      refresh()
+    }, {deep: true, debounce: 500, maxWait: 5000}
 );
 
-watch(
-    () => filterNews.start_time,
+watchDebounced(
+    () => params.start_time,
     () => {
-      refresh(filterNews);
-
-      if (newsList.value.length <= 10) {
-        current.value = 1;
-      }
-    },
+      params.page = 1
+      refresh();
+    }, {deep: true, debounce: 500, maxWait: 5000}
 );
+watch(() => props.sms, async function (val) {
+  toRefresh.value = !toRefresh.value
+  if (val == 'directory.News') {
+    await refresh();
+    await store.getStatus()
+  }
 
-watch(
-    () => filterNews.status,
-    () => {
-      refresh(filterNews);
+})
 
-      if (newsList.value.length <= 10) {
-        current.value = 1;
-      }
-    },
-);
-
-
-onMounted(async () => {
-  await refresh(paginationFilter);
-  await store.getStatus()
-});
 </script>
 
 <template>
@@ -162,8 +160,8 @@ onMounted(async () => {
               type="text"
               class="form-input"
               :placeholder="$t('Search')"
-              v-model="filterNews.search"
-              @input="searchByTitle"
+              v-model="params.search"
+
           />
         </div>
 
@@ -174,9 +172,9 @@ onMounted(async () => {
           <v-select
               :placeholder="$t('Status')"
               :options="store.statusList && store.statusList.results"
-              v-model="filterNews.status"
-              :getOptionLabel="(name) => name.title[$i18n.locale]"
-              :reduce="(name) => name.id"
+              v-model="params.status"
+              :getOptionLabel="(name:any) => name['title_'+$i18n.locale]"
+              :reduce="(name:any) => name.id"
           >
             <template #no-options> {{ $t("no_matching_options") }}</template>
           </v-select>
@@ -186,7 +184,8 @@ onMounted(async () => {
           <label for="from" class="dark:text-gray-300">
             {{ $t("from") }}
           </label>
-          <VueDatePicker v-model="filterNews.start_time" model-type="yyyy-MM-dd" :enable-time-picker="false" ></VueDatePicker>
+          <VueDatePicker v-model="params.start_time" model-type="yyyy-MM-dd"
+                         :enable-time-picker="false"></VueDatePicker>
         </div>
 
       </form>
@@ -205,17 +204,17 @@ onMounted(async () => {
       </template>
 
       <template #header="data">
-        {{ t(data.text).toUpperCase() }}
+        {{ t(data.text) }}
       </template>
 
       <template #item-title="item">
-        {{ item.title[$i18n.locale] }}
+        {{ item['title_' + $i18n.locale] }}
       </template>
 
       <template #item-status="item">
         <span
             :class="item.status.unique_name == 'not_sent' ? 'rounded-md bg-danger px-4 pb-0.5 text-white' : item.status.unique_name == 'in_progress' ? 'rounded-md bg-warning px-4 pb-0.5 text-white' : 'rounded-md bg-primary px-4 pb-0.5 text-white'">{{
-            item.status.title[$i18n.locale]
+            item.status['title_' + $i18n.locale]
           }}</span>
       </template>
 
@@ -257,15 +256,15 @@ onMounted(async () => {
       </template>
     </EasyDataTable>
 
-    <TwPagination :restart="toRefresh" aclass="mt-10 tw-pagination" :current="current"
-                  :total="store.newsList && store.newsList.count"
-                  :per-page="10"
+    <TwPagination :restart="toRefresh" class="mt-10 tw-pagination" :current="params.page"
+                  :total=" store.newsList.count"
+                  :per-page="params.page_size"
                   :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
-                  @page-changed="changePagionation"/>
+                  @page-changed="changePagination" @per-page-changed="changePageSize"/>
 
 
     <AddEditModal :editData="editData" @saveNews="saveNews"/>
-    <DeleteNewsModal @deleteNews="deleteNews" :newsId="newsId"/>
+    <DeleteModal @delete-action="deleteNews" :id="'news-delete-modal'"/>
     <ShowFileModal :image="image" ref="imageCard" id="news-show-image"/>
   </div>
 </template>

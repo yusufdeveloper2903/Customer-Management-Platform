@@ -1,47 +1,35 @@
 <script setup lang="ts">
-//Imported files
 
+
+//IMPORTED FILES
 import {newsTemplateTable} from "../constants";
 import knowledgeBase from ".././store/index";
-import {nextTick, reactive, ref, watch} from "vue";
+import {nextTick, onMounted, reactive, ref, watch} from "vue";
 import {useI18n} from "vue-i18n";
 import UIKit from "uikit";
 import NewsTemplateModal from "../components/modals/NewsTemplateModal.vue";
-import {NewsTemplate} from "../interfaces";
+import {NewsTemplate} from "../interfaces/index";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
 import ShowFileModal from "./ShowImageModal.vue";
 import UIkit from "uikit";
 
-interface Emits {
-  (event: "update:modelValue", value: File | File[]): void;
 
-  (event: "remove", value: ReturnValue | string): void;
-
-  (event: "show", value: ReturnValue | string): void;
-}
-
-interface ReturnValue {
-  item: string;
-  index: number;
-}
-
-const emit = defineEmits<Emits>();
-//Declared variables
+//DECLARED VARIABLES
 const {t} = useI18n()
 const store = knowledgeBase();
 const isLoading = ref(false);
-const {locale} = useI18n();
 const itemToDelete = ref<number | null>(null);
 const dataToEdit = ref<NewsTemplate>({
-  title: {
-    uz: null,
-    ru: null,
-  },
-  description: {
-    uz: null,
-    ru: null,
-  },
+  id: null,
+  title: '',
+  title_uz: '',
+  title_kr: '',
+  title_ru: '',
+  description: '',
+  description_uz: '',
+  description_kr: '',
+  description_ru: '',
   file: null,
   url: "",
 });
@@ -50,90 +38,87 @@ const params = reactive({
   page_size: 10,
   search: ''
 })
-
-//Functions
 const props = defineProps<{
   knowledge: string
 }>();
-
 let toRefresh = ref(false)
-watch(() => props.knowledge, function () {
-  toRefresh.value = !toRefresh.value
-})
-
-const refresh = async (params: any) => {
-  await store.getNewsTemplate(params);
-};
-refresh(params)
-const openModal = (isEdit?: boolean, data?: NewsTemplate) => {
-  if (isEdit && data) {
-    dataToEdit.value = data;
-  } else {
-    dataToEdit.value = {
-      title: {
-        uz: null,
-        ru: null,
-      },
-      description: {
-        uz: null,
-        ru: null,
-      },
-      file: null,
-      url: "",
-    };
-  }
-  nextTick(() => {
-    UIKit.modal("#news_template").show();
-  });
-};
 const image = ref<string>("");
 const imageCard = ref();
+
+
+//MOUNTED LIFE CYCLE
+onMounted(async () => {
+  let knowledgeBase = localStorage.getItem('knowledgeBase')
+  if (knowledgeBase == 'News template') {
+    await refresh()
+
+  }
+})
+
+
+//WATCHERS
+watch(() => props.knowledge, async function (val) {
+  toRefresh.value = !toRefresh.value
+  if (val == 'News template') {
+    await refresh()
+  }
+
+})
+watchDebounced(() => params.search, function () {
+  params.page = 1
+  refresh()
+}, {deep: true, debounce: 500, maxWait: 500,})
+
+
+//FUNCTIONS
+const refresh = async () => {
+  await store.getNewsTemplate(params);
+};
+const openModal = (isEdit: boolean, data?: NewsTemplate) => {
+  if (isEdit && data) {
+    dataToEdit.value = data;
+  }
+  nextTick(() => {
+    UIkit.modal("#news_template").show();
+  });
+};
+
 const onShowFile = (item: any) => {
   image.value = item;
   nextTick(() => {
     UIkit.modal("#file-modal-image").show();
-
-    emit("show", item);
   });
 };
 const deleteAction = async () => {
   isLoading.value = true
   try {
     await store.deleteNewsTemplate(itemToDelete.value)
-    UIKit.modal("#newstemplate-main-delete-modal").hide();
+    await UIKit.modal("#newstemplate-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.newTemplate.count - 1) % params.page > 0) {
+    if ((store.newTemplate.count - 1) % params.page_size == 0) {
       params.page = params.page - 1
-      await refresh(params)
+      await refresh()
     } else {
-      await refresh(params)
+      await refresh()
     }
     isLoading.value = false
   } catch (error: any) {
-    toast.error(
-        t('error')
-    );
+    toast.error(t('error'));
   }
 };
 const changePagination = (page: number) => {
   params.page = page;
-  refresh(params);
+  refresh();
 };
 const onPageSizeChanged = (e: number) => {
   params.page_size = e
   params.page = 1
-  refresh(params)
+  refresh()
 }
-
-watchDebounced(() => params.search, function () {
-  params.page = 1
-  refresh(params)
-}, {deep: true, debounce: 500, maxWait: 500,})
-const handleDeleteModal = (id) => {
+const handleDeleteModal = (id: number) => {
   itemToDelete.value = id
   UIKit.modal("#newstemplate-main-delete-modal").show()
 };
-
 
 </script>
 
@@ -150,7 +135,7 @@ const handleDeleteModal = (id) => {
         />
       </label>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-              @click="openModal(false)">
+              @click="openModal(false )">
         {{ $t("Add") }}
       </button>
     </div>
@@ -165,17 +150,17 @@ const handleDeleteModal = (id) => {
         {{ $t(header.text) }}
       </template>
 
-      <template #item-title="{ title }">
-        {{ title[locale] }}
+      <template #item-title="item">
+        {{ item['title_' + $i18n.locale] }}
       </template>
-      <template #item-description="{ description }">
-        {{ description[locale] }}
+      <template #item-description="item">
+        {{ item['description_' + $i18n.locale] }}
       </template>
       <template #item-url="{ url }">
         <a :href="url" class="">{{ url }}</a>
       </template>
       <template #item-photo="{ file }">
-        <div class="py-3 flex justify-center gap-3">
+        <div class="py-3 flex justify-left gap-3">
           <img
               v-if="file"
               class="w-[45px] h-[45px] rounded object-cover"
@@ -192,7 +177,7 @@ const handleDeleteModal = (id) => {
         </div>
       </template>
       <template #item-actions="data">
-        <div class="flex my-4 justify-center">
+        <div class="flex my-4 justify-left">
           <button class="btn-warning btn-action" @click="openModal(true, data)">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
-//Imported files
-import {nextTick, reactive, ref, watch} from "vue";
+
+
+//IMPORTED FILES
+import {nextTick, onMounted, reactive, ref, watch} from "vue";
 import {toast} from "vue3-toastify";
 import {productsFields} from "../constants";
 import CreateProducts from "./modals/CreateProductsModal.vue";
@@ -9,8 +11,10 @@ import UIkit from "uikit";
 import {watchDebounced} from "@vueuse/core";
 import {useI18n} from "vue-i18n";
 import ShowFileModal from "@/modules/KnowledgeBase/components/ShowImageModal.vue";
-//Declared variables
+import {EditDataProduct} from '../interfaces/index'
 
+
+//DECLARED VARIABLES
 const {t} = useI18n()
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
@@ -18,86 +22,79 @@ const store = knowledgeBase()
 const params = reactive({
   page_size: 10,
   page: 1,
-  search: ''
+  search: null
 });
-
 const props = defineProps<{
   knowledge: string
 }>();
-
 let toRefresh = ref(false)
-watch(() => props.knowledge, function () {
-  toRefresh.value = !toRefresh.value
-})
-
-interface EditData {
-  id: number | null,
-  title: {
-    uz: string,
-    ru: string
-  },
-  description: {
-    uz: string,
-    ru: string
-  },
-  price: number | null,
-  image: null | string,
-  code: string,
-  measurement_type: string | null,
-  quantity: number | null
-}
-
-interface Emits {
-  (event: "update:modelValue", value: File | File[]): void;
-
-  (event: "remove", value: ReturnValue | string): void;
-
-  (event: "show", value: ReturnValue | string): void;
-}
-
-const emit = defineEmits<Emits>();
-
-const editData = ref<EditData>({
-  id: 0,
-  title: {
-    uz: "",
-    ru: ""
-  },
-  description: {
-    uz: "",
-    ru: ""
-  },
-  price: null,
-  image: null,
+const editData = ref<EditDataProduct>({
+  id: '',
+  title: '',
+  title_uz: '',
+  title_kr: '',
+  title_ru: '',
+  description: '',
+  description_uz: '',
+  description_kr: '',
+  description_ru: '',
+  price: '',
+  image: '',
   code: "",
   measurement_type: '',
-  quantity: 0
+  quantity: ''
+})
+const image = ref<string>("");
+const imageCard = ref();
+
+
+//MOUNTED LIFE CYCLE
+onMounted(async () => {
+  let knowledgeBase = localStorage.getItem('knowledgeBase')
+  if (knowledgeBase == 'products') {
+    await refresh()
+  }
 })
 
+
+//WATCHERS
+watch(() => props.knowledge, async function (val) {
+  toRefresh.value = !toRefresh.value
+  if (val == 'products') {
+    await refresh()
+  }
+})
+watchDebounced(
+    () => params.search,
+    async () => {
+      params.page = 1;
+      await refresh()
+    }, {deep: true, debounce: 500, maxWait: 5000}
+);
+
+
+//FUNCTIONS
 const changePagionation = (e: number) => {
   params.page = e;
-  refresh(params);
+  refresh();
 };
-const onPageSizeChanged = (e) => {
+const onPageSizeChanged = (e: number) => {
   params.page_size = e
   params.page = 1
-  refresh(params)
+  refresh()
 }
-
-const handleDeleteModal = (id) => {
+const handleDeleteModal = (id: number) => {
   UIkit.modal("#product-delete-modal").show()
   itemId.value = id
 };
-
 const saveProducts = () => {
-  refresh(params);
+  refresh();
 }
 
-
-const refresh = async (filter: any) => {
+const refresh = async () => {
   isLoading.value = true;
   try {
-    await store.getProducts(filter)
+    await store.getProducts(params)
   } catch (error: any) {
     toast.error(
         t('error')
@@ -105,41 +102,27 @@ const refresh = async (filter: any) => {
   }
   isLoading.value = false;
 };
-refresh(params)
 const deleteAction = async () => {
   isLoading.value = true
   try {
     await store.deleteProducts(itemId.value)
-    UIkit.modal("#product-delete-modal").hide();
+    await UIkit.modal("#product-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.productsList.count - 1) % params.page > 0) {
+    if ((store.productsList.count - 1) % params.page_size == 0) {
       params.page = params.page - 1
-      await refresh(params)
+      await refresh()
     } else {
-      await refresh(params)
+      await refresh()
     }
-
     isLoading.value = false
   } catch (error: any) {
-    toast.error(
-        t('error')
-    );
+    toast.error(t('error'));
   }
 };
-watchDebounced(
-    () => params.search,
-    async () => {
-      params.page = 1;
-      await refresh(params)
-    }, {deep: true, debounce: 500, maxWait: 5000}
-);
-const image = ref<string>("");
-const imageCard = ref();
 const onShowFile = (item: any) => {
   image.value = item;
   nextTick(() => {
     UIkit.modal("#file-show-image").show();
-    emit("show", item);
   });
 };
 </script>
@@ -155,7 +138,7 @@ const onShowFile = (item: any) => {
       </label>
 
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-              uk-toggle="target: #create_products" @click="editData = <EditData>{}">
+              uk-toggle="target: #create_products" @click="editData = {}">
         {{ $t("Add") }}
       </button>
     </div>
@@ -194,7 +177,7 @@ const onShowFile = (item: any) => {
       </template>
 
       <template #item-title="item">
-        {{ item.title[$i18n.locale] }}
+        {{ item['title_' + $i18n.locale] }}
       </template>
 
 
@@ -219,7 +202,7 @@ const onShowFile = (item: any) => {
       </template>
 
       <template #item-description="item">
-        {{ item.description[$i18n.locale] }}
+        {{ item['description_' + $i18n.locale] }}
       </template>
 
       <template #item-actions="item">

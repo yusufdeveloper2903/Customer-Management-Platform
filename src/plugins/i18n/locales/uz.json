@@ -1,5 +1,5 @@
 {
-  "validation":{
+  "validation": {
     "this_field_is_required": "Ushbu qator to'ldirilishi shart"
   },
   "pagination": {
@@ -45,7 +45,7 @@
     "un_publish": "Nashrni bekor qilish",
     "draft": "QORALAMA"
   },
-  "test":{
+  "test": {
     "test": "Test",
     "add_test": "Test qo'shish",
     "type_test": "Test turi",
@@ -126,13 +126,13 @@
   "upload": "Yuklash",
   "deadline": "Muddati",
   "Name of tags": "Teg nomi",
-  "Are you sure?" : "Ishonchingiz komilmi?",
-  "You won't be able to revert this!" : "Bu amalni qaytarib bo'lmaydi!",
+  "Are you sure?": "Ishonchingiz komilmi?",
+  "You won't be able to revert this!": "Bu amalni qaytarib bo'lmaydi!",
   "Are you sure you to leave this page?": "Bu sahifani tark etishga ishonchingiz komilmi?",
   "Phone number must be entered in the format: '998 [XX] [XXX XX XX]'. Up to 12 digits allowed!": "Telefon raqami quyidagi formatda kiritilishi kerak: '998 [XX] [XXX XX XX]'. 12 tagacha raqamga ruxsat beriladi!",
   "Enter a valid email address!": "Yaroqli elektron pochta manzilini kiriting!",
-  "Yes, delete it!" : "Ha, o'chirish!",
-  "No, cancel!" : "Yo'q, bekor qilish!",
+  "Yes, delete it!": "Ha, o'chirish!",
+  "No, cancel!": "Yo'q, bekor qilish!",
   "file_input": "Fayl kiritish",
   "no_data": "Ma'lumotlar yo'q",
   "choose_file": "Fayl tanlang",
@@ -145,6 +145,7 @@
   "User with that username already exists!": "Bunday foydalanuvchi nomi allaqachon mavjud!",
   "of": "Jami",
   "yes": "Ha",
+  "add_staff": "Xodim qo'shish",
   "no": "Yo'q",
   "filter": "Filtrlar",
   "type_of_operation": "Operatsiya turlari",
@@ -208,8 +209,9 @@
   "template": "Shablon:",
   "photo": "Rasm",
   "url": "URL",
-  "UZ": "Uz",
-  "RU": "Ru",
+  "UZ": "O'z",
+  "RU": "Ру",
+  "KR": "Ўз",
   "Published": "Chop etilgan",
   "Transactions": "Bitimlar",
   "planned for(publish date)": "Rejalangan sana",
@@ -285,6 +287,7 @@
   "licence": "Litsenziya",
   "available": "Mavjud",
   "used": "Ishlatilgan",
+  "no_photo": "Rasm mavjud emas",
   "systems": "Tizimlar",
   "frontend": "Frontend",
   "backend": "Backend",
@@ -303,7 +306,6 @@
   "PrivacyPolicy": "Maxfiylik siyosati",
   "Terms_and_conditions": "Foydalanish shartlari",
   "staff_details": "Xodimlar tafsilotlari",
-  "add_staff": "Xodimlarni qo'shish",
   "edit sms sending": "SMS yuborishni tahrirlash",
   "add_sms_sending": "SMS xabarnomani qo'shish",
   "edit news": "Yangiliklarni tahrirlash",
@@ -313,5 +315,4 @@
   "contacts": "Kontaktlar",
   "The phone number must be entered in the format: '998 [XX] [XXX XX XX]": "Telefon raqami formatda kiritilishi kerak: '998 [XX] [XXX XX XX]",
   "phone_numbers": "Telefon raqamlari"
-
 }

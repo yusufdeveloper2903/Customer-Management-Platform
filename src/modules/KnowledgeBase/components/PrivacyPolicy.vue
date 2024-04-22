@@ -1,38 +1,51 @@
 <script setup lang="ts">
 
-//Imported files
-
+//IMPORTED FILES
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
-import {ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import knowledgeBase from ".././store/index"
 import {toast} from "vue3-toastify";
 import {useI18n} from "vue-i18n";
 
-
-//Declared variables
-
+//DECLARED VARIABLES
 const store = knowledgeBase()
-
 const is_disabledUz = ref(false)
+const is_disabledKr = ref(false)
 const is_disabledRu = ref(false)
 const {t} = useI18n()
+const props = defineProps<{
+  knowledge: string
+}>();
+
+//MOUNTED LIFE CYCLE
+onMounted(async () => {
+  let knowledgeBase = localStorage.getItem('knowledgeBase')
+  if (knowledgeBase == 'PrivacyPolicy') {
+    await refresh()
+  }
+})
 
 
-//Mounted
+//WATCHERS
+watch(() => props.knowledge, async function (val) {
+  if (val == 'PrivacyPolicy') {
+    await refresh()
+  }
+})
 
-
+//FUNCTIONS
 const refresh = async () => {
   try {
     await store.getPagesPolicy({type: 'privacy_policy'});
   } catch (error: any) {
     toast.error(t('error'));
   }
-
 };
-refresh()
+
 
 const updateText = () => {
+  store.pagesListPolicy.text = store.pagesListPolicy.text_uz
   store.updatePages({...store.pagesListPolicy}).then(() => {
     setTimeout(() => {
       toast.success(t("updated_successfully"));
@@ -43,12 +56,23 @@ const updateText = () => {
 
 }
 const updateText2 = () => {
+  store.pagesListPolicy.text = store.pagesListPolicy.text_uz
   store.updatePages({...store.pagesListPolicy}).then(() => {
     setTimeout(() => {
       toast.success(t("updated_successfully"));
     }, 200);
     refresh()
     is_disabledRu.value = false
+  })
+}
+const updateText3 = () => {
+  store.pagesListPolicy.text = store.pagesListPolicy.text_uz
+  store.updatePages({...store.pagesListPolicy}).then(() => {
+    setTimeout(() => {
+      toast.success(t("updated_successfully"));
+    }, 200);
+    refresh()
+    is_disabledKr.value = false
   })
 }
 
@@ -58,48 +82,75 @@ const updateText2 = () => {
 <template>
   <div class="card">
     <Tabs pill>
+      <Tab title="UZ">
+        <div v-if="store.pagesListPolicy.text_uz">
+          <Editor
+              :placeholder="$t('enter_information')"
+              content-type="html"
+              toolbar="full"
+              class="scrollbar rounded border"
+              style="height: 45vh; overflow-y: auto;"
+              v-model:content="store.pagesListPolicy.text_uz"
+          >
+          </Editor>
+        </div>
 
-      <Tab :title="$t('UZ')" >
-        <div v-if="store.pagesListPolicy.text.uz" >
+        <div class="flex justify-end mt-2">
+          <button v-if="is_disabledUz == false" class="btn-warning" @click="is_disabledUz = true">{{
+              t('Edit')
+            }}
+          </button>
+
+          <button v-if="is_disabledUz == true" class="btn-success" @click="updateText">{{ t('Save') }}</button>
+
+        </div>
+      </Tab>
+      <Tab title="KR">
+        <div v-if="store.pagesListPolicy.text_kr">
           <Editor
 
               :placeholder="$t('enter_information')"
               content-type="html"
               toolbar="full"
               class="scrollbar rounded border"
-              style="height: 45vh; overflow-y: auto;" v-model:content="store.pagesListPolicy.text.uz"
+              style="height: 45vh; overflow-y: auto;" v-model:content="store.pagesListPolicy.text_kr"
           >
 
           </Editor>
         </div>
 
         <div class="flex justify-end mt-2">
-          <button v-if="is_disabledUz == false" class="btn-warning" @click="is_disabledUz = true">Edit</button>
+          <button v-if="is_disabledKr == false" class="btn-warning" @click="is_disabledKr = true">{{
+              t('Edit')
+            }}
+          </button>
 
-          <button v-if="is_disabledUz == true" class="btn-success" @click="updateText">Add</button>
+          <button v-if="is_disabledKr == true" class="btn-success" @click="updateText3">{{ t('Save') }}</button>
 
         </div>
       </Tab>
 
 
-      <Tab :title="$t('RU')">
-        <div >
+      <Tab title="RU">
+        <div v-if="store.pagesListPolicy.text_ru">
           <Editor
-              v-if="store.pagesListPolicy.text.ru"
               :placeholder="$t('enter_information')"
               content-type="html"
               toolbar="full"
               class="scrollbar rounded border"
-              style="height: 45vh; overflow-y: auto;" v-model:content="store.pagesListPolicy.text.ru"
+              style="height: 45vh; overflow-y: auto;" v-model:content="store.pagesListPolicy.text_ru"
           >
 
           </Editor>
         </div>
 
         <div class="flex justify-end mt-2">
-          <button v-if="is_disabledRu == false" class="btn-warning" @click="is_disabledRu = true">Edit</button>
+          <button v-if="is_disabledRu == false" class="btn-warning" @click="is_disabledRu = true">{{
+              t('Edit')
+            }}
+          </button>
 
-          <button v-if="is_disabledRu == true" class="btn-success" @click="updateText2">Add</button>
+          <button v-if="is_disabledRu == true" class="btn-success" @click="updateText2">{{ t('Save') }}</button>
         </div>
       </Tab>
     </Tabs>

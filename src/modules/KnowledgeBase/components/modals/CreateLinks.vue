@@ -1,89 +1,39 @@
 <script lang="ts" setup>
-import {Ref, ref, computed, watch} from "vue";
+
+//IMPORTED FILES
+import {Ref, ref, computed} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import knowledgeBase from "../../store/index";
+import {linkType} from '../../constants/index'
+import {EditLink} from '../../interfaces/index'
 
+
+//DECLARED VARIABLES
 const {t} = useI18n();
 const store = knowledgeBase()
 const isSubmitted = ref<boolean>(false);
 const emits = defineEmits(["saveContact"]);
-
-const linktype = [
-  {
-    id: 1,
-    type: "website",
-    name: "Website"
-  },
-  {
-    id: 2,
-    type: "telegram",
-    name: "Telegram"
-  },
-  {
-    id: 3,
-    type: "instagram",
-    name: "Instagram"
-  },
-  {
-    id: 4,
-    type: "facebook",
-    name: "Facebook"
-  },
-  {
-    id: 5,
-    type: "twitter",
-    name: "Twitter"
-  },
-  {
-    id: 6,
-    type: "tiktok",
-    name: "TikTok"
-  },
-]
-
-const rules = computed(() => {
-  return {
-    type: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
-    },
-    url: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
-    },
-  };
-});
-
-
-interface EditLink {
-  id: null | number,
-  type: string | number,
-  url: string
-}
-
+const propData = defineProps<{ editData: EditLink }>();
 const editData = ref({
   type: "",
   url: ""
 })
 
-const propData = defineProps<{ editData: EditLink }>();
-const validate: Ref<Validation> = useVuelidate(rules, editData);
 
-
+//FUNCTIONS
 const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
   if (propData.editData.id) {
     try {
-      await store.updateSocialMediaLinks({id: propData.editData.id, url: editData.value.url, type: editData.value.type}).then(() => {
-        emits("saveContact");
-        UIkit.modal("#links").hide();
-        setTimeout(() => {
-          toast.success(t("updated_successfully"));
-        }, 200);
-      });
+      await store.updateSocialMediaLinks({id: propData.editData.id, url: editData.value.url, type: editData.value.type})
+      await UIkit.modal("#links").hide();
+      emits("saveContact");
+      toast.success(t("updated_successfully"));
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
@@ -94,14 +44,10 @@ const updateDeal = async () => {
 
   } else {
     try {
-      await store.createSocialMediaLinks(editData.value).then(() => {
-
-        UIkit.modal("#links").hide();
-        emits("saveContact");
-        setTimeout(() => {
-          toast.success(t("created_successfully"));
-        }, 200);
-      });
+      await store.createSocialMediaLinks(editData.value)
+      await UIkit.modal("#links").hide();
+      emits("saveContact");
+      toast.success(t("created_successfully"));
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
@@ -122,15 +68,32 @@ function openModal() {
   if (propData.editData.id) {
     editData.value.type = propData.editData.type
     editData.value.url = propData.editData.url
-  } else {
-    editData.value.type = ""
-    editData.value.url = ""
   }
 }
+
+function hideModal() {
+  validate.value.$reset()
+  editData.value.type = ""
+  editData.value.url = ""
+}
+
+
+//COMPUTED
+const rules = computed(() => {
+  return {
+    type: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    url: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+  };
+});
+const validate: Ref<Validation> = useVuelidate(rules, editData);
 </script>
 
 <template>
-  <div id="links" class="uk-flex-top" uk-modal @shown="openModal" @hidden="validate.$reset()">
+  <div id="links" class="uk-flex-top" uk-modal @shown="openModal" @hidden="hideModal">
     <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden">
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
@@ -140,11 +103,9 @@ function openModal() {
       </div>
 
       <div class="uk-modal-body py-4">
-
-        <!-- <form> -->
         <label>
           <p class=" mt-5 mb-1">{{ $t("type") }}:</p>
-          <v-select id="type" :options="linktype" :get-option-label="(name) => name.name" :placeholder="$t('type')"
+          <v-select id="type" :options="linkType" :get-option-label="(name) => name.name" :placeholder="$t('type')"
                     class="mb-4" :class="validate.type.$errors.length ? 'required-input' : ''"
                     :reduce="name => name.type"
                     v-model="editData.type">
@@ -162,7 +123,6 @@ function openModal() {
         <p v-for="error in validate.url.$errors" :key="error.$uid" class="text-danger text-sm">
           {{ $t(error.$message) }}
         </p>
-        <!-- </form> -->
       </div>
 
       <div class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white">

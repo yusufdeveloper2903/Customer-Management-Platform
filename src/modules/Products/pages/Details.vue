@@ -1,8 +1,7 @@
 <script setup lang="ts">
-//Imported files
-
+//IMPORTED FILES
 import {headerProductCard} from "../constants";
-import {reactive, ref,} from "vue";
+import {onMounted, reactive, ref,} from "vue";
 import CreateProductsDetail from "../components/CreateProductDetailModal.vue";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
@@ -12,7 +11,8 @@ import productStore from '../store/index'
 import {useRoute} from "vue-router";
 import {Link} from "@/modules/KnowledgeBase/interfaces";
 
-//Declared variables
+
+//DECLARED VARIABLES
 const currentRow = ref<Link | null>(null);
 const route = useRoute()
 const {t} = useI18n()
@@ -24,36 +24,42 @@ const params = reactive({
   search: '',
   page_size: 10
 })
-
-
 const editData = ref({
   id: null,
-  product: null,
+  product: '',
   is_active: false,
-  price: null,
-  has_discount: false,
-  discount_percentage: null,
-  category: null
+  price: '',
+  has_discount: '',
+  discount_percentage: '',
+  category: '',
+  title_ru: '',
+  title_uz: '',
+  title_kr: '',
 })
 
 
-//Functions
+//MOUNTED
+onMounted(async () => {
+  await refresh()
+  await productStorage.getProductFromKnowledgeBase({page_size: 1000})
+  await productStorage.getProductList({page_size: 1000})
+})
 
 
-const changePagionation = (e: number) => {
+//FUNCTIONS
+const changePagination = (e: number) => {
   params.page = e;
   refresh();
 };
-const onPageSizeChanged = (e) => {
+const onPageSizeChanged = (e: number) => {
   params.page_size = e
   params.page = 1
   refresh()
 }
-const handleDeleteModal = (id) => {
+const handleDeleteModal = (id: number) => {
   itemId.value = id
   UIkit.modal("#product-card-delete-modal").show()
 };
-
 const saveProducts = () => {
   refresh();
 }
@@ -66,16 +72,14 @@ const refresh = async () => {
   }
   isLoading.value = false;
 };
-refresh()
-productStorage.getProductFromKnowledgeBase({page_size: 1000})
-productStorage.getProductList({page_size: 1000})
+
 const deleteAction = async () => {
   isLoading.value = true
   try {
     await productStorage.deleteProductCard(itemId.value)
-    UIkit.modal("#product-card-delete-modal").hide();
+    await UIkit.modal("#product-card-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((productStorage.productListCards.count - 1) % params.page > 0) {
+    if ((productStorage.productListCards.count - 1) % params.page_size == 0) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -108,7 +112,7 @@ const dragDrop = async (item: Link) => {
   await productStorage.DRAG_DROP_PRODUCTS_CARDS({id1: currentRow.value?.id, id2: item.id, category_id: route.params.id})
   await refresh()
   toast.success(t("updated_successfully"));
-};
+}
 </script>
 
 <template>
@@ -135,12 +139,14 @@ const dragDrop = async (item: Link) => {
       </thead>
 
       <tbody>
-      <tr v-for="item in productStorage.productListCards.results" :key="item.id" :loading="isLoading"
+      <tr v-for="item in productStorage.productListCards.results" :key="item.id"
           class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
           :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
         <td class="px-6 whitespace-no-wrap text-left ">{{ item.id }}</td>
-        <td class="px-6 whitespace-no-wrap text-left">{{ item.product.title[$i18n.locale] }}</td>
-        <td class="px-6 whitespace-no-wrap text-left">{{ (`${item.price}`).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' Som' }}</td>
+        <td class="px-6 whitespace-no-wrap text-left">{{ item.product['title_' + $i18n.locale] }}</td>
+        <td class="px-6 whitespace-no-wrap text-left">
+          {{ (`${item.price}`).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' Som' }}
+        </td>
         <td class="px-6 whitespace-no-wrap text-left">
           <label
               className="relative inline-flex items-center cursor-pointer">
@@ -164,7 +170,7 @@ const dragDrop = async (item: Link) => {
             {{ item.discount_percentage }}
           </span>
           <span v-else>
-           {{$t('noDiscount')}}
+           {{ $t('noDiscount') }}
          </span>
 
         </td>
@@ -194,7 +200,7 @@ const dragDrop = async (item: Link) => {
                   :current="params.page"
                   :per-page="params.page_size"
                   :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
-                  @page-changed="changePagionation" @per-page-changed="onPageSizeChanged"/>
+                  @page-changed="changePagination" @per-page-changed="onPageSizeChanged"/>
     <CreateProductsDetail :editData="editData" @saveProducts="saveProducts"/>
 
   </div>

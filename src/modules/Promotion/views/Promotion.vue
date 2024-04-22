@@ -1,5 +1,7 @@
 <script setup lang="ts">
-//Imported files
+
+
+//IMPORTED FILES
 import promotionBase from '../store/index'
 import {newsPromotionTable} from "../constants";
 import {reactive, ref,} from "vue";
@@ -9,7 +11,10 @@ import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
 import UIkit from "uikit";
 import {formatDate} from "@/mixins/features";
-//Declared variables
+import {EditData} from '../Interface/index'
+
+
+//DECLARED VARIABLES
 const {t} = useI18n()
 const itemId = ref<number | null | undefined>(null);
 const promotionStorage = promotionBase()
@@ -19,41 +24,27 @@ const params = reactive({
   search: "",
   page: 1
 });
-
-interface EditData {
-  id: number | null,
-  title: {
-    uz: string,
-    ru: string
-  },
-  description: {
-    uz: string,
-    ru: string
-  },
-  is_active: boolean | null,
-  background_photo: null | string,
-  detail_photo: null | string,
-  start_date: null | string,
-  end_date: null | string
-
-}
-
 const editData = ref<EditData>({
   id: null,
-  title: {
-    uz: "",
-    ru: ""
-  },
-  description: {
-    uz: "",
-    ru: ""
-  },
+  title:'',
+  title_ru: '',
+  title_uz: '',
+  title_kr: '',
+  description_ru: '',
+  description_uz: '',
+  description_kr: '',
   is_active: false,
-  background_photo: null,
-  detail_photo: null,
-  start_date: null,
-  end_date: null
+  background_photo: '',
+  detail_photo: '',
+  start_date: '',
+  end_date: '',
+  description: '',
+  is_published: false,
+  modified_date:''
 })
+
+
+//WATCHERS
 watchDebounced(
     () => params.search,
     async () => {
@@ -61,6 +52,9 @@ watchDebounced(
       await refresh(params)
     }, {deep: true, debounce: 500, maxWait: 5000}
 );
+
+
+//FUNCTIONS
 const refresh = async (val: any) => {
   isLoading.value = true;
   try {
@@ -76,7 +70,7 @@ function saveProducts() {
   refresh(params)
 }
 
-const changePagionation = (e: number) => {
+const changePagination = (e: number) => {
   params.page = e;
   refresh(params);
 };
@@ -89,9 +83,9 @@ const deleteAction = async () => {
   isLoading.value = true
   try {
     await promotionStorage.deletePromotion(itemId.value)
-    UIkit.modal("#delete-promotion-item").hide();
+    await UIkit.modal("#delete-promotion-item").hide();
     toast.success(t('deleted_successfully'));
-    if ((promotionStorage.promotionList.count - 1) % params.page > 0) {
+    if ((promotionStorage.promotionList.count - 1) % params.page_size == 0) {
       params.page = params.page - 1
       await refresh(params)
     } else {
@@ -102,15 +96,14 @@ const deleteAction = async () => {
     toast.error(t('error'));
   }
 };
-const handleDeleteModal = (id) => {
+const handleDeleteModal = (id: number) => {
   itemId.value = id
   UIkit.modal("#delete-promotion-item").show()
 };
-const onGetData = async (val) => {
+const onGetData = async (val: any) => {
   try {
     await promotionStorage.getPromotionId(val)
     editData.value = promotionStorage.promotionListId
-
   } catch (error) {
     toast.error(t('error'));
   }
@@ -154,7 +147,7 @@ const onGetData = async (val) => {
         {{ $t(header.text) }}
       </template>
       <template #item-title="item">
-        {{ item.title[$i18n.locale] }}
+        {{ item['title_' + $i18n.locale] }}
       </template>
       <template #item-start_date="item">
         {{ formatDate(item.start_date) }}
@@ -208,7 +201,7 @@ const onGetData = async (val) => {
                   :current="params.page"
                   :per-page="params.page_size"
                   :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
-                  @page-changed="changePagionation" @per-page-changed="onPageSizeChanged"/>
+                  @page-changed="changePagination" @per-page-changed="onPageSizeChanged"/>
     <CreatePromotionModal :editData="editData" @saveProducts="saveProducts"/>
     <DeleteModal @delete-action="deleteAction" :id="'delete-promotion-item'"/>
   </div>

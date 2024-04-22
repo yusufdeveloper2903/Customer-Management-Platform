@@ -1,6 +1,7 @@
 <script setup lang="ts">
-//Imported files
 
+
+//IMPORTED FILES
 import {headerProduct} from "../constants";
 import {reactive, ref,} from "vue";
 import CreateProducts from "../components/CreateProductModal.vue";
@@ -14,7 +15,8 @@ import {useRouter} from "vue-router";
 import {Link} from "@/modules/KnowledgeBase/interfaces";
 import {formatDate} from "@/mixins/features";
 
-//Declared variables
+
+//DECLARED VARIABLES
 const router = useRouter()
 const {t} = useI18n()
 const productStorage = productStore()
@@ -25,19 +27,25 @@ const params = reactive({
   search: '',
   page_size: 10
 })
-
 const currentRow = ref<Link | null>(null);
 const editData = ref({
   id: null,
-  title: {
-    uz: "",
-    ru: ""
-  },
+  title_ru: '',
+  title_uz: '',
+  title_kr: '',
   is_active: false
 })
-//Functions
 
+//WATCHERS
+watchDebounced(
+    () => params.search,
+    async () => {
+      params.page = 1;
+      await refresh(params)
+    }, {deep: true, debounce: 500, maxWait: 5000}
+);
 
+//FUNCTIONS
 const changePagionation = (e: number) => {
   params.page = e;
   refresh(params);
@@ -47,17 +55,14 @@ const onPageSizeChanged = (e) => {
   params.page = 1
   refresh(params)
 }
-const handleDeleteModal = (id) => {
+const handleDeleteModal = (id: any) => {
   itemId.value = id
-
   UIkit.modal("#product-main-delete-modal").show()
 };
 
 const saveProducts = () => {
   refresh(params);
 }
-
-
 const refresh = async (params: any) => {
   isLoading.value = true;
   try {
@@ -72,9 +77,9 @@ const deleteAction = async () => {
   isLoading.value = true
   try {
     await productStorage.deleteProductItem(itemId.value)
-    UIkit.modal("#product-main-delete-modal").hide();
+    await UIkit.modal("#product-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((productStorage.productListCategory.count - 1) % params.page > 0) {
+    if ((productStorage.productListCategory.count - 1) % params.page_size == 0) {
       params.page = params.page - 1
       refresh(params)
     } else {
@@ -85,22 +90,16 @@ const deleteAction = async () => {
     toast.error(t('error'));
   }
 };
-watchDebounced(
-    () => params.search,
-    async () => {
-      params.page = 1;
-      await refresh(params)
-    }, {deep: true, debounce: 500, maxWait: 5000}
-);
+
 const showDetailPage = (item: any) => {
   router.push({name: 'product-details', params: {id: item.id}})
 };
 
-const dragStart = (item) => {
+const dragStart = (item: any) => {
   currentRow.value = item;
 };
 
-const dragOver = (e) => {
+const dragOver = (e: any) => {
   e.preventDefault();
 };
 
@@ -141,7 +140,7 @@ const dragDrop = async (item: Link) => {
           :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
 
         <td class="px-6 whitespace-no-wrap text-left ">{{ item.id }}</td>
-        <td class="px-6 whitespace-no-wrap text-left">{{ item.title[$i18n.locale] }}</td>
+        <td class="px-6 whitespace-no-wrap text-left">{{ item['title_' + $i18n.locale] }}</td>
         <td class="px-6 whitespace-no-wrap text-left">{{ item.active_products_count }}</td>
         <td class="px-6 whitespace-no-wrap text-left">{{ item.inactive_products_count }}</td>
         <td class="px-6 whitespace-no-wrap text-left">

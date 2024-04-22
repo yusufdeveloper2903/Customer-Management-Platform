@@ -1,58 +1,60 @@
-import { defineStore } from "pinia";
-import $axios from "@/plugins/axios";
+//IMPORTED FILES
 
+import {defineStore} from "pinia";
+import $axios from "@/plugins/axios";
 import {
-  UserList,
-  UsersRolesList,
-  User,
-  Regions,
+    UserList,
+    UsersRolesList,
+    User,
+    Regions,
+    params,
 } from "../interfaces";
 
+
+//EXPORT DEFAULT
+
 export default defineStore("users", {
-  state: () => {
-    return {
-      usersList: {} as UserList,
-      usersRolesList: {} as UsersRolesList,
-      user: {} as User,
-      regions: {} as Regions,
-    };
-  },
-
-  actions: {
-    async getUsers(params) {
-      const { data } = await $axios.get("/clients/client/", { params});
-      this.usersList = data;
+    state: () => {
+        return {
+            usersList: {} as UserList,
+            usersRolesList: {} as UsersRolesList,
+            user: {} as User,
+            regions: {} as Regions,
+            usersListSelected: {} as UserList
+        };
     },
 
-    async getUserById(id: number) {
-      const { data } = await $axios.get(`/clients/client/${id}`);
-      this.user = data;
-    },
+    actions: {
+        // GET REQUESTS
+        async getUsers(params: params) {
+            const {data} = await $axios.get("/clients/client/", {params});
+            this.usersList = data;
+        },
+        async getUsersSelected(params: params) {
+            const {data} = await $axios.get("/clients/client/", {params});
+            this.usersListSelected = data;
+        },
+        async getUserById(id: number) {
+            const {data} = await $axios.get(`/clients/client/${id}`);
+            this.user = data;
+        },
+        async getRegions(params) {
+            const {data} = await $axios.get("/knowledge_base/regions/", {params});
+            this.regions = data;
+            return data;
+        },
 
-    createTerminateId(data: object) {
-      return $axios.post("/clients/terminate_client_session/", data);
-    },
 
-    createUser(data: object) {
-      return $axios.post("/users/users/", data);
-    },
+        //CREATE REQUESTS
+        createTerminateId(data: object) {
+            return $axios.post("/clients/terminate_client_session/", data);
+        },
 
-    updateUser(data) {
-      return $axios.patch(`/users/users/${data.get("id")}/`, data);
-    },
 
-    deleteUser(id: number) {
-      return $axios.delete(`/users/users/${id}/`);
-    },
+        //DELETE REQUESTS
+        deleteUser(id: number) {
+            return $axios.delete(`/users/users/${id}/`);
+        },
 
-    async getUsersRoles() {
-      const { data } = await $axios.get("/users/roles/");
-      this.usersRolesList = data;
     },
-    async getRegions(params) {
-      const { data } = await $axios.get("/knowledge_base/regions/", {params});
-      this.regions = data;
-      return data;
-    },
-  },
 });

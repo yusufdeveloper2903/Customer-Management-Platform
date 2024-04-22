@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+
+//IMPORTED FILES
 import {reactive, onMounted, computed, Ref, ref, watch} from "vue";
 import "@/assets/modal.css";
 import L from "leaflet";
@@ -21,118 +24,93 @@ interface Props {
   oldData?: LocationPlace;
 }
 
+
+//DECLARED VARIABLES
 const props = defineProps<Props>();
-const emit = defineEmits(["refresh"]);
+const emit = defineEmits(["refresh", "getRegion"]);
 const store = knowledgeStore();
 const {t, locale} = useI18n();
 const showMap = ref(false);
-
+let openTime = ref()
+let closeTime = ref()
 let location = reactive<LocationPlaceData>({
-  title: {
-    uz: "",
-    ru: "",
-  },
-  address: {
-    uz: "",
-    ru: "",
-  },
+  id: '',
+  title: '',
+  title_uz: '',
+  title_ru: '',
+  title_kr: '',
+  address: "",
+  address_uz: "",
+  address_kr: "",
+  address_ru: "",
   photo: '',
   closed_at: '',
   opened_at: '',
   phones: [],
-  region: null,
+  region: '',
   coordinates: {lat: null, lng: null},
 });
 
-const rules = computed(() => {
-  return {
-    title: {
-      ru: {
-        required: helpers.withMessage(
-            "validation.this_field_is_required",
-            required
-        ),
-      },
-      uz: {
-        required: helpers.withMessage(
-            "validation.this_field_is_required",
-            required
-        ),
-      },
-    },
-    address: {
-      ru: {
-        required: helpers.withMessage(
-            "validation.this_field_is_required",
-            required
-        ),
-      },
-      uz: {
-        required: helpers.withMessage(
-            "validation.this_field_is_required",
-            required
-        ),
-      },
-    },
-    phones: {
-      required: helpers.withMessage(
-          "validation.this_field_is_required",
-          required
-      ),
-    },
-    region: {
-      required: helpers.withMessage(
-          "validation.this_field_is_required",
-          required
-      ),
-    },
-    coordinates: {
-      lat: {
-        required: helpers.withMessage(
-            "validation.this_field_is_required",
-            required
-        ),
-      },
-      lng: {
-        required: helpers.withMessage(
-            "validation.this_field_is_required",
-            required
-        ),
-      },
-    },
-  };
-});
 
-const validate: Ref<Validation> = useVuelidate(rules, location);
+//FUNCTIONS
 
+
+const onGetData = async () => {
+  emit('getRegion')
+}
 const onSubmit = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
   const formData = new FormData()
-  formData.append('title', JSON.stringify(location.title))
-  formData.append('address', JSON.stringify(location.address))
+  formData.append('title', location.title)
+  formData.append('title_ru', location.title_ru)
+  formData.append('title_kr', location.title_kr)
+  formData.append('title_uz', location.title_uz)
+  formData.append('address', location.address)
+  formData.append('address_uz', location.address_uz)
+  formData.append('address_kr', location.address_kr)
+  formData.append('address_ru', location.address_ru)
   formData.append('coordinates', JSON.stringify(location.coordinates))
-  formData.append('phones', location.phones)
+  formData.append('phones', `${location.phones}`)
   formData.append('opened_at', location.opened_at)
   formData.append('closed_at', location.closed_at)
   formData.append('region', location.region)
+  formData.append('id', location.id)
   if (typeof location.photo !== 'string') {
     formData.append('photo', location.photo)
   }
   if (location.id) {
-    await store.updateOneForm(formData, location.id);
-
+    await store.updateOneForm(formData);
     toast.success(t("success"));
   } else {
     await store.AddForms(formData);
-
     toast.success(t("success"));
   }
   UIkit.modal("#location-modal").hide();
   emit("refresh");
 };
-let openTime = ref()
-let closeTime = ref()
+
+const hideModal = () => {
+  openTime.value = '';
+  closeTime.value = '';
+  Object.assign(location, {
+    id: undefined,
+    title: {
+      uz: "",
+      ru: "",
+    },
+    address: {
+      uz: "",
+      ru: "",
+    },
+    closed_at: '',
+    opened_at: '',
+    phones: [],
+    region: null,
+    coordinates: {lat: null, lng: null},
+  });
+
+}
 const onShowModal = () => {
       if (props.oldData?.id) {
         const {region, opened_at, closed_at, ...rest} = props.oldData;
@@ -149,29 +127,6 @@ const onShowModal = () => {
             hours: timClose[0], minutes: timClose[1], seconds: timClose[2]
           }
         }
-
-
-      } else {
-        openTime.value = '';
-        closeTime.value = '';
-        Object.assign(location, {
-          id: undefined,
-          title: {
-            uz: "",
-            ru: "",
-          },
-          address: {
-            uz: "",
-            ru: "",
-          },
-          closed_at: '',
-          opened_at: '',
-
-
-          phones: [],
-          region: null,
-          coordinates: {lat: null, lng: null},
-        });
 
 
       }
@@ -197,6 +152,8 @@ const onShowModal = () => {
     }
 ;
 
+
+//MOUNTED LIFE CYCLE
 onMounted(() => {
   UIkit.util.on("#location-modal", "show", () => {
     onShowModal();
@@ -208,8 +165,8 @@ onMounted(() => {
 });
 
 
+//WATCHERS
 watch(() => openTime.value, function (val) {
-  console.log(val, 'val')
   if (val.hours && val.minutes) {
     location.opened_at = val.hours + ':' + val.minutes
   }
@@ -219,10 +176,53 @@ watch(() => closeTime.value, function (val) {
     location.closed_at = val.hours + ':' + val.minutes
   }
 })
+
+
+//COMPUTED
+const rules = computed(() => {
+      return {
+        title_ru: {
+          required: helpers.withMessage("validation.this_field_is_required", required),
+        },
+        title_uz: {
+          required: helpers.withMessage("validation.this_field_is_required", required),
+        },
+        title_kr: {
+          required: helpers.withMessage("validation.this_field_is_required", required),
+        },
+        address_ru: {
+          required: helpers.withMessage("validation.this_field_is_required", required)
+        },
+        address_uz: {
+          required: helpers.withMessage("validation.this_field_is_required", required)
+        },
+        address_kr: {
+          required: helpers.withMessage("validation.this_field_is_required", required)
+        },
+        phones: {
+          required: helpers.withMessage("validation.this_field_is_required", required)
+        },
+        region: {
+          required: helpers.withMessage("validation.this_field_is_required", required)
+        },
+        coordinates: {
+          lat: {
+            required: helpers.withMessage("validation.this_field_is_required", required)
+          },
+          lng: {
+            required: helpers.withMessage("validation.this_field_is_required", required)
+          }
+        },
+      };
+    })
+;
+
+const validate: Ref<Validation> = useVuelidate(rules, location);
+
 </script>
 
 <template>
-  <div id="location-modal" class="uk-flex-top" uk-modal>
+  <div id="location-modal" class="uk-flex-top" uk-modal @hidden="hideModal">
     <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg w-[1000px]">
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
@@ -242,15 +242,15 @@ watch(() => closeTime.value, function (val) {
                     <label for="form-stacked-text">{{ $t("name") + ' ' + $t('UZ') }} </label>
                     <div class="uk-form-controls">
                       <input
-                          v-model="location.title.uz"
-                          :placeholder="$t('name') + $t('UZ')"
+                          v-model="location.title_uz"
+                          :placeholder="$t('name') + ' ' +  $t('UZ')"
                           class="form-input"
                           id="form-stacked-text"
                           type="text"
-                          :class="validate.title.uz.$errors.length ? 'required-input' : ''"
+                          :class="validate.title_uz.$errors.length ? 'required-input' : ''"
                       />
                       <p
-                          v-for="error in validate.title.uz.$errors"
+                          v-for="error in validate.title_uz.$errors"
                           :key="error.$uid"
                           class="text-danger text-sm"
                       >
@@ -262,14 +262,56 @@ watch(() => closeTime.value, function (val) {
                     <label for="form-stacked-text">{{ $t("address") + ' ' + $t('UZ') }} </label>
                     <div class="uk-form-controls">
                     <textarea
-                        v-model="location.address.uz"
-                        :placeholder="$t('address') + $t('UZ')"
+                        v-model="location.address_uz"
+                        :placeholder="$t('address') + ' ' + $t('UZ')"
                         class="form-input"
                         rows="3"
-                        :class="validate.address.uz.$errors.length ? 'required-input' : ''"
+                        :class="validate.address_uz.$errors.length ? 'required-input' : ''"
                     ></textarea>
                       <p
-                          v-for="error in validate.address.uz.$errors"
+                          v-for="error in validate.address_uz.$errors"
+                          :key="error.$uid"
+                          class="text-danger text-sm"
+                      >
+                        {{ $t(error.$message) }}
+                      </p>
+                    </div>
+                  </div>
+                </Tab>
+                <Tab title="KR">
+                  <div class="w-full">
+
+                    <label for="form-stacked-text">{{ $t("name") + ' ' + $t('KR') }} </label>
+                    <div class="uk-form-controls">
+                      <input
+                          v-model="location.title_kr"
+                          :placeholder="$t('name') +  ' '  +  $t('KR')"
+                          class="form-input"
+                          id="form-stacked-text"
+                          type="text"
+                          :class="validate.title_kr.$errors.length ? 'required-input' : ''"
+                      />
+                      <p
+                          v-for="error in validate.title_kr.$errors"
+                          :key="error.$uid"
+                          class="text-danger text-sm"
+                      >
+                        {{ $t(error.$message) }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="w-full mt-4">
+                    <label for="form-stacked-text">{{ $t("address") + ' ' + $t('KR') }} </label>
+                    <div class="uk-form-controls">
+                    <textarea
+                        v-model="location.address_kr"
+                        :placeholder="$t('address') + ' ' +  $t('UZ')"
+                        class="form-input"
+                        rows="3"
+                        :class="validate.address_kr.$errors.length ? 'required-input' : ''"
+                    ></textarea>
+                      <p
+                          v-for="error in validate.address_kr.$errors"
                           :key="error.$uid"
                           class="text-danger text-sm"
                       >
@@ -283,15 +325,15 @@ watch(() => closeTime.value, function (val) {
                     <label for="form-stacked-text">{{ $t("name") + ' ' + $t('RU') }}</label>
                     <div class="uk-form-controls">
                       <input
-                          v-model="location.title.ru"
+                          v-model="location.title_ru"
                           class="form-input"
-                          :placeholder="$t('name') + $t('RU')"
+                          :placeholder="$t('name') + ' ' +  $t('RU')"
                           id="form-stacked-text"
                           type="text"
-                          :class="validate.title.ru.$errors.length ? 'required-input' : ''"
+                          :class="validate.title_ru.$errors.length ? 'required-input' : ''"
                       />
                       <p
-                          v-for="error in validate.title.ru.$errors"
+                          v-for="error in validate.title_ru.$errors"
                           :key="error.$uid"
                           class="text-danger text-sm"
                       >
@@ -303,14 +345,14 @@ watch(() => closeTime.value, function (val) {
                     <label for="form-stacked-text">{{ $t("address") + ' ' + $t('RU') }}</label>
                     <div class="uk-form-controls">
                     <textarea
-                        v-model="location.address.ru"
-                        :placeholder="$t('address') + $t('RU')"
+                        v-model="location.address_ru"
+                        :placeholder="$t('address') + ' ' +  $t('RU')"
                         class="form-input"
-                        :class="validate.address.ru.$errors.length ? 'required-input' : ''"
+                        :class="validate.address_ru.$errors.length ? 'required-input' : ''"
                         rows="3"
                     ></textarea>
                       <p
-                          v-for="error in validate.address.ru.$errors"
+                          v-for="error in validate.address_ru.$errors"
                           :key="error.$uid"
                           class="text-danger text-sm"
                       >
@@ -328,7 +370,7 @@ watch(() => closeTime.value, function (val) {
                       id="model"
                       :placeholder="$t('region')"
                       :options="store.regionsList"
-                      :fetch="store.getRegions"
+                      :fetch="onGetData"
                       :reduce="(el) => el.id"
                       :getOptionLabel="(v) => v.name[locale] || ''"
                       :class="validate.region.$errors.length ? 'required-input' : ''"
@@ -397,7 +439,6 @@ watch(() => closeTime.value, function (val) {
             </div>
 
             <div class="w-1/2">
-              <!-- Place of map -->
               <div class="w-full">
                 <div id="map1" v-if="showMap"></div>
               </div>

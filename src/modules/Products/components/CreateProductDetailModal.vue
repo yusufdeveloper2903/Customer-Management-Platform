@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-//Imported files
+//IMPORTED FILES
 import productStore from '../store/index'
 import {Ref, ref, computed, watch, reactive} from "vue";
 import {helpers, required} from "@vuelidate/validators";
@@ -9,42 +9,27 @@ import {useI18n} from 'vue-i18n'
 import {toast} from "vue3-toastify";
 import UIkit from "uikit";
 import {useRoute} from "vue-router";
-//Props and Emits
+import {EditDataSecond} from '../Interfaces/index'
 
+
+//DECLARED VARIABLES
 const route = useRoute();
 const propData = defineProps<{
-  editData: EditData
+  editData: EditDataSecond
 }>();
 const emits = defineEmits(["saveProducts"]);
-
-
-//Declared variables
 const productStorage = productStore()
 const {t} = useI18n()
 const isSubmitted = ref<boolean>(false);
-
-interface EditData {
-  id: number | null,
-
-  is_active: boolean,
-  category: number | null,
-  product: number | null,
-  has_discount: boolean,
-  discount_percentage: number | null,
-  price: number | null
-
-}
-
 let productsCategory = ref({
-  product: null,
-  id: null,
+  product: '',
+  id: '',
   is_active: false,
-  category: null,
-  has_discount: null,
-  discount_percentage: 0,
-  price: null
+  category: '',
+  has_discount: '',
+  discount_percentage: '',
+  price: ''
 })
-
 let discountList = reactive([
   {
     title: 'Discount available',
@@ -56,11 +41,16 @@ let discountList = reactive([
   }
 ])
 
+
+//WATCHERS
 watch(() => productsCategory.value.has_discount, function (val) {
   if (!val) {
-    productsCategory.value.discount_percentage = 0
+    productsCategory.value.discount_percentage = ''
   }
 })
+
+
+//FUNCTIONS
 const saveData = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
@@ -68,9 +58,9 @@ const saveData = async () => {
   if (propData.editData.id) {
     try {
       await productStorage.updateProductCard(productsCategory.value)
-      UIkit.modal("#create_and_edit_product_detail").hide();
+      await UIkit.modal("#create_and_edit_product_detail").hide();
       emits("saveProducts");
-
+      toast.success(t('updated_successfully'))
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
@@ -80,7 +70,7 @@ const saveData = async () => {
   } else {
     try {
       await productStorage.createProductCard(productsCategory.value)
-      UIkit.modal("#create_and_edit_product_detail").hide();
+      await UIkit.modal("#create_and_edit_product_detail").hide();
       emits("saveProducts");
       toast.success(t("created_successfully"));
       isSubmitted.value = false;
@@ -100,21 +90,21 @@ function openModal() {
     productsCategory.value.price = propData.editData.price
     productsCategory.value.has_discount = propData.editData.has_discount
     productsCategory.value.discount_percentage = propData.editData.discount_percentage
-    productsCategory.value.id = propData.editData.id
+    productsCategory.value.id = String(propData.editData.id)
   } else {
-    productsCategory.value.category = route.params.id
+    productsCategory.value.category = String(route.params.id)
   }
 }
 
 
 const onHide = () => {
-  productsCategory.value.id = null
+  productsCategory.value.id = ''
   productsCategory.value.is_active = false
-  productsCategory.value.product = null
-  productsCategory.value.has_discount = null
-  productsCategory.value.discount_percentage = null
-  productsCategory.value.price = null
-  productsCategory.value.category = null
+  productsCategory.value.product = ''
+  productsCategory.value.has_discount = ''
+  productsCategory.value.discount_percentage = ''
+  productsCategory.value.price = ''
+  productsCategory.value.category = ''
   validate.value.$reset()
 }
 
@@ -123,12 +113,9 @@ const rules = computed(() => {
     product: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
-
-
   };
 
 });
-
 const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
 
 </script>
@@ -150,7 +137,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
           <v-select
               :options="productStorage.productFromKnowledgeBase.results"
               v-model="productsCategory.product"
-              :getOptionLabel="(name) => name.title[$i18n.locale]"
+              :getOptionLabel="(name) => name['title_'+$i18n.locale]"
               :reduce="(name) => name.id"
           >
             <template #no-options> {{ $t("no_matching_options") }}</template>
@@ -168,7 +155,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
           <v-select
               :options="productStorage.productListCategory.results"
               v-model="productsCategory.category"
-              :getOptionLabel="(name) => name.title[$i18n.locale]"
+              :getOptionLabel="(name) => name['title_'+$i18n.locale]"
               :reduce="(name) => name.id"
           >
             <template #no-options> {{ $t("no_matching_options") }}</template>
