@@ -1,90 +1,79 @@
 <script setup lang="ts">
+
+// IMPORTED FILES
+
 import {fields} from "../constants/index";
-import {onMounted, reactive, ref, watch} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import users from "../store/index";
 import {toast} from "vue3-toastify";
-import {formatPhoneNumber} from "../features";
+import {formatPhoneNumber} from "@/components/Formatters/Formatters";
 import DoubleRight from "../img/double-right-chevron-svgrepo-com.svg"
 import {useI18n} from 'vue-i18n'
-// import {useI18n} from "vue-i18n";
+import {formatDate} from "@/mixins/features";
+import {watchDebounced} from "@vueuse/core";
+import {params} from '../interfaces'
 
-// const {locale} = useI18n();
+// DECLARED VARIABLES
+
 const {t} = useI18n()
 const store = users();
 let usersList = ref<object[]>([]);
 const isLoading = ref(false);
 const router = useRouter()
-
-const filterUsers = reactive({
-  page_size: 10,
-  search: "",
-  role: null,
-});
-
-
-const paginationFilter = reactive({
+const filterUsers = reactive<params>({
   page_size: 10,
   page: 1,
+  search: null,
 });
 
-
-const refresh = async (filter) => {
-  isLoading.value = true;
-  try {
-    await store.getUsers(filter);
-    usersList.value = store.usersList.results;
-  } catch (error: any) {
-    toast.error(
-        t('error')
-    );
-  }
-
-  isLoading.value = false;
-};
-
-
-const current = ref<number>(1);
-
-const changePagionation = (e: number) => {
-  paginationFilter.page = e;
-  current.value = e;
-  refresh({...paginationFilter, ...filterUsers});
-};
-
-const timeout = ref();
-
-const searchByName = () => {
-  clearTimeout(timeout.value);
-  timeout.value = setTimeout(() => {
-    refresh(filterUsers);
-  }, 500);
-};
-
-const showDetailPage = (item) => {
-  router.push({name: 'user detail', params: {id: item.id}})
-};
-
-watch(
-    () => filterUsers.search,
-    () => {
-      if (usersList.value.length <= 10) {
-        current.value = 1;
-      }
-    }
-);
+// MOUNTED
 
 onMounted(async () => {
-  await refresh(paginationFilter);
-
+  await refresh();
 });
+
+
+// WATCHERS
+
+
+watchDebounced(() => filterUsers.search, async () => {
+      filterUsers.page = 1
+      await refresh()
+    }, {deep: true, debounce: 500, maxWait: 5000}
+)
+
+// FUNCTIONS
+
+const refresh = async () => {  // REFRESH FUNCTION
+  isLoading.value = true;
+  try {
+    await store.getUsers(filterUsers);
+    usersList.value = store.usersList.results;
+  } catch (error: any) {
+    toast.error(t('error'));
+  }
+  isLoading.value = false;
+};
+const changePagination = (e: number) => {  // CHANGE PAGINATION FUNCTION
+  filterUsers.page = e;
+  refresh();
+};
+const onPageSizeChanged = (event: number) => {  // CHANGE PAGE SIZE FUNCTION
+  filterUsers.page = 1
+  filterUsers.page_size = event
+  refresh()
+}
+const showDetailPage = (item: any) => {  // PUSH TO DETAILS
+  router.push({name: 'user detail', params: {id: item.id}})
+};
 </script>
 
 <template>
   <div>
     <div class="card">
-      <div class="md:flex items-center justify-between mb-5">
-        <form class="mb-4 md:flex items-center gap-5 md:w-5/12">
+      <div class="md:flex items-center justify-between mb-9">
+        <form class=" md:flex items-center gap-5 md:w-5/12">
           <div class="md:w-1/2">
             <label for="search" class="dark:text-gray-300">
               {{ $t("Search") }}
@@ -96,7 +85,6 @@ onMounted(async () => {
                 class="form-input"
                 :placeholder="$t('Search')"
                 v-model="filterUsers.search"
-                @input="searchByName"
             />
           </div>
 
@@ -115,27 +103,27 @@ onMounted(async () => {
         </template>
 
         <template #header-full_name="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
         <template #header-last_login="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
         <template #header-phone="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
         <template #header-created_date="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
         <template #header-is_active="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
         <template #header-detail="header">
-          {{ $t(header.text).toUpperCase() }}
+          {{ $t(header.text) }}
         </template>
 
 
@@ -144,9 +132,19 @@ onMounted(async () => {
             {{ formatPhoneNumber(items.phone) }}
           </span>
         </template>
+        <template #item-created_date="data">
+          <span>
+            {{ formatDate(data.created_date) }}
+          </span>
+        </template>
+        <template #item-last_login="data">
+          <span>
+            {{ formatDate(data.last_login) }}
+          </span>
+        </template>
 
         <template #item-is_active="items">
-          <label class="relative inline-flex items-center cursor-pointer">
+          <label class=" mt-2 relative inline-flex items-center cursor-pointer">
             <input
                 type="checkbox"
                 :checked="items.is_active"
@@ -166,12 +164,13 @@ onMounted(async () => {
 
       <TwPagination
           class="mt-10 tw-pagination"
-          :current="current"
+          :current="filterUsers.page"
           :total="store.usersList.count"
-          :per-page="10"
+          :per-page="filterUsers.page_size"
           :text-before-input="$t('go_to_page')"
           :text-after-input="$t('forward')"
-          @page-changed="changePagionation"
+          @page-changed="changePagination"
+          @per-page-changed="onPageSizeChanged"
       />
 
     </div>

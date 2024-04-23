@@ -1,9 +1,9 @@
-import { defineStore } from "pinia";
+import {defineStore} from "pinia";
 
 export default defineStore("knowledgeBase", {
-  state: () => {
-    return {};
-  },
+    state: () => {
+        return {};
+    },
 
-  actions: {},
+    actions: {},
 });

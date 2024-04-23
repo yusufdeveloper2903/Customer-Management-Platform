@@ -113,14 +113,31 @@ export const splashItems = [
 ];
 
 export const locationFields = [
-
     {
-        text: "title",
+        text: "ID",
+        value: "id",
+    },
+    {
+        text: "name",
         value: "title",
     },
     {
         text: "description",
         value: "description",
+    },
+    {
+        text: "actions",
+        value: "actions",
+    },
+];
+export const Regions = [
+    {
+        text: "ID",
+        value: "id",
+    },
+    {
+        text: "name",
+        value: "name",
     },
     {
         text: "actions",
@@ -135,7 +152,7 @@ export const newsTemplateTable = [
         value: "id",
     },
     {
-        text: "title",
+        text: "name",
         value: "title",
     },
     {
@@ -185,7 +202,10 @@ export const versionControlFields = [
 ]
 
 export const productsFields = [
-
+    {
+        text: "ID",
+        value: 'id'
+    },
     {
         text: "Number (multi-digit-code)",
         value: "code"
@@ -203,7 +223,7 @@ export const productsFields = [
         value: "price"
     },
     {
-        text: 'quantity',
+        text: 'Quantity',
         value: 'quantity'
     },
 
@@ -214,8 +234,8 @@ export const productsFields = [
 ]
 export const phoneNumberFields = [
     {
-        text: "#",
-        value: "index"
+        text: "ID",
+        value: "id"
     },
     {
         text: "Phone Number",
@@ -229,11 +249,11 @@ export const phoneNumberFields = [
 
 export const linksFields = [
     {
-        text: "#",
-        value: "index"
+        text: "ID",
+        value: "id"
     },
     {
-        text: "Type",
+        text: "type",
         value: "type"
     },
     {
@@ -245,8 +265,51 @@ export const linksFields = [
         value: "actions"
     },
 ]
-
+export const linkType = [
+    {
+        id: 1,
+        type: "website",
+        name: "Website"
+    },
+    {
+        id: 2,
+        type: "telegram",
+        name: "Telegram"
+    },
+    {
+        id: 3,
+        type: "instagram",
+        name: "Instagram"
+    },
+    {
+        id: 4,
+        type: "facebook",
+        name: "Facebook"
+    },
+    {
+        id: 5,
+        type: "twitter",
+        name: "Twitter"
+    },
+    {
+        id: 6,
+        type: "tiktok",
+        name: "TikTok"
+    },
+]
 export const headerPlaces = [
+    {
+        text: "id",
+        value: "id"
+    },
+    {
+        text: "name",
+        value: "title"
+    },
+    {
+        text: "phones",
+        value: "phones"
+    },
     { text: "id", value: "id" },
     { text: "title", value: "title" },
     { text: "phones", value: "phones" },
@@ -274,3 +337,4 @@ export const recipesItems = [
         added_time: "03.04.2024"
     },
 ]
+

@@ -1,5 +1,5 @@
 <template>
     <div>
-        Transactions
+<!--      {{ // Transactions }}-->
     </div>
 </template>

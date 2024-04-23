@@ -17,7 +17,7 @@
         "
           @click="onTitleSelected(title)"
       >
-        <span class="dark:text-gray-400">{{ t(title) }}</span>
+        <span class="dark:text-gray-400">{{ $t(title) }}</span>
       </li>
     </ul>
     <div :class="vertical && 'w-5/6'" class="tabs__main__body">
@@ -49,21 +49,23 @@ export default {
     },
   },
   setup(props, {slots, emit}) {
-    const {locale, t} = useI18n();
+    const { t} = useI18n();
     const tabTitles = ref(
         slots.default().map((tab) => tab.props && tab.props.title)
     );
     const selectedTitle = ref(tabTitles.value[0]);
 
     const storeData = localStorage.getItem('knowledgeBase')
+    const storeData2 = localStorage.getItem('sms')
     const storedModule = localStorage.getItem('sidebar')
     if (storeData && storedModule === 'knowledgeBase' && props.unique === 'unique') {
       selectedTitle.value = storeData
+    } else if (storeData2 && storedModule === 'sms-template' && props.unique === 'unique') {
+      selectedTitle.value = storeData2
     }
     provide("selectedTitle", selectedTitle);
 
     function onTitleSelected(title) {
-      // console.log(title, 'title')
       selectedTitle.value = title;
       emit("selectedTitle", selectedTitle.value);
     }
@@ -88,9 +90,6 @@ export default {
 }
 
 @media (min-width: 0px) and (max-width: 480px) {
-  /* .tw-pagination > section > div{
-      flex-wrap: wrap !important;
-    } */
   .tabs__main {
     display: flex;
     flex-direction: column;

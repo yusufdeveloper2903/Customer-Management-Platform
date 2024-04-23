@@ -1,7 +1,7 @@
 <script setup lang="ts">
 //Imported files
 
-import {reactive, ref} from "vue";
+import {nextTick, onMounted, reactive, ref} from "vue";
 import staff from "../store/index";
 import {fields} from "../constants/index";
 import UIkit from "uikit";
@@ -10,15 +10,17 @@ import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
 import DeleteModal from "@/components/DeleteModal.vue";
 import {useI18n} from "vue-i18n";
+import ShowFileModal from "@/modules/KnowledgeBase/components/ShowImageModal.vue";
 
-const {t} = useI18n()
+
 //Declared files
-
+const {t} = useI18n()
+const image = ref<string>("");
+const imageCard = ref();
 const store = staff();
 const router = useRouter();
 const userId = ref<number | null>(null);
 const isLoading = ref(false);
-
 const filterUsers = reactive({
   page_size: 10,
   page: 1,
@@ -26,16 +28,21 @@ const filterUsers = reactive({
   role: null,
 });
 
-
+//MOUNTED
+onMounted(async () => {
+  await refresh();
+  await store.getUsersRolesList()
+})
+//FUNCTIONS
 const handleDeleteModal = (id: number) => {
-  UIkit.modal("#global-delete-modal").show();
+  UIkit.modal("#staff-main-delete-modal").show();
   userId.value = id;
 };
 
-const refresh = async (filter: any) => {
+const refresh = async () => {
   isLoading.value = true;
   try {
-    await store.getStaffs(filter);
+    await store.getStaffs(filterUsers);
     isLoading.value = false;
   } catch (error: any) {
     toast.error(
@@ -44,23 +51,18 @@ const refresh = async (filter: any) => {
   }
 
 };
-refresh(filterUsers);
-store.getUsersRolesList()
+
 const deleteAction = async () => {
   isLoading.value = true
   try {
     await store.deleteStaff(userId.value)
-    UIkit.modal("#global-delete-modal").hide();
+    UIkit.modal("#staff-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.staffsList.count - 1) % filterUsers.page_size == 0) {
-      if (filterUsers.page > 1) {
-        filterUsers.page = filterUsers.page - 1
-        refresh(filterUsers)
-      } else {
-        filterUsers.page = 1
-        refresh(filterUsers)
-      }
-
+    if ((store.staffsList.count - 1) % filterUsers.page > 0) {
+      filterUsers.page = filterUsers.page - 1
+      await refresh()
+    } else {
+      await refresh()
     }
     isLoading.value = false
   } catch (error: any) {
@@ -72,30 +74,37 @@ const deleteAction = async () => {
 
 const changePagionation = (e: number) => {
   filterUsers.page = e;
-  refresh(filterUsers);
+  refresh();
 };
 
 const filterByRole = () => {
   filterUsers.page = 1
-  refresh(filterUsers)
+  refresh()
 }
 
 watchDebounced(() => filterUsers.search, async function () {
   filterUsers.page = 1
-  refresh(filterUsers)
+  refresh()
 }, {deep: true, debounce: 500, maxWait: 5000,})
 const onPageSizeChanged = (event: number) => {
   filterUsers.page = 1;
   filterUsers.page_size = event;
-  refresh(filterUsers);
+  refresh();
+};
+
+const onShowFile = (item: any) => {
+  image.value = item;
+  nextTick(() => {
+    UIkit.modal("#file-show-staff-image").show();
+  });
 };
 </script>
 
 <template>
   <div>
     <div class="card">
-      <div class="md:flex items-center justify-between mb-5">
-        <form class="mb-4 md:flex items-center gap-5 md:w-5/12">
+      <div class="md:flex items-end justify-between mb-7">
+        <form class="md:flex items-center gap-5 md:w-5/12">
           <div class="md:w-1/2">
             <label for="search" class="dark:text-gray-300">
               {{ $t("Search") }}
@@ -117,7 +126,7 @@ const onPageSizeChanged = (event: number) => {
                 :placeholder="$t('Role')"
                 :options="store.users_roles.results"
                 :getOptionLabel="(role:any) => role.name"
-                :reduce="(role:number) => role.id"
+                :reduce="(role:any) => role.id"
                 v-model="filterUsers.role"
                 @update:model-value="filterByRole"
             >
@@ -142,7 +151,6 @@ const onPageSizeChanged = (event: number) => {
           :loading="isLoading"
           :headers="fields"
           :items="store.staffsList.results"
-          show-index
       >
         <template #empty-message>
           <div class="dark:text-white">{{ $t("no_available_data") }}</div>
@@ -181,12 +189,13 @@ const onPageSizeChanged = (event: number) => {
         </template>
 
         <template #item-photo="items">
-          <div class="py-3 flex justify-center gap-3">
+          <div class="py-3 flex justify-left gap-3">
             <img
                 v-if="items && items.photo"
                 class="w-[45px] h-[45px] rounded object-cover"
                 :src="items.photo"
                 alt="Rounded avatar"
+                @click="onShowFile(items.photo)"
             />
             <div
                 v-else
@@ -227,7 +236,7 @@ const onPageSizeChanged = (event: number) => {
         </template>
 
         <template #item-actions="items">
-          <div class="flex justify-center">
+          <div class="flex justify-left">
             <button
                 class="btn-warning btn-action"
                 @click="
@@ -256,11 +265,8 @@ const onPageSizeChanged = (event: number) => {
           @per-page-changed="onPageSizeChanged"
 
       />
-
-      <DeleteModal
-          @delete-action="deleteAction"
-
-      />
+      <DeleteModal @delete-action="deleteAction" :id="'staff-main-delete-modal'"/>
     </div>
   </div>
+  <ShowFileModal :image="image" ref="imageCard" id="file-show-staff-image"/>
 </template>

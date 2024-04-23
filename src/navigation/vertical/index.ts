@@ -25,7 +25,7 @@ export default [
         permissions: ["admin"],
     },
     {
-        name: "products",
+        name: "productsCategory",
         icon: 'File',
         path: '/products',
         permissions: ['admin']
@@ -92,12 +92,7 @@ export default [
             },
         ],
     },
-    {
-        name: "Discounts",
-        path: "/discounts",
-        icon: "File",
-        permissions: ["admin"],
-    },
+
 
 
 ];

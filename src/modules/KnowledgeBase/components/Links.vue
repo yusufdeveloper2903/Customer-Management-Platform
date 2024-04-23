@@ -1,111 +1,124 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref} from "vue";
+
+
+//IMPORTED FILES
+import {onMounted, reactive, ref, watch} from "vue";
 import {toast} from "vue3-toastify";
 import {linksFields} from "../constants";
-import ConfirmModal from "@/components/ConfirmModals/ConfirmModal.vue";
 import KnowledgeBase from "../store/index";
 import {Link} from "../interfaces/index";
 import CreateLinks from "./modals/CreateLinks.vue";
 import UIkit from "uikit";
 import PhoneNumbers from "./Phones.vue"
 import {useI18n} from "vue-i18n";
+import {EditLink} from '../interfaces/index'
 
+
+//DECLARED VARIABLES
 const {t} = useI18n()
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
 const store = KnowledgeBase()
 const items = ref<Link[]>([]);
 const currentRow = ref<Link | null>(null);
-
-
-const paginationFilter = reactive({
+const props = defineProps<{
+  knowledge: string
+}>();
+const params = reactive({
   page_size: 10,
   page: 1,
+  search: null
 });
-
-const filter = ref({
-  page_size: 10,
-})
-
-interface EditLink {
-  id: null | number,
-  type: string | number,
-  url: string
-}
-
 const editLink = ref<EditLink>({
   id: null,
   type: "",
   url: ""
 })
 
-const dragStart = (item) => {
+
+//MOUNTED LIFE CYCLE
+onMounted(async () => {
+  let knowledgeBase = localStorage.getItem('knowledgeBase')
+  if (knowledgeBase == 'contacts') {
+    await refresh()
+  }
+});
+
+
+//WATCHERS
+watch(() => props.knowledge, async function (val) {
+  if (val == 'contacts') {
+    await refresh()
+  }
+})
+
+
+//FUNCTIONS
+const dragStart = (item: any) => {
   currentRow.value = item;
 };
 
-const dragOver = (e) => {
+const dragOver = (e: any) => {
   e.preventDefault();
 };
 
-const dragDrop = (item: Link) => {
+const dragDrop = async (item: Link) => {
   event?.preventDefault();
-  store.create_drag_and_drop({id1: currentRow.value?.id, id2: item.id}).then(() => {
-    refresh(paginationFilter);
-    setTimeout(() => {
-      toast.success("ok");
-    }, 200);
-  })
-
+  await store.create_drag_and_drop({id1: currentRow.value?.id, id2: item.id})
+  await refresh();
+  toast.success(t("updated_successfully"));
 };
 
 const saveContact = () => {
-  refresh(filter);
+  refresh();
 }
-
-
 const changePagionation = (e: number) => {
-  paginationFilter.page = e;
-  refresh(paginationFilter);
+  params.page = e;
+  refresh();
 };
-
 const onPageSizeChanged = (e) => {
-  paginationFilter.page_size = e
-  paginationFilter.page = 1
-  refresh(paginationFilter)
+  params.page_size = e
+  params.page = 1
+  refresh()
 }
-
-const deleteLinks = () => {
-  store.deleteSocialMediaLinks(itemId.value).then(() => {
-    refresh(paginationFilter);
-    UIkit.modal("#links-delete").hide();
-  })
-};
-
-const refresh = async (filter) => {
+const deleteLinks = async () => {
+  isLoading.value = true
+  try {
+    await store.deleteSocialMediaLinks(itemId.value)
+    await UIkit.modal("#conctacs-main-delete-modal").hide();
+    toast.success(t('deleted_successfully'));
+    if ((store.linksList.count - 1) % params.page_size == 0) {
+      params.page = params.page - 1
+      await refresh()
+    } else {
+      await refresh()
+    }
+    isLoading.value = false
+  } catch (error: any) {
+    toast.error(t('error'));
+  }
+}
+const refresh = async () => {
   isLoading.value = true;
   try {
-    store.getSocialMediaLinks(filter)
-    items.value = store.linksList?.results
+    await store.getSocialMediaLinks(params)
+    items.value = store.linksList.results
   } catch (error: any) {
-    toast.error(
-        t('error')
-    );
+    toast.error(t('error'));
   }
-
   isLoading.value = false;
 };
 
-onMounted(() => {
-  refresh(paginationFilter);
-});
+
 </script>
 
 
 <template>
   <div class="card">
-    <div class="flex justify-between items-center mb-5">
-      <h1 class="font-semibold text-lg mb-4 text-success">{{ $t('Links') }}</h1>
-      <button class="btn-primary" uk-toggle="target: #links" @click="editLink = {}">
+    <div class="flex justify-between items-end mb-7">
+      <h1 class="font-semibold text-lg text-success">{{ $t('social_links') }}</h1>
+      <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full "
+              uk-toggle="target: #links" @click="editLink = {}">
         {{ $t("Add") }}
       </button>
     </div>
@@ -114,8 +127,8 @@ onMounted(() => {
       <thead>
       <tr>
         <th v-for="field in linksFields"
-            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-center text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
-          {{ $t(field.text)}}
+            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
+          {{ $t(field.text) }}
         </th>
       </tr>
       </thead>
@@ -123,15 +136,16 @@ onMounted(() => {
       <tr v-for="item in store.linksList?.results" :key="item.id"
           class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
           :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
-        <td class="px-6 whitespace-no-wrap text-center ">{{ item.position }}</td>
-        <td class="px-6 whitespace-no-wrap text-center">{{ item.type }}</td>
-        <td class="px-6 whitespace-no-wrap text-center">{{ item.url }}</td>
+        <td class="px-6 whitespace-no-wrap text-left ">{{ item.id }}</td>
+        <td class="px-6 whitespace-no-wrap text-left">{{ item.type }}</td>
+        <td class="px-6 whitespace-no-wrap text-left">{{ item.url }}</td>
         <td class="px-6 whitespace-no-wrap">
-          <div class="flex py-2 justify-center">
+          <div class="flex py-2 justify-left">
             <button class="btn-warning btn-action" uk-toggle="target: #links" @click="editLink = item">
               <Icon icon="Pen New Square" color="#fff" size="16"/>
             </button>
-            <button @click="itemId = item.id" class="ml-3 btn-danger btn-action" uk-toggle="target: #links-delete">
+            <button @click="itemId = item.id" class="ml-3 btn-danger btn-action"
+                    uk-toggle="target: #conctacs-main-delete-modal">
               <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
             </button>
           </div>
@@ -143,25 +157,20 @@ onMounted(() => {
 
     <TwPagination
         class="mt-10 tw-pagination"
-        :current="paginationFilter.page"
+        :current="params.page"
         :total="store.linksList.count"
-        :per-page="paginationFilter.page_size"
+        :per-page="params.page_size"
         :text-before-input="$t('go_to_page')"
         :text-after-input="$t('forward')"
         @page-changed="changePagionation"
         @per-page-changed="onPageSizeChanged"
     />
-
-    <ConfirmModal :title="$t('delete')" :cancel="$t('Cancel')" :ok="$t('delete')" id="links-delete" @ok="deleteLinks"
-                  @cancel="itemId = null">
-      <p>{{ $t('Are you sure?') }}</p>
-    </ConfirmModal>
-
+    <DeleteModal @delete-action="deleteLinks" id="conctacs-main-delete-modal"/>
     <CreateLinks :editData="editLink" @saveContact="saveContact"/>
   </div>
 
 
   <div class="card mt-10">
-    <PhoneNumbers/>
+    <PhoneNumbers :knowledge="props.knowledge"/>
   </div>
 </template>

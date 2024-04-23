@@ -121,7 +121,7 @@ const onPageSizeChanged = (event: number) => {
 
       <div class="flex items-start gap-10 w-full">
         <div class="w-full">
-          <div class="flex items-center justify-between flex-wrap mb-4">
+          <div class="flex items-end justify-between flex-wrap mb-7">
             <div class="flex items-center justify-between">
               <form>
                 <label
@@ -187,13 +187,13 @@ const onPageSizeChanged = (event: number) => {
 
 
             </div>
-            <button class="btn-primary mt-4" uk-toggle="target: #backup-add-modal">
+            <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
+                    uk-toggle="target: #backup-add-modal">
               {{ $t('create_a_backup') }}
             </button>
           </div>
           <EasyDataTable
               theme-color="#7367f0"
-              show-index
               buttons-pagination
               :headers="headerDataArchive"
               :loading="isLoading"
@@ -205,7 +205,9 @@ const onPageSizeChanged = (event: number) => {
               <div>{{ $t('no_available_data') }}</div>
             </template>
 
-
+            <template #header-id="header">
+              {{ $t(header.text) }}
+            </template>
             <template #header-title="header">
               {{ $t(header.text) }}
             </template>
@@ -224,27 +226,27 @@ const onPageSizeChanged = (event: number) => {
 
 
             <template #item-author="items">
-              <div class="flex justify-center" style="overflow-wrap: anywhere;">
+              <div class="flex justify-left" style="overflow-wrap: anywhere;">
                 {{ items.author && items.author.name ? items.author.name : "" }}
               </div>
             </template>
 
             <template #item-title="items">
-              <div class="flex justify-center" style="overflow-wrap: anywhere;">
+              <div class="flex justify-flex" style="overflow-wrap: anywhere;">
                 {{ items.title }}
               </div>
             </template>
 
             <template #item-created_at="items">
-              <div class="flex justify-center" style="overflow-wrap: anywhere;">
+              <div class="flex justify-flex" style="overflow-wrap: anywhere;">
                 {{ dayjs(items.created_at).format("DD-MM-YYYY") }}
               </div>
             </template>
 
             <template #item-actions="items">
-              <div class="flex justify-center">
+              <div class="flex justify-flex">
                 <button
-                    class="btn-warning btn-action ml-2"
+                    class="btn-warning btn-action"
                     @click="download(items.file_path)"
                 >
                     <span

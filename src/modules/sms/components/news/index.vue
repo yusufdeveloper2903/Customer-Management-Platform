@@ -1,189 +1,200 @@
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { newsFields } from "../../constants/index"
+
+//IMPORTED FILES
+
+import {useI18n} from "vue-i18n";
+import {newsFields} from "../../constants/index"
 import knowledgeBase from "../../store/index"
-import { onMounted, ref, reactive, watch } from "vue";
-import { toast } from "vue3-toastify";
-import DeleteNewsModal from "./DeleteNewsModal.vue";
+import {onMounted, ref, reactive, watch, nextTick} from "vue";
+import {toast} from "vue3-toastify";
 import UIkit from "uikit";
 import {useRouter} from "vue-router";
+import ShowFileModal from "@/modules/KnowledgeBase/components/ShowImageModal.vue";
+import {EditData} from '../../interfaces'
+import {watchDebounced} from "@vueuse/core";
 
-const { t } = useI18n()
+//DECLARED VARIABLES
+
+const {t} = useI18n()
 const router = useRouter()
 const store = knowledgeBase()
 const newsList = ref<object[]>([]);
 const isLoading = ref(false);
-const timeout = ref();
-const current = ref<number>(1);
 const newsId = ref<number | null>(null)
-
-const paginationFilter = reactive({
+const params = reactive({
   page_size: 10,
   page: 1,
-});
-
-const filterNews = reactive({
-  page_size: 10,
   search: "",
   status: null,
-    start_time: null,
+  start_time: null,
 
 });
-
-interface EditData {
-  id: number | null,
-  title: {
-    uz: string,
-    ru: string
-  } 
-    file: string,
-    start_time: string,
-    status: string
-}
-
-
+const image = ref<string>("");
+const imageCard = ref();
 const editData = ref<EditData>({
   id: null,
-    title: {
-      uz: "",
-      ru: ""
-    },
-    file: "",
-    start_time: "",
-    status: ""
+  title: {
+    uz: "",
+    ru: ""
+  },
+  file: "",
+  start_time: "",
+  status: ""
 })
+const props = defineProps<{
+  sms: string
+}>();
+let toRefresh = ref(false)
 
-const refresh = async (filter) => {
+
+//MOUNTED LIFE CYCLE
+onMounted(async () => {
+  let sms = localStorage.getItem('sms')
+  if (sms == 'directory.News') {
+    await refresh();
+    await store.getStatus()
+  }
+});
+
+
+//FUNCTIONS
+const refresh = async () => {
   isLoading.value = true;
   try {
-    await store.getNews(filter)
+    await store.getNews(params)
     newsList.value = store.newsList.results;
   } catch (error: any) {
     toast.error(
-      error.response.message || "Error"
+        error.response.message || "Error"
     );
   }
-
   isLoading.value = false;
 };
 
-const changePagionation = (e: number) => {
-  paginationFilter.page = e;
-  current.value = e;
-  refresh({ ...paginationFilter, ...filterNews });
+const changePagination = (e: number) => {
+  params.page = e;
+  refresh();
 };
-
-const searchByTitle = () => {
-  clearTimeout(timeout.value);
-  timeout.value = setTimeout(() => {
-    refresh(filterNews);
-  }, 500);
-};
-
-const saveNews = () => {
-  refresh(filterNews);
+const changePageSize = (event: number) => {
+  params.page = 1
+  params.page_size = event
+  refresh()
 }
 
+const saveNews = () => {
+  refresh();
+}
+const onShowFile = (item: any) => {
+  image.value = item;
+  nextTick(() => {
+    UIkit.modal("#news-show-image").show();
+  });
+};
 const handleDeleteModal = (id: number) => {
   newsId.value = id;
   UIkit.modal("#news-delete-modal").show();
 };
-
-const deleteNews = () => {
-  refresh(filterNews);
+const deleteNews = async () => {
+  isLoading.value = true
+  try {
+    await store.deleteNews(newsId.value)
+    UIkit.modal("#news-delete-modal").hide();
+    toast.success(t('deleted_successfully'));
+    if ((store.newsList.count - 1) % params.page_size == 0) {
+      params.page = params.page - 1
+      await refresh()
+    } else {
+      await refresh()
+    }
+    isLoading.value = false
+  } catch (error: any) {
+    toast.error(t('error'));
+  }
 };
 
-watch(
-  () => filterNews.search,
-  () => {
-    if (newsList.value.length <= 10) {
-      current.value = 1;
-    }
+watchDebounced(
+    () => params.search,
+    () => {
+      params.page = 1
+      refresh()
+    }, {deep: true, debounce: 500, maxWait: 5000}
+);
+watchDebounced(
+    () => params.status,
+    () => {
+      params.page = 1
+      refresh()
+    }, {deep: true, debounce: 500, maxWait: 5000}
+);
+
+watchDebounced(
+    () => params.start_time,
+    () => {
+      params.page = 1
+      refresh();
+    }, {deep: true, debounce: 500, maxWait: 5000}
+);
+watch(() => props.sms, async function (val) {
+  toRefresh.value = !toRefresh.value
+  if (val == 'directory.News') {
+    await refresh();
+    await store.getStatus()
   }
-);
 
-watch(
-  
-    () => filterNews.start_time , 
-    () => {
-      refresh(filterNews);
-      
-      if (newsList.value.length <= 10) {
-        current.value = 1;
-      }
-    },
+})
 
-);
-
-watch(
-  
-    () => filterNews.status , 
-    () => {
-      refresh(filterNews);
-      
-      if (newsList.value.length <= 10) {
-        current.value = 1;
-      }
-    },
-
-);
-
-
-onMounted(async () => {
-  await refresh(paginationFilter);
-  await store.getStatus()
-});
 </script>
 
 <template>
   <div>
 
 
-      <div class="md:flex items-center justify-between mb-5">
-        <form class="mb-4 md:flex items-center gap-5 md:w-9/12">
-          <div class="md:w-1/2">
-            <label for="search" class="dark:text-gray-300">
-              {{ $t("Search") }}
-            </label>
-            <input
-                id="search"
-                type="text"
-                class="form-input"
-                :placeholder="$t('Search')"
-                v-model="filterNews.search"
-                @input="searchByTitle"
-            />
-          </div>
+    <div class="md:flex items-end justify-between mb-7">
+      <form class=" md:flex items-center gap-5 md:w-9/12">
+        <div class="md:w-1/2">
+          <label for="search" class="dark:text-gray-300">
+            {{ $t("Search") }}
+          </label>
+          <input
+              id="search"
+              type="text"
+              class="form-input"
+              :placeholder="$t('Search')"
+              v-model="params.search"
 
-          <div class="md:w-1/2 md:m-0 mt-2">
-            <label for="role" class="dark:text-gray-300">
-              {{ $t("Status") }}
-            </label>
-            <v-select
-                :placeholder="$t('Status')"
-                :options="store.statusList && store.statusList.results"
-                v-model="filterNews.status"
-                :getOptionLabel="(name) => name.title[$i18n.locale]"  
-                :reduce="(name) => name.id"
-                >
-              <template #no-options> {{ $t("no_matching_options") }}</template>
-            </v-select>
-          </div>
+          />
+        </div>
 
-          <div class="md:w-1/2 md:m-0 mt-2">
-            <label for="from" class="dark:text-gray-300">
-              {{ $t("from") }}
-            </label>
-            <VueDatePicker v-model="filterNews.start_time"></VueDatePicker>
-          </div>
+        <div class="md:w-1/2 md:m-0 ">
+          <label for="role" class="dark:text-gray-300">
+            {{ $t("Status") }}
+          </label>
+          <v-select
+              :placeholder="$t('Status')"
+              :options="store.statusList && store.statusList.results"
+              v-model="params.status"
+              :getOptionLabel="(name:any) => name['title_'+$i18n.locale]"
+              :reduce="(name:any) => name.id"
+          >
+            <template #no-options> {{ $t("no_matching_options") }}</template>
+          </v-select>
+        </div>
 
-        </form>
-        <button
-            class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-            @click="router.push('/add-news')"
-        >
-          {{ $t("Add") }}
-        </button>
+        <div class="md:w-1/2 md:m-0 ">
+          <label for="from" class="dark:text-gray-300">
+            {{ $t("from") }}
+          </label>
+          <VueDatePicker v-model="params.start_time" model-type="yyyy-MM-dd"
+                         :enable-time-picker="false"></VueDatePicker>
+        </div>
+
+      </form>
+      <button
+          class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
+          @click="router.push('/add-news')"
+      >
+        {{ $t("Add") }}
+      </button>
     </div>
 
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="newsFields" :items="newsList">
@@ -193,29 +204,39 @@ onMounted(async () => {
       </template>
 
       <template #header="data">
-        {{ t(data.text).toUpperCase() }}
+        {{ t(data.text) }}
       </template>
 
       <template #item-title="item">
-        {{ item.title[$i18n.locale] }}
+        {{ item['title_' + $i18n.locale] }}
       </template>
 
       <template #item-status="item">
         <span
-          :class="item.status.unique_name == 'not_sent' ? 'rounded-md bg-danger px-4 pb-0.5 text-white' : item.status.unique_name == 'in_progress' ? 'rounded-md bg-warning px-4 pb-0.5 text-white' : 'rounded-md bg-primary px-4 pb-0.5 text-white'">{{
-            item.status.title[$i18n.locale] }}</span>
+            :class="item.status.unique_name == 'not_sent' ? 'rounded-md bg-danger px-4 pb-0.5 text-white' : item.status.unique_name == 'in_progress' ? 'rounded-md bg-warning px-4 pb-0.5 text-white' : 'rounded-md bg-primary px-4 pb-0.5 text-white'">{{
+            item.status['title_' + $i18n.locale]
+          }}</span>
       </template>
 
       <template #item-from_to="item">
         <div>{{ item.start_time }}</div>
       </template>
-
-      <template #item-photo="item">
-        <div class="py-3 flex items-center gap-3">
-          <img v-if="item.file" class="w-[45px] h-[45px] rounded object-cover" :src="item.file" alt="Rounded avatar" />
-          <div v-else
-            class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded">
-            <Icon icon="Camera" color="#356c2d" />
+      <template #item-file="item">
+        <div class="py-3 flex justify-left items-center gap-3">
+          <img v-if="item.file"
+               class="w-[45px] h-[45px] rounded object-cover"
+               :src="item.file"
+               alt="Rounded avatar"
+               @click="onShowFile(item.file)"
+          />
+          <div
+              v-else
+              class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded"
+          >
+            <Icon
+                icon="Camera"
+                color="#356c2d"
+            />
           </div>
         </div>
       </template>
@@ -226,19 +247,24 @@ onMounted(async () => {
           <button class="btn-warning btn-action" @click="
                 router.push(`/news-detail/${item.id}`)
               ">
-            <Icon icon="Pen New Square" color="#fff" size="16" />
+            <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>
           <button class="ml-3 btn-danger btn-action" @click="handleDeleteModal(item.id)">
-            <Icon icon="Trash Bin Trash" color="#fff" size="16" />
+            <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
           </button>
         </div>
       </template>
     </EasyDataTable>
 
-    <TwPagination class="mt-10 tw-pagination" :current="current" :total="store.newsList && store.newsList.count" :per-page="10"
-      :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')" @page-changed="changePagionation" />
+    <TwPagination :restart="toRefresh" class="mt-10 tw-pagination" :current="params.page"
+                  :total=" store.newsList.count"
+                  :per-page="params.page_size"
+                  :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
+                  @page-changed="changePagination" @per-page-changed="changePageSize"/>
 
-    <AddEditModal  :editData="editData" @saveNews="saveNews"/>
-    <DeleteNewsModal  @deleteNews="deleteNews" :newsId="newsId"/>
+
+    <AddEditModal :editData="editData" @saveNews="saveNews"/>
+    <DeleteModal @delete-action="deleteNews" :id="'news-delete-modal'"/>
+    <ShowFileModal :image="image" ref="imageCard" id="news-show-image"/>
   </div>
 </template>

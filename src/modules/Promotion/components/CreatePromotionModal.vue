@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 
-//Imported files
-
+//IMPORTED FILES
 import {Ref, ref, computed, watch} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
@@ -11,14 +10,14 @@ import useVuelidate, {Validation} from "@vuelidate/core";
 import prmotionBase from "../store/index";
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
+import FileInput from '@/components/FileInput/FileInput.vue'
+import {EditData} from '../Interface/index'
 
-
-//Declared variables
-
+//DECLARED VARIABLES
 const propData = defineProps<{
   editData: EditData
 }>();
-const dateConfig = ref(null)
+const dateConfig = ref({})
 const imageDiv = ref<string | undefined | null | object>('')
 const imageDivBackground = ref<string | undefined | null | object>('')
 const {t} = useI18n();
@@ -26,114 +25,52 @@ const isSubmitted = ref<boolean>(false);
 const store = prmotionBase()
 const emits = defineEmits(["saveProducts"]);
 let productsData = ref({
-  title: {
-    uz: "",
-    ru: "",
-  },
-  description: {
-    uz: "",
-    ru: ""
-  },
+  title: '',
+  title_ru: '',
+  title_uz: '',
+  title_kr: '',
+  description: '',
+  description_ru: '',
+  description_uz: '',
+  description_kr: '',
   is_published: false,
-  background_photo: null,
-  detail_photo: null,
-  start_date: null,
-  end_date: null
-
+  background_photo: '',
+  detail_photo: '',
+  start_date: '',
+  end_date: '',
+  modified_date: 'string'
 })
 
-//Declared type
 
-interface EditData {
-  id: number | null,
-  title: {
-    uz: string,
-    ru: string
-  },
-  description: {
-    uz: string,
-    ru: string
-  }
-  is_active: boolean | null,
-  is_published: boolean | null,
-  background_photo: null | string,
-  detail_photo: null | string,
-  start_date: null | string
-  end_date: null | string
-
-}
-
-
-//Declared Validate rules
-
-const rules = computed(() => {
-  return {
-    title: {
-      uz: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-      },
-      ru: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-      }
-    },
-    description: {
-      uz: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-      },
-      ru: {
-        required: helpers.withMessage("validation.this_field_is_required", required),
-      }
-    },
-  };
-
-});
-
-
-//All Function
-
-const getFile = (event: any) => {
-  productsData.value.detail_photo = event.target.files[0]
-  let input = event.target;
-  if (input.files && input.files[0]) {
-    let reader = new FileReader();
-    reader.onload = (e) => {
-      imageDiv.value = e?.target?.result;
-    }
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-const getFileBackground = (event: any) => {
-  productsData.value.background_photo = event.target.files[0]
-  let input = event.target;
-  if (input.files && input.files[0]) {
-    let reader = new FileReader();
-    reader.onload = (e) => {
-      imageDivBackground.value = e?.target?.result;
-    }
-    reader.readAsDataURL(input.files[0]);
-  }
-}
+//FUNCTIONS
 const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
   const formData = new FormData()
-  formData.append('title', JSON.stringify(productsData.value.title))
-  formData.append('description', JSON.stringify(productsData.value.description))
-  formData.append('is_published', productsData.value.is_published)
+  formData.append('title', productsData.value.title_uz)
+  formData.append('title_uz', productsData.value.title_uz)
+  formData.append('title_kr', productsData.value.title_kr)
+  formData.append('title_ru', productsData.value.title_ru)
+  formData.append('description', productsData.value.description_uz)
+  formData.append('description_uz', productsData.value.description_uz)
+  formData.append('description_ru', productsData.value.description_ru)
+  formData.append('description_kr', productsData.value.description_kr)
+  formData.append('is_published', String(productsData.value.is_published))
   formData.append('start_date', productsData.value.start_date)
   formData.append('end_date', productsData.value.end_date)
-  if (imageDiv.value) {
+  if (typeof productsData.value.detail_photo == 'object' || productsData.value.detail_photo == '') {
     formData.append('detail_photo', productsData.value.detail_photo)
   }
-  if (imageDivBackground.value) {
+  if (typeof productsData.value.background_photo == 'object' || productsData.value.background_photo == '') {
     formData.append('background_photo', productsData.value.background_photo)
   }
   if (propData.editData.id) {
     try {
-      formData.append('id', propData.editData.id)
+      formData.append('id', String(propData.editData.id))
       await store.updatePromotion(formData)
       emits("saveProducts");
       UIkit.modal("#create_edit_promotion").hide();
+      toast.success(t("updated_successfully"));
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
@@ -174,46 +111,99 @@ watch(
 
 function openModal() {
   if (propData.editData.id) {
-    productsData.value.title.uz = propData.editData.title?.uz
-    productsData.value.title.ru = propData.editData.title?.ru
-    productsData.value.description.ru = propData.editData.description?.ru
-    productsData.value.description.uz = propData.editData.description?.uz
+    productsData.value.title = propData.editData.title_uz
+    productsData.value.title_uz = propData.editData.title_uz
+    productsData.value.title_kr = propData.editData.title_kr
+    productsData.value.title_ru = propData.editData.title_ru
+    productsData.value.description = propData.editData.description_uz
+    productsData.value.description_ru = propData.editData.description_ru
+    productsData.value.description_uz = propData.editData.description_uz
+    productsData.value.description_kr = propData.editData.description_kr
     productsData.value.background_photo = propData.editData.background_photo
     productsData.value.is_published = propData.editData.is_published
     productsData.value.detail_photo = propData.editData.detail_photo
     dateConfig.value = [propData.editData.start_date, propData.editData.end_date]
-  } else {
-    productsData.value.title.uz = ""
-    productsData.value.is_published = false
-    productsData.value.description.uz = ''
-    productsData.value.description.ru = ''
-    productsData.value.title.ru = ""
-    productsData.value.background_photo = ''
-    productsData.value.detail_photo = ''
-    productsData.value.start_date = ""
-    productsData.value.end_date = ""
-    dateConfig.value = null
-
-    imageDiv.value = ""
   }
 }
 
 
 const onHide = () => {
   validate.value.$reset()
-  dateConfig.value = null
+  dateConfig.value = {}
   imageDiv.value = ''
   imageDivBackground.value = ""
   productsData.value.detail_photo = ""
-  productsData.value.title.ru = ''
-  productsData.value.title.uz = ''
+  productsData.value.title = ''
+  productsData.value.title_uz = ''
+  productsData.value.title_ru = ''
+  productsData.value.title_kr = ''
+  productsData.value.description = ''
+  productsData.value.description_uz = ''
+  productsData.value.description_ru = ''
+  productsData.value.description_kr = ''
   productsData.value.start_date = ""
   productsData.value.end_date = ""
   productsData.value.background_photo = ""
-  document.getElementById('fileInput').value = ''
-  document.getElementById('fileInputback').value = ''
-
+  const firstTab = document.querySelectorAll('.first_tab');
+  const secondTab = document.querySelectorAll('.second_tab');
+  const thirdTab = document.querySelectorAll('.third_tab');
+  firstTab.forEach(function (val) {
+    const inputElement = val.querySelector('input');
+    const textAreaElement = val.querySelector('textarea');
+    if (inputElement) {
+      inputElement.value = ''
+    }
+    if (textAreaElement) {
+      textAreaElement.value = ''
+    }
+  });
+  secondTab.forEach(function (val) {
+    const inputElement = val.querySelector('input');
+    const textAreaElement = val.querySelector('textarea');
+    if (inputElement) {
+      inputElement.value = ''
+    }
+    if (textAreaElement) {
+      textAreaElement.value = ''
+    }
+  });
+  thirdTab.forEach(function (val) {
+    const inputElement = val.querySelector('input');
+    const textAreaElement = val.querySelector('textarea');
+    if (inputElement) {
+      inputElement.value = ''
+    }
+    if (textAreaElement) {
+      textAreaElement.value = ''
+    }
+  });
 }
+
+
+//COMPUTED
+const rules = computed(() => {
+  return {
+    title_uz: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    title_ru: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    title_kr: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    description_ru: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    description_uz: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    description_kr: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+  };
+
+});
 const validate: Ref<Validation> = useVuelidate(rules, productsData);
 
 </script>
@@ -230,84 +220,157 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           {{ propData.editData.id ? $t("Change") : $t('Add') }}
         </h2>
       </div>
+
       <div class="uk-modal-body py-4">
         <Tabs>
           <Tab title="UZ">
-            <label>{{ $t('name') }}</label>
-            <input
-                type="text"
-                class="form-input"
-                :placeholder="$t('name')"
-                v-model="productsData.title.uz"
-                :class="validate.title.uz.$errors.length ? 'required-input' : ''"
-            />
-            <p
-                v-for="error in validate.title.uz.$errors"
-                :key="error.$uid"
-                class="text-danger text-sm"
-            >
-              {{ $t(error.$message) }}
-            </p>
-            <label for="number" class="block mt-4">{{ $t('description') }}
+            <div class="first_tab">
+              <label>{{ $t('name') + ' ' + $t('UZ') }}</label>
+              <input
+                  type="text"
+                  class="form-input "
+                  :placeholder="$t('name')"
+                  v-model="productsData.title_uz"
+                  :class="validate.title_uz.$errors.length ? 'required-input' : ''"
+              />
+              <p
+                  v-for="error in validate.title_uz.$errors"
+                  :key="error.$uid"
+                  class="text-danger text-sm"
+              >
+                {{ $t(error.$message) }}
+              </p>
+              <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('UZ') }} </label>
               <textarea
                   id="number"
                   type="text"
-                  class="form-input"
+                  class="form-input ="
                   :placeholder="$t('description')"
-                  v-model="productsData.description.uz"
-                  :class="validate.description.uz.$errors.length ? 'required-input' : ''"
+                  v-model="productsData.description_uz"
+                  :class="validate.description_uz.$errors.length ? 'required-input' : ''"
               />
               <p
-                  v-for="error in validate.description.uz.$errors"
+                  v-for="error in validate.description_uz.$errors"
                   :key="error.$uid"
                   class="text-danger text-sm"
               >
                 {{ $t(error.$message) }}
               </p>
 
-            </label>
+            </div>
+
+
           </Tab>
-          <Tab title="RU">
-            <label>{{ $t('name') }}</label>
-            <input
-                type="text"
-                class="form-input"
-                :placeholder="$t('name')"
-                v-model="productsData.title.ru"
-                :class="validate.title.ru.$errors.length ? 'required-input' : ''"
-            />
-            <p
-                v-for="error in validate.title.ru.$errors"
-                :key="error.$uid"
-                class="text-danger text-sm"
-            >
-              {{ $t(error.$message) }}
-            </p>
-            <label for="number" class="block mt-4">{{ $t('description') }}
-              <textarea
-                  id="number"
+          <Tab title="KR">
+            <div class="second_tab">
+              <label>{{ $t('name') + ' ' + $t('KR') }}</label>
+              <input
                   type="text"
-                  class="form-input"
-                  :placeholder="$t('description')"
-                  v-model="productsData.description.ru"
-                  :class="validate.description.ru.$errors.length ? 'required-input' : ''"
+                  class="form-input "
+                  :placeholder="$t('name')"
+                  v-model="productsData.title_kr"
+                  :class="validate.title_kr.$errors.length ? 'required-input' : ''"
               />
               <p
-                  v-for="error in validate.description.ru.$errors"
+                  v-for="error in validate.title_kr.$errors"
                   :key="error.$uid"
                   class="text-danger text-sm"
               >
                 {{ $t(error.$message) }}
               </p>
-            </label>
+              <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('KR') }} </label>
+              <textarea
+                  id="number"
+                  type="text"
+                  class="form-input "
+                  :placeholder="$t('description')"
+                  v-model="productsData.description_kr"
+                  :class="validate.description_kr.$errors.length ? 'required-input' : ''"
+              />
+              <p
+                  v-for="error in validate.description_kr.$errors"
+                  :key="error.$uid"
+                  class="text-danger text-sm"
+              >
+                {{ $t(error.$message) }}
+              </p>
+
+            </div>
+
+
+          </Tab>
+          <Tab title="RU">
+            <div class="third_tab">
+              <label>{{ $t('name') + ' ' + $t('RU') }}</label>
+              <input
+                  type="text"
+                  class="form-input "
+                  :placeholder="$t('name')"
+                  v-model="productsData.title_ru"
+                  :class="validate.title_ru.$errors.length ? 'required-input' : ''"
+              />
+              <p
+                  v-for="error in validate.title_ru.$errors"
+                  :key="error.$uid"
+                  class="text-danger text-sm"
+              >
+                {{ $t(error.$message) }}
+              </p>
+              <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('RU') }}</label>
+              <textarea
+                  id="number"
+                  type="text"
+                  class="form-input "
+                  :placeholder="$t('description')"
+                  v-model="productsData.description_ru"
+                  :class="validate.description_ru.$errors.length ? 'required-input' : ''"
+              />
+              <p
+                  v-for="error in validate.description_ru.$errors"
+                  :key="error.$uid"
+                  class="text-danger text-sm"
+              >
+                {{ $t(error.$message) }}
+              </p>
+
+            </div>
+
 
           </Tab>
         </Tabs>
         <div class="mt-2">
           <label for="from" class="dark:text-gray-300">
-            {{ $t("from_to") }}
+            {{ $t("date_from") + ' - ' + $t("date_to") }}
           </label>
           <VueDatePicker auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
+        </div>
+
+        <div>
+
+          <label class="mt-4 block" for="photo">{{ $t('Detail photo') }}
+            <FileInput
+                v-model="productsData.detail_photo"
+                @remove="productsData.detail_photo = ''"
+                :typeModal="propData.editData.id"
+                name="promotion-modal"
+            />
+
+
+          </label>
+
+        </div>
+        <div>
+          <label class="mt-4 block" for="photo">{{ $t('Background photo') }}
+            <FileInput
+                v-model="productsData.background_photo"
+                @remove="productsData.background_photo = ''"
+                :typeModal="propData.editData.id"
+                name="second-promotion"
+            />
+
+
+          </label>
+
         </div>
         <p class=" mt-5 mb-1">{{ $t("Published") }}:</p>
         <label className="relative inline-flex items-center cursor-pointer">
@@ -321,51 +384,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
           ></div>
         </label>
-        <div>
-
-          <label class="mt-4 block" for="photo">{{ $t('Detail photo') }}
-            <input @change="getFile" id="fileInput" type="file"
-                   class="form-file-input p-1"
-            />
-
-          </label>
-          <div v-if="propData.editData.detail_photo || imageDiv">
-            <img v-if="propData.editData.detail_photo && !imageDiv"
-                 class="w-[100%] h-[200px] rounded object-contain mt-3"
-                 :src="propData.editData.detail_photo "
-                 alt="Rounded avatar"
-            />
-            <img v-else
-                 class="w-[100%] h-[200px] rounded object-contain mt-3"
-                 :src="imageDiv"
-                 alt="Rounded avatar"
-            />
-
-          </div>
-        </div>
-        <div>
-
-          <label class="mt-4 block" for="photo">{{ $t('Background photo') }}
-            <input @change="getFileBackground" id="fileInputback" type="file"
-                   class="form-file-input p-1"
-            />
-
-          </label>
-          <div v-if="propData.editData.background_photo || imageDivBackground">
-            <img v-if="propData.editData.background_photo && !imageDivBackground"
-                 class="w-[100%] h-[200px] rounded object-contain mt-3"
-                 :src="propData.editData.background_photo "
-                 alt="Rounded avatar"
-            />
-            <img v-else
-                 class="w-[100%] h-[200px] rounded object-contain mt-3"
-                 :src="imageDivBackground"
-                 alt="Rounded avatar"
-            />
-
-          </div>
-        </div>
-
       </div>
 
       <div

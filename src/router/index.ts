@@ -6,7 +6,6 @@ import knowledgeBase from "@/modules/KnowledgeBase/router";
 import dashboard from "@/modules/Dashboard/router";
 import news from "@/modules/News/router";
 import sms from "@/modules/sms/router";
-import discounts from "@/modules/Discounts/router"
 import promotion from "@/modules/Promotion/router"
 import transactions from "@/modules/Transactions/router"
 import promo_code from "@/modules/Products/router"
@@ -20,7 +19,6 @@ const routes: Array<RouteRecordRaw> = [
     ...administration,
     ...news,
     ...sms,
-    ...discounts,
     ...promotion,
     ...transactions,
     {

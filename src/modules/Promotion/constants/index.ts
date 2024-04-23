@@ -30,13 +30,9 @@ export const newsPromotionTable = [
         value: "id",
     },
     {
-        text: "title",
+        text: "name",
         value: "title",
     },
-    // {
-    //     text: "Period",
-    //     value: "period",
-    // },
     {
         text: "date_and_time",
         value: "start_date",
@@ -46,12 +42,12 @@ export const newsPromotionTable = [
         value: "end_date",
     },
     {
-        text:"Published",
-        value:"is_published",
+        text: "Published",
+        value: "is_published",
     },
     {
-        text:"Status",
-        value:"is_active",
+        text: "Status",
+        value: "is_active",
     },
     {
         text: "actions",

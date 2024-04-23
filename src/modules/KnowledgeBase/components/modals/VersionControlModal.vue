@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+
+
+//IMPORTED FILES
 import {Ref, ref, computed} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
@@ -6,23 +9,65 @@ import {toast} from "vue3-toastify";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import knowledgeBase from "../../store/index";
+import {EditVersion} from '../../interfaces/index'
 
+
+//DECLARED VARIABLES
 const {t} = useI18n();
-const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase()
 const emits = defineEmits(["saveVersionControl"]);
-
-interface EditData {
-  id: number | null
-  number: string,
-  description: string
-}
-
 let versionControlData = ref({
   number: "",
   description: ""
 })
+const propData = defineProps<{ editData: EditVersion }>();
 
+
+//FUNCTIONS
+function openModal() {
+  if (propData.editData.id) {
+    versionControlData.value.number = propData.editData.number
+    versionControlData.value.description = propData.editData.description
+  }
+}
+
+const updateDeal = async () => {
+  const success = await validate.value.$validate();
+  if (!success) return;
+
+  if (propData.editData.id) {
+    try {
+      await store.updateVersion({id: propData.editData.id, ...versionControlData.value})
+      await UIkit.modal("#version_control").hide();
+      emits("saveVersionControl");
+      toast.success(t("updated_successfully"));
+    } catch (error: any) {
+      if (error) {
+        toast.error(error.response || "Error");
+      }
+    }
+
+  } else {
+    try {
+      await store.createVersion(versionControlData.value)
+      await UIkit.modal("#version_control").hide();
+      emits("saveVersionControl");
+      toast.success(t("created_successfully"));
+    } catch (error: any) {
+      if (error) {
+        toast.error(error.response || "Error");
+      }
+    }
+  }
+};
+const hideData = () => {
+  versionControlData.value.number = ''
+  versionControlData.value.description = ''
+  validate.value.$reset()
+}
+
+
+//COMPUTED
 const rules = computed(() => {
   return {
     number: {
@@ -34,68 +79,6 @@ const rules = computed(() => {
 
 const validate: Ref<Validation> = useVuelidate(rules, versionControlData);
 
-const propData = defineProps<{ editData: EditData }>();
-
-
-function openModal() {
-  if (propData.editData.id) {
-    versionControlData.value.number = propData.editData.number
-    versionControlData.value.description = propData.editData.description
-  } else {
-    versionControlData.value.number = ""
-  }
-}
-
-const updateDeal = async () => {
-  const success = await validate.value.$validate();
-  if (!success) return;
-
-  if (propData.editData.id) {
-    try {
-      await store.updateVersion({id: propData.editData.id, ...versionControlData.value}).then(() => {
-        emits("saveVersionControl");
-        setTimeout(() => {
-          toast.success(t("updated_successfully"));
-        }, 200);
-        UIkit.modal("#version_control").hide();
-      });
-      isSubmitted.value = false;
-    } catch (error: any) {
-      isSubmitted.value = false;
-      if (error) {
-        toast.error(
-            // error.response.data.msg || error.response.data.error || "Error"
-            error.response || "Error"
-        );
-      }
-    }
-
-  } else {
-    try {
-      await store.createVersion(versionControlData.value).then(() => {
-        emits("saveVersionControl");
-        setTimeout(() => {
-          toast.success(t("created_successfully"));
-        }, 200);
-        UIkit.modal("#version_control").hide();
-      });
-      isSubmitted.value = false;
-    } catch (error: any) {
-      isSubmitted.value = false;
-      if (error) {
-        toast.error(
-            // error.response || error.response.data.msg || error.response.data.error || "Error"
-            error.response || "Error"
-        );
-      }
-    }
-  }
-};
-const hideData = () => {
-  versionControlData.value.number = ''
-  versionControlData.value.description = ''
-  validate.value.$reset()
-}
 </script>
 
 <template>
@@ -149,13 +132,11 @@ const hideData = () => {
           {{ $t("Cancel") }}
         </button>
 
-        <button :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal"
-                :disabled="isSubmitted">
+        <button :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal">
           <img
               src="@/assets/image/loading.svg"
               alt="loading.svg"
               class="inline w-4 h-4 text-white animate-spin mr-2"
-              v-if="isSubmitted"
           />
           <span>{{ propData.editData.id ? $t("Change") : $t('Add') }}</span>
         </button>
