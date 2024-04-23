@@ -258,7 +258,7 @@ export const headerPlaces = [
 export const recipesFields = [
     { text: "ID",  value: "id" },
     { text: "title", value: "title" },
-    { text: "created_date", value: "created_date" },
+    { text: "added_time", value: "added_time" },
     { text: "actions", value: "actions" },
 ]
 
@@ -266,11 +266,11 @@ export const recipesItems = [
     {
         id: 1,
         title: "Plov",
-        created_date: "31.01.2022"
+        added_time: "31.01.2022"
     },
     {
         id: 2,
         title: "stake",
-        created_date: "03.04.2024"
+        added_time: "03.04.2024"
     },
 ]

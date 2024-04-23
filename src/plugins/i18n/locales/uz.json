@@ -298,6 +298,7 @@
   "add banner": "Banner qo'shish",
   "contacts": "Kontaktlar",
   "The phone number must be entered in the format: '998 [XX] [XXX XX XX]": "Telefon raqami formatda kiritilishi kerak: '998 [XX] [XXX XX XX]",
-  "phone_numbers": "Telefon raqamlari"
+  "phone_numbers": "Telefon raqamlari",
+  "added_time": "Qoshilgan vaqt"
 
 }
