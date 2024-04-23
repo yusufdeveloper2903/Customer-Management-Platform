@@ -9,6 +9,7 @@ import Products from "../components/Products.vue"
 import PrivacyPolicy from "../components/PrivacyPolicy.vue";
 import TermsAndConditions from "../components/TermsAndConditions.vue"
 import Contacts from "../components/Links.vue";
+import Recipes from "../components/Recipes.vue"
 import {ref} from 'vue'
 
 const knowledge = ref('')
@@ -55,6 +56,10 @@ const selectedTitle = (val) => {
 
       <Tab :title="'contacts'">
         <Contacts :knowledge="knowledge"/>
+      </Tab>
+
+      <Tab :title="'Recipes'">
+        <Recipes :knowledge="knowledge"/>
       </Tab>
     </Tabs>
   </div>

@@ -264,12 +264,12 @@ const updateDeal = async () => {
         </label>
 
         <label
-          >{{ $t('photo') }}
+          >{{ $t('photo') }} </label>
           <FileInput
             v-model="newsTemplateData.file"
             @remove="newsTemplateData.file = null"
           />
-        </label>
+       
       </div>
 
       <div

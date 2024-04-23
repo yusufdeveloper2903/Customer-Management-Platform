@@ -61,33 +61,6 @@ export const introFields = [
     },
 ];
 
-export const introItems = [
-    {
-        id: 1,
-        photo: "https://picsum.photos/300",
-        name: "Парфюм",
-        description:
-            "Publish up your selfies to make yourself more beautiful with this app",
-        step_id: 1,
-    },
-    {
-        id: 2,
-        photo: "https://picsum.photos/300",
-        name: "Для взрослых",
-        description:
-            "Publish up your selfies to make yourself more beautiful with this app",
-        step_id: 2,
-    },
-    {
-        id: 3,
-        photo: "",
-        name: "Аксессуары",
-        description:
-            "Publish up your selfies to make yourself more beautiful with this app",
-        step_id: 3,
-    },
-];
-
 export const splashFields = [
     {
         text: "ID",
@@ -274,25 +247,30 @@ export const linksFields = [
 ]
 
 export const headerPlaces = [
-    {text: "id", value: "id"},
-    {text: "title", value: "title"},
-    {text: "phones", value: "phones"},
-    {text: "region", value: "region"},
-    {text: "address", value: "address"},
-    {text: "actions", value: "actions"},
+    { text: "id", value: "id" },
+    { text: "title", value: "title" },
+    { text: "phones", value: "phones" },
+    { text: "region", value: "region" },
+    { text: "address", value: "address" },
+    { text: "actions", value: "actions" },
 ]
 
-export const phoneNumberItems = [
+export const recipesFields = [
+    { text: "ID",  value: "id" },
+    { text: "title", value: "title" },
+    { text: "created_date", value: "created_date" },
+    { text: "actions", value: "actions" },
+]
+
+export const recipesItems = [
     {
-        index: 1,
-        phone: '998990076655'
+        id: 1,
+        title: "Plov",
+        created_date: "31.01.2022"
     },
     {
-        index: 2,
-        phone: '998997076625'
-    },
-    {
-        index: 3,
-        phone: '998990546655'
+        id: 2,
+        title: "stake",
+        created_date: "03.04.2024"
     },
 ]

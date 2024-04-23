@@ -74,7 +74,7 @@ const openModal = (isEdit?: boolean, data?: NewsTemplate) => {
 const deleteAction = async () => {
   isLoading.value = true
   try {
-    await store.deleteNewsTemplate(itemToDelete.value)
+    await store.deleteNewsTemplate(Number(itemToDelete.value))
     UIKit.modal("#global-delete-modal").hide();
     toast.success(t('deleted_successfully'));
     if ((store.newTemplate.count - 1) % params.page_size == 0) {
