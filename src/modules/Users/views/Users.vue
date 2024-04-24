@@ -128,7 +128,7 @@ const showDetailPage = (item: any) => {  // PUSH TO DETAILS
 
 
         <template #item-phone="items">
-          <span>
+          <span v-if="items.phone">
             {{ formatPhoneNumber(items.phone) }}
           </span>
         </template>

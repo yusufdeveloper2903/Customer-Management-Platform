@@ -52,9 +52,8 @@ const validationForm = async () => {
     let userAbilities = [{subject: "all", action: "manage"}];
     localStorage.setItem("userAbilities", JSON.stringify(userAbilities));
     ability.update(userAbilities);
-
     // if (check("car_showroom")) {
-    router.push("/dashboard");
+    await router.push("/dashboard");
     // } else {
     //   router.push("/dashboard");
     // }

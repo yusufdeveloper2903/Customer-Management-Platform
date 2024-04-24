@@ -79,11 +79,15 @@ async function saveData() {
   if (!success) return;
   const formData = new FormData()
   if (smsSendingData.value.title) {
-    formData.append('title', JSON.stringify(smsSendingData.value.title))
-    formData.append('description', JSON.stringify(smsSendingData.value.description))
+    formData.append('title', smsSendingData.value.title)
+    formData.append('description', smsSendingData.value.description)
   }
-  formData.append('id', route.params.id)
-  formData.append('start_time', smsSendingData.value.start_time)
+  if (route.params.id) {
+    formData.append('id', String(route.params.id))
+  }
+  if (smsSendingData.value.start_time) {
+    formData.append('start_time', String(smsSendingData.value.start_time))
+  }
   if (itemSelected.value.length) {
     itemSelected.value.forEach(el => {
       formData.append('receivers', el.id)
@@ -93,7 +97,7 @@ async function saveData() {
   }
 
   if (smsSendingData.value.template) {
-    formData.append('template', smsSendingData.value.template?.id)
+    formData.append('template', String(smsSendingData.value.template.id))
   }
   if (route.params.id) {
     try {

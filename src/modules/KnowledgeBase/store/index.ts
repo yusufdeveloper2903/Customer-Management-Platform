@@ -117,7 +117,7 @@ export default defineStore("knowledgeBase", {
 
 
         //CREATE REQUEST
-        createSmsTemplate(data: object) {
+        createSmsTemplate(data: any) {
             return $axios.post("/knowledge_base/sms_template/", data);
         },
         createNewsTemplate(data: NewsTemplate) {
