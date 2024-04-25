@@ -4,17 +4,41 @@
 import {nextTick, ref, watch} from "vue";
 import ShowFileModal from "./showFileModal.vue";
 import UIkit from "uikit";
-const emit = defineEmits(['remove'])
-
 
 //DECLARED VARIABLES
-const props = ref<any>({
+
+interface ReturnValue {
+  item: string;
+  index: number;
+}
+
+interface Emits {
+  (event: "update:modelValue", value: File | File[]): void;
+
+  (event: "remove", value: ReturnValue | string): void;
+
+  (event: "show", value: ReturnValue | string): void;
+}
+
+
+interface Props {
+  modelValue: string | string[] | null;
+  typeModal: number | null | undefined;
+  eye?: boolean;
+  minus?: boolean;
+  class?: string;
+  multiple?: boolean;
+  name: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
   eye: true,
   minus: true,
   multiple: false,
   typeModal: null,
   name: ''
 });
+const emit = defineEmits<Emits>();
 const inputValue = ref<string | string[] | null>();
 const input = ref<boolean>(true);
 const image = ref<string>("");
@@ -23,6 +47,7 @@ const onShowFile = (item) => {
   image.value = item;
   nextTick(() => {
     UIkit.modal(`#${props.name}`).show();
+    emit("show", item);
   });
 };
 
@@ -42,6 +67,13 @@ watch(
       }
     }
 );
+const onInputFile = (value) => {
+  const valueSize: File[] = Object.values(value.target.files);
+  if (valueSize.length === 1) emit("update:modelValue", value.target.files[0]);
+  else {
+    emit("update:modelValue", valueSize);
+  }
+};
 
 </script>
 
@@ -50,8 +82,12 @@ watch(
       v-if="input"
       class="form-file-input"
       :class="props.class"
+      @input="onInputFile"
+      v-on="emit"
+
       v-bind="props"
       type="file"
+      :multiple="multiple"
   />
   <template v-if="typeof inputValue === 'string'">
     <div v-if="props.typeModal" class="flex justify-between items-center mt-3 mx-5" @click.prevent>
