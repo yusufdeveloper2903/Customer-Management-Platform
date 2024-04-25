@@ -112,9 +112,7 @@ const refresh = async () => {
     await clientsStorage.getUsers(params)
     receiversList.value = clientsStorage.usersList.results
   } catch (error: any) {
-    toast.error(
-        error.response || "Error"
-    );
+    toast.error(t('error'));
   }
   loading.value = false;
 };
@@ -189,9 +187,7 @@ const saveData = async () => {
       })
     } catch (error: any) {
       if (error) {
-        toast.error(
-            error.response.message || "Error"
-        );
+        toast.error(t('error'));
       }
     }
 
@@ -203,9 +199,7 @@ const saveData = async () => {
       })
     } catch (error: any) {
       if (error) {
-        toast.error(
-            error.response.message || "Error"
-        );
+        toast.error(t('error'));
       }
     }
   }

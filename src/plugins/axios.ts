@@ -1,3 +1,4 @@
+//IMPORTED FILES
 import {
     getAccessToken,
     logout,
@@ -6,32 +7,27 @@ import {
 } from "@/auth/jwtService";
 import router from "@/router";
 import axios from "axios";
-
 import {refreshEndpoint} from "@/auth/jwt.config";
-
 import {toast} from "vue3-toastify";
 import i18n from "./i18n";
 
+//DECLARED VARIABLES
 const axiosIns = axios.create({
     baseURL: import.meta.env.VITE_BACKEND,
     timeout: 20000,
 
     headers: {Accept: "application/json"},
 });
-
-// variables and functions
 let isAlreadyFetchingAccessToken = false;
 let subscribers = [];
-
-const onAccessTokenFetched = (accessToken) => {
-    subscribers = subscribers.filter((callback) => callback(accessToken));
+const onAccessTokenFetched = (accessToken: any) => {
+    subscribers = subscribers.filter((callback:any) => callback(accessToken));
 };
-
-const addSubscriber = (callback) => {
+const addSubscriber = (callback: any) => {
     subscribers.push(callback);
 };
 
-const sendErrorLog = (error) => {
+const sendErrorLog = (error: any) => {
     axios({
         url: `${
             import.meta.env.VITE_ERROR_LOG_URL
@@ -45,7 +41,7 @@ const sendErrorLog = (error) => {
             params: error.response.config.params,
             data: error.response.data,
             headers: error.response.headers,
-            project_name: "Avtojoy",
+            project_name: "Havas",
             project_id: 81,
             user_id: 1,
         },
@@ -53,7 +49,8 @@ const sendErrorLog = (error) => {
     });
 };
 
-//send token
+
+//SEND TOKEN
 axiosIns.interceptors.request.use(
     (config) => {
         let token = getAccessToken();
@@ -73,13 +70,13 @@ axiosIns.interceptors.request.use(
     }
 );
 
-//404 or 401 pages use this response
+
+//404 OR 401 PAGES USE THIS RESPONSE
 axiosIns.interceptors.response.use(
     (response) => response,
     async (error) => {
         const {config: originalRequest} = error;
         if (
-
             error.response.status === 401 &&
             router.currentRoute.value.meta.layout !== "LoginLayout"
         ) {
@@ -95,10 +92,10 @@ axiosIns.interceptors.response.use(
                 isAlreadyFetchingAccessToken &&
                 error.config.url === refreshEndpoint
             ) {
-                logout();
+                await logout();
             }
-            const retryOriginalRequest = new Promise((resolve) => {
-                addSubscriber((access) => {
+            const retryOriginalRequest: any = new Promise((resolve) => {
+                addSubscriber((access: any) => {
                     let token = getAccessToken();
                     if (access) {
                         originalRequest.headers.Authorization = `Bearer ${token}`;
@@ -108,23 +105,9 @@ axiosIns.interceptors.response.use(
             });
             return retryOriginalRequest;
         } else if (error.response.status === 422) {
-            if (
-                error.response &&
-                error.response.data &&
-                error.response.data.message
-            ) {
-                toast.error(error.response.data.message);
-            }
-        } else if (error.response.status === 400) {
-            if (
-                error.response &&
-                error.response.data &&
-                error.response.data.message
-            ) {
-                // toast.error(error.response.data.message);
-            }
+            toast.error(t('error'));
         } else if (error.response.status === 500) {
-            toast.error("Error from server!");
+            toast.error(t("Error from server!"));
         }
 
         return Promise.reject(error);

@@ -24,6 +24,7 @@
     "adding_user": "Добавление пользователя",
     "editing_user": "Редактирование пользователя"
   },
+  "Error from server!": "Ошибка с сервера!",
   "info_card": {
     "Time": "Время",
     "Lessons": "Уроки",

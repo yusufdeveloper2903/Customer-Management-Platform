@@ -43,7 +43,7 @@ const updateDeal = async () => {
       toast.success(t("updated_successfully"));
     } catch (error: any) {
       if (error) {
-        toast.error(error.response || "Error");
+        toast.error(t("error"))
       }
     }
 
@@ -55,7 +55,7 @@ const updateDeal = async () => {
       toast.success(t("created_successfully"));
     } catch (error: any) {
       if (error) {
-        toast.error(error.response || "Error");
+        toast.error(t('error'));
       }
     }
   }

@@ -50,7 +50,13 @@ onMounted(async () => {
 
       if (route.params.id) {
         await store.getSmsSendingDetail({id: Number(route.params.id)})
-        await store.getReseivers({object_id: route.params.id, notification_type: 'sms', search: params.search, page: params.page, page_size: params.page_size})
+        await store.getReseivers({
+          object_id: route.params.id,
+          notification_type: 'sms',
+          search: params.search,
+          page: params.page,
+          page_size: params.page_size
+        })
         smsSendingData.value.start_time = store.smsSendingDetail.start_time;
         smsSendingData.value.description = store.smsSendingDetail.description
         smsSendingData.value.template = store.smsSendingDetail.template
@@ -66,9 +72,7 @@ const refresh = async () => {
     await clientsStorage.getUsers(params)
     smsData.value = clientsStorage.usersList.results
   } catch (error: any) {
-    toast.error(
-        error.response || "Error"
-    );
+    toast.error(t('error'));
   }
   loading.value = false;
 };
@@ -107,9 +111,7 @@ async function saveData() {
       })
     } catch (error: any) {
       if (error) {
-        toast.error(
-            error.response.message || "Error"
-        );
+        toast.error(t('error'));
       }
     }
   } else {
@@ -120,9 +122,7 @@ async function saveData() {
       })
     } catch (error: any) {
       if (error) {
-        toast.error(
-            error.response.message || "Error"
-        );
+        toast.error(t('error'));
       }
     }
 

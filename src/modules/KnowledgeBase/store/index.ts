@@ -120,7 +120,7 @@ export default defineStore("knowledgeBase", {
         createSmsTemplate(data: any) {
             return $axios.post("/knowledge_base/sms_template/", data);
         },
-        createNewsTemplate(data: NewsTemplate) {
+        createNewsTemplate(data: any) {
             return $axios.post(`/knowledge_base/news_template/`, data);
         },
         AddForms(data) {

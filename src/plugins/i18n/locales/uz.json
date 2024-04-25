@@ -242,6 +242,7 @@
   "Link": "Havola",
   "phones": "Telefonlar",
   "region": "Viloyatlar",
+  "Error from server!": "Serverdan xato!",
   "address": "Manzil",
   "dashboard": "Boshqaruv paneli",
   "product": "Mahsulot",
@@ -270,6 +271,7 @@
   "database": "Ma'lumotlar bazasi",
   "date_and_time": "Yaratilgan sana",
   "View order": "Buyurtmani ko'rish",
+
   "version_number": "Versiya raqami",
   "version_control": "Versiya nazorati",
   "Modified date": "O'zgartirilgan sana",

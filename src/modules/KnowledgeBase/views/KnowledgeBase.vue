@@ -59,7 +59,7 @@ const selectedTitle = (val: any) => {
       <Tab title="PrivacyPolicy">
         <PrivacyPolicy :knowledge="knowledge"/>
       </Tab>
-      <Tab title="Region">
+      <Tab title="region">
         <CreateRegions :knowledge="knowledge"/>
       </Tab>
 

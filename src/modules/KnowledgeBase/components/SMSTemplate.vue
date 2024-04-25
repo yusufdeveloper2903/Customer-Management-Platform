@@ -94,9 +94,7 @@ const refresh = async () => {
     await store.getSmsTemplate(params);
     smsTemplateList.value = store.smsTemplateList.results;
   } catch (error: any) {
-    toast.error(
-        error.response || "Error"
-    );
+    toast.error(t('error'));
   }
   isLoading.value = false;
 };

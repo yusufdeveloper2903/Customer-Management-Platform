@@ -168,7 +168,6 @@
 import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useSidebarStore } from "@/stores/layoutConfig.ts";
-import { getUserData } from "@/auth/jwtService";
 import users from "@/modules/Users/store/index";
 import UIkit from "uikit";
 import i18n from "@/plugins/i18n";
@@ -218,11 +217,11 @@ const store = users();
 const userImage = ref("");
 
 onMounted(() => {
-  if (getUserData().id) {
-    store.getUserById(Number(getUserData().id)).then(() => {
-      userImage.value = store.user.photo;
-    });
-  }
+  // if (getUserData().id) {
+  //   store.getUserById(Number(getUserData().id)).then(() => {
+  //     userImage.value = store.user.photo;
+  //   });
+  // }
 
   // document.addEventListener("keydown", (e) => {
   //   if (e.ctrlKey && e.code === "KeyK") {

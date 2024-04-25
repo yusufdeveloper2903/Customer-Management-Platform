@@ -1,18 +1,17 @@
+//IMPORTED FILES
 import $axios from "@/plugins/axios";
 import {
     loginEndpoint,
     logoutEndpoint,
     refreshEndpoint,
     refreshTokenKeyName,
-    registerEndpoint,
     tokenKeyName,
 } from "./jwt.config";
 import router from "@/router";
-import type {UserData} from "./types";
 
-export function login(
-    ...args
-): Promise<{ data: { access: string; refresh: string } }> {
+
+//EXPORTED FUNCTIONS
+export function login(...args: any[]) {
     return $axios.post(loginEndpoint, ...args, {
         headers: {no_add_token: true},
     });
@@ -24,18 +23,11 @@ export async function logout(isClearOnly: boolean = true): Promise<void> {
     document.cookie = "access=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
-    router.push("/login");
+    await router.push("/login");
 }
-
-export function register(...args): Promise<any> {
-    return $axios.post(registerEndpoint, ...args, {
-        headers: {no_add_token: true},
-    });
-}
-
 
 export function setAccessToken(value: any): void {
-    setCookie(tokenKeyName, value, 17);
+    setCookie(tokenKeyName, value, 2);
 }
 
 
@@ -43,17 +35,12 @@ export function getAccessToken(): string {
     return getCookie(tokenKeyName);
 }
 
-export function setRefreshToken(value): void {
-    setCookie(refreshTokenKeyName, value, 17);
+export function setRefreshToken(value: any): void {
+    setCookie(refreshTokenKeyName, value, 2);
 }
 
 export function getRefreshToken(): string {
     return getCookie(refreshTokenKeyName);
-}
-
-export function getUserData(): UserData {
-    // return parseJWT(getCookie(tokenKeyName)).user_data;
-    return {};
 }
 
 export function refreshToken() {

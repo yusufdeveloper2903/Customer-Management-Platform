@@ -76,7 +76,7 @@ const refresh = async () => {
     await store.getSmsSending(smsFilter)
     smsSendingList.value = store.smsSendingList.results;
   } catch (error: any) {
-    toast.error(error.response.message || "Error");
+    toast.error(t('error'));
   }
   isLoading.value = false;
 };

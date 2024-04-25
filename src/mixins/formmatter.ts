@@ -1,33 +1,18 @@
-export const objectToFormData = (obj, form?, namespace?) => {
-
-  const fd = form || new FormData();
-  let formKey;
-  for (const property in obj) {
-    if (obj.hasOwnProperty(property)) {
-      if (namespace) {
-        formKey = `${namespace}.${property}`;
-      } else {
-        formKey = property;
-      }
-
-      // if the property is an object, but not a File,
-      // use recursivity.
-
-      if (Array.isArray(obj[property])) {
-        obj[property].forEach((e) => {
-          fd.append(property, e);
-        });
-      } else if (
-        typeof obj[property] === "object" &&
-        !(obj[property] instanceof File)
-      ) {
-        objectToFormData(obj[property], fd, property);
-      } else {
-        // if it's a string or a File object
-        fd.append(formKey, obj[property]);
-      }
+export const objectToFormData = (obj: any) => {
+    const formData = new FormData();
+    for (const property in obj) {
+        console.log(obj[property], 'ob')
+        if (property == 'file' || property == 'photo') {
+            if (obj[property] == null) {
+                formData.append(property, '');
+            } else if (typeof obj[property] == 'string') {  // DOES NOT CUT THIS PART IT'S IMPORTANT TO VALIDATION
+                // formData.append(property, '');
+            } else {
+                formData.append(property, obj[property]);
+            }
+        } else {
+            formData.append(property, obj[property]);
+        }
     }
-  }
-
-  return fd;
+    return formData;
 };

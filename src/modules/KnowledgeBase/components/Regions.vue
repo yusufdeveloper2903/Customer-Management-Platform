@@ -38,7 +38,7 @@ const params = reactive({
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
   let knowledgeBase = localStorage.getItem('knowledgeBase')
-  if (knowledgeBase == 'Region') {
+  if (knowledgeBase == 'region') {
     await refresh()
   }
 })
@@ -47,7 +47,7 @@ onMounted(async () => {
 //WATCHERS
 watch(() => props.knowledge, async function (val) {
   toRefresh.value = !toRefresh.value
-  if (val == 'Region') {
+  if (val == 'region') {
     await refresh()
   }
 })

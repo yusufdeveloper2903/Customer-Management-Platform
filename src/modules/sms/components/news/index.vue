@@ -64,9 +64,7 @@ const refresh = async () => {
     await store.getNews(params)
     newsList.value = store.newsList.results;
   } catch (error: any) {
-    toast.error(
-        error.response.message || "Error"
-    );
+    toast.error(t('error'));
   }
   isLoading.value = false;
 };

@@ -57,9 +57,7 @@ const updateDeal = async () => {
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
-      toast.error(
-          error.response || "Error"
-      );
+      toast.error(t('error'));
     }
 
   } else {
@@ -72,7 +70,7 @@ const updateDeal = async () => {
     } catch (error: any) {
       isSubmitted.value = false;
       if (error) {
-        toast.error(error.response || "Error");
+        toast.error(t("error"));
       }
     }
   }

@@ -65,39 +65,35 @@ const updateDeal = async () => {
   if (propData.editData.id) {
     try {
       const fd = objectToFormData({
-        file: file || "",
+        file: file || null,
         ...rest,
       });
       await store.updateNewsTemplate(fd)
+      await UIkit.modal("#news_template").hide();
       toast.success(t("updated_successfully"));
-      emit("refresh");
-      UIkit.modal("#news_template").hide();
       isSubmitted.value = false;
+      emit("refresh");
     } catch (error: any) {
       isSubmitted.value = false;
       if (error) {
-        toast.error(
-            error.response || "Error"
-        );
+        toast.error(t("error"));
       }
     }
   } else {
     try {
       const fd = objectToFormData({
-        file: file || "",
+        file: file || null,
         ...rest,
       });
       await store.createNewsTemplate(fd)
+      await UIkit.modal("#news_template").hide();
       toast.success(t("created_successfully"));
       emit("refresh");
-      UIkit.modal("#news_template").hide();
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
       if (error) {
-        toast.error(
-            error.response || "Error"
-        );
+        toast.error(t('error'));
       }
     }
   }
