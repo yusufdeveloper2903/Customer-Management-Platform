@@ -1,11 +1,9 @@
 <script setup lang="ts">
-//Imported files
-
+//IMPORTED FILES
 import { reactive } from "vue";
 
 
-//Declared variables
-
+//DECLARED VARIABLES
 const statistics = reactive([
   {
     id: 1,

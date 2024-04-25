@@ -49,6 +49,7 @@ export function refreshToken() {
     });
 }
 
+
 function setCookie(name: string, value: object, expirationDays: number): void {
     const date = new Date();
     date.setTime(date.getTime() + expirationDays * 24 * 60 * 60 * 1000);

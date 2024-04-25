@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
-//Imported files
-
+//IMPORTED FILES
 import {onMounted, reactive, ref} from "vue";
 import {toast} from "vue3-toastify";
 import {categoryFields, categoryitems} from "../constants";
@@ -9,7 +8,9 @@ import CategoriesDetail from "./modals/CategoriesDetail.vue";
 import ConfirmModal from "@/components/ConfirmModals/ConfirmModal.vue";
 import {ICategory} from "../interfaces/index";
 import {useI18n} from "vue-i18n";
-//Declared variables
+
+
+//DECLARED VARIABLES
 const {t} = useI18n()
 const current = ref<number>(1);
 const isLoading = ref<boolean>(false);

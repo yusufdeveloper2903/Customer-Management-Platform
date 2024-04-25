@@ -5,20 +5,6 @@ export interface Results<T> {
     results: T[];
 }
 
-export interface IStaff {
-  id: number | null;
-  full_name: string | null;
-  phone: string | null;
-  username: string | null;
-  is_active: boolean;
-  role: string | null;
-  photo: string | null;
-}
-
-export interface UsersRoles {
-
-}
-
 export interface StaffDetails {
   id: number | null;
   role: string | null;

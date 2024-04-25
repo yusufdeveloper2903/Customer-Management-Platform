@@ -1,20 +1,30 @@
 <script setup lang="ts">
+
+//IMPORT FILES
 import {useSidebarStore} from "@/stores/layoutConfig";
 import EmptyLayout from "@/layout/EmptyLayout.vue";
 import MainLayout from "@/layout/MainLayout.vue";
 import LoginLayout from "@/layout/LoginLayout.vue";
 import {onMounted, ref, watch} from "vue";
 
-const sidebar = useSidebarStore();
 
+//DECLARED VARIABLES
+const sidebar = useSidebarStore();
 const layouts = {
   EmptyLayout: EmptyLayout,
   MainLayout: MainLayout,
   LoginLayout: LoginLayout,
 };
-
 const body = ref<HTMLElement | null>(document.querySelector("body"));
 
+
+//MOUNTED
+onMounted(() => {
+  body.value?.classList.add(sidebar.currentTheme);
+});
+
+
+//WATCHERS
 watch(
     () => sidebar.currentTheme,
     () => {
@@ -28,9 +38,6 @@ watch(
     }
 );
 
-onMounted(() => {
-  body.value?.classList.add(sidebar.currentTheme);
-});
 
 </script>
 
@@ -49,18 +56,12 @@ onMounted(() => {
 }
 
 .my-editor {
-  /* we dont use `language-` classes anymore so thats why we need to add background and text color manually */
-  /* background: #2d2d2d; */
   color: #ccc;
-
-  /* you must provide font-family font-size line-height. Example:*/
   font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
   font-size: 14px;
   line-height: 1.5;
   padding: 5px;
 }
-
-/* optional class for removing the outline */
 .prism-editor__textarea:focus {
   outline: none;
 }
@@ -76,7 +77,6 @@ onMounted(() => {
 }
 
 .bg-dark-theme {
-  // background: rgb(40, 48, 70);
   background-color: white;
 }
 
@@ -182,9 +182,6 @@ onMounted(() => {
   border: 1px solid #e0e0e0;
 }
 
-// .vue3-easy-data-table__body{
-//   border: none !important;
-// }
 .Toastify__toast-body {
   font-family: Montserrat, Helvetica, Arial, serif !important;
 }

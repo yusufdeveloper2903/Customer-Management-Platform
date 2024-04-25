@@ -53,13 +53,6 @@ export default [
     },
 
 
-    // {
-    //   name: "news",
-    //   icon: "Fire",
-    //   path: "/news",
-    //   permissions: ["admin"],
-    // },
-
 
     {
         name: "Administration",

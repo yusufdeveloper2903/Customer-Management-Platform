@@ -1,40 +1,21 @@
 <script lang="ts" setup>
+
+//IMPORTED FILES
 import {nextTick, ref, watch} from "vue";
 import ShowFileModal from "./showFileModal.vue";
 import UIkit from "uikit";
+const emit = defineEmits(['remove'])
 
-interface ReturnValue {
-  item: string;
-  index: number;
-}
 
-interface Emits {
-  (event: "update:modelValue", value: File | File[]): void;
-
-  (event: "remove", value: ReturnValue | string): void;
-
-  (event: "show", value: ReturnValue | string): void;
-}
-
-interface Props {
-  modelValue: string | string[] | null;
-  typeModal: number | null | undefined | string | object;
-  eye?: boolean;
-  minus?: boolean;
-  class?: string;
-  multiple?: boolean;
-  name: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
+//DECLARED VARIABLES
+const props = ref<any>({
   eye: true,
   minus: true,
   multiple: false,
   typeModal: null,
   name: ''
 });
-const emit = defineEmits<Emits>();
-const inputValue = ref<string | string[] | ''>();
+const inputValue = ref<string | string[] | null>();
 const input = ref<boolean>(true);
 const image = ref<string>("");
 const imageCard = ref();
@@ -42,9 +23,11 @@ const onShowFile = (item) => {
   image.value = item;
   nextTick(() => {
     UIkit.modal(`#${props.name}`).show();
-    emit("show", item);
   });
 };
+
+
+//WATCHERS
 watch(
     () => props.modelValue,
     () => {
@@ -60,13 +43,6 @@ watch(
     }
 );
 
-const onInputFile = (value) => {
-  const valueSize: File[] = Object.values(value.target.files);
-  if (valueSize.length === 1) emit("update:modelValue", value.target.files[0]);
-  else {
-    emit("update:modelValue", valueSize);
-  }
-};
 </script>
 
 <template>
@@ -75,13 +51,10 @@ const onInputFile = (value) => {
       class="form-file-input"
       :class="props.class"
       v-bind="props"
-      @input="onInputFile"
-      v-on="emit"
       type="file"
-      :multiple="multiple"
   />
   <template v-if="typeof inputValue === 'string'">
-    <div v-if="typeModal" class="flex justify-between items-center mt-3 mx-5" @click.prevent>
+    <div v-if="props.typeModal" class="flex justify-between items-center mt-3 mx-5" @click.prevent>
       <span class="rounded bg-primary px-4 pb-0.5 text-white">{{
           inputValue.length < 26
               ? inputValue.split("/").at(-1)

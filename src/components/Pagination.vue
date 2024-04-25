@@ -1,6 +1,10 @@
 <script lang="ts">
+//IMPORTED FILES
 import {defineComponent} from "vue";
 
+
+
+//EXPORTED FILES
 export default defineComponent({
   name: "Vue Tailwind Pagination",
   props: {
@@ -37,7 +41,7 @@ export default defineComponent({
 
   data() {
     return {
-      input: null,
+      input: '',
       perPageOptions: [5, 10, 15],
     };
   },
@@ -302,6 +306,4 @@ select option:checked {
   background: #092f50 !important;
   color: #fff;
 }
-
-/* active option color is #092F50 */
 </style>

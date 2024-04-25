@@ -66,57 +66,6 @@ export const introItems = [
     },
 ];
 
-export const splashFields = [
-    {
-        text: "ID",
-        value: "id",
-    },
-    {
-        text: "photo",
-        value: "photo",
-    },
-    {
-        text: "Version",
-        value: "version",
-    },
-    {
-        text: "Time",
-        value: "time",
-    },
-    {
-        text: "Status",
-        value: "is_active",
-    },
-    {
-        text: "actions",
-        value: "actions",
-    },
-];
-
-export const splashItems = [
-    {
-        id: 1,
-        photo: "https://picsum.photos/300",
-        version: "1.16",
-        time: "24-08-2023",
-        is_active: true,
-    },
-    {
-        id: 2,
-        photo: "",
-        version: "1.14",
-        time: "24-08-2023",
-        is_active: false,
-    },
-    {
-        id: 3,
-        photo: "",
-        version: "1.12",
-        time: "24-08-2023",
-        is_active: false,
-    },
-];
-
 export const locationFields = [
     {
         text: "ID",

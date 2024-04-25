@@ -10,8 +10,7 @@ module.exports = {
     'plugin:sonarjs/recommended',
 
     'plugin:@typescript-eslint/recommended',
-  
-    // 'plugin:unicorn/recommended',
+
   ],
   parser: 'vue-eslint-parser',
   parserOptions: {
@@ -29,16 +28,16 @@ module.exports = {
 
     // indentation (Already present in TypeScript)
     'indent': ['error', 2],
-  
+
     // Enforce trailing comma (Already present in TypeScript)
     'comma-dangle': ['error', 'always-multiline'],
-  
+
     // Enforce consistent spacing inside braces of object (Already present in TypeScript)
     'object-curly-spacing': ['error', 'always'],
-  
+
     // Disable max-len
     'max-len': 'off',
-  
+
     // we don't want it
     'semi': ['error', 'never'],
   
@@ -105,10 +104,7 @@ module.exports = {
       ],
     }],
   
-    // Thanks: https://stackoverflow.com/a/63961972/10796681
     'no-shadow': 'off',
-  
-  
     // Plugin: eslint-plugin-promise
     'promise/always-return': 'off',
     'promise/catch-or-return': 'off',

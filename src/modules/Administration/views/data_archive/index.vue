@@ -1,20 +1,20 @@
 <script setup lang="ts">
 
-//Imported Files
+//IMPORTED FILES
 import {headerDataArchive} from '../../constants/index'
-import {administrationStore} from '../../store/index'
+import administrationStore from '../../store/index'
 import UIkit from "uikit";
 import {
+  onMounted,
   ref,
 } from "vue"
-
 import dayjs from 'dayjs'
 import {toast} from "vue3-toastify";
 import {useI18n} from 'vue-i18n';
 import {watchDebounced} from '@vueuse/core';
 
-//Declared variables
 
+//DECLARED VARIABLES
 const {t} = useI18n()
 const administrationStorage = administrationStore()
 const isLoading = ref(false)
@@ -29,8 +29,14 @@ let params = ref({
 })
 const deletingID = ref()
 
-//Functions
 
+//MOUNTED
+onMounted(async () => {
+  await refresh()
+})
+
+
+//FUNCTIONS
 const refresh = async () => {
   isLoading.value = true
   try {
@@ -40,7 +46,6 @@ const refresh = async () => {
     isError.value = true
   }
 }
-refresh()
 
 function download(url: string) {
   const url_parts = url.split('/')
@@ -70,23 +75,22 @@ const deleteAction = async () => {
   isLoading.value = true
   try {
     await administrationStorage.DELETE_BACKUP_MEDIA(deletingID.value)
-    UIkit.modal("#global-delete-modal").hide();
+    await UIkit.modal("#data-archive-delete-modal").hide();
+    await refresh()
     toast.success(t('deleted_successfully'));
-    refresh()
     isLoading.value = false
   } catch (error) {
     isError.value = true
   }
 }
 const openDeleteBackupModal = async (id) => {
-  UIkit.modal("#global-delete-modal").show();
+  UIkit.modal("#data-archive-delete-modal").show();
   deletingID.value = id
 }
 const onInput = async (event: number) => {
   params.value.page = event
   refresh()
 }
-
 
 watchDebounced(() => params.value.search, async function () {
   params.value.offset = 0
@@ -109,8 +113,6 @@ const onPageSizeChanged = (event: number) => {
   params.value.limit = event;
   refresh();
 };
-
-
 </script>
 
 
@@ -316,7 +318,7 @@ const onPageSizeChanged = (event: number) => {
     </div>
 
 
-    <DeleteModal @delete-action="deleteAction"/>
+    <DeleteModal @delete-action="deleteAction" id="data-archive-delete-modal"/>
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 //IMPORTED FILES
 import {defineStore} from "pinia";
 import $axios from "@/plugins/axios";
-import {Results, UsersRoles, StaffDetails} from "../interfaces/index";
+import {Results, StaffDetails} from "../interfaces/index";
 
 
 //EXPORT DEFAULT
@@ -13,8 +13,8 @@ export default defineStore("staff", {
                 results: []
             },
             users_roles: {
-                results: [] as UsersRoles[]
-            } as Results<UsersRoles>,
+                results: [] as any
+            } as Results<any>,
             staff: {} as StaffDetails
         };
     },
@@ -42,7 +42,7 @@ export default defineStore("staff", {
 
 
         //PATCH REQUEST
-        updateStaff(data:any) {
+        updateStaff(data: any) {
             return $axios.patch(`/users/users/${data.get("id")}/`, data);
         },
 

@@ -10,7 +10,7 @@ import {useI18n} from "vue-i18n";
 const store = users();
 const {t} = useI18n();
 const props = defineProps<{
-  userId: number
+  userId: number | null
 }>();
 const emits = defineEmits(["deleteUser"]);
 

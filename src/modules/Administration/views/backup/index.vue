@@ -1,7 +1,9 @@
 <script setup lang="ts">
-//Imported Files
-import {administrationStore} from '../../store/index'
-import {ref} from "vue"
+
+
+//IMPORTED FILES
+import administrationStore from '../../store/index'
+import {onMounted, ref} from "vue"
 import {headerBackUp} from "../../constants/index";
 import dayjs from 'dayjs'
 import {toast} from "vue3-toastify";
@@ -9,8 +11,8 @@ import {useI18n} from 'vue-i18n';
 import {watchDebounced} from '@vueuse/core';
 import UIkit from "uikit";
 
-//Declared variables
 
+//DECLARED VARIABLES
 const {t} = useI18n()
 const administrationStorage = administrationStore()
 const isLoading = ref(false)
@@ -25,8 +27,15 @@ let params = ref({
 })
 const deletingID = ref()
 
-//Functions
 
+//MOUNTED
+onMounted(async () => {
+  await refresh()
+
+})
+
+
+//FUNCTIONS
 const refresh = async () => {
   isLoading.value = true
   try {
@@ -36,7 +45,6 @@ const refresh = async () => {
     isError.value = true
   }
 }
-refresh()
 
 function download(url: string) {
   const url_parts = url.split('/')
@@ -67,9 +75,9 @@ const deleteAction = async () => {
   isLoading.value = true
   try {
     await administrationStorage.DELETE_BACKUP(deletingID.value)
-    UIkit.modal("#global-delete-modal").hide();
+    await UIkit.modal("#backup-delete-modal").hide();
+    await refresh()
     toast.success(t('deleted_successfully'));
-    refresh()
     isLoading.value = false
   } catch (error) {
     isError.value = true
@@ -77,8 +85,8 @@ const deleteAction = async () => {
 }
 
 
-const openDeleteBackupModal = async (id) => {
-  UIkit.modal("#global-delete-modal").show();
+const openDeleteBackupModal = async (id: any) => {
+  UIkit.modal("#backup-delete-modal").show();
   deletingID.value = id
 }
 const onInput = (event: number) => {
@@ -112,9 +120,8 @@ const onPageSizeChanged = (event: number) => {
   refresh();
 };
 
-//Life Cycles
 
-
+//WATCHERS
 watchDebounced(() => params.value.search, async function () {
   params.value.offset = 0
   params.value.page = 1
@@ -200,7 +207,8 @@ watchDebounced(() => params.value.search, async function () {
 
 
             </div>
-            <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full " uk-toggle="target: #backup-add-modal">
+            <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full "
+                    uk-toggle="target: #backup-add-modal">
               {{ $t('create_a_backup') }}
             </button>
           </div>
@@ -327,9 +335,6 @@ watchDebounced(() => params.value.search, async function () {
         </div>
       </div>
     </div>
-
-
-    <!-- =========== Modal =========== -->
     <div
         id="backup-delete-modal"
         class="uk-flex-top"
@@ -368,7 +373,7 @@ watchDebounced(() => params.value.search, async function () {
       </div>
     </div>
 
-    <DeleteModal @delete-action="deleteAction"/>
+    <DeleteModal @delete-action="deleteAction" id="backup-delete-modal"/>
   </div>
 </template>
 

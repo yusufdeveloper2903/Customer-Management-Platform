@@ -7,7 +7,7 @@ import Locale from "@/layout/Bars/Locale.vue";
   <div class="bg-[#F7F7F7] dark:bg-gray-900">
     <div class="min-h-screen justify-center">
       <header
-        class="flex justify-between items-center px-5 md:px-20 py-7 mb-10"
+          class="flex justify-between items-center px-5 md:px-20 py-7 mb-10"
       >
         <div class="w-52 flex items-center gap-4 font-medium">
           <img src="@/assets/havas/logo.svg" alt="" class="lg:w-[70px] w-[40px]"/>
@@ -16,15 +16,15 @@ import Locale from "@/layout/Bars/Locale.vue";
         </div>
 
         <div
-          class="flex items-center gap-4 bg-primary dark:bg-darkLayoutMain pt-3 pb-3 px-4 rounded-md"
+            class="flex items-center gap-4 bg-primary dark:bg-darkLayoutMain pt-3 pb-3 px-4 rounded-md"
         >
-          <ThemeTogler />
+          <ThemeTogler/>
 
-          <Locale />
+          <Locale/>
         </div>
       </header>
 
-      <slot />
+      <slot/>
     </div>
   </div>
 </template>

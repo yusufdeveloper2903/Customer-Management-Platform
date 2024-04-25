@@ -1,20 +1,24 @@
 <template>
   <button
-    class="fixed bg-primary text-white p-2.5 hover:-translate-y-9 hover:shadow-buttonShadow hover:shadow-primary active:shadow-none rounded duration-300"
-    :class="
+      class="fixed bg-primary text-white p-2.5 hover:-translate-y-9 hover:shadow-buttonShadow hover:shadow-primary active:shadow-none rounded duration-300"
+      :class="
       isVisible
         ? 'opacity-100 pointer-events-auto -bottom-1 right-7 -translate-y-7'
         : 'opacity-0 pointer-events-none -bottom-1 right-7 translate-y-7'
     "
-    @click="scrollToTop"
+      @click="scrollToTop"
   >
-    <Icon icon="Round Double Alt Arrow Up" color="#fff" size="25" />
+    <Icon icon="Round Double Alt Arrow Up" color="#fff" size="25"/>
   </button>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onUnmounted } from "vue";
 
+//IMPORTED FILES
+import {defineComponent, ref, onMounted, onUnmounted} from "vue";
+
+
+//EXPORT FILES
 export default defineComponent({
   name: "ScrollToTop",
   setup() {

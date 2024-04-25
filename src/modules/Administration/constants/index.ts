@@ -88,14 +88,6 @@ export const headerLoggingRight = [
         text: "Login",
         value: "user",
     },
-    // {
-    //     text: "region",
-    //     value: "region",
-    // },
-    // {
-    //     text: "district",
-    //     value: "district",
-    // },
     {
         text: "ip_address",
         value: "ip_address",

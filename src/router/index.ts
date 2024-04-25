@@ -1,15 +1,17 @@
+//IMPORTED FILES
 import {createRouter, createWebHistory, RouteRecordRaw} from "vue-router";
 import users from "@/modules/Users/router";
 import administration from "@/modules/Administration/router";
 import staff from "@/modules/Staff/router";
 import knowledgeBase from "@/modules/KnowledgeBase/router";
 import dashboard from "@/modules/Dashboard/router";
-import news from "@/modules/News/router";
 import sms from "@/modules/sms/router";
 import promotion from "@/modules/Promotion/router"
 import transactions from "@/modules/Transactions/router"
 import promo_code from "@/modules/Products/router"
+import {isUserLoggedIn} from './utils'
 
+//DECLARED VARIABLES
 const routes: Array<RouteRecordRaw> = [
     ...promo_code,
     ...users,
@@ -17,20 +19,17 @@ const routes: Array<RouteRecordRaw> = [
     ...staff,
     ...knowledgeBase,
     ...administration,
-    ...news,
     ...sms,
     ...promotion,
     ...transactions,
     {
         path: "/",
         redirect: () => {
-            // if (isUserLoggedIn()) {
-            // if (check("car_showroom")) {
-            return {name: "dashboard"};
-            // }
-            return {name: "dashboard"};
-            // }
+            if (isUserLoggedIn()) {
+                return {name: 'dashboard'}
+            }
             return {name: "login"};
+
         },
     },
     {
@@ -64,9 +63,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, _, next) => {
-
-    if (to.meta.loginNotRequired) return next();
-
+    if (to.meta.loginNotRequired) return next()
     next();
 });
 

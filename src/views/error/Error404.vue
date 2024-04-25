@@ -1,20 +1,24 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
 
+//IMPORTED FILES
+import {useRouter} from "vue-router";
+
+
+//DECLARED VARIABLES
 const router = useRouter();
 </script>
 
 <template>
   <section class="bg-white dark:bg-gray-900">
     <div
-      class="container mx-auto min-h-screen px-6 py-12 lg:flex lg:items-center lg:gap-12"
+        class="container mx-auto min-h-screen px-6 py-12 lg:flex lg:items-center lg:gap-12"
     >
       <div class="wf-ull lg:w-1/2">
         <p class="text-sm font-medium text-blue-500 dark:text-blue-400">
           404 error
         </p>
         <h1
-          class="mt-3 text-2xl font-semibold text-gray-800 dark:text-white md:text-3xl"
+            class="mt-3 text-2xl font-semibold text-gray-800 dark:text-white md:text-3xl"
         >
           Page not found
         </h1>
@@ -25,21 +29,21 @@ const router = useRouter();
 
         <div class="mt-6 flex items-center gap-x-3">
           <button
-            class="flex w-1/2 items-center justify-center gap-x-2 sm:w-auto btn-outline-secondary"
-            @click="router.go(-1)"
+              class="flex w-1/2 items-center justify-center gap-x-2 sm:w-auto btn-outline-secondary"
+              @click="router.go(-1)"
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="h-5 w-5 rtl:rotate-180"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="h-5 w-5 rtl:rotate-180"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
               />
             </svg>
 
@@ -47,8 +51,8 @@ const router = useRouter();
           </button>
 
           <button
-            class="w-1/2 sm:w-auto btn-primary"
-            @click="router.push({ path: '/' })"
+              class="w-1/2 sm:w-auto btn-primary"
+              @click="router.push({ path: '/' })"
           >
             Take me home
           </button>
@@ -57,9 +61,9 @@ const router = useRouter();
 
       <div class="relative mt-12 w-full lg:mt-0 lg:w-1/2">
         <img
-          class="w-full max-w-lg lg:mx-auto"
-          src="https://merakiui.com/images/components/illustration.svg"
-          alt=""
+            class="w-full max-w-lg lg:mx-auto"
+            src="https://merakiui.com/images/components/illustration.svg"
+            alt=""
         />
       </div>
     </div>

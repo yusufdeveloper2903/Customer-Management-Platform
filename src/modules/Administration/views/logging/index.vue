@@ -1,20 +1,18 @@
 <script setup lang="ts">
-//Imported files
+//IMPORTED FILES
 import {headerLoggingLeft, headerLoggingRight} from "@/modules/Administration/constants";
 import Tab from "@/components/Tab/Tab.vue"
 import Tabs from "@/components/Tab/Tabs.vue"
-import {administrationStore} from '../../store/index'
+import administrationStore from '../../store/index'
 import {
+  onMounted,
   ref,
 } from "vue"
 import dayjs from 'dayjs'
-import {useI18n} from 'vue-i18n';
 import {watchDebounced} from '@vueuse/core';
 
 
-//Declared variables
-
-const {locale} = useI18n()
+//DECLARED VARIABLES
 const administrationStorage = administrationStore()
 const isLoading = ref(false)
 const isLoading2 = ref(false)
@@ -35,7 +33,15 @@ let filter = ref({
   limit: 10,
 })
 
-//Function
+//MOUNTED
+onMounted(async () => {
+  await refresh()
+  await refresh2()
+
+})
+
+
+//FUNCTIONS
 const refresh = async () => {
   isLoading.value = true
   try {
@@ -45,7 +51,6 @@ const refresh = async () => {
     isError.value = true
   }
 }
-refresh()
 const refresh2 = async () => {
   isLoading2.value = true
   try {
@@ -55,7 +60,6 @@ const refresh2 = async () => {
     isError.value = true
   }
 }
-refresh2()
 const downloadExcel = async () => {
   isLoading.value = true
   await administrationStorage.FETCH_JOURNAL_AUTHORIZATION_LIST_EXCEL({excel: true}).then((res) => {
@@ -117,6 +121,7 @@ const onInput2 = async (event: number) => {
 }
 
 
+//WATCHERS
 watchDebounced(() => params.value.search, async function () {
   params.value.page = 1
   refresh()
@@ -256,14 +261,6 @@ const onPageSizeChangedRight = async (event: number) => {
                     {{ $t(header.text) }}
                   </template>
 
-<!--                  <template #header-region="header">-->
-<!--                    {{ $t(header.text) }}-->
-<!--                  </template>-->
-
-<!--                  <template #header-district="header">-->
-<!--                    {{ $t(header.text) }}-->
-<!--                  </template>-->
-
                   <template #header-ip_address="header">
                     {{ $t(header.text) }}
                   </template>
@@ -282,18 +279,6 @@ const onPageSizeChangedRight = async (event: number) => {
                       {{ items.user.username }}
                     </div>
                   </template>
-
-<!--                  <template #item-region="items">-->
-<!--                    <div class="flex justify-left" style="overflow-wrap: anywhere;">-->
-<!--                      {{ items.user.region_parent && items.user.region_parent[locale] }}-->
-<!--                    </div>-->
-<!--                  </template>-->
-
-<!--                  <template #item-district="items">-->
-<!--                    <div class="flex justify-left" style="overflow-wrap: anywhere;">-->
-<!--                      {{ items.user.region && items.user.region[locale] }}-->
-<!--                    </div>-->
-<!--                  </template>-->
 
                   <template #item-ip_address="items">
                     <div class="flex justify-left" style="overflow-wrap: anywhere;">
@@ -429,15 +414,6 @@ const onPageSizeChangedRight = async (event: number) => {
                   <template #header-user="header">
                     {{ $t(header.text) }}
                   </template>
-
-<!--                  <template #header-region="header">-->
-<!--                    {{ $t(header.text) }}-->
-<!--                  </template>-->
-
-<!--                  <template #header-district="header">-->
-<!--                    {{ $t(header.text) }}-->
-<!--                  </template>-->
-
                   <template #header-ip_address="header">
                     {{ $t(header.text) }}
                   </template>
@@ -456,39 +432,22 @@ const onPageSizeChangedRight = async (event: number) => {
                       {{ items.user.username }}
                     </div>
                   </template>
-
-<!--                  <template #item-region="items">-->
-<!--                    <div class="flex justify-left" style="overflow-wrap: anywhere;">-->
-<!--                      {{ items.user.region_parent }}-->
-<!--                    </div>-->
-<!--                  </template>-->
-
-<!--                  <template #item-district="items">-->
-<!--                    <div class="flex justify-left" style="overflow-wrap: anywhere;">-->
-<!--                      {{ items.user.region && items.user.region[locale] }}-->
-<!--                    </div>-->
-<!--                  </template>-->
-
                   <template #item-ip_address="items">
                     <div class="flex justify-left" style="overflow-wrap: anywhere;">
                       {{ items.ip_address }}
                     </div>
                   </template>
-
                   <template #item-mac_address="items">
                     <div class="flex justify-left" style="overflow-wrap: anywhere;">
                       {{ items.mac_address }}
                     </div>
                   </template>
-
                   <template #item-datetime="items">
                     <div class="flex justify-left" style="overflow-wrap: anywhere;">
                       {{ dayjs(items.datetime).format("DD-MM-YYYY HH:mm") }}
                     </div>
                   </template>
-
                 </EasyDataTable>
-
                 <TwPagination
                     class="tw-pagination"
                     :current="filter.page"
@@ -501,18 +460,9 @@ const onPageSizeChangedRight = async (event: number) => {
                 />
               </div>
             </div>
-
-
           </div>
         </Tab>
       </Tabs>
     </div>
-
-
   </div>
 </template>
-
-
-<style lang="scss">
-
-</style>

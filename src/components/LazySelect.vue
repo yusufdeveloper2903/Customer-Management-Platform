@@ -1,19 +1,19 @@
 <template>
   <v-select
-    id="select"
-    ref="selectV"
-    v-model="selected"
-    :label="label"
-    :reduce="reduce"
-    :options="localeOptions"
-    :get-option-label="getOptionLabel"
-    :placeholder="placeholder"
-    :multiple="multiple"
-    :filterable="false"
-    direction="top"
-    @input="onSelected"
-    @search="onSearch"
-    @open="onOpen"
+      id="select"
+      ref="selectV"
+      v-model="selected"
+      :label="label"
+      :reduce="reduce"
+      :options="localeOptions"
+      :get-option-label="getOptionLabel"
+      :placeholder="placeholder"
+      :multiple="multiple"
+      :filterable="false"
+      direction="top"
+      @input="onSelected"
+      @search="onSearch"
+      @open="onOpen"
   >
     <template #list-footer>
       <li v-show="options.next" ref="load" class="loader">
@@ -21,7 +21,7 @@
       </li>
     </template>
 
-    <template #no-options> {{ $t("no_matching_options") }} </template>
+    <template #no-options> {{ $t("no_matching_options") }}</template>
   </v-select>
 </template>
 
@@ -61,7 +61,8 @@ export default {
     getOptionLabel: {
       type: Function,
       required: false,
-      default: () => {},
+      default: () => {
+      },
     },
     reduce: {
       type: Function,
@@ -76,7 +77,8 @@ export default {
     fetch: {
       type: Function,
       required: false,
-      default: () => {},
+      default: () => {
+      },
     },
     pageSize: {
       type: Number,
@@ -132,13 +134,13 @@ export default {
       this.$emit("input", value);
     },
     onOpen() {
-      const { uid } = this.$refs.selectV;
+      const {uid} = this.$refs.selectV;
       setTimeout(() => {
         this.select = document.getElementById(`vs${uid}__listbox`);
         this.select.addEventListener("scroll", () => {
           if (
-            this.select.scrollTop + this.select.clientHeight >=
-            this.select.scrollHeight - 5
+              this.select.scrollTop + this.select.clientHeight >=
+              this.select.scrollHeight - 5
           ) {
             this.loadOptions();
             this.oldPosition = this.select.scrollTop;
@@ -186,9 +188,9 @@ export default {
           this.nextPage = this.options.next;
           this.localeOptions.push(...this.options.results);
           this.$nextTick(() => {
-            const { uid } = this.$refs.selectV;
+            const {uid} = this.$refs.selectV;
             document.getElementById(`vs${uid}__listbox`).scrollTop =
-              this.oldPosition;
+                this.oldPosition;
           });
         }
       }

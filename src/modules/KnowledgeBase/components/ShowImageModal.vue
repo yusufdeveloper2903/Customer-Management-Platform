@@ -1,19 +1,19 @@
 <script setup lang="ts">
 
-interface Props {
+//INTERFACE
+interface PropsShowImage {
   image: string;
   id: string;
 }
 
-const props = defineProps<Props>();
 
-// const hideModal = () => {
-//   UIkit.modal(`${props.id || '#file-modal'}`).hide()
-// }
+//DECLARED VARIABLES
+const props = defineProps<PropsShowImage>();
+
 </script>
 
 <template>
-  <div :id="id" class="uk-flex-top" uk-modal>
+  <div :id="props.id" class="uk-flex-top" uk-modal>
     <div
         class="uk-modal-dialog uk-margin-auto-vertical rounded-md overflow-hidden"
     >

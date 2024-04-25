@@ -66,24 +66,21 @@
 </template>
 
 <script setup lang="ts">
-//Imported Files
 
+//IMPORTED FILES
 import {useSidebarStore} from "@/stores/layoutConfig";
 import {useRouter} from "vue-router";
 
-defineProps<{ list: Array<T> }>();
 
-//Declared variables
-
+//DECLARED VARIABLES
 const store = useSidebarStore();
 const router = useRouter();
+defineProps<{ list: Array<T> }>();
 
-//Functions
-
+//FUNCTIONS
 const onBefore = (item: any) => {
   if (!item.active) {
     router.go(-1);
-
   }
 };
 

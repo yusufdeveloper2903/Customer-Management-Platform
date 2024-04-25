@@ -5,6 +5,7 @@ export interface Results<T> {
     results: T[];
 }
 
+
 export interface SmsTemplate {
     id: number;
     title: {

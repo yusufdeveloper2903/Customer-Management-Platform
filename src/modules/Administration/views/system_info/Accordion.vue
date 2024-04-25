@@ -1,7 +1,9 @@
 <script setup lang="ts">
-//Imported files
 
+
+//IMPORTED FILES
 import {ref} from "vue";
+
 defineProps({
   title: {
     type: String,
@@ -16,6 +18,9 @@ defineProps({
     default: true,
   },
 });
+
+
+//DECLARED VARIABLES
 const emit = defineEmits(['openEditModal'])
 let isOpen = ref();
 
