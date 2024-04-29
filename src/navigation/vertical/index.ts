@@ -13,6 +13,12 @@ export default [
         permissions: ["admin"],
     },
     {
+        name: "Stories",
+        icon: "Users Group Rounded",
+        path: "/stories",
+        permissions: ["admin"],
+    },
+    {
         name: "Transactions",
         path: "/transactions",
         icon: "File",

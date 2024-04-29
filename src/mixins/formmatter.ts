@@ -10,6 +10,8 @@ export const objectToFormData = (obj: any) => {
             } else {
                 formData.append(property, obj[property]);
             }
+        } else if (obj[property] == null) {
+            // formData.append(property, obj[property]);
         } else {
             formData.append(property, obj[property]);
         }

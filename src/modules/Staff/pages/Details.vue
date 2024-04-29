@@ -13,7 +13,7 @@ import {objectToFormData} from "@/mixins/formmatter";
 
 //DECLARED VARIABLES
 const store = staff()
-const {locale, t} = useI18n();
+const {t} = useI18n();
 const imageUrl = ref<string>("")
 const isPasswordShown = ref<boolean>(false)
 const router = useRouter();
@@ -37,9 +37,9 @@ onMounted(async () => {
     store.getStaffById(Number(route.params.id)).then(() => {
       userData.value = store.staff;
       userData.value.password = store.staff.show_password
+      userData.value.role = store.staff.role?.id
       if (store.staff.photo) {
         imageUrl.value = store.staff.photo;
-        userData.value.photo = null;
       }
     });
   }
@@ -216,15 +216,11 @@ const validate: Ref<Validation> = useVuelidate(rules, userData);
             </label>
           </div>
 
-
           <label class="mt-5 mb-1 block text-xs"> {{ $t("Role") }}:
             <v-select
                 v-model="userData.role"
-                :clearable="false"
                 :options="store.users_roles.results"
-                :getOptionLabel="
-                (role) => (role.name && role.name[locale]) || role.name
-              "
+                :getOptionLabel="role => role.name"
                 :reduce="(v) => v.id"
                 :placeholder="$t('Role')"
                 :class="validate.role.$errors.length ? 'required-input' : ''"

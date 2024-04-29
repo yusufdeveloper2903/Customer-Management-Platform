@@ -10,7 +10,8 @@ import {
     VersionControl,
     Products,
     Link,
-    Phones
+    Phones,
+    Polls
 
 } from "../interfaces";
 
@@ -19,6 +20,10 @@ export default defineStore("knowledgeBase", {
     state: () => {
         return {
             knowledge: '',
+            pollList: {
+                count: 0,
+                results: [] as Polls[]
+            } as Results<Polls>,
             smsTemplateList: {
                 count: 0,
                 results: [] as SmsTemplate[],
@@ -74,6 +79,10 @@ export default defineStore("knowledgeBase", {
             const {data} = await $axios.get("/knowledge_base/sms_template/", {params})
             this.smsTemplateList = data
         },
+        async getPolls(params: any) {
+            const {data} = await $axios.get("knowledge_base/poll/", {params})
+            this.pollList = data
+        },
         async getNewsTemplate(params: Params) {
             const {data} = await $axios.get(`/knowledge_base/news_template/`, {params});
             this.newTemplate = data;
@@ -120,6 +129,9 @@ export default defineStore("knowledgeBase", {
         createSmsTemplate(data: any) {
             return $axios.post("/knowledge_base/sms_template/", data);
         },
+        createPoll(data: any) {
+            return $axios.post("knowledge_base/poll/", data)
+        },
         createNewsTemplate(data: any) {
             return $axios.post(`/knowledge_base/news_template/`, data);
         },
@@ -155,6 +167,9 @@ export default defineStore("knowledgeBase", {
         updateSmsTemplate(data) {
             return $axios.patch(`/knowledge_base/sms_template/${data.id}/`, data);
         },
+        updatePoll(data: any) {
+            return $axios.patch(`knowledge_base/poll/${data.id}/`, data);
+        },
         updateNewsTemplate(data) {
             return $axios.patch(`/knowledge_base/news_template/${data.get("id")}/`, data);
         },
@@ -187,6 +202,9 @@ export default defineStore("knowledgeBase", {
         //DELETE REQUEST
         deleteSmsTemplate(id: number | null) {
             return $axios.delete(`/knowledge_base/sms_template/${id}/`);
+        },
+        detelePoll(id: number | null) {
+            return $axios.delete(`knowledge_base/poll/${id}`)
         },
         deleteRegion(id: number | null) {
             return $axios.delete(`/knowledge_base/region/${id}/`);

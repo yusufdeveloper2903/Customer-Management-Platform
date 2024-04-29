@@ -14,13 +14,11 @@ import TermsAndConditions from "../components/TermsAndConditions.vue"
 import Contacts from "../components/Links.vue";
 import CreateRegions from '../components/Regions.vue'
 import {ref} from 'vue'
+import Polls from '../components/Polls.vue'
 
 
 //DECLARED VARIABLES
 const knowledge = ref('')
-
-
-
 
 
 //FUNCTIONS
@@ -39,6 +37,10 @@ const selectedTitle = (val: any) => {
       <Tab title="sms_template">
         <SMSTemplate :knowledge="knowledge"/>
       </Tab>
+      <Tab title="Polls">
+        <Polls :knowledge="knowledge"/>
+      </Tab>
+
 
       <Tab title="News template">
         <NewsTemplate :knowledge="knowledge"/>

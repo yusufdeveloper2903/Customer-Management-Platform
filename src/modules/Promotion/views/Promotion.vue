@@ -21,7 +21,7 @@ const promotionStorage = promotionBase()
 const isLoading = ref(false);
 const params = reactive({
   page_size: 10,
-  search: "",
+  search: null,
   page: 1
 });
 const editData = ref<EditData>({

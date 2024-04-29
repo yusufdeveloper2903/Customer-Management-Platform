@@ -78,6 +78,7 @@ onMounted(() => {
 });
 
 function breadCrumbStart(newPath) {
+  // console.log(newPath, 'newPath')
   localStorage.setItem('sidebar', newPath)
   switch (newPath) {
     case "dashboard":
@@ -88,6 +89,11 @@ function breadCrumbStart(newPath) {
     case "users":
       BreadcrumbList.value = [
         {title: 'Users', active: true},
+      ];
+      break;
+    case "stories":
+      BreadcrumbList.value = [
+        {title: 'Stories', active: true},
       ];
       break;
     case "user detail":

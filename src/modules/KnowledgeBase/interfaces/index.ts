@@ -18,6 +18,12 @@ export interface SmsTemplate {
     };
 }
 
+export interface Polls {
+    id: number | null;
+    name: string;
+    is_active: boolean;
+}
+
 export interface NewsTemplate {
     id: number | null;
     title: string;

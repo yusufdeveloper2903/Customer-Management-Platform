@@ -16,7 +16,24 @@ export const categoryFields = [
         value: "actions",
     },
 ];
-
+export const PollsFields = [
+    {
+        text: "ID",
+        value: "id",
+    },
+    {
+        text: "name",
+        value: "name",
+    },
+    {
+        text: "Status",
+        value: "is_active",
+    },
+    {
+        text: "actions",
+        value: "actions",
+    },
+];
 export const categoryitems = [
     {
         id: 1,
@@ -66,7 +83,7 @@ export const introItems = [
     },
 ];
 
-export const locationFields = [
+export const SmsFields = [
     {
         text: "ID",
         value: "id",
