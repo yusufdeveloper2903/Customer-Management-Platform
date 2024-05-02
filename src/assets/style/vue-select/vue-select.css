@@ -150,11 +150,12 @@
   -moz-appearance: none;
   appearance: none;
   display: flex;
-  padding: 0 0 4px;
+  padding: 0 0 0.4rem;
   background: none;
   border: var(--vs-border-width) var(--vs-border-style) var(--vs-border-color);
-  border-radius: var(--vs-border-radius);
-  white-space: normal
+  border-radius: 0.5rem;
+  white-space: normal;
+  margin-top:0.29rem
 }
 
 .vs__selected-options {

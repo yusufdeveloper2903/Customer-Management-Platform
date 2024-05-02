@@ -38,6 +38,9 @@ onMounted(async () => {
   if (sms == 'sms sending') {
     await refresh();
     await store.getStatus()
+  } else {
+    await refresh();
+    await store.getStatus()
   }
 })
 

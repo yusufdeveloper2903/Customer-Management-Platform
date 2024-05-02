@@ -69,7 +69,7 @@ export default defineStore("sms", {
             return $axios.patch(`/knowledge_base/news/${data.id || data.get('id')}/`, data);
         },
         updateSmsSending(data) {
-            return $axios.patch(`/knowledge_base/sms/${data.get('id')}/`, data);
+            return $axios.patch(`/knowledge_base/sms/${data.id}/`, data);
         },
 
 

@@ -62,11 +62,11 @@ const onSubmit = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
   const formData = new FormData()
-  formData.append('title', location.title)
+  formData.append('title', location.title_uz)
   formData.append('title_ru', location.title_ru)
   formData.append('title_kr', location.title_kr)
   formData.append('title_uz', location.title_uz)
-  formData.append('address', location.address)
+  formData.append('address', location.address_uz)
   formData.append('address_uz', location.address_uz)
   formData.append('address_kr', location.address_kr)
   formData.append('address_ru', location.address_ru)

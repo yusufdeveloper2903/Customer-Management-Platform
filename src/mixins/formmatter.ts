@@ -1,8 +1,7 @@
-export const objectToFormData = (obj: any) => {
+export const objectToFormData = (photo: any, obj: any) => {
     const formData = new FormData();
     for (const property in obj) {
-        console.log(obj[property], 'ob')
-        if (property == 'file' || property == 'photo') {
+        if (property == photo ) {
             if (obj[property] == null) {
                 formData.append(property, '');
             } else if (typeof obj[property] == 'string') {  // DOES NOT CUT THIS PART IT'S IMPORTANT TO VALIDATION

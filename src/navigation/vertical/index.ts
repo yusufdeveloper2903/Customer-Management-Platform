@@ -14,7 +14,7 @@ export default [
     },
     {
         name: "Stories",
-        icon: "Users Group Rounded",
+        icon: "File",
         path: "/stories",
         permissions: ["admin"],
     },

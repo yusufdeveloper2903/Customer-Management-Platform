@@ -18,6 +18,7 @@ const {t} = useI18n()
 const store = knowledgeBase()
 const isLoading = ref(false);
 let smsTemplateList = ref<object[]>([]);
+
 const userId = ref<number | null>(null);
 const props = defineProps<{
   knowledge: string
@@ -46,7 +47,10 @@ onMounted(async () => {
   let knowledgeBase = localStorage.getItem('knowledgeBase')
   if (knowledgeBase == 'sms_template') {
     await refresh()
+  } else {
+    await refresh()
   }
+
 })
 
 

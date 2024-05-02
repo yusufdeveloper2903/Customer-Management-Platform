@@ -14,7 +14,6 @@ import clientsStore from "@/modules/Users/store/index"
 import {watchDebounced} from "@vueuse/core";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
-import {SmsSendingData} from '../../interfaces'
 import {addFields} from '../../constants/index'
 
 //DECLARED VARIABLES
@@ -34,20 +33,20 @@ const params = reactive({
   page: 1,
   search: null,
 });
-const smsSendingData = ref<SmsSendingData>({
+const smsSendingData = ref<any>({
   start_time: "",
-  template: '',
+  template: null,
   description: '',
   receivers: [],
   title: '',
+  id: null
 })
 
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
       await refresh()
-      await templateStore.getSmsTemplate()
-
+      await templateStore.getSmsTemplate({page_size: 1000})
       if (route.params.id) {
         await store.getSmsSendingDetail({id: Number(route.params.id)})
         await store.getReseivers({
@@ -59,6 +58,7 @@ onMounted(async () => {
         })
         smsSendingData.value.start_time = store.smsSendingDetail.start_time;
         smsSendingData.value.description = store.smsSendingDetail.description
+        smsSendingData.value.title = store.smsSendingDetail.title
         smsSendingData.value.template = store.smsSendingDetail.template
       }
     }
@@ -81,34 +81,27 @@ const refresh = async () => {
 async function saveData() {
   const success = await validate.value.$validate();
   if (!success) return;
-  const formData = new FormData()
-  if (smsSendingData.value.title) {
-    formData.append('title', smsSendingData.value.title)
-    formData.append('description', smsSendingData.value.description)
-  }
-  if (route.params.id) {
-    formData.append('id', String(route.params.id))
-  }
-  if (smsSendingData.value.start_time) {
-    formData.append('start_time', String(smsSendingData.value.start_time))
-  }
+
   if (itemSelected.value.length) {
     itemSelected.value.forEach(el => {
-      formData.append('receivers', el.id)
+      smsSendingData.value.receivers.push(el.id)
     })
   } else {
-    formData.append('receivers', 'null')
+    smsSendingData.value.receivers = []
+  }
+  if (smsSendingData.value.template) {
+    smsSendingData.value.template = smsSendingData.value.template?.id
+  } else {
+    smsSendingData.value.template = ''
   }
 
-  if (smsSendingData.value.template) {
-    formData.append('template', String(smsSendingData.value.template.id))
-  }
   if (route.params.id) {
+    smsSendingData.value.id = Number(route.params.id)
     try {
-      store.updateSmsSending(formData).then(() => {
-        router.push("/sms-template");
-        toast.success(t("updated_successfully"));
-      })
+      await store.updateSmsSending(smsSendingData.value)
+      await router.push("/sms-template");
+      toast.success(t("updated_successfully"));
+
     } catch (error: any) {
       if (error) {
         toast.error(t('error'));
@@ -116,10 +109,9 @@ async function saveData() {
     }
   } else {
     try {
-      store.createSmsSending(formData).then(() => {
-        router.push("/sms-template");
-        toast.success(t("created_successfully"));
-      })
+      await store.createSmsSending(smsSendingData.value)
+      await router.push("/sms-template");
+      toast.success(t("created_successfully"));
     } catch (error: any) {
       if (error) {
         toast.error(t('error'));
@@ -203,7 +195,6 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
           </p>
         </div>
       </div>
-
       <div class="uk-margin">
         <label for="form-stacked-text">{{ $t('template') }}</label>
         <div class="uk-form-controls">

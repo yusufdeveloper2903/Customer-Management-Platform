@@ -10,7 +10,7 @@ import {toast} from "vue3-toastify";
 import UIkit from "uikit";
 import {useRouter} from "vue-router";
 import ShowFileModal from "@/modules/KnowledgeBase/components/ShowImageModal.vue";
-import {EditData} from '../../interfaces'
+import {EditDataNews} from '../../interfaces'
 import {watchDebounced} from "@vueuse/core";
 
 //DECLARED VARIABLES
@@ -31,12 +31,12 @@ const params = reactive({
 });
 const image = ref<string>("");
 const imageCard = ref();
-const editData = ref<EditData>({
+const editData = ref<EditDataNews>({
   id: null,
-  title: {
-    uz: "",
-    ru: ""
-  },
+  title:'',
+  title_uz:'',
+  title_ru:'',
+  title_kr:'',
   file: "",
   start_time: "",
   status: ""
@@ -163,7 +163,7 @@ watch(() => props.sms, async function (val) {
           />
         </div>
 
-        <div class="md:w-1/2 md:m-0 ">
+        <div class="md:w-1/2 ">
           <label for="role" class="dark:text-gray-300">
             {{ $t("Status") }}
           </label>
@@ -178,7 +178,7 @@ watch(() => props.sms, async function (val) {
           </v-select>
         </div>
 
-        <div class="md:w-1/2 md:m-0 ">
+        <div class="md:w-1/2 ">
           <label for="from" class="dark:text-gray-300">
             {{ $t("from") }}
           </label>

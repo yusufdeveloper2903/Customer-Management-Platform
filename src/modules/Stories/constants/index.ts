@@ -28,3 +28,29 @@ export const storiesTable = [
         value: "actions",
     },
 ];
+export const storiesDetailTable = [
+    {
+        text: "ID",
+        value: "story_id",
+    },
+    {
+        text: "Photo",
+        value: 'background'
+    },
+    {
+        text: 'Button Name',
+        value: 'button_name',
+    },
+    {
+        text: "Button Url",
+        value: 'button_url',
+    },
+    {
+        text: 'Duration',
+        value: 'duration',
+    },
+    {
+        text: "actions",
+        value: "actions",
+    },
+]

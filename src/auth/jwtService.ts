@@ -12,6 +12,7 @@ import router from "@/router";
 
 //EXPORTED FUNCTIONS
 export function login(...args: any[]) {
+    localStorage.setItem('knowledgeBase', 'sms_template');
     return $axios.post(loginEndpoint, ...args, {
         headers: {no_add_token: true},
     });
@@ -22,7 +23,6 @@ export async function logout(isClearOnly: boolean = true): Promise<void> {
 
     document.cookie = "access=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
     await router.push("/login");
 }
 

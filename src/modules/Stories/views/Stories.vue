@@ -7,28 +7,19 @@ import StoriesStore from ".././store/index";
 import {nextTick, onMounted, reactive, ref} from "vue";
 import {useI18n} from "vue-i18n";
 import UIKit from "uikit";
-import CreateEditStories from "../components/CreateEditStories.vue";
-import {storiesHeaders} from "../interfaces/index";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
 import ShowPhotoGlobal from "@/components/ShowPhotoGlobal.vue";
+import {useRouter} from "vue-router";
+
 
 //DECLARED VARIABLES
+let storiesList = ref<object[]>([]);
 const {t} = useI18n()
+const router = useRouter()
 const store = StoriesStore();
 const isLoading = ref(false);
 const itemToDelete = ref<number | null>(null);
-const dataToEdit = ref<storiesHeaders>({
-  id: null,
-  subtitle: '',
-  subtitle_uz: '',
-  subtitle_kr: '',
-  subtitle_ru: '',
-  start_date: '',
-  end_date: '',
-  is_active: false,
-  avatar: ''
-});
 const params = reactive({
   page: 1,
   page_size: 10,
@@ -54,7 +45,17 @@ watchDebounced(() => params.search, function () {
 
 //FUNCTIONS
 const refresh = async () => {
-  await store.getStoriesList(params);
+  isLoading.value = true;
+  try {
+    await store.getStoriesList(params);
+    storiesList.value = store.storiesList.results
+    isLoading.value = false;
+  } catch (error: any) {
+    toast.error(
+        t('error')
+    );
+  }
+
 };
 
 
@@ -109,7 +110,7 @@ const onShowFile = (item: any) => {
         />
       </label>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-              uk-toggle="target: #stories-modal" @click="dataToEdit = {}">
+              @click="router.push('/stories-detail')">
         {{ $t("Add") }}
       </button>
     </div>
@@ -118,7 +119,7 @@ const onShowFile = (item: any) => {
         hide-footer
         :loading="isLoading"
         :headers="storiesTable"
-        :items="store.storiesList.results"
+        :items="storiesList"
     >
       <template #header="header">
         {{ $t(header.text) }}
@@ -159,7 +160,8 @@ const onShowFile = (item: any) => {
       </template>
       <template #item-actions="data">
         <div class="flex my-4 justify-left">
-          <button class="btn-warning btn-action" uk-toggle="target: #stories-modal" @click="dataToEdit = data">
+          <button class="btn-warning btn-action" uk-toggle="target: #stories-modal"
+                  @click="router.push(`/stories-detail/${data.id}`)">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>
           <button
@@ -186,6 +188,5 @@ const onShowFile = (item: any) => {
     />
   </div>
   <DeleteModal @delete-action="deleteAction" id="stories-main-delete-modal"/>
-  <CreateEditStories :edit-data="dataToEdit" @refresh="refresh"/>
   <ShowPhotoGlobal :image="image" id="stories-modal-image" ref="imageCard"/>
 </template>

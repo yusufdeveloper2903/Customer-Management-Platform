@@ -55,7 +55,7 @@ const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
   const formData = new FormData()
-  formData.append('title', productsData.value.title)
+  formData.append('title', productsData.value.title_uz)
   formData.append('title_uz', productsData.value.title_uz)
   formData.append('title_kr', productsData.value.title_kr)
   formData.append('title_ru', productsData.value.title_ru)
@@ -63,7 +63,7 @@ const updateDeal = async () => {
   formData.append('quantity', productsData.value.quantity)
   formData.append('measurement_type', productsData.value.measurement_type)
   formData.append('price', productsData.value.price)
-  formData.append('description', productsData.value.description)
+  formData.append('description', productsData.value.description_uz)
   formData.append('description_uz', productsData.value.description_uz)
   formData.append('description_kr', productsData.value.description_kr)
   formData.append('description_ru', productsData.value.description_ru)

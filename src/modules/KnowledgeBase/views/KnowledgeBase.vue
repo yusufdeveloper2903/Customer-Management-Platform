@@ -20,7 +20,6 @@ import Polls from '../components/Polls.vue'
 //DECLARED VARIABLES
 const knowledge = ref('')
 
-
 //FUNCTIONS
 const selectedTitle = (val: any) => {
   localStorage.setItem('knowledgeBase', val)

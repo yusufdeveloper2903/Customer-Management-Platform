@@ -14,7 +14,6 @@ import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import FileInput from "@/components/FileInput/FileInput.vue";
 import {watchDebounced} from "@vueuse/core";
-import {NewsData} from '../../interfaces'
 import {newsHeader} from '../../constants/index'
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
@@ -31,7 +30,7 @@ let select = ref(false)
 const loading = ref(false);
 const clientsStorage = clientsStore()
 let lang = ref<string | null>('')
-const newsData = ref<NewsData>({
+const newsData = ref<any>({
   title_ru: '',
   title_uz: '',
   title_kr: '',
@@ -45,13 +44,13 @@ const newsData = ref<NewsData>({
   status: '',
   url: "",
   receivers: [],
-  template: {},
+  template: null,
   enable_push_notify: false
 })
 const params = reactive({
   page_size: 10,
   page: 1,
-  search: "",
+  search: null,
 });
 
 
@@ -81,12 +80,16 @@ watch(() => newsData.value.template, (val: any) => {
 //MOUNTED
 onMounted(async () => {
   await refresh()
-  await store.getStatus()
-  await newTemplate.getNewsTemplate({page_size: 1000})
-  lang.value = localStorage.getItem('last-locale')
+
   if (route.params.id) {
     await store.getNewsDetail({id: Number(route.params.id)})
-    await store.getReseivers({object_id: route.params.id, notification_type: 'news', search: params.search, page: params.page, page_size: params.page_size})
+    await store.getReseivers({
+      object_id: route.params.id,
+      notification_type: 'news',
+      search: params.search,
+      page: params.page,
+      page_size: params.page_size
+    })
     newsData.value.start_time = store.newsListDetail.start_time;
     newsData.value.title = store.newsListDetail.title
     newsData.value.title_ru = store.newsListDetail.title_ru
@@ -102,6 +105,9 @@ onMounted(async () => {
     newsData.value.template = store.newsListDetail.template
     newsData.value.enable_push_notify = store.newsListDetail.enable_push_notify
   }
+  await store.getStatus()
+  await newTemplate.getNewsTemplate({page_size: 1000})
+  lang.value = localStorage.getItem('last-locale')
 })
 
 
@@ -147,24 +153,30 @@ const saveData = async () => {
   if (newsData.value.title_uz) {
     formData.append('title', newsData.value.title_uz)
     formData.append('title_uz', newsData.value.title_uz)
-  } else if (newsData.value.title_ru) {
+  }
+  if (newsData.value.title_ru) {
     formData.append('title_ru', newsData.value.title_ru)
 
-  } else if (newsData.value.title_kr) {
+  }
+  if (newsData.value.title_kr) {
     formData.append('title_kr', newsData.value.title_kr)
   }
   if (newsData.value.description_uz) {
     formData.append('description', newsData.value.description_uz)
     formData.append('description_uz', newsData.value.description_uz)
-  } else if (newsData.value.description_ru) {
+  }
+  if (newsData.value.description_ru) {
     formData.append('description_ru', newsData.value.description_ru)
 
-  } else if (newsData.value.description_kr) {
+  }
+  if (newsData.value.description_kr) {
     formData.append('description_kr', newsData.value.description_kr)
-  } else if (newsData.value.start_time) {
+  }
+  if (newsData.value.start_time) {
     formData.append('start_time', newsData.value.start_time)
-  } else if (newsData.value.status) {
-    formData.append('status', newsData.value.status)
+  }
+  if (newsData.value.status) {
+    formData.append('status', newsData.value.status?.id)
   }
   formData.append('enable_push_notify', String(newsData.value.enable_push_notify))
   if (itemSelected.value.length) {
@@ -172,10 +184,15 @@ const saveData = async () => {
       formData.append('receivers', el.id)
     })
   } else {
-    formData.append('receivers', 'null')
+    formData.append('receivers', '[]')
+
   }
+
   if (newsData.value.template) {
     formData.append('template', newsData.value.template?.id)
+  } else {
+    formData.append('template', '')
+
   }
   if (route.params.id) {
     try {
@@ -274,7 +291,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <div class="uk-margin">
             <label for="form-stacked-text">{{ $t('name') + ' ' + $t('UZ') }}</label>
             <div class="uk-form-controls">
-              <input @input="newsData.template = {}" v-model="newsData.title_uz" class="form-input"
+              <input @input="newsData.template = null" v-model="newsData.title_uz" class="form-input"
                      :class="validate.title_uz.$errors.length ? 'required-input' : ''"/>
               <p
                   v-for="error in validate.title_uz.$errors"
@@ -289,7 +306,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
             <label for="form-stacked-text">{{ $t('description') + ' ' + $t('UZ') }}</label>
             <div class="uk-form-controls">
           <textarea
-              @input="newsData.template = {}"
+              @input="newsData.template = null"
               v-model="newsData.description_uz"
               class="form-input" rows="5"/>
             </div>
@@ -301,7 +318,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <div class="uk-margin">
             <label for="form-stacked-text">{{ $t('name') + ' ' + $t('KR') }}</label>
             <div class="uk-form-controls">
-              <input @input="newsData.template = {}" :class="validate.title_kr.$errors.length ? 'required-input' : ''"
+              <input @input="newsData.template = null" :class="validate.title_kr.$errors.length ? 'required-input' : ''"
                      v-model="newsData.title_kr"
                      class="form-input"/>
               <p
@@ -317,7 +334,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
             <label for="form-stacked-text">{{ $t('description') + ' ' + $t('KR') }}</label>
             <div class="uk-form-controls">
           <textarea
-              @input="newsData.template = {}"
+              @input="newsData.template = null"
               v-model="newsData.description_kr"
               class="form-input" rows="5"/>
             </div>
@@ -328,7 +345,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <div class="uk-margin">
             <label for="form-stacked-text">{{ $t('name') + ' ' + $t('RU') }}</label>
             <div class="uk-form-controls">
-              <input @input="newsData.template = {}" :class="validate.title_ru.$errors.length ? 'required-input' : ''"
+              <input @input="newsData.template = null" :class="validate.title_ru.$errors.length ? 'required-input' : ''"
                      v-model="newsData.title_ru"
                      class="form-input"/>
               <p
@@ -344,7 +361,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
             <label for="form-stacked-text">{{ $t('description') + ' ' + $t('RU') }}</label>
             <div class="uk-form-controls">
           <textarea
-              @input="newsData.template = {}"
+              @input="newsData.template = null"
               v-model="newsData.description_ru"
               class="form-input" rows="5"/>
             </div>
@@ -398,7 +415,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
         </div>
         <EasyDataTable theme-color="#7367f0" :loading="loading" :headers="newsHeader"
                        v-model:items-selected="itemSelected"
-                       :items="receiversList "
+                       :items="receiversList"
                        @select-all="selectAllData"
                        hide-footer>
           <template #empty-message>

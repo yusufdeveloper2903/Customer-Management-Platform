@@ -60,11 +60,13 @@ const hideModal = () => {
 const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
-
+  newsTemplateData.value.title = newsTemplateData.value.title_uz;
+  newsTemplateData.value.description = newsTemplateData.value.description_uz;
   const {file, ...rest} = newsTemplateData.value;
+
   if (propData.editData.id) {
     try {
-      const fd = objectToFormData({
+      const fd = objectToFormData('file', {
         file: file || null,
         ...rest,
       });
@@ -81,7 +83,7 @@ const updateDeal = async () => {
     }
   } else {
     try {
-      const fd = objectToFormData({
+      const fd = objectToFormData('file', {
         file: file || null,
         ...rest,
       });
