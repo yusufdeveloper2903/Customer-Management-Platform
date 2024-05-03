@@ -106,7 +106,7 @@ const deleteSms = async () => {
     await store.deleteSmsSending(smsId.value)
     UIkit.modal("#sms_sending-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.smsSendingList.count - 1) % smsFilter.page > 0) {
+    if (store.smsSendingList.count > 1 && ((store.smsSendingList.count - 1) % smsFilter.page_size == 0)) {
       smsFilter.page = smsFilter.page - 1
       await refresh()
     } else {
@@ -141,7 +141,7 @@ const deleteSms = async () => {
           <label for="from" class="dark:text-gray-300">
             {{ $t("from") }}
           </label>
-          <VueDatePicker model-type="yyyy-MM-dd" :enable-time-picker="false"
+          <VueDatePicker auto-apply model-type="yyyy-MM-dd" :enable-time-picker="false"
                          v-model="smsFilter.start_time"></VueDatePicker>
         </div>
 
@@ -157,7 +157,7 @@ const deleteSms = async () => {
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="smsFields" :items="smsSendingList">
 
       <template #empty-message>
-        <span class="dark:text-neutral-400">{{ t('empty_text') }}</span>
+        <div>{{ $t('no_available_data') }}</div>
       </template>
 
       <template #header="data">

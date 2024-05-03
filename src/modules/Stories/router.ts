@@ -11,7 +11,7 @@ export default [
     {
         path: "/stories-detail",
         name: "stories-detail",
-        component: () => import("@/modules/Stories/components/CreateEditStories.vue"),
+        component: () => import("@/modules/Stories/pages/DetailStory.vue"),
         meta: {
             layout: "MainLayout",
             permissions: ['admin'],
@@ -20,7 +20,7 @@ export default [
     {
         path: "/stories-detail/:id",
         name: "stories-detail-id",
-        component: () => import("@/modules/Stories/components/CreateEditStories.vue"),
+        component: () => import("@/modules/Stories/pages/DetailStory.vue"),
         meta: {
             layout: "MainLayout",
             permissions: ['admin'],

@@ -26,7 +26,7 @@ const params = reactive({
 });
 const editData = ref<EditData>({
   id: null,
-  title:'',
+  title: '',
   title_ru: '',
   title_uz: '',
   title_kr: '',
@@ -40,7 +40,7 @@ const editData = ref<EditData>({
   end_date: '',
   description: '',
   is_published: false,
-  modified_date:''
+  modified_date: ''
 })
 
 
@@ -85,7 +85,7 @@ const deleteAction = async () => {
     await promotionStorage.deletePromotion(itemId.value)
     await UIkit.modal("#delete-promotion-item").hide();
     toast.success(t('deleted_successfully'));
-    if ((promotionStorage.promotionList.count - 1) % params.page_size == 0) {
+    if (promotionStorage.promotionList.count > 1 && ((promotionStorage.promotionList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh(params)
     } else {
@@ -125,7 +125,7 @@ const onGetData = async (val: any) => {
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="newsPromotionTable"
                    :items="promotionStorage.promotionList.results">
       <template #empty-message>
-        <span>{{ t("empty_text") }}</span>
+        <div>{{ $t('no_available_data') }}</div>
       </template>
 
       <template #header-title="header">

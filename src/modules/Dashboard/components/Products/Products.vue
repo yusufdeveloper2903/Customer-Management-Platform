@@ -37,6 +37,9 @@ const tableData = reactive([
         :items="tableData"
         hide-footer
     >
+      <template #empty-message>
+        <div>{{ $t('no_available_data') }}</div>
+      </template>
       <template #item-product="items">
         <div class="p-2 flex items-center">
           <img :src="items.product.img" class="w-[100px] rounded" />

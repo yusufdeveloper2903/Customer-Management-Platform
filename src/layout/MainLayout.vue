@@ -102,6 +102,12 @@ function breadCrumbStart(newPath) {
         {title: 'storiesDetail', active: true},
       ];
       break;
+    case "stories-detail":
+      BreadcrumbList.value = [
+        {title: 'Stories', active: false},
+        {title: 'storiesDetail', active: true},
+      ]
+      break;
     case "user detail":
       BreadcrumbList.value = [
         {title: 'Users', active: false},

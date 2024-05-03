@@ -40,7 +40,7 @@ onMounted(async () => {
 watchDebounced(() => params.search, function () {
   params.page = 1
   refresh()
-}, {deep: true, debounce: 500, maxWait: 500,})
+}, {deep: true, debounce: 500, maxWait: 5000})
 
 
 //FUNCTIONS
@@ -65,7 +65,7 @@ const deleteAction = async () => {
     await store.deleteStories(itemToDelete.value)
     await UIKit.modal("#stories-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.storiesList.count - 1) % params.page_size == 0) {
+    if (store.storiesList.count > 1 && ((store.storiesList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -121,6 +121,9 @@ const onShowFile = (item: any) => {
         :headers="storiesTable"
         :items="storiesList"
     >
+      <template #empty-message>
+        <div class="dark:text-white">{{ $t("no_available_data") }}</div>
+      </template>
       <template #header="header">
         {{ $t(header.text) }}
       </template>
@@ -160,7 +163,7 @@ const onShowFile = (item: any) => {
       </template>
       <template #item-actions="data">
         <div class="flex my-4 justify-left">
-          <button class="btn-warning btn-action" uk-toggle="target: #stories-modal"
+          <button class="btn-warning btn-action"
                   @click="router.push(`/stories-detail/${data.id}`)">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>

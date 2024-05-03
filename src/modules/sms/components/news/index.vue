@@ -33,10 +33,10 @@ const image = ref<string>("");
 const imageCard = ref();
 const editData = ref<EditDataNews>({
   id: null,
-  title:'',
-  title_uz:'',
-  title_ru:'',
-  title_kr:'',
+  title: '',
+  title_uz: '',
+  title_ru: '',
+  title_kr: '',
   file: "",
   start_time: "",
   status: ""
@@ -96,9 +96,9 @@ const deleteNews = async () => {
   isLoading.value = true
   try {
     await store.deleteNews(newsId.value)
-    UIkit.modal("#news-delete-modal").hide();
+    await UIkit.modal("#news-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.newsList.count - 1) % params.page_size == 0) {
+    if (store.newsList.count > 1 && ((store.newsList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -182,8 +182,8 @@ watch(() => props.sms, async function (val) {
           <label for="from" class="dark:text-gray-300">
             {{ $t("from") }}
           </label>
-          <VueDatePicker v-model="params.start_time" model-type="yyyy-MM-dd"
-                         :enable-time-picker="false"></VueDatePicker>
+          <VueDatePicker :enableTimePicker="false" auto-apply v-model="params.start_time" model-type="yyyy-MM-dd"
+                         ></VueDatePicker>
         </div>
 
       </form>
@@ -198,7 +198,7 @@ watch(() => props.sms, async function (val) {
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="newsFields" :items="newsList">
 
       <template #empty-message>
-        <span class="dark:text-neutral-400">{{ t('empty_text') }}</span>
+        <div>{{ $t('no_available_data') }}</div>
       </template>
 
       <template #header="data">

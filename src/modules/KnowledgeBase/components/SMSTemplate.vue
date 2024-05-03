@@ -74,7 +74,7 @@ const deleteAction = async () => {
     await store.deleteSmsTemplate(userId.value);
     UIkit.modal("#sms-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.smsTemplateList.count - 1) % params.page_size == 0) {
+    if (store.smsTemplateList.count > 1 && ((store.smsTemplateList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -134,7 +134,7 @@ const saveSmsTemplate = () => {
                    :items="smsTemplateList">
 
       <template #empty-message>
-        <span class="dark:text-neutral-400">{{ $t('empty_text') }}</span>
+        <div>{{ $t('no_available_data') }}</div>
       </template>
 
       <template #header-title="header">

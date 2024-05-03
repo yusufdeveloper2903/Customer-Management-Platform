@@ -97,7 +97,7 @@ const showUntieCardModal = (item) => {
 
           </li>
         </ul>
-        <h2 v-else class="text-center">{{ $t('no_data') }}</h2>
+        <h2 v-else class="text-center">{{ $t('no_available_data') }}</h2>
       </div>
     </div>
 

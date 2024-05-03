@@ -83,7 +83,7 @@ const deletePhone = async () => {
     await store.deletePhones(itemId.value)
     await UIkit.modal("#phone-delete").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.phonesList.count - 1) % params.page_size == 0) {
+    if (store.phonesList.count > 1 && ((store.phonesList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -169,7 +169,7 @@ const refresh = async () => {
       </tr>
       </tbody>
     </table>
-    <div class="empty_table" v-if="!store.phonesList.results.length">{{ $t("empty_text") }}</div>
+    <div class="empty_table" v-if="!store.phonesList.results.length">{{ $t('no_available_data') }}</div>
 
 
     <TwPagination

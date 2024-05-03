@@ -14,9 +14,14 @@ export default defineStore("stories", {
                 count: 0,
                 results: [] as storiesDetailHeaders[],
             } as Results<storiesDetailHeaders>,
-            storiesDetailsId:{
-                data:{},
-
+            storiesDetailsId: {
+                data: {},
+            },
+            storySectionButtonType: {
+                data: []
+            },
+            contentButtonTypeList:{
+                results:[]
             }
         };
     },
@@ -36,7 +41,14 @@ export default defineStore("stories", {
             const {data} = await $axios.get(`/knowledge_base/story/${id}/`)
             this.storiesDetailsId = data
         },
-
+        async getStoriesSectionButtonType() {
+            const {data} = await $axios.get('/knowledge_base/story_content_type')
+            this.storySectionButtonType = data
+        },
+        async getConentButtontype(model: any) {
+            const {data} = await $axios.get(`${model}`)
+            this.contentButtonTypeList = data
+        },
 
         //CREATE REQUEST
         createStories(data: any) {

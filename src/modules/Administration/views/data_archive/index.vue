@@ -76,8 +76,13 @@ const deleteAction = async () => {
   try {
     await administrationStorage.DELETE_BACKUP_MEDIA(deletingID.value)
     await UIkit.modal("#data-archive-delete-modal").hide();
-    await refresh()
     toast.success(t('deleted_successfully'));
+    if (administrationStorage.back_up_media_list.count > 1 && ((administrationStorage.back_up_media_list.count - 1) % params.value.limit == 0)) {
+      params.value.page = params.value.page - 1
+      await refresh()
+    } else {
+      await refresh()
+    }
     isLoading.value = false
   } catch (error) {
     isError.value = true
@@ -150,6 +155,7 @@ const onPageSizeChanged = (event: number) => {
                 </div>
                 <div class="relative">
                   <VueDatePicker
+                      auto-apply
                       :locale="'ru'"
                       :autoApply="true"
                       format="dd.MM.yyyy"
@@ -174,6 +180,7 @@ const onPageSizeChanged = (event: number) => {
                 </div>
                 <div class="relative">
                   <VueDatePicker
+                      auto-apply
                       :locale="'ru'"
                       :autoApply="true"
                       format="dd.MM.yyyy"

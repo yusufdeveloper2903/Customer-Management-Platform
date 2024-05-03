@@ -2,7 +2,7 @@
 
 
 //IMPORTED FILES
-import {Ref, ref, computed} from "vue";
+import {Ref, ref, computed, watch} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
@@ -10,19 +10,24 @@ import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
-import sectionStoriesModal from "../store/index";
+import sectionStoriesModal from "../store";
 import FileInput from "@/components/FileInput/FileInput.vue";
 import {objectToFormData} from "@/mixins/formmatter";
-import {EditData} from "../interfaces/index";
+import {EditData} from "../interfaces";
+import {useRoute} from 'vue-router'
+
 
 //DECLARED VARIABLES
 const {t} = useI18n();
+const route = useRoute()
 const isSubmitted = ref<boolean>(false);
 const store = sectionStoriesModal();
 const emit = defineEmits(["refresh"]);
-const propData = defineProps<{ editData: any }>();
+const propData = defineProps<{ editData: EditData }>();
+const duration = ref<any>({"hours": 0, "minutes": 10, "seconds": 0})
 let sectionStories = ref<EditData>({
-  duration: null,
+  id: null,
+  duration: '',
   button_name: '',
   button_name_uz: '',
   button_name_kr: '',
@@ -30,7 +35,7 @@ let sectionStories = ref<EditData>({
   button_type: '',
   button_url: '',
   is_button: false,
-  is_active: false,
+  is_active: true,
   object_id: null,
   story: null,
   content_type: null,
@@ -39,33 +44,6 @@ let sectionStories = ref<EditData>({
   background_kr: '',
   background_ru: '',
 });
-let buttonTypeList = ref([
-  {
-    title: 'Promotion',
-    value: 'PROMOTION'
-  },
-  {
-    title: 'Map',
-    value: 'MAPS'
-  },
-  {
-    title: "Poll",
-    value: 'POLL'
-  },
-  {
-    title: 'Product',
-    value: 'PRODUCT'
-  },
-  {
-    title: 'Recipes',
-    value: 'RECIPES'
-  },
-  {
-    title: 'Url',
-    value: 'URL'
-  },
-
-])
 
 
 //FUNCTIONS
@@ -83,9 +61,9 @@ const hideModal = () => {
   sectionStories.value.button_name_ru = ''
   sectionStories.value.button_type = ''
   sectionStories.value.button_url = ''
-  sectionStories.value.duration = null
+  sectionStories.value.duration = ''
   sectionStories.value.is_button = false
-  sectionStories.value.is_active = false
+  sectionStories.value.is_active = true
   sectionStories.value.object_id = null
   sectionStories.value.story = null
   sectionStories.value.content_type = null
@@ -95,11 +73,23 @@ const hideModal = () => {
   sectionStories.value.background_ru = ''
 
 }
-const updateDeal = async () => {
+watch(() => sectionStories.value.button_type, function (val: any) {
+  if (val.url) {
+    store.getConentButtontype(val.url)
+    sectionStories.value.content_type = val.content_type_id
+  }
+})
+
+const saveEdit = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
+  sectionStories.value.duration = duration.value.hours + ':' + duration.value.minutes
+  sectionStories.value.button_type = sectionStories.value.button_type.value
+  sectionStories.value.background = sectionStories.value.background_uz
 
   if (propData.editData.id) {
+    sectionStories.value.story = route.params.id
+
     try {
       const fd = objectToFormData('background', sectionStories.value);
       await store.updateSectionStories(fd)
@@ -133,9 +123,9 @@ const updateDeal = async () => {
 //COMPUTED
 const rules = computed(() => {
   return {
-    story: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
-    },
+    // story: {
+    //   required: helpers.withMessage("validation.this_field_is_required", required),
+    // },
   };
 });
 
@@ -145,7 +135,7 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
 
 <template>
   <div
-      id="stories-section-modal"
+      id="stories_section_modal"
       class="uk-flex-top"
       uk-modal
       @shown="openModal"
@@ -167,7 +157,7 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
         <label for="from" class="dark:text-gray-300">
           {{ $t("Duration") }}
         </label>
-        <VueDatePicker auto-apply time-picker v-model="sectionStories.duration"/>
+        <VueDatePicker auto-apply time-picker v-model="duration"/>
         <div class="mt-4">
           <p class="mb-1">{{ $t("Add Button") }}</p>
 
@@ -259,34 +249,55 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
         <div class="flex gap-4" v-if="sectionStories.is_button">
 
           <div
-              class="select w-1/4"
+              class="select w-2/4"
 
           >
-            <p class=" mt-5 mb-1">{{ $t("Button Type") }}:</p>
+            <p class=" mt-5 ">{{ $t("Button Type") }}</p>
             <v-select
                 class="style-chooser"
-                :options="buttonTypeList"
+                :options="store.storySectionButtonType.data"
                 v-model="sectionStories.button_type"
-                :getOptionLabel="(name) => t(`${name.title}`)"
-                :reduce="(name) => name.value"
+                :getOptionLabel="(name:any) => name.title[$i18n.locale]"
+                :reduce="(name:any) => name"
 
             >
               <template #no-options> {{ $t("no_matching_options") }}</template>
             </v-select>
           </div>
-          <div
-              class="select-chooser w-3/4"
-              style="margin-top:44px"
+          <div v-if="sectionStories.button_type?.value == 'URL'" class=" w-2/4">
+            <p class="mt-5"> {{ $t('URL') }}</p>
+            <input
+                type="text"
+                style="padding-top:12px;padding-bottom:12px"
+                class="form-input  "
+                :placeholder="$t('URL')"
+                v-model="sectionStories.button_url"
+            />
+          </div>
+          <div v-else-if="sectionStories.button_type"
+               class="select-chooser w-2/4"
           >
+            <p class="mt-5">{{ $t(`${sectionStories.button_type?.value}`) }}</p>
+
             <v-select
-                :options="buttonTypeList"
+                :options="store.contentButtonTypeList.results"
                 v-model="sectionStories.object_id"
-                :getOptionLabel="(name) => t(`${name.title}`)"
-                :reduce="(name) => name.value"
+                :getOptionLabel="(name:any) => name.value"
+                :reduce="(name:any) => name.object_id"
 
             >
               <template #no-options> {{ $t("no_matching_options") }}</template>
             </v-select>
+
+          </div>
+          <div v-else
+               class="select-chooser w-2/4 mt-11"
+          >
+            <v-select
+                disabled="true"
+            >
+            </v-select>
+
           </div>
         </div>
 
@@ -302,7 +313,7 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
 
         <button
             :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'"
-            @click="updateDeal"
+            @click="saveEdit"
         >
           <img
               src="@/assets/image/loading.svg"
@@ -327,7 +338,7 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
   z-index: 9999; /* Set a high z-index value */
   left: 30px;
   top: 220px;
-  width: 10px;
+  width: 44%;
   height: 40%;
   overflow: auto;
   background-color: white;
@@ -337,9 +348,9 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
 .select-chooser .vs__dropdown-menu {
   position: fixed;
   z-index: 9999;
-  left: 175px;
+  left: 305px;
   top: 220px;
-  width: 66%;
+  width: 44%;
   height: 40%;
   overflow: auto;
   background-color: white;

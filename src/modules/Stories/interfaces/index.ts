@@ -30,7 +30,8 @@ export interface storiesDetailHeaders {
 }
 
 export interface EditData {
-    duration: number | null,
+    id: number | null,
+    duration: string | null,
     button_name: string | null,
     button_name_uz: string | null,
     button_name_kr: string | null,

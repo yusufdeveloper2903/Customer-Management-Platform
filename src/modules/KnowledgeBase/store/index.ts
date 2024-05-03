@@ -174,7 +174,7 @@ export default defineStore("knowledgeBase", {
             return $axios.patch(`/knowledge_base/news_template/${data.get("id")}/`, data);
         },
         updateOneForm(data) {
-            return $axios.patch(`/knowledge_base/location/${data.id}/`, data);
+            return $axios.patch(`/knowledge_base/location/${data.get('id')}/`, data);
         },
         updateRegions(data: any) {
             return $axios.patch(`knowledge_base/region/${data.id}/`, data)

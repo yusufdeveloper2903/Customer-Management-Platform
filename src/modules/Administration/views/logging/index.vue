@@ -200,6 +200,7 @@ const onPageSizeChangedRight = async (event: number) => {
                       </div>
                       <div class="relative">
                         <VueDatePicker
+                            auto-apply
                             :locale="'ru'"
                             :autoApply="true"
                             format="dd.MM.yyyy"
@@ -222,6 +223,7 @@ const onPageSizeChangedRight = async (event: number) => {
                       </div>
                       <div class="relative">
                         <VueDatePicker
+                            auto-apply
                             :locale="'ru'"
                             :autoApply="true"
                             format="dd.MM.yyyy"
@@ -350,6 +352,7 @@ const onPageSizeChangedRight = async (event: number) => {
                       </div>
                       <div class="relative">
                         <VueDatePicker
+                            auto-apply
                             :locale="'ru'"
                             :autoApply="true"
                             format="dd.MM.yyyy"
@@ -372,6 +375,7 @@ const onPageSizeChangedRight = async (event: number) => {
                       </div>
                       <div class="relative">
                         <VueDatePicker
+                            auto-apply
                             :locale="'ru'"
                             :autoApply="true"
                             format="dd.MM.yyyy"

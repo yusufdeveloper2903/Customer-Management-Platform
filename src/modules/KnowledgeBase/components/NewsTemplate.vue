@@ -64,24 +64,21 @@ watch(() => props.knowledge, async function (val) {
   }
 
 })
-watchDebounced(() => params.search, function () {
+watchDebounced(() => params.search, async function () {
   params.page = 1
-  refresh()
-}, {deep: true, debounce: 500, maxWait: 500,})
+  await refresh()
+}, {deep: true, debounce: 500, maxWait: 5000})
 
 
 //FUNCTIONS
 const refresh = async () => {
   await store.getNewsTemplate(params);
 };
-const openModal = (isEdit: boolean, data?: NewsTemplate) => {
-  if (isEdit && data) {
-    dataToEdit.value = data;
-  }
-  nextTick(() => {
-    UIkit.modal("#news_template").show();
-  });
-};
+const openModal = () => {
+  UIkit.modal("#news_template").show()
+  dataToEdit.value = {};
+}
+
 
 const onShowFile = (item: any) => {
   image.value = item;
@@ -95,7 +92,7 @@ const deleteAction = async () => {
     await store.deleteNewsTemplate(itemToDelete.value)
     await UIKit.modal("#newstemplate-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.newTemplate.count - 1) % params.page_size == 0) {
+    if (store.newTemplate.count > 1 && ((store.newTemplate.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -146,8 +143,8 @@ const handleDeleteModal = (id: number) => {
         :headers="newsTemplateTable"
         :items="store.newTemplate.results"
     >
-      <template #header="header">
-        {{ $t(header.text) }}
+      <template #empty-message>
+        <div>{{ $t('no_available_data') }}</div>
       </template>
 
       <template #item-title="item">
@@ -178,7 +175,7 @@ const handleDeleteModal = (id: number) => {
       </template>
       <template #item-actions="data">
         <div class="flex my-4 justify-left">
-          <button class="btn-warning btn-action" @click="openModal(true, data)">
+          <button uk-toggle="target: #news_template" class="btn-warning btn-action" @click="dataToEdit = data">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>
           <button

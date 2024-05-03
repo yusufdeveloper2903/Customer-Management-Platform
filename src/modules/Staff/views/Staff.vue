@@ -58,7 +58,7 @@ const deleteAction = async () => {
     await store.deleteStaff(userId.value)
     UIkit.modal("#staff-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.staffsList.count - 1) % filterUsers.page > 0) {
+    if (store.staffsList.count> 1((store.staffsList.count - 1) % filterUsers.page_size == 0)) {
       filterUsers.page = filterUsers.page - 1
       await refresh()
     } else {

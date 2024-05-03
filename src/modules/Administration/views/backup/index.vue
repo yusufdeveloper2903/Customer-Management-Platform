@@ -76,8 +76,14 @@ const deleteAction = async () => {
   try {
     await administrationStorage.DELETE_BACKUP(deletingID.value)
     await UIkit.modal("#backup-delete-modal").hide();
-    await refresh()
     toast.success(t('deleted_successfully'));
+    if (administrationStorage.back_up_list.count > 1 && ((administrationStorage.back_up_list.count - 1) % params.value.limit == 0)) {
+      params.value.page = params.value.page - 1
+      await refresh()
+    } else {
+      await refresh()
+    }
+
     isLoading.value = false
   } catch (error) {
     isError.value = true
@@ -166,6 +172,7 @@ watchDebounced(() => params.value.search, async function () {
                 </div>
                 <div class="relative">
                   <VueDatePicker
+                      auto-apply
                       :locale="'ru'"
                       :autoApply="true"
                       format="dd.MM.yyyy"
@@ -191,6 +198,7 @@ watchDebounced(() => params.value.search, async function () {
                 </div>
                 <div class="relative">
                   <VueDatePicker
+                      auto-apply
                       :locale="'ru'"
                       :autoApply="true"
                       format="dd.MM.yyyy"

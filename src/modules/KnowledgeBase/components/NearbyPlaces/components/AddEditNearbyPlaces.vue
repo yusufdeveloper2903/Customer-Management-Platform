@@ -363,26 +363,26 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                 </Tab>
               </Tabs>
               <div class="w-full mt-4">
-                <label for="status">
-                  {{ $t("region") }}
-                  <LazySelect
-                      v-model="location.region"
-                      id="model"
-                      :placeholder="$t('region')"
-                      :options="store.regionsList"
-                      :fetch="onGetData"
-                      :reduce="(el) => el.id"
-                      :getOptionLabel="(v) => v.name[locale] || ''"
-                      :class="validate.region.$errors.length ? 'required-input' : ''"
-                  />
-                  <p
-                      v-for="error in validate.region.$errors"
-                      :key="error.$uid"
-                      class="text-danger text-sm"
-                  >
-                    {{ $t(error.$message) }}
-                  </p>
-                </label>
+                <p class="mt-5">{{ $t("region") }}</p>
+
+                <v-select
+                    :options="store.regionsList.results"
+                    v-model="location.region"
+                    :placeholder="$t('region')"
+                    :getOptionLabel="(name:any) => name['name_'+ $i18n.locale]"
+                    :reduce="(name:any) => name.id"
+
+                >
+                  <template #no-options> {{ $t("no_matching_options") }}</template>
+                </v-select>
+                <p
+                    v-for="error in validate.region.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ $t(error.$message) }}
+                </p>
+
               </div>
 
               <div class="w-full mt-4">
@@ -408,6 +408,8 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
               <div class="w-full mt-4">
                 <label class="relative"> {{ $t('Open hour') }}</label>
                 <VueDatePicker
+
+                    auto-apply
                     v-model="openTime"
                     :placeholder="$t('Open hour')"
                     time-picker
@@ -416,6 +418,7 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
               <div class="w-full mt-4">
                 <label class="relative"> {{ $t('Close hour') }} </label>
                 <VueDatePicker
+                    auto-apply
                     v-model="closeTime"
                     :placeholder="$t('Close hour')"
                     time-picker

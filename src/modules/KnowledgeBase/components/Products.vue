@@ -108,7 +108,7 @@ const deleteAction = async () => {
     await store.deleteProducts(itemId.value)
     await UIkit.modal("#product-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.productsList.count - 1) % params.page_size == 0) {
+    if (store.productsList.count > 1 && ((store.productsList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -147,7 +147,7 @@ const onShowFile = (item: any) => {
                    :items="store.productsList.results">
 
       <template #empty-message>
-        <span>{{ $t('empty_text') }}</span>
+        <div>{{ $t('no_available_data') }}</div>
       </template>
 
       <template #header-code="header">
