@@ -7,6 +7,7 @@ import {onMounted, ref, watch} from "vue";
 import knowledgeBase from ".././store/index"
 import {toast} from "vue3-toastify";
 import {useI18n} from "vue-i18n";
+import {aW} from "@fullcalendar/core/internal-common";
 
 //DECLARED VARIABLES
 const store = knowledgeBase()
@@ -44,36 +45,27 @@ const refresh = async () => {
 };
 
 
-const updateText = () => {
+const updateText = async () => {
   store.pagesListPolicy.text = store.pagesListPolicy.text_uz
-  store.updatePages({...store.pagesListPolicy}).then(() => {
-    setTimeout(() => {
-      toast.success(t("updated_successfully"));
-    }, 200);
-    refresh()
-  })
+  await store.updatePages(store.pagesListPolicy)
+  await refresh()
+  toast.success(t("updated_successfully"));
   is_disabledUz.value = false
 
 }
-const updateText2 = () => {
+const updateText2 = async () => {
   store.pagesListPolicy.text = store.pagesListPolicy.text_uz
-  store.updatePages({...store.pagesListPolicy}).then(() => {
-    setTimeout(() => {
-      toast.success(t("updated_successfully"));
-    }, 200);
-    refresh()
-    is_disabledRu.value = false
-  })
+  await store.updatePages(store.pagesListPolicy)
+  await refresh()
+  toast.success(t("updated_successfully"));
+  is_disabledRu.value = false
 }
-const updateText3 = () => {
+const updateText3 = async () => {
   store.pagesListPolicy.text = store.pagesListPolicy.text_uz
-  store.updatePages({...store.pagesListPolicy}).then(() => {
-    setTimeout(() => {
-      toast.success(t("updated_successfully"));
-    }, 200);
-    refresh()
-    is_disabledKr.value = false
-  })
+  await store.updatePages(store.pagesListPolicy)
+  await refresh()
+  toast.success(t("updated_successfully"));
+  is_disabledKr.value = false
 }
 
 

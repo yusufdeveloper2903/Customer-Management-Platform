@@ -60,7 +60,7 @@ app.use(Vue3Toasity, {
     position: toast.POSITION.BOTTOM_RIGHT,
     theme: "colored",
 });
-app.use(VueNativeSock, import.meta.env.VITE_SYSTEM_INFO_WEBSOCKET);
+// app.use(VueNativeSock, import.meta.env.VITE_SYSTEM_INFO_WEBSOCKET);
 app.use(abilitiesPlugin, ability, {
     useGlobalProperties: true,
 });
