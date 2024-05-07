@@ -36,7 +36,7 @@ export interface EditData {
     button_name_uz: string | null,
     button_name_kr: string | null,
     button_name_ru: string | null,
-    button_type: string | null ,
+    button_type: string | null | object,
     button_url: string | null,
     is_button: boolean,
     is_active: boolean,

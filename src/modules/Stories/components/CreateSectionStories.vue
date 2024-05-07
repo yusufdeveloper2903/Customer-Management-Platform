@@ -47,34 +47,13 @@ let sectionStories = ref<EditData>({
 //FUNCTIONS
 function openModal() {
   if (propData.editData && propData.editData.story_id) {
-    if (propData.editData?.button_name) {
-      sectionStories.value.button_name = propData.editData?.button_name
-
-    }
-    if (propData.editData?.button_name_uz) {
-      sectionStories.value.button_name_uz = propData.editData?.button_name_uz
-
-    }
-    if (propData.editData?.button_name_kr) {
-      sectionStories.value.button_name_kr = propData.editData?.button_name_kr
-
-    }
-    if (propData.editData?.button_name_ru) {
-      sectionStories.value.button_name_ru = propData.editData?.button_name_ru
-
-    }
-    if (propData.editData.button_type) {
-      sectionStories.value.button_type = propData.editData.button_type
-
-    }
-    if (propData.editData?.button_url) {
-      sectionStories.value.button_url = propData.editData?.button_url
-
-    }
-    if (propData.editData?.object_id) {
-      sectionStories.value.object_id = propData.editData?.object_id
-
-    }
+    sectionStories.value.button_name = propData.editData?.button_name
+    sectionStories.value.button_name_uz = propData.editData?.button_name_uz
+    sectionStories.value.button_name_kr = propData.editData?.button_name_kr
+    sectionStories.value.button_name_ru = propData.editData?.button_name_ru
+    sectionStories.value.button_type = propData.editData.button_type
+    sectionStories.value.button_url = propData.editData?.button_url
+    sectionStories.value.object_id = propData.editData.object_id
     sectionStories.value.duration = propData.editData.duration
     sectionStories.value.is_button = propData.editData.is_button
     sectionStories.value.is_active = propData.editData.is_active
@@ -84,6 +63,13 @@ function openModal() {
     sectionStories.value.background_uz = propData.editData.background_uz
     sectionStories.value.background_kr = propData.editData.background_kr
     sectionStories.value.background_ru = propData.editData.background_ru
+    store.storySectionButtonType.data.forEach((item: any) => {
+      if (item.value == sectionStories.value.button_type) {
+        item.first = 'first'
+        sectionStories.value.button_type = item
+      }
+    })
+
   }
 }
 
@@ -111,15 +97,39 @@ watch(() => sectionStories.value.button_type, function (val: any) {
     store.getConentButtontype(val.url)
     sectionStories.value.content_type = val.content_type_id
   }
-})
+  if (val?.url && !val.first) {
+    sectionStories.value.object_id = null
+  }
 
+})
+watch(() => sectionStories.value.is_button, function (val: boolean) {
+  if (!val) {
+    sectionStories.value.object_id = null
+    sectionStories.value.button_type = null
+    sectionStories.value.button_name = ''
+    sectionStories.value.button_name_uz = ''
+    sectionStories.value.button_name_kr = ''
+    sectionStories.value.button_name_ru = ''
+    sectionStories.value.button_url = ''
+
+  }
+})
 const saveEdit = async () => {
-  if (!route.params.id ) return;
+  if (!route.params.id) return;
   sectionStories.value.button_type = sectionStories.value.button_type?.value
   sectionStories.value.background = sectionStories.value.background_uz
+  sectionStories.value.button_name = sectionStories.value.button_name_uz
   sectionStories.value.story = String(route.params.id)
   sectionStories.value.story_id = String(route.params.id)
+  if (!sectionStories.value.is_button) {
+    sectionStories.value.object_id = null
+    sectionStories.value.button_name = ''
+    sectionStories.value.button_name_uz = ''
+    sectionStories.value.button_name_kr = ''
+    sectionStories.value.button_name_ru = ''
+    sectionStories.value.button_url = ''
 
+  }
   if (propData.editData && propData.editData.story_id) {
     try {
       const fd = objectToFormData(['background', 'background_uz', 'background_kr', 'background_ru'], sectionStories.value);
@@ -219,7 +229,7 @@ const saveEdit = async () => {
                 v-model="sectionStories.background_uz"
                 @remove="sectionStories.background_uz = null"
                 :typeModal="propData.editData && propData.editData.story_id"
-                name="stories-detail-template"
+                name="stories-detail-template-uz"
             />
 
           </Tab>
@@ -241,7 +251,7 @@ const saveEdit = async () => {
                 v-model="sectionStories.background_kr"
                 @remove="sectionStories.background_kr = null"
                 :typeModal="propData.editData && propData.editData.story_id"
-                name="stories-detail-template"
+                name="stories-detail-template-kr"
             />
 
 
@@ -266,7 +276,7 @@ const saveEdit = async () => {
                 v-model="sectionStories.background_ru"
                 @remove="sectionStories.background_ru = null"
                 :typeModal="propData.editData && propData.editData.story_id"
-                name="stories-detail-template"
+                name="stories-detail-template-ru"
             />
 
 
@@ -305,7 +315,6 @@ const saveEdit = async () => {
                class="select-chooser w-2/4"
           >
             <p class="mt-5">{{ $t(`${sectionStories.button_type?.value}`) }}</p>
-
             <v-select
                 :options="store.contentButtonTypeList.results"
                 v-model="sectionStories.object_id"

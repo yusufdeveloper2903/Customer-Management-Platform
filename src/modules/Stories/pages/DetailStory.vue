@@ -15,6 +15,9 @@ import {toast} from "vue3-toastify";
 import {useI18n} from 'vue-i18n';
 import UIKit from "uikit";
 import ShowPhotoGlobal from "@/components/ShowPhotoGlobal.vue";
+import ShowTextModal from "@/components/ShowTextModal.vue";
+
+
 import StoriesDetail from '../store'
 import DetailsModal from '../components/CreateSectionStories.vue';
 import {watchDebounced} from "@vueuse/core";
@@ -26,7 +29,6 @@ import {objectToFormData} from "@/mixins/formmatter";
 const store = StoriesDetail()
 const itemToDelete = ref<number | null>(null);
 const image = ref<string>("");
-const imageCard = ref();
 const imageUrl = ref('')
 const {t, locale} = useI18n()
 const isLoading = ref(false);
@@ -34,6 +36,7 @@ const route = useRoute()
 const router = useRouter()
 const routeParams = ref('')
 const isSubmitted = ref<boolean>(false);
+const url = ref('')
 let storiesVariable = ref({
   id: '',
   subtitle: '',
@@ -89,7 +92,7 @@ onMounted(async () => {
 
 
 //FUNCTION
-const saveData = async () => {
+const saveData = async (val: string) => {
   const success = await validate.value.$validate();
   if (!success) return;
   storiesVariable.value.subtitle = storiesVariable.value.subtitle_uz
@@ -98,8 +101,11 @@ const saveData = async () => {
     try {
       const fd = objectToFormData(['avatar'], storiesVariable.value);
       await store.updateStories(fd)
-      toast.success(t("updated_successfully"));
       isSubmitted.value = false;
+      if (val == 'detail') {
+        await router.push('/stories')
+      }
+      toast.success(t("updated_successfully"));
     } catch (error: any) {
       isSubmitted.value = false;
       if (error) {
@@ -114,8 +120,12 @@ const saveData = async () => {
         localStorage.setItem('createdData', res.data.status_code)
         createdData.value = res.data.status_code
       });
-      toast.success(t("created_successfully"));
       isSubmitted.value = false;
+
+      if (val == 'detail') {
+        await router.push('/stories')
+      }
+      toast.success(t("created_successfully"));
     } catch (error: any) {
       isSubmitted.value = false;
       if (error) {
@@ -142,6 +152,12 @@ const onShowFile = (item: any) => {
   image.value = item;
   nextTick(() => {
     UIKit.modal("#stories-detail-modal-image").show();
+  });
+};
+const onShowFileLink = (item: any) => {
+  url.value = item;
+  nextTick(() => {
+    UIKit.modal("#stories-detail-url-image").show();
   });
 };
 
@@ -190,7 +206,7 @@ const addSection = async () => {
   } else if (createdData.value && createdData.value == '201') {
     await UIKit.modal("#stories_section_modal").show();
   } else {
-    await saveData()
+    await saveData('modal')
     await UIKit.modal("#stories_section_modal").show();
   }
 
@@ -215,6 +231,7 @@ const deleteAction = async () => {
 };
 
 const showRow = (val: any) => {
+  console.log(val, 'val')
   imageUrl.value = val['background_' + locale.value]
 }
 
@@ -416,9 +433,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             {{ $t(header.text) }}
           </template>
 
-          <template #item-subtitle="item">
-            {{ item['subtitle_' + $i18n.locale] }}
-          </template>
+
           <template #item-is_active="items">
             <label className="relative inline-flex items-center cursor-pointer">
               <input
@@ -432,15 +447,31 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
               ></div>
             </label>
           </template>
-          <template #item-background="item">
-            <div class="py-3 flex justify-left gap-3">
-              <img
-                  v-if="item.background"
-                  class="w-[45px] h-[45px] rounded object-cover"
-                  :src="item.background"
-                  alt="Rounded avatar"
-                  @click="onShowFile(item.background)"
+          <template #item-button_url="item">
+            <button
+                type="button"
+                class=" btn-success btn-action"
+                @click="onShowFileLink(item.button_url)"
+                :disabled="!item.button_url"
+            >
+              <Icon
+                  icon="Eye"
+                  color="#FFF"
+                  size="16"
               />
+            </button>
+          </template>
+          <template #item-background="item">
+
+            <div class="py-3 flex justify-left gap-3">
+              <div v-if="item['background_'+ locale]">
+                <img
+                    class="w-[45px] h-[45px] rounded object-cover"
+                    :src="item['background_'+ locale]"
+                    alt="Rounded avatar"
+                    @click="onShowFile(item['background_'+ locale])"
+                />
+              </div>
               <div
                   v-else
                   class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded"
@@ -450,7 +481,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             </div>
           </template>
           <template #item-actions="data">
-            <div class="flex my-4 justify-left">
+            <div class="flex my-4 justify-left" @click.stop>
               <button class="btn-warning btn-action" uk-toggle="target: #stories_section_modal" @click="editData= data">
                 <Icon icon="Pen New Square" color="#fff" size="16"/>
               </button>
@@ -494,7 +525,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             {{ $t("Отмена") }}
           </button>
 
-          <button @click="saveData"
+          <button @click="saveData('detail')"
                   class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full">
             {{ $t('Add') }}
           </button>
@@ -503,7 +534,10 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
     </div>
     <DetailsModal :editData="editData" @refresh="refresh"/>
     <DeleteModal @delete-action="deleteAction" id="stories-detail-main-delete-modal"/>
-    <ShowPhotoGlobal :image="image" id="stories-detail-modal-image" ref="imageCard"/>
+    <ShowPhotoGlobal :image="image" id="stories-detail-modal-image" />
+    <ShowTextModal :url="url" id="stories-detail-url-image"/>
   </div>
 
 </template>
+
+
