@@ -2,7 +2,7 @@
 
 
 //IMPORTED FILES
-import {Ref, ref, computed} from "vue";
+import {Ref, ref, computed, nextTick} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
@@ -40,7 +40,17 @@ let newsTemplateData = ref<NewsTemplate>({
 //FUNCTIONS
 function openModal() {
   if (propData.editData.id) {
-    newsTemplateData.value = propData.editData;
+    newsTemplateData.value.title = propData.editData.title
+    newsTemplateData.value.title_ru = propData.editData.title_ru
+    newsTemplateData.value.title_uz = propData.editData.title_uz
+    newsTemplateData.value.title_kr = propData.editData.title_kr
+    newsTemplateData.value.description = propData.editData.description
+    newsTemplateData.value.description_ru = propData.editData.description_ru
+    newsTemplateData.value.description_kr = propData.editData.description_kr
+    newsTemplateData.value.description_uz = propData.editData.description_uz
+    newsTemplateData.value.file = propData.editData.file
+    newsTemplateData.value.url = propData.editData.url
+    newsTemplateData.value.id = propData.editData.id
   }
 }
 
@@ -56,20 +66,19 @@ const hideModal = () => {
   newsTemplateData.value.description_uz = ''
   newsTemplateData.value.file = null
   newsTemplateData.value.url = ""
+  newsTemplateData.value.id = null
+
 }
 const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
   newsTemplateData.value.title = newsTemplateData.value.title_uz;
   newsTemplateData.value.description = newsTemplateData.value.description_uz;
-  const {file, ...rest} = newsTemplateData.value;
+
 
   if (propData.editData.id) {
     try {
-      const fd = objectToFormData('file', {
-        file: file || null,
-        ...rest,
-      });
+      const fd = objectToFormData(['file'], newsTemplateData.value);
       await store.updateNewsTemplate(fd)
       await UIkit.modal("#news_template").hide();
       toast.success(t("updated_successfully"));
@@ -83,10 +92,7 @@ const updateDeal = async () => {
     }
   } else {
     try {
-      const fd = objectToFormData('file', {
-        file: file || null,
-        ...rest,
-      });
+      const fd = objectToFormData(['file'], newsTemplateData.value);
       await store.createNewsTemplate(fd)
       await UIkit.modal("#news_template").hide();
       toast.success(t("created_successfully"));

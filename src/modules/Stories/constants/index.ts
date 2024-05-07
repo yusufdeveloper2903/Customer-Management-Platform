@@ -16,7 +16,7 @@ export const storiesTable = [
         value: "subtitle",
     },
     {
-        text: "Status",
+        text: "Published",
         value: "is_active",
     },
     {

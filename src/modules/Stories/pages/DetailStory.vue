@@ -28,14 +28,14 @@ const itemToDelete = ref<number | null>(null);
 const image = ref<string>("");
 const imageCard = ref();
 const imageUrl = ref('')
-const {t} = useI18n()
+const {t, locale} = useI18n()
 const isLoading = ref(false);
 const route = useRoute()
 const router = useRouter()
 const routeParams = ref('')
 const isSubmitted = ref<boolean>(false);
 let storiesVariable = ref({
-  id: null,
+  id: '',
   subtitle: '',
   subtitle_uz: '',
   subtitle_kr: '',
@@ -45,8 +45,9 @@ let storiesVariable = ref({
   avatar: '',
   is_active: false,
 });
-const editData = ref<EditData>({
-  id: null,
+const createdData = ref<string | null>('')
+const editData = ref<EditData | null>({
+  story_id: null,
   duration: null,
   button_name: '',
   button_name_uz: '',
@@ -74,15 +75,16 @@ const params = reactive({
 
 //MOUNTED LIEF CYCLE
 onMounted(async () => {
+  await getButtonType()
   if (route.params.id) {
     await refresh()
     await getDetail()
     storiesVariable.value = store.storiesDetailsId.data
     routeParams.value = String(route.params.id)
   } else {
+    createdData.value = localStorage.getItem('createdData')
     routeParams.value = ''
   }
-  await getButtonType()
 })
 
 
@@ -94,7 +96,7 @@ const saveData = async () => {
   if (route.params.id) {
     storiesVariable.value.id = String(route.params.id)
     try {
-      const fd = objectToFormData('avatar', storiesVariable.value);
+      const fd = objectToFormData(['avatar'], storiesVariable.value);
       await store.updateStories(fd)
       toast.success(t("updated_successfully"));
       isSubmitted.value = false;
@@ -106,8 +108,12 @@ const saveData = async () => {
     }
   } else {
     try {
-      const fd = objectToFormData('avatar', storiesVariable.value);
-      await store.createStories(fd)
+      const fd = objectToFormData(['avatar'], storiesVariable.value);
+      await store.createStories(fd).then((res) => {
+        router.push(`/stories-detail/${res.data.data.id}`)
+        localStorage.setItem('createdData', res.data.status_code)
+        createdData.value = res.data.status_code
+      });
       toast.success(t("created_successfully"));
       isSubmitted.value = false;
     } catch (error: any) {
@@ -176,13 +182,16 @@ const getDetail = async () => {
 
 };
 const addSection = async () => {
+  const success = await validate.value.$validate();
+  if (!success) return;
+  editData.value = null
   if (route.params.id) {
-    await UIKit.modal("#stories-section-modal").show();
-    editData.value = {}
+    await UIKit.modal("#stories_section_modal").show();
+  } else if (createdData.value && createdData.value == '201') {
+    await UIKit.modal("#stories_section_modal").show();
   } else {
-    await saveData().then((res) => {
-      console.log(res, 'res')
-    })
+    await saveData()
+    await UIKit.modal("#stories_section_modal").show();
   }
 
 
@@ -204,6 +213,10 @@ const deleteAction = async () => {
     toast.error(t('error'));
   }
 };
+
+const showRow = (val: any) => {
+  imageUrl.value = val['background_' + locale.value]
+}
 
 
 //WATCHERS
@@ -394,6 +407,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             :loading="isLoading"
             :headers="storiesDetailTable"
             :items="store.storiesDetailsList.results"
+            @click-row="showRow"
         >
           <template #empty-message>
             <div class="dark:text-white">{{ $t("no_available_data") }}</div>
@@ -437,7 +451,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           </template>
           <template #item-actions="data">
             <div class="flex my-4 justify-left">
-              <button class="btn-warning btn-action" uk-toggle="target: #stories-section-modal" @click="editData= data">
+              <button class="btn-warning btn-action" uk-toggle="target: #stories_section_modal" @click="editData= data">
                 <Icon icon="Pen New Square" color="#fff" size="16"/>
               </button>
               <button
@@ -468,7 +482,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           <span v-if="!imageUrl" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
           <img
               v-else
-              class="w-full h-full object-cover"
+              class="h-full"
               :src="imageUrl"
               alt=""
           />

@@ -64,7 +64,7 @@ export default defineStore("stories", {
             return $axios.patch(`/knowledge_base/story/${data.get("id")}/`, data);
         },
         updateSectionStories(data) {
-            return $axios.patch(`/knowledge_base/story_section/${data.get("id")}/`, data);
+            return $axios.patch(`/knowledge_base/story_section/${data.get("story_id")}/`, data);
         },
 
 

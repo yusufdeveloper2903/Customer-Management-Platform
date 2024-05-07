@@ -79,7 +79,7 @@ const saveUser = async () => {
   }
 
 
-  const formData = objectToFormData('photo', userData.value);
+  const formData = objectToFormData(['photo'], userData.value);
   if (route.params.id) {
     try {
       await store.updateStaff(formData)

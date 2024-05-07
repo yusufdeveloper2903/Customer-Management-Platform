@@ -65,6 +65,9 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, _, next) => {
+    if (to.fullPath !== '/stories-detail') {
+        localStorage.setItem('createdData', '')
+    }
     if (to.meta.loginNotRequired) return next()
     next();
 });

@@ -1,3 +1,28 @@
+<script setup lang="ts">
+
+//IMPORTED FILES
+import {useSidebarStore} from "@/stores/layoutConfig";
+import {useRouter} from "vue-router";
+import {ListInterface} from '@/interface/index'
+
+//DECLARED VARIABLES
+const store = useSidebarStore();
+const router = useRouter();
+defineProps<{ list: ListInterface[] }>();
+
+//FUNCTIONS
+const onBefore = (item: any) => {
+  if (!item.active) {
+    router.go(-1);
+  }
+};
+
+</script>
+<style>
+.breadcolor {
+  color: #356c2d
+}
+</style>
 <template>
   <div>
     <nav class="mb-5 mt-1 flex card">
@@ -65,28 +90,3 @@
   </div>
 </template>
 
-<script setup lang="ts">
-
-//IMPORTED FILES
-import {useSidebarStore} from "@/stores/layoutConfig";
-import {useRouter} from "vue-router";
-
-
-//DECLARED VARIABLES
-const store = useSidebarStore();
-const router = useRouter();
-defineProps<{ list: Array<T> }>();
-
-//FUNCTIONS
-const onBefore = (item: any) => {
-  if (!item.active) {
-    router.go(-1);
-  }
-};
-
-</script>
-<style>
-.breadcolor {
-  color: #356c2d
-}
-</style>
