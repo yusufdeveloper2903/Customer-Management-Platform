@@ -140,9 +140,7 @@ const saveEdit = async () => {
       emit("refresh");
     } catch (error: any) {
       isSubmitted.value = false;
-      if (error) {
-        toast.error(t("error"));
-      }
+      toast.error(t("error"));
     }
   } else {
     try {
@@ -154,9 +152,7 @@ const saveEdit = async () => {
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
-      if (error) {
-        toast.error(t('error'));
-      }
+      toast.error(t('error'));
     }
   }
 };

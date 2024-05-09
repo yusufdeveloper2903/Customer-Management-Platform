@@ -35,9 +35,7 @@ const updateDeal = async () => {
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
-      if (error) {
-        toast.error(t("error"));
-      }
+      toast.error(t("error"));
     }
 
   } else {
@@ -49,14 +47,12 @@ const updateDeal = async () => {
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
-      if (error) {
-        if (error.response.data.message == '{\'number\': [ErrorDetail(string=\'phone number with this number already exists.\', code=\'unique\')]}') {
-          toast.error(t('phone_number_exists'));
-        } else {
-          toast.error(t("error"))
-        }
-
+      if (error.response.data.message == '{\'number\': [ErrorDetail(string=\'phone number with this number already exists.\', code=\'unique\')]}') {
+        toast.error(t('phone_number_exists'));
+      } else {
+        toast.error(t("error"))
       }
+
     }
   }
 };

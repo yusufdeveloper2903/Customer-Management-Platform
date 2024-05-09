@@ -127,25 +127,10 @@ const onGetData = async (val: any) => {
       <template #empty-message>
         <div>{{ $t('no_available_data') }}</div>
       </template>
+      <template #header="header">
+        {{ $t(header.text) }}
+      </template>
 
-      <template #header-title="header">
-        {{ $t(header.text) }}
-      </template>
-      <template #header-actions="header">
-        {{ $t(header.text) }}
-      </template>
-      <template #header-start_date="header">
-        {{ $t(header.text) }}
-      </template>
-      <template #header-is_published="header">
-        {{ $t(header.text) }}
-      </template>
-      <template #header-end_date="header">
-        {{ $t(header.text) }}
-      </template>
-      <template #header-is_active="header">
-        {{ $t(header.text) }}
-      </template>
       <template #item-title="item">
         {{ item['title_' + $i18n.locale] }}
       </template>

@@ -131,7 +131,6 @@ const deleteSms = async () => {
               id="search"
               type="text"
               class="form-input"
-              :placeholder="$t('Search')"
               v-model="smsFilter.search"
           />
         </div>
@@ -139,7 +138,7 @@ const deleteSms = async () => {
 
         <div class="md:w-1/3 md:m-0 mt-2">
           <label for="from" class="dark:text-gray-300">
-            {{ $t("from") }}
+            {{ $t("startDate") }}
           </label>
           <VueDatePicker auto-apply model-type="yyyy-MM-dd" :enable-time-picker="false"
                          v-model="smsFilter.start_time"></VueDatePicker>
@@ -160,15 +159,12 @@ const deleteSms = async () => {
         <div>{{ $t('no_available_data') }}</div>
       </template>
 
-      <template #header="data">
-        {{ $t(data.text) }}
+      <template #header="header">
+        {{ $t(header.text) }}
       </template>
 
       <template #item-title="item">
         {{ item.title }}
-      </template>
-      <template #header-description="data">
-        {{ $t(data.text) }}
       </template>
 
 

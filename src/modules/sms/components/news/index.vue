@@ -9,7 +9,7 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
 import {toast} from "vue3-toastify";
 import UIkit from "uikit";
 import {useRouter} from "vue-router";
-import ShowFileModal from "@/modules/KnowledgeBase/components/ShowImageModal.vue";
+import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
 import {EditDataNews} from '../../interfaces'
 import {watchDebounced} from "@vueuse/core";
 
@@ -157,7 +157,6 @@ watch(() => props.sms, async function (val) {
               id="search"
               type="text"
               class="form-input"
-              :placeholder="$t('Search')"
               v-model="params.search"
 
           />
@@ -168,7 +167,6 @@ watch(() => props.sms, async function (val) {
             {{ $t("Status") }}
           </label>
           <v-select
-              :placeholder="$t('Status')"
               :options="store.statusList && store.statusList.results"
               v-model="params.status"
               :getOptionLabel="(name:any) => name['title_'+$i18n.locale]"
@@ -180,7 +178,7 @@ watch(() => props.sms, async function (val) {
 
         <div class="md:w-1/2 ">
           <label for="from" class="dark:text-gray-300">
-            {{ $t("from") }}
+            {{ $t("startDate") }}
           </label>
           <VueDatePicker :enableTimePicker="false" auto-apply v-model="params.start_time" model-type="yyyy-MM-dd"
                          ></VueDatePicker>
@@ -200,9 +198,8 @@ watch(() => props.sms, async function (val) {
       <template #empty-message>
         <div>{{ $t('no_available_data') }}</div>
       </template>
-
-      <template #header="data">
-        {{ t(data.text) }}
+      <template #header="header">
+        {{ $t(header.text) }}
       </template>
 
       <template #item-title="item">

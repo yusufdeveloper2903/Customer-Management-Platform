@@ -30,18 +30,16 @@ const clearModal = () => {
 watch(showModal, onModalChange);
 
 
-
 //FUNCTIONS
 const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
+  await UIkit.modal("#categories").hide();
   isSubmitted.value = true;
-  UIkit.modal("#categories").hide();
+  clearModal();
+  isSubmitted.value = false;
   toast.success(t("updated_successfully"));
-  setTimeout(() => {
-    clearModal();
-    isSubmitted.value = false;
-  }, 500);
+
 };
 
 

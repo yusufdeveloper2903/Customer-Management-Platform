@@ -47,37 +47,26 @@ const refresh = async () => {
 };
 
 
-const updateText = () => {
+const updateText = async () => {
   store.pagesList.text = store.pagesList.text_uz
-  store.updatePages({...store.pagesList}).then(() => {
-    setTimeout(() => {
-      toast.success(t("updated_successfully"));
-    }, 200);
-    refresh()
-    is_disabledUz.value = false
-  })
+  await store.updatePages({...store.pagesList})
+  await refresh()
+  toast.success(t("updated_successfully"));
+  is_disabledUz.value = false
 }
-const updateText2 = () => {
+const updateText2 = async () => {
   store.pagesList.text = store.pagesList.text_uz
-
-  store.updatePages({...store.pagesList}).then(() => {
-    setTimeout(() => {
-      toast.success(t("updated_successfully"));
-    }, 200);
-    refresh()
-    is_disabledRu.value = false
-  })
+  await store.updatePages({...store.pagesList})
+  await refresh()
+  toast.success(t("updated_successfully"));
+  is_disabledRu.value = false
 }
-const updateText3 = () => {
+const updateText3 = async () => {
   store.pagesList.text = store.pagesList.text_uz
-
-  store.updatePages({...store.pagesList}).then(() => {
-    setTimeout(() => {
-      toast.success(t("updated_successfully"));
-    }, 200);
-    refresh()
-    is_disabledKr.value = false
-  })
+  await store.updatePages({...store.pagesList})
+  await refresh()
+  toast.success(t("updated_successfully"));
+  is_disabledKr.value = false
 }
 
 

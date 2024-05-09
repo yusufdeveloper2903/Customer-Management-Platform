@@ -86,9 +86,7 @@ const saveUser = async () => {
       await router.push("/staff");
       toast.success(t("updated_successfully"));
     } catch (error: any) {
-      if (error) {
-        toast.error(t('error'))
-      }
+      toast.error(t('error'))
     }
 
   } else {
@@ -99,13 +97,9 @@ const saveUser = async () => {
     } catch (error: any) {
 
       if (error.response.data.message == '{\'username\': [ErrorDetail(string=\'Пользователь с таким именем уже существует.\', code=\'unique\')]}') {
-        if (error) {
-          toast.error(t('User with that username already exists!'))
-        }
+        toast.error(t('User with that username already exists!'))
       } else {
-        if (error) {
-          toast.error(t('error'))
-        }
+        toast.error(t('error'))
       }
 
     }

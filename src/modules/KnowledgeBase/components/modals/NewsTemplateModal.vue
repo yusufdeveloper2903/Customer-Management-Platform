@@ -2,7 +2,7 @@
 
 
 //IMPORTED FILES
-import {Ref, ref, computed, nextTick} from "vue";
+import {Ref, ref, computed} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
@@ -86,9 +86,7 @@ const updateDeal = async () => {
       emit("refresh");
     } catch (error: any) {
       isSubmitted.value = false;
-      if (error) {
-        toast.error(t("error"));
-      }
+      toast.error(t("error"));
     }
   } else {
     try {
@@ -100,9 +98,7 @@ const updateDeal = async () => {
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
-      if (error) {
-        toast.error(t('error'));
-      }
+      toast.error(t('error'));
     }
   }
 };

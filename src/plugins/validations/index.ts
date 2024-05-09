@@ -1,5 +1,5 @@
 // 👉 IsEmpty
-export const isEmpty = value => {
+export const isEmpty = (value: any) => {
     if (value === null || value === undefined || value === '')
         return true
 
@@ -7,11 +7,11 @@ export const isEmpty = value => {
 }
 
 // 👉 IsNullOrUndefined
-export const isNullOrUndefined = value => {
+export const isNullOrUndefined = (value: any) => {
     return value === null || value === undefined
 }
 
 // 👉 IsEmptyArray
-export const isEmptyArray = arr => {
+export const isEmptyArray = (arr: any) => {
     return Array.isArray(arr) && arr.length === 0
 }

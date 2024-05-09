@@ -145,28 +145,12 @@ const onPageSizeChanged = (e) => {
       <template #empty-message>
         <div>{{ $t('no_available_data') }}</div>
       </template>
-
-      <template #header-datetime="header">
-        {{ $t(header.text) }}
-      </template>
-      <template #header-description="header">
-        {{ $t(header.text) }}
-      </template>
-      <template #header-modified_date="header">
+      <template #header="header">
         {{ $t(header.text) }}
       </template>
 
-      <template #header-version_number="header">
-        {{ $t(header.text) }}
-      </template>
 
-      <template #header-is_active="header">
-        {{ $t(header.text) }}
-      </template>
 
-      <template #header-actions="header">
-        {{ $t(header.text) }}
-      </template>
 
       <template #item-datetime="items">
         {{ formatDate(items.created_date) }}

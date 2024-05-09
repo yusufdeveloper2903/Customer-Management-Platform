@@ -12,6 +12,8 @@ import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
 import FileInput from '@/components/FileInput/FileInput.vue'
 import {EditData} from '../Interface/index'
+import {objectToFormData} from "@/mixins/formmatter";
+
 
 //DECLARED VARIABLES
 const propData = defineProps<{
@@ -25,6 +27,7 @@ const isSubmitted = ref<boolean>(false);
 const store = prmotionBase()
 const emits = defineEmits(["saveProducts"]);
 let productsData = ref({
+  id: '',
   title: '',
   title_ru: '',
   title_uz: '',
@@ -46,30 +49,15 @@ let productsData = ref({
 const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
-  const formData = new FormData()
-  formData.append('title', productsData.value.title_uz)
-  formData.append('title_uz', productsData.value.title_uz)
-  formData.append('title_kr', productsData.value.title_kr)
-  formData.append('title_ru', productsData.value.title_ru)
-  formData.append('description', productsData.value.description_uz)
-  formData.append('description_uz', productsData.value.description_uz)
-  formData.append('description_ru', productsData.value.description_ru)
-  formData.append('description_kr', productsData.value.description_kr)
-  formData.append('is_published', String(productsData.value.is_published))
-  formData.append('start_date', productsData.value.start_date)
-  formData.append('end_date', productsData.value.end_date)
-  if (typeof productsData.value.detail_photo == 'object' || productsData.value.detail_photo == '') {
-    formData.append('detail_photo', productsData.value.detail_photo)
-  }
-  if (typeof productsData.value.background_photo == 'object' || productsData.value.background_photo == '') {
-    formData.append('background_photo', productsData.value.background_photo)
-  }
+  productsData.value.title = productsData.value.title_uz;
+  productsData.value.description = productsData.value.description_uz;
+  productsData.value.id = propData.editData.id
+  const fd = objectToFormData(['detail_photo', 'background_photo'], productsData.value)
   if (propData.editData.id) {
     try {
-      formData.append('id', String(propData.editData.id))
-      await store.updatePromotion(formData)
+      await store.updatePromotion(fd)
+      await UIkit.modal("#create_edit_promotion").hide();
       emits("saveProducts");
-      UIkit.modal("#create_edit_promotion").hide();
       toast.success(t("updated_successfully"));
       isSubmitted.value = false;
     } catch (error: any) {
@@ -79,8 +67,8 @@ const updateDeal = async () => {
 
   } else {
     try {
-      await store.createPromotion(formData)
-      UIkit.modal("#create_edit_promotion").hide();
+      await store.createPromotion(fd)
+      await UIkit.modal("#create_edit_promotion").hide();
       emits("saveProducts");
       toast.success(t("created_successfully"));
       isSubmitted.value = false;
@@ -89,7 +77,7 @@ const updateDeal = async () => {
       toast.error(t('error'))
     }
   }
-};
+}
 
 watch(
     () => dateConfig.value,

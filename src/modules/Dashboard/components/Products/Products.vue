@@ -40,6 +40,9 @@ const tableData = reactive([
       <template #empty-message>
         <div>{{ $t('no_available_data') }}</div>
       </template>
+      <template #header="header">
+        {{ $t(header.text) }}
+      </template>
       <template #item-product="items">
         <div class="p-2 flex items-center">
           <img :src="items.product.img" class="w-[100px] rounded" />

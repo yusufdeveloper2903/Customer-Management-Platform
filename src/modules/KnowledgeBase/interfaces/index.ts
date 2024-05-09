@@ -166,7 +166,7 @@ export interface LocationPlaceData {
     coordinates: {
         lat: number | null;
         lng: number | null;
-    };
+    } | {};
     photo: string,
     phones: [];
     opened_at: string,

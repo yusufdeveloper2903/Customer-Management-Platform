@@ -101,30 +101,10 @@ const showDetailPage = (item: any) => {
         <template #empty-message>
           <div class="dark:text-white">{{ $t("no_available_data") }}</div>
         </template>
-
-        <template #header-full_name="header">
+        <template #header="header">
           {{ $t(header.text) }}
         </template>
 
-        <template #header-last_login="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-phone="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-created_date="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-is_active="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-detail="header">
-          {{ $t(header.text) }}
-        </template>
 
 
         <template #item-phone="items">

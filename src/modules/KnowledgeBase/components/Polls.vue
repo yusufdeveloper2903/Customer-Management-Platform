@@ -126,16 +126,7 @@ const savePoll = () => {
       <template #empty-message>
         <div>{{ $t('no_available_data') }}</div>
       </template>
-
-      <template #header-name="header">
-        {{ $t(header.text) }}
-      </template>
-
-      <template #header-is_active="header">
-        {{ $t(header.text) }}
-      </template>
-
-      <template #header-actions="header">
+      <template #header="header">
         {{ $t(header.text) }}
       </template>
       <template #item-is_active="items">

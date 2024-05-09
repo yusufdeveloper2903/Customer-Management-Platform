@@ -34,7 +34,6 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import Paginate from "vuejs-paginate-next";
 import DeleteModal from "@/components/DeleteModal.vue";
 import LazySelect from "./components/LazySelect.vue";
-import VueNativeSock from "vue-native-websocket-vue3";
 import VueApexCharts from "vue3-apexcharts";
 import Icon from "@/components/Icons/Icon.vue";
 

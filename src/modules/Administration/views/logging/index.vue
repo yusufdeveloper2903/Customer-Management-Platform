@@ -77,9 +77,7 @@ const downloadExcel = async () => {
     link.click();
   })
       .catch(() => {
-        setTimeout(() => {
-          isError.value = true
-        }, 500);
+        isError.value = true
       })
       .finally(() => {
         isLoading.value = false
@@ -103,9 +101,7 @@ const downloadExcel2 = async () => {
     link.click();
   })
       .catch(() => {
-        setTimeout(() => {
-          isError.value = true
-        }, 500);
+        isError.value = true
       })
       .finally(() => {
         isLoading2.value = false
@@ -259,21 +255,10 @@ const onPageSizeChangedRight = async (event: number) => {
                     <div>{{ $t('no_available_data') }}</div>
                   </template>
 
-                  <template #header-user="header">
+                  <template #header="header">
                     {{ $t(header.text) }}
                   </template>
 
-                  <template #header-ip_address="header">
-                    {{ $t(header.text) }}
-                  </template>
-
-                  <template #header-mac_address="header">
-                    {{ $t(header.text) }}
-                  </template>
-
-                  <template #header-datetime="header">
-                    {{ $t(header.text) }}
-                  </template>
 
 
                   <template #item-user="items">
@@ -409,24 +394,7 @@ const onPageSizeChangedRight = async (event: number) => {
                   <template #empty-message>
                     <div>{{ $t('no_available_data') }}</div>
                   </template>
-
-
-                  <template #header-request="header">
-                    {{ $t(header.text) }}
-                  </template>
-
-                  <template #header-user="header">
-                    {{ $t(header.text) }}
-                  </template>
-                  <template #header-ip_address="header">
-                    {{ $t(header.text) }}
-                  </template>
-
-                  <template #header-mac_address="header">
-                    {{ $t(header.text) }}
-                  </template>
-
-                  <template #header-datetime="header">
+                  <template #header="header">
                     {{ $t(header.text) }}
                   </template>
 

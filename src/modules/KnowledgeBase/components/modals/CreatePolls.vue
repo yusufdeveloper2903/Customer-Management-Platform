@@ -47,9 +47,9 @@ const updateDeal = async () => {
   if (propData.editData.id) {
     try {
       await store.updatePoll({id: propData.editData.id, ...pollList.value})
+      await UIkit.modal("#polls-modal").hide();
       emits("savePoll");
       toast.success(t("updated_successfully"));
-      UIkit.modal("#polls-modal").hide();
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
@@ -59,15 +59,13 @@ const updateDeal = async () => {
   } else {
     try {
       await store.createPoll(pollList.value)
+      await UIkit.modal("#polls-modal").hide();
       emits("savePoll");
       toast.success(t("created_successfully"));
-      UIkit.modal("#polls-modal").hide();
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
-      if (error) {
-        toast.error(t("error"));
-      }
+      toast.error(t("error"));
     }
   }
 };

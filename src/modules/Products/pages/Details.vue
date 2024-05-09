@@ -99,11 +99,11 @@ watchDebounced(
 );
 
 
-const dragStart = (item) => {
+const dragStart = (item: any) => {
   currentRow.value = item;
 };
 
-const dragOver = (e) => {
+const dragOver = (e: any) => {
   e.preventDefault();
 };
 

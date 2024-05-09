@@ -36,7 +36,6 @@ import BreadCrumb from "@/components/Breadcrumb/Index.vue";
 import {useRoute} from "vue-router";
 import ScrollToTop from '@/components/ScrollToTop.vue'
 
-
 //DECLARED VARIABLES
 const sidebar = useSidebarStore();
 const windowWidth = window.innerWidth;
@@ -75,6 +74,7 @@ watch(() => route.name, function (val) {
 //MOUNTED
 onMounted(() => {
   breadCrumbStart(route.name);
+
 });
 
 function breadCrumbStart(newPath) {

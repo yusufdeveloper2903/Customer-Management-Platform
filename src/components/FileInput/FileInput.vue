@@ -5,8 +5,10 @@ import {nextTick, ref, watch} from "vue";
 import ShowFileModal from "./showFileModal.vue";
 import UIkit from "uikit";
 
-//DECLARED VARIABLES
 
+
+
+//DECLARED VARIABLES
 interface ReturnValue {
   item: string;
   index: number;

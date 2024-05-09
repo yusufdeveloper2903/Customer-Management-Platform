@@ -71,14 +71,10 @@ const activities = reactive([
           <Icon :icon="item.icon"/>
         </div>
 
-        <span class="dark:text-gray-200 text-gray-600 ml-2">{{
-            item.title
-          }}</span>
+        <span class="dark:text-gray-200 text-gray-600 ml-2">{{ item.title }}</span>
       </div>
       <div>
-        <span class="dark:text-gray-100 text-gray-300 text-sm">{{
-            item.time
-          }}</span>
+        <span class="dark:text-gray-100 text-gray-300 text-sm">{{item.time }}</span>
         <h5 class="font-medium dark:text-gray-200 text-gray-600 mb-0 pb-0">
           {{ item.date }}
         </h5>

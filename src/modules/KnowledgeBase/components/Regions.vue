@@ -128,14 +128,11 @@ const saveSmsTemplate = () => {
         <div>{{ $t('no_available_data') }}</div>
       </template>
 
-      <template #header-name="header">
+      <template #header="header">
         {{ $t(header.text) }}
       </template>
 
 
-      <template #header-actions="header">
-        {{ $t(header.text) }}
-      </template>
 
       <template #item-name="item">
         {{ item['name_' + $i18n.locale] }}

@@ -112,7 +112,9 @@ const showUntieCardModal = (item) => {
         <template #empty-message>
           <div class="dark:text-white">{{ $t("no_available_data") }}</div>
         </template>
-
+        <template #header="header">
+          {{ $t(header.text) }}
+        </template>
         <template #item-created="item">
           {{ item.created_date }}
         </template>

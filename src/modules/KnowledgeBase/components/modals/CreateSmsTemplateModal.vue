@@ -51,9 +51,9 @@ const updateDeal = async () => {
   if (propData.editData.id) {
     try {
       await store.updateSmsTemplate({id: propData.editData.id, ...smsTemplateData.value})
+      await UIkit.modal("#sms_template").hide();
       emits("saveSmsTemplate");
       toast.success(t("updated_successfully"));
-      UIkit.modal("#sms_template").hide();
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
@@ -63,15 +63,14 @@ const updateDeal = async () => {
   } else {
     try {
       await store.createSmsTemplate(smsTemplateData.value)
+      await UIkit.modal("#sms_template").hide();
+
       emits("saveSmsTemplate");
       toast.success(t("created_successfully"));
-      UIkit.modal("#sms_template").hide();
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
-      if (error) {
-        toast.error(t("error"));
-      }
+      toast.error(t("error"));
     }
   }
 };

@@ -10,7 +10,7 @@ import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
 import DeleteModal from "@/components/DeleteModal.vue";
 import {useI18n} from "vue-i18n";
-import ShowFileModal from "@/modules/KnowledgeBase/components/ShowImageModal.vue";
+import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
 
 
 //Declared files
@@ -58,7 +58,7 @@ const deleteAction = async () => {
     await store.deleteStaff(userId.value)
     UIkit.modal("#staff-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if (store.staffsList.count> 1((store.staffsList.count - 1) % filterUsers.page_size == 0)) {
+    if (store.staffsList.count > 1 && ((store.staffsList.count - 1) % filterUsers.page_size == 0)) {
       filterUsers.page = filterUsers.page - 1
       await refresh()
     } else {
@@ -155,36 +155,7 @@ const onShowFile = (item: any) => {
         <template #empty-message>
           <div class="dark:text-white">{{ $t("no_available_data") }}</div>
         </template>
-
-        <template #header-full_name="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-photo="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-username="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-phone="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-role="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-is_active="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-status="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-actions="header">
+        <template #header="header">
           {{ $t(header.text) }}
         </template>
 

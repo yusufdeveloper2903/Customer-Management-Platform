@@ -13,7 +13,11 @@ export const objectToFormData = (photo: any, obj: any) => {
                     }
                 }
             }
-        } else if (obj[property] == null ) {
+        } else if (Array.isArray(obj[property])) {
+            obj[property].forEach((item: any) => {
+                formData.append(property, item.id);
+            })
+        } else if (obj[property] == null) {
             // formData.append(property, obj[property]);
         } else {
             formData.append(property, obj[property]);

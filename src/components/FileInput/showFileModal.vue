@@ -2,7 +2,6 @@
 
 interface Props {
   image: string;
-  id?: string;
   name: string
 }
 

@@ -11,6 +11,7 @@ export const useSidebarStore = defineStore("counter", {
             ),
             currentTheme: localStorage.getItem("currentTheme") || "dark",
             miniSidebar: JSON.parse(localStorage.getItem("miniSidebar") || "false"),
+
         };
     },
 

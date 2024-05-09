@@ -10,7 +10,7 @@ import knowledgeBase from "../store/index"
 import UIkit from "uikit";
 import {watchDebounced} from "@vueuse/core";
 import {useI18n} from "vue-i18n";
-import ShowFileModal from "@/modules/KnowledgeBase/components/ShowImageModal.vue";
+import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
 import {EditDataProduct} from '../interfaces/index'
 
 
@@ -150,30 +150,11 @@ const onShowFile = (item: any) => {
         <div>{{ $t('no_available_data') }}</div>
       </template>
 
-      <template #header-code="header">
-        {{ $t(header.text) }}
-      </template>
-
-      <template #header-title="header">
-        {{ $t(header.text) }}
-      </template>
-
-      <template #header-image="header">
-        {{ $t(header.text) }}
-      </template>
-
-      <template #header-actions="header">
-        {{ $t(header.text) }}
-      </template>
-
-      <template #header-price="header">
+      <template #header="header">
         {{ $t(header.text) }}
       </template>
       <template #item-price="data">
         {{ (`${data.price}`).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' Som' }}
-      </template>
-      <template #header-quantity="header">
-        {{ $t(header.text) }}
       </template>
 
       <template #item-title="item">

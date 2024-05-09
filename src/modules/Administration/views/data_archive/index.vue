@@ -63,11 +63,12 @@ const createBackup = async () => {
   isLoading.value = true
   try {
     await administrationStorage.CREATE_BACKUP_MEDIA()
-    UIkit.modal("#backup-add-modal").hide();
-    toast.success(t('created_successfully'));
+    await UIkit.modal("#backup-add-modal").hide();
     refresh()
+    toast.success(t('created_successfully'));
     isLoading.value = false
   } catch (error) {
+    toast.error(t('error'));
     isError.value = true
   }
 }
@@ -85,6 +86,7 @@ const deleteAction = async () => {
     }
     isLoading.value = false
   } catch (error) {
+    toast.error(t('error'));
     isError.value = true
   }
 }
@@ -213,27 +215,9 @@ const onPageSizeChanged = (event: number) => {
             <template #empty-message>
               <div>{{ $t('no_available_data') }}</div>
             </template>
-
-            <template #header-id="header">
+            <template #header="header">
               {{ $t(header.text) }}
             </template>
-            <template #header-title="header">
-              {{ $t(header.text) }}
-            </template>
-
-            <template #header-author="header">
-              {{ $t(header.text) }}
-            </template>
-
-            <template #header-created_at="header">
-              {{ $t(header.text) }}
-            </template>
-
-            <template #header-actions="header">
-              {{ $t(header.text) }}
-            </template>
-
-
             <template #item-author="items">
               <div class="flex justify-left" style="overflow-wrap: anywhere;">
                 {{ items.author && items.author.name ? items.author.name : "" }}

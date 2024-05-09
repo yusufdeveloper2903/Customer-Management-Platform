@@ -103,9 +103,7 @@ async function saveData() {
       toast.success(t("updated_successfully"));
 
     } catch (error: any) {
-      if (error) {
-        toast.error(t('error'));
-      }
+      toast.error(t('error'));
     }
   } else {
     try {
@@ -113,9 +111,7 @@ async function saveData() {
       await router.push("/sms-template");
       toast.success(t("created_successfully"));
     } catch (error: any) {
-      if (error) {
-        toast.error(t('error'));
-      }
+      toast.error(t('error'));
     }
 
   }
@@ -184,7 +180,8 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
       <div class="uk-margin">
         <label for="form-stacked-text">{{ $t('start_date') }} </label>
         <div class="uk-form-controls">
-          <VueDatePicker :enableTimePicker="false" auto-apply :locale="'ru'" model-type="yyyy-MM-dd hh:mm:ss" v-model="smsSendingData.start_time"
+          <VueDatePicker :enableTimePicker="false" auto-apply :locale="'ru'" model-type="yyyy-MM-dd hh:mm:ss"
+                         v-model="smsSendingData.start_time"
                          :class="validate.start_time.$errors.length ? 'required-input' : ''"/>
           <p
               v-for="error in validate.start_time.$errors"
@@ -243,7 +240,6 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
                 id="search"
                 type="text"
                 class="form-input"
-                :placeholder="$t('Search')"
                 v-model="params.search"
             />
           </div>
@@ -259,8 +255,8 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
           <template #empty-message>
             <div>{{ $t('no_available_data') }}</div>
           </template>
-          <template #header="data">
-            {{ t(data.text) }}
+          <template #header="header">
+            {{ $t(header.text) }}
           </template>
 
           <template #item-name="item">

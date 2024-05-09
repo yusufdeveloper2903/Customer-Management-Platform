@@ -17,9 +17,10 @@ import {watchDebounced} from "@vueuse/core";
 import {newsHeader} from '../../constants/index'
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
+import {objectToFormData} from "@/mixins/formmatter";
+
 
 //DECLARED VARIABLES
-const itemSelected = ref<any[]>([]);
 const newTemplate = newsTemplate()
 const {t} = useI18n()
 const store = knowledgeBase()
@@ -31,6 +32,7 @@ const loading = ref(false);
 const clientsStorage = clientsStore()
 let lang = ref<string | null>('')
 const newsData = ref<any>({
+  id: '',
   title_ru: '',
   title_uz: '',
   title_kr: '',
@@ -39,7 +41,7 @@ const newsData = ref<any>({
   description_uz: '',
   description_kr: '',
   description: '',
-  photo: "",
+  file: "",
   start_time: "",
   status: '',
   url: "",
@@ -60,7 +62,7 @@ watchDebounced(() => params.search, async function () {
 }, {deep: true, debounce: 500, maxWait: 5000,})
 
 watch(() => store.receiversList.results, function () {
-  itemSelected.value = store.receiversList.results
+  newsData.value.receivers = store.receiversList.results
   select.value = true
 })
 
@@ -95,7 +97,7 @@ onMounted(async () => {
     newsData.value.title_ru = store.newsListDetail.title_ru
     newsData.value.title_uz = store.newsListDetail.title_uz
     newsData.value.title_kr = store.newsListDetail.title_kr
-    newsData.value.photo = store.newsListDetail.file
+    newsData.value.file = store.newsListDetail.file
     newsData.value.url = store.newsListDetail.url
     newsData.value.status = store.newsListDetail.status
     newsData.value.description = store.newsListDetail.description
@@ -137,87 +139,38 @@ async function selectAllData() {
   select.value = !select.value
   if (select.value) {
     await clientsStorage.getUsersSelected(params)
-    itemSelected.value = clientsStorage.usersListSelected.results
+    newsData.value.receivers = clientsStorage.usersListSelected.results
   } else {
-    itemSelected.value = []
+    newsData.value.receivers = []
   }
 }
 
 const saveData = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
-  const formData = new FormData()
-  if (typeof newsData.value.photo !== 'string' && newsData.value.photo !== null) {
-    formData.append('file', newsData.value.photo)
-  }
-  if (newsData.value.title_uz) {
-    formData.append('title', newsData.value.title_uz)
-    formData.append('title_uz', newsData.value.title_uz)
-  }
-  if (newsData.value.title_ru) {
-    formData.append('title_ru', newsData.value.title_ru)
+  newsData.value.title = newsData.value.title_uz
+  newsData.value.description = newsData.value.description_uz
+  newsData.value.template = newsData.value.template?.id
+  newsData.value.id = route.params.id
+  newsData.value.status = newsData.value.status?.id
+  const fd = objectToFormData(['file'], newsData.value)
 
-  }
-  if (newsData.value.title_kr) {
-    formData.append('title_kr', newsData.value.title_kr)
-  }
-  if (newsData.value.description_uz) {
-    formData.append('description', newsData.value.description_uz)
-    formData.append('description_uz', newsData.value.description_uz)
-  }
-  if (newsData.value.description_ru) {
-    formData.append('description_ru', newsData.value.description_ru)
-
-  }
-  if (newsData.value.description_kr) {
-    formData.append('description_kr', newsData.value.description_kr)
-  }
-  if (newsData.value.start_time) {
-    formData.append('start_time', newsData.value.start_time)
-  }
-  if (newsData.value.status) {
-    formData.append('status', newsData.value.status?.id)
-  }
-  formData.append('enable_push_notify', String(newsData.value.enable_push_notify))
-  if (itemSelected.value.length) {
-    itemSelected.value.forEach(el => {
-      formData.append('receivers', el.id)
-    })
-  } else {
-    formData.append('receivers', '[]')
-
-  }
-
-  if (newsData.value.template) {
-    formData.append('template', newsData.value.template?.id)
-  } else {
-    formData.append('template', '')
-
-  }
   if (route.params.id) {
     try {
-      let id = String(route.params.id)
-      formData.append('id', id)
-      await store.updateNews(formData).then(() => {
-        router.push("/sms-template");
-        toast.success(t("updated_successfully"));
-      })
+      await store.updateNews(fd)
+      await router.push("/sms-template");
+      toast.success(t("updated_successfully"));
     } catch (error: any) {
-      if (error) {
-        toast.error(t('error'));
-      }
+      toast.error(t('error'));
     }
 
   } else {
     try {
-      await store.createNews(formData).then(() => {
-        router.push("/sms-template");
-        toast.success(t("created_successfully"));
-      })
+      await store.createNews(fd)
+      await router.push("/sms-template");
+      toast.success(t("created_successfully"));
     } catch (error: any) {
-      if (error) {
-        toast.error(t('error'));
-      }
+      toast.error(t('error'));
     }
   }
 };
@@ -374,8 +327,8 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
         <label
         >{{ $t('photo') }}
           <FileInput
-              v-model="newsData.photo"
-              @remove="newsData.photo = ''"
+              v-model="newsData.file"
+              @remove="newsData.file = ''"
               :typeModal="route.params.id"
               name="news-detail"
           />
@@ -414,16 +367,17 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           </div>
         </div>
         <EasyDataTable theme-color="#7367f0" :loading="loading" :headers="newsHeader"
-                       v-model:items-selected="itemSelected"
+                       v-model:items-selected="newsData.receivers"
                        :items="receiversList"
                        @select-all="selectAllData"
                        hide-footer>
           <template #empty-message>
             <div>{{ $t('no_available_data') }}</div>
           </template>
-          <template #header="data">
-            {{ t(data.text) }}
+          <template #header="header">
+            {{ $t(header.text) }}
           </template>
+
           <template #item-fio="item">
             {{ item.full_name }}
           </template>

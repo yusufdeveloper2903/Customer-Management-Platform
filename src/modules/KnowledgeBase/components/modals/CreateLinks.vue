@@ -37,9 +37,7 @@ const updateDeal = async () => {
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
-      if (error) {
-        toast.error(t("error"));
-      }
+      toast.error(t("error"));
     }
 
   } else {
@@ -51,15 +49,12 @@ const updateDeal = async () => {
       isSubmitted.value = false;
     } catch (error: any) {
       isSubmitted.value = false;
-      if (error) {
-        if (error.response.data.message == '{\'type\': [ErrorDetail(string=\'social media link with this type already exists.\', code=\'unique\')]}') {
-          toast.error(t("social_media_exists"));
-        } else {
-          toast.error(t("error"));
-
-        }
-
+      if (error.response.data.message == '{\'type\': [ErrorDetail(string=\'social media link with this type already exists.\', code=\'unique\')]}') {
+        toast.error(t("social_media_exists"));
+      } else {
+        toast.error(t("error"));
       }
+
     }
   }
 };
@@ -140,10 +135,3 @@ const validate: Ref<Validation> = useVuelidate(rules, editData);
     </div>
   </div>
 </template>
-
-<style>
-.vs__dropdown-menu {
-  max-height: 150px;
-}
-
-</style>

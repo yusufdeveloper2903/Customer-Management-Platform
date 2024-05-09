@@ -135,7 +135,7 @@ export default defineStore("knowledgeBase", {
         createNewsTemplate(data: any) {
             return $axios.post(`/knowledge_base/news_template/`, data);
         },
-        AddForms(data) {
+        AddForms(data:any) {
             return $axios.post("/knowledge_base/location/", data);
         },
         createRegions(data: object) {
@@ -144,57 +144,57 @@ export default defineStore("knowledgeBase", {
         createVersion(data: object) {
             return $axios.post(`/versions/create_version/`, data);
         },
-        createProducts(data) {
+        createProducts(data:any) {
             return $axios.post(`/products/products/`, data);
         },
-        create_drag_and_drop(data) {
+        create_drag_and_drop(data:any) {
             return $axios.post(`/knowledge_base/social_media_links/drag_and_drop/`, data);
         },
 
-        createSocialMediaLinks(data) {
+        createSocialMediaLinks(data:any) {
             return $axios.post(`/knowledge_base/social_media_links/`, data)
         },
 
-        createPhones(data) {
+        createPhones(data:any) {
             return $axios.post(`/knowledge_base/phones/`, data);
         },
-        create_phones_drag_and_drop(data) {
+        create_phones_drag_and_drop(data:any) {
             return $axios.post(`/knowledge_base/phones/drag_and_drop/`, data);
         },
 
 
         //PATCH REQUEST
-        updateSmsTemplate(data) {
+        updateSmsTemplate(data:any) {
             return $axios.patch(`/knowledge_base/sms_template/${data.id}/`, data);
         },
         updatePoll(data: any) {
             return $axios.patch(`knowledge_base/poll/${data.id}/`, data);
         },
-        updateNewsTemplate(data) {
+        updateNewsTemplate(data:any) {
             return $axios.patch(`/knowledge_base/news_template/${data.get("id")}/`, data);
         },
-        updateOneForm(data) {
+        updateOneForm(data:any) {
             return $axios.patch(`/knowledge_base/location/${data.get('id')}/`, data);
         },
         updateRegions(data: any) {
             return $axios.patch(`knowledge_base/region/${data.id}/`, data)
         },
-        updateVersion(data) {
+        updateVersion(data:any) {
             return $axios.patch(`/versions/version/${data.id}/`, data);
         },
-        updateProducts(data) {
+        updateProducts(data:any) {
             return $axios.patch(
                 `/products/products/${data.id || data.get("id")}/`,
                 data
             );
         },
-        updatePages(data) {
+        updatePages(data:any) {
             return $axios.patch(`/knowledge_base/pages/${data.id}/`, data);
         },
-        updateSocialMediaLinks(data) {
+        updateSocialMediaLinks(data:any) {
             return $axios.patch(`/knowledge_base/social_media_links/${data.id}/`, data);
         },
-        updatePhones(data) {
+        updatePhones(data:any) {
             return $axios.patch(`/knowledge_base/phones/${data.id}/`, data);
         },
 

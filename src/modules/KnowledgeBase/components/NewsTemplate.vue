@@ -11,7 +11,7 @@ import NewsTemplateModal from "../components/modals/NewsTemplateModal.vue";
 import {NewsTemplate} from "../interfaces/index";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
-import ShowFileModal from "./ShowImageModal.vue";
+import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
 import UIkit from "uikit";
 
 
@@ -146,7 +146,9 @@ const handleDeleteModal = (id: number) => {
       <template #empty-message>
         <div>{{ $t('no_available_data') }}</div>
       </template>
-
+      <template #header="header">
+        {{ $t(header.text) }}
+      </template>
       <template #item-title="item">
         {{ item['title_' + $i18n.locale] }}
       </template>

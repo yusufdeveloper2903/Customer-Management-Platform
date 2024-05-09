@@ -59,7 +59,6 @@ export default [
     },
 
 
-
     {
         name: "Administration",
         icon: "Settings",
@@ -91,7 +90,6 @@ export default [
             },
         ],
     },
-
 
 
 ];

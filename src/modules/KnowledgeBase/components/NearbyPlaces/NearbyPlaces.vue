@@ -145,21 +145,11 @@ const deleteAction = async () => {
         <template #empty-message>
           <div>{{ $t('no_available_data') }}</div>
         </template>
-        <template #header-title="item">
-          {{ $t(item.text) }}
+        <template #header="header">
+          {{ $t(header.text) }}
         </template>
-        <template #header-phones="item">
-          {{ $t(item.text) }}
-        </template>
-        <template #header-region="item">
-          {{ $t(item.text) }}
-        </template>
-        <template #header-address="item">
-          {{ $t(item.text) }}
-        </template>
-        <template #header-actions="item">
-          {{ $t(item.text) }}
-        </template>
+
+
         <template #item-title="item">
           {{ item['title_' + $i18n.locale] }}
         </template>

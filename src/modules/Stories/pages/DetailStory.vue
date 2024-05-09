@@ -108,9 +108,7 @@ const saveData = async (val: string) => {
       toast.success(t("updated_successfully"));
     } catch (error: any) {
       isSubmitted.value = false;
-      if (error) {
-        toast.error(t("error"));
-      }
+      toast.error(t("error"));
     }
   } else {
     try {
@@ -128,9 +126,7 @@ const saveData = async (val: string) => {
       toast.success(t("created_successfully"));
     } catch (error: any) {
       isSubmitted.value = false;
-      if (error) {
-        toast.error(t('error'));
-      }
+      toast.error(t('error'));
     }
   }
 };
@@ -429,6 +425,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           <template #empty-message>
             <div class="dark:text-white">{{ $t("no_available_data") }}</div>
           </template>
+
           <template #header="header">
             {{ $t(header.text) }}
           </template>
@@ -534,7 +531,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
     </div>
     <DetailsModal :editData="editData" @refresh="refresh"/>
     <DeleteModal @delete-action="deleteAction" id="stories-detail-main-delete-modal"/>
-    <ShowPhotoGlobal :image="image" id="stories-detail-modal-image" />
+    <ShowPhotoGlobal :image="image" id="stories-detail-modal-image"/>
     <ShowTextModal :url="url" id="stories-detail-url-image"/>
   </div>
 
