@@ -178,17 +178,17 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? $t("Change") : $t('Add') }}
+          {{ propData.editData.id ? t("Change") : t('Add') }}
         </h2>
       </div>
       <div class="uk-modal-body py-4">
         <Tabs>
           <Tab title="UZ">
-            <label>{{ $t('name') + ' ' + $t('UZ') }}</label>
+            <label>{{ t('name') + ' ' + t('UZ') }}</label>
             <input
                 type="text"
                 class="form-input"
-                :placeholder="$t('name')"
+                :placeholder="t('name')"
                 v-model="productsData.title_uz"
                 :class="validate.title_uz.$errors.length ? 'required-input' : ''"
             />
@@ -197,25 +197,25 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 :key="error.$uid"
                 class="text-danger text-sm"
             >
-              {{ $t(error.$message) }}
+              {{ t(error.$message) }}
             </p>
-            <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('UZ') }}
+            <label for="number" class="block mt-4">{{ t('description') + ' ' + t('UZ') }}
               <textarea
                   id="number"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('description')"
+                  :placeholder="t('description')"
                   v-model="productsData.description_uz"
               />
 
             </label>
           </Tab>
           <Tab title="KR">
-            <label>{{ $t('name') + ' ' + $t('KR') }}</label>
+            <label>{{ t('name') + ' ' + t('KR') }}</label>
             <input
                 type="text"
                 class="form-input"
-                :placeholder="$t('name')"
+                :placeholder="t('name')"
                 v-model="productsData.title_kr"
                 :class="validate.title_kr.$errors.length ? 'required-input' : ''"
             />
@@ -224,25 +224,25 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 :key="error.$uid"
                 class="text-danger text-sm"
             >
-              {{ $t(error.$message) }}
+              {{ t(error.$message) }}
             </p>
-            <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('KR') }}
+            <label for="number" class="block mt-4">{{ t('description') + ' ' + t('KR') }}
               <textarea
                   id="number"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('description')"
+                  :placeholder="t('description')"
                   v-model="productsData.description_kr"
               />
 
             </label>
           </Tab>
           <Tab title="RU">
-            <label>{{ $t('name') + ' ' + $t('RU') }}</label>
+            <label>{{ t('name') + ' ' + t('RU') }}</label>
             <input
                 type="text"
                 class="form-input"
-                :placeholder="$t('name')"
+                :placeholder="t('name')"
                 v-model="productsData.title_ru"
                 :class="validate.title_ru.$errors.length ? 'required-input' : ''"
             />
@@ -251,14 +251,14 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 :key="error.$uid"
                 class="text-danger text-sm"
             >
-              {{ $t(error.$message) }}
+              {{ t(error.$message) }}
             </p>
-            <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('RU') }}
+            <label for="number" class="block mt-4">{{ t('description') + ' ' + t('RU') }}
               <textarea
                   id="number"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('description')"
+                  :placeholder="t('description')"
                   v-model="productsData.description_ru"
               />
 
@@ -268,12 +268,12 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
         </Tabs>
         <form>
           <div class="flex gap-4">
-            <label class="w-full mt-4">{{ $t('Number (multi-digit-code)') }}
+            <label class="w-full mt-4">{{ t('Number (multi-digit-code)') }}
               <input
                   id="number"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('Number (multi-digit-code)')"
+                  :placeholder="t('Number (multi-digit-code)')"
                   v-model="productsData.code"
                   :class="validate.code.$errors.length ? 'required-input' : ''"
               />
@@ -282,7 +282,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   :key="error.$uid"
                   class="text-danger text-sm"
               >
-                {{ $t(error.$message) }}
+                {{ t(error.$message) }}
               </p>
             </label>
 
@@ -290,23 +290,23 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
 
           <div class="flex gap-4">
 
-            <label class="mt-4  w-full">{{ $t('Quantity') }}
+            <label class="mt-4  w-full">{{ t('Quantity') }}
               <input
                   id="quantity"
                   type="number"
                   class="form-input"
-                  :placeholder="$t('Quantity')"
+                  :placeholder="t('Quantity')"
                   v-model="productsData.quantity"
                   :class="validate.quantity.$errors.length ? 'required-input' : ''"
               />
 
             </label>
-            <label class="w-full mt-4">{{ $t('Measurement_type') }}
+            <label class="w-full mt-4">{{ t('Measurement_type') }}
               <input
                   id="number"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('Measurement_type')"
+                  :placeholder="t('Measurement_type')"
                   v-model="productsData.measurement_type"
                   :class="validate.measurement_type.$errors.length ? 'required-input' : ''"
               />
@@ -315,15 +315,15 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   :key="error.$uid"
                   class="text-danger text-sm"
               >
-                {{ $t(error.$message) }}
+                {{ t(error.$message) }}
               </p>
             </label>
-            <label class="mt-4 w-full ">{{ $t('price') }}
+            <label class="mt-4 w-full ">{{ t('price') }}
               <input
                   id="price"
                   type="number"
                   class="form-input"
-                  :placeholder="$t('price')"
+                  :placeholder="t('price')"
                   v-model="productsData.price"
                   :class="validate.price.$errors.length ? 'required-input' : ''"
               />
@@ -332,13 +332,13 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   :key="error.$uid"
                   class="text-danger text-sm"
               >
-                {{ $t(error.$message) }}
+                {{ t(error.$message) }}
               </p>
             </label>
           </div>
 
         </form>
-        <label class="mt-4 block" for="photo">{{ $t('photo') }}
+        <label class="mt-4 block" for="photo">{{ t('photo') }}
           <input @change="getFile" id="fileInput" type="file"
                  class="form-file-input p-1"
                  :class="validate.photo.$errors.length  ? 'required-input' : ''"/>
@@ -364,7 +364,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           class=" uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
       >
         <button uk-toggle="target: #create_products" class="btn-secondary">
-          {{ $t("Cancel") }}
+          {{ t("Cancel") }}
         </button>
 
         <button :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'" @click="updateDeal"
@@ -375,7 +375,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
               class="inline w-4 h-4 text-white animate-spin mr-2"
               v-if="isSubmitted"
           />
-          <span>{{ propData.editData.id ? $t("Change") : $t('Add') }}</span>
+          <span>{{ propData.editData.id ? t("Change") : t('Add') }}</span>
 
         </button>
       </div>

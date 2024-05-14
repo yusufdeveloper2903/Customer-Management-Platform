@@ -234,3 +234,25 @@ export interface editSms {
     description_uz: '',
     description_kr: '',
 }
+
+export interface Retsept {
+    id: number | null,
+    title: string,
+    title_uz: string,
+    title_ru: string,
+    title_kr: string,
+    rating: string,
+    calorie: number,
+    preparation_time: string,
+    is_active: boolean,
+    category: number | null
+}
+
+export interface RetseptCategory {
+    id: number;
+    name: string;
+    name_uz: string;
+    name_ru: string;
+    name_kr: string;
+}
+

@@ -305,7 +305,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
               :typeModal="propData.editData.id"
               name="news-template"
           />
-       
+        </label>
       </div>
 
       <div

@@ -10,7 +10,9 @@ import {
     VersionControl,
     Products,
     Link,
-    Phones
+    Phones,
+    Retsept,
+    RetseptCategory
 
 } from "../interfaces";
 
@@ -62,8 +64,15 @@ export default defineStore("knowledgeBase", {
 
             phonesList: {
                 results: [] as Phones[]
-            } as Results<Phones>
+            } as Results<Phones>,
 
+            retseptList: {
+                results: [] as Retsept[]
+            } as Results<Retsept>,
+
+            retseptCategoryList: {
+                results: [] as RetseptCategory[]
+            } as Results<RetseptCategory>
         };
     },
     actions: {
@@ -114,6 +123,15 @@ export default defineStore("knowledgeBase", {
             const {data} = await $axios.get('/knowledge_base/phones/', {params})
             this.phonesList = data
         },
+        async getRetsept(params: Params) {
+            const {data} = await $axios.get('/knowledge_base/retsept/', {params})
+            this.retseptList = data
+        },
+
+        async getRetseptCategory() {
+            const {data} = await $axios.get('/knowledge_base/retsept_category/')
+            this.retseptCategoryList = data
+        },
 
 
         //CREATE REQUEST
@@ -149,6 +167,9 @@ export default defineStore("knowledgeBase", {
         create_phones_drag_and_drop(data) {
             return $axios.post(`/knowledge_base/phones/drag_and_drop/`, data);
         },
+        create_retsept(data: object) {
+            return $axios.post(`/knowledge_base/retsept/`, data);
+        },
 
 
         //PATCH REQUEST
@@ -182,6 +203,9 @@ export default defineStore("knowledgeBase", {
         updatePhones(data) {
             return $axios.patch(`/knowledge_base/phones/${data.id}/`, data);
         },
+        updateRetsept(data: object) {
+            return $axios.patch(`/knowledge_base/retsept/${data.id}/`, data);
+        },
 
 
         //DELETE REQUEST
@@ -208,6 +232,9 @@ export default defineStore("knowledgeBase", {
         },
         deletePhones(id: number | null) {
             return $axios.delete(`/knowledge_base/phones/${id}/`);
+        },
+        deleteRetsept(recipes_id: number | null) {
+            return $axios.delete(`/knowledge_base/retsept/${recipes_id}/`);
         },
 
 

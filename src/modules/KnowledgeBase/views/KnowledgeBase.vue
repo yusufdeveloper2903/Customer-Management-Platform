@@ -59,9 +59,6 @@ const selectedTitle = (val: any) => {
       <Tab title="PrivacyPolicy">
         <PrivacyPolicy :knowledge="knowledge"/>
       </Tab>
-      <Tab title="Region">
-        <CreateRegions :knowledge="knowledge"/>
-      </Tab>
 
       <Tab title="Terms_and_conditions">
         <TermsAndConditions :knowledge="knowledge"/>

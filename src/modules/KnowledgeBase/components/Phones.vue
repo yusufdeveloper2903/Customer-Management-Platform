@@ -56,6 +56,7 @@ const dragStart = (item: any) => {
 const dragOver = (e: any) => {
   e.preventDefault();
 };
+
 const dragDrop = async (item: Phones) => {
   event?.preventDefault();
   await store.create_phones_drag_and_drop({id1: currentRow.value?.id, id2: item.id})
@@ -128,7 +129,7 @@ const refresh = async () => {
             v-for="field in phoneNumberFields"
             class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider"
         >
-          {{ $t(field.text) }}
+          {{ t(field.text) }}
 
         </th>
       </tr>

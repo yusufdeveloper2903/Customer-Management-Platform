@@ -296,7 +296,6 @@
   "system_modules": "Tizim modullari",
   "district": "Tuman",
   "mac_address": "MAC-manzil",
-  "Receivers": "Qabul qiluvchilar",
   "Do you really want to unlink this card?": "Haqiqatdan ham ushbu kartani mijozdan uzib qo'ymoqchimisiz?",
   "Unlinking the card": "Kartani uzish",
   "created_successfully": "Muvaffaqiyatli yaratildi",
@@ -315,6 +314,11 @@
   "contacts": "Kontaktlar",
   "The phone number must be entered in the format: '998 [XX] [XXX XX XX]": "Telefon raqami formatda kiritilishi kerak: '998 [XX] [XXX XX XX]",
   "phone_numbers": "Telefon raqamlari",
-  "added_time": "Qoshilgan vaqt"
+  "added_time": "Qoshilgan vaqt",
+  "Recipes": "Retseptlar",
+  "preparation_time": "Tayyorgarlik vaqti",
+  "calorie": "Kaloriya",
+  "rating": "Reyting",
+  "select_category": "Kategoriyani tanlang"
 
 }
