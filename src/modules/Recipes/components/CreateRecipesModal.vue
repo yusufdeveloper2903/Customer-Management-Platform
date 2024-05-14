@@ -8,8 +8,9 @@ import { helpers, required } from "@vuelidate/validators";
 import useVuelidate, { Validation } from "@vuelidate/core";
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
-import knowledgeBase from "../../store/index";
-import { Retsept } from "../../interfaces/index"
+import recipeStore from "../store/index"
+import { Retsept } from "../interfaces/index"
+import knowledgeBase from '@/modules/KnowledgeBase/store/index';
 
 
 // declared type
@@ -29,9 +30,10 @@ interface RecipesData {
 // Declared variables
 const { t } = useI18n();
 const isSubmitted = ref<boolean>(false);
-const store = knowledgeBase()
+const store = recipeStore()
 const emits = defineEmits(["saveRecipes"]);
 const propData = defineProps<{ editData: Retsept }>();
+const knowledgeStore = knowledgeBase()
 let recipes = ref<RecipesData>({
   id: null,
   title: "",
@@ -67,7 +69,7 @@ const validate: Ref<Validation> = useVuelidate(rules, recipes);
 
 // Functions
 async function openModal() {
-  await store.getRetseptCategory()
+  await knowledgeStore.getRetseptCategory()
   if (propData.editData.id) {
     recipes.value.id = propData.editData.id
     recipes.value.title_ru = propData.editData.title_ru
@@ -209,7 +211,7 @@ const updateDeal = async () => {
 
           <label for="category" class="mt-4 block">{{ t('category') }}
             <VSelect v-model="recipes.category"
-              :options="store.retseptCategoryList && store.retseptCategoryList.results"
+              :options="knowledgeStore.retseptCategoryList && knowledgeStore.retseptCategoryList.results"
               :getOptionLabel="(name: any) => name.name" :reduce="(item: any) => item.id"
               :placeholder="t('select_category')" />
           </label>

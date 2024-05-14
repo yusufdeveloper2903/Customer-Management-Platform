@@ -2,26 +2,23 @@
 
 //Imported files
 import { recipesFields } from "../constants";
-import knowledgeBase from ".././store/index"
-import { reactive, ref, watch } from "vue";
+import recipes from "../store/index"
+import { reactive, ref } from "vue";
 import { toast } from "vue3-toastify";
 import UIkit from "uikit";
-import CreateRecipe from "./modals/CreateRecipesModal.vue"
+import CreateRecipe from "../components/CreateRecipesModal.vue"
 import { useI18n } from "vue-i18n";
 import { watchDebounced } from "@vueuse/core";
 import { Retsept } from "../interfaces/index"
-
-
+import {useRouter} from "vue-router";
+import DoubleRight from "@/modules/Users/img/double-right-chevron-svgrepo-com.svg";
 
 //Declared variables
 const { t } = useI18n()
-const store = knowledgeBase()
+const store = recipes()
+const router = useRouter()
 const isLoading = ref(false);
 const userId = ref<number | null>(null);
-const props = defineProps<{
-    knowledge: string
-}>();
-let toRefresh = ref(false)
 
 const editData = ref<Retsept>({
     id: null,
@@ -42,9 +39,6 @@ const params = reactive({
     page: 1
 });
 
-watch(() => props.knowledge, function () {
-    toRefresh.value = !toRefresh.value
-})
 
 
 
@@ -55,7 +49,7 @@ const deleteAction = async () => {
         await store.deleteRetsept(userId.value);
         UIkit.modal("#recipes-delete-modal").hide();
         toast.success(t('deleted_successfully'));
-        if ((store.smsTemplateList.count - 1) % params.page_size == 0) {
+        if ((store.retseptList.count - 1) % params.page_size == 0) {
             if (params.page > 1) {
                 params.page = params.page - 1
                 await refresh(params)
@@ -114,6 +108,9 @@ const onPageSizeChanged = (e: number) => {
     refresh(params)
 }
 
+const showDetailPage = (item: any) => {
+  router.push({name: 'recipe-detail', params: {id: item.id}})
+};
 
 const saveRecipes = () => {
     refresh(params)
@@ -153,10 +150,13 @@ const saveRecipes = () => {
 
             <template #item-actions="item">
                 <div class="py-3 flex justify-left items-center gap-3">
+                    <button @click="showDetailPage(item)" class="btn-success btn-action">
+                        <img :src="DoubleRight" alt="Icon">
+                    </button>
                     <button class="btn-warning btn-action" uk-toggle="target: #create_recipes" @click="editData = item">
                         <Icon icon="Pen New Square" color="#fff" size="16" />
                     </button>
-                    <button class="ml-3 btn-danger btn-action" @click="handleDeleteModal(item.id)">
+                    <button class=" btn-danger btn-action" @click="handleDeleteModal(item.id)">
                         <Icon icon="Trash Bin Trash" color="#fff" size="16" />
                     </button>
                 </div>
@@ -164,7 +164,7 @@ const saveRecipes = () => {
 
         </EasyDataTable>
 
-        <TwPagination :total="2" class="mt-10 tw-pagination" :restart="toRefresh" :current="params.page"
+        <TwPagination :total="2" class="mt-10 tw-pagination" :current="params.page"
             :per-page="params.page_size" :text-before-input="t('go_to_page')" :text-after-input="t('forward')"
             @page-changed="changePagionation" @per-page-changed="onPageSizeChanged" />
     </div>

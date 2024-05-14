@@ -329,4 +329,16 @@ export const recipesFields = [
     { text: "actions", value: "actions" },
 ]
 
+export const recipedetailFields = [
+    { text: "ID",  value: "id" },
+    { text: "photo", value: "photo" },
+    { text: "name", value: "title" },
+    { text: "category", value: "category" },
+    { text: "rating", value: "rating" },
+    { text: "views", value: "views" },
+    { text: "link", value: "link" },
+    { text: "Status", value: "is_active" },
+    { text: "actions", value: "actions" },
+]
+
 

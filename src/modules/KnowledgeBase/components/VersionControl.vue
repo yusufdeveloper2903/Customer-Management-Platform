@@ -118,23 +118,23 @@ const onPageSizeChanged = (e) => {
 
         <div class="md:w-1/2 md:m-0 mt-2">
           <label for="from" class="dark:text-gray-300">
-            {{ $t("from") }}
+            {{ t("from") }}
           </label>
           <VueDatePicker v-model="params.start_date"></VueDatePicker>
         </div>
 
         <div class="md:w-1/2 md:m-0 mt-2">
           <label for="to" class="dark:text-gray-300">
-            {{ $t("to") }}
+            {{ t("to") }}
           </label>
           <VueDatePicker v-model="params.end_date"></VueDatePicker>
         </div>
       </form>
       <button
           class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-          uk-toggle="target: #version_control" @click="editData = {}"
+          uk-toggle="target: #version_control" @click="editData = <EditDataVersion>{}"
       >
-        {{ $t("Add") }}
+        {{ t("Add") }}
       </button>
     </div>
 
@@ -143,29 +143,29 @@ const onPageSizeChanged = (e) => {
                    :items="store.versionControlList.results">
 
       <template #empty-message>
-        <span class="dark:text-neutral-400">{{ $t('empty_text') }}</span>
+        <span class="dark:text-neutral-400">{{ t('empty_text') }}</span>
       </template>
 
       <template #header-datetime="header">
-        {{ $t(header.text) }}
+        {{ t(header.text) }}
       </template>
       <template #header-description="header">
-        {{ $t(header.text) }}
+        {{ t(header.text) }}
       </template>
       <template #header-modified_date="header">
-        {{ $t(header.text) }}
+        {{ t(header.text) }}
       </template>
 
       <template #header-version_number="header">
-        {{ $t(header.text) }}
+        {{ t(header.text) }}
       </template>
 
       <template #header-is_active="header">
-        {{ $t(header.text) }}
+        {{ t(header.text) }}
       </template>
 
       <template #header-actions="header">
-        {{ $t(header.text) }}
+        {{ t(header.text) }}
       </template>
 
       <template #item-datetime="items">
@@ -207,7 +207,7 @@ const onPageSizeChanged = (e) => {
 
     <TwPagination :restart="toRefresh" :total="store.versionControlList.count" class="mt-10 tw-pagination"
                   :current="params.page" :per-page="params.page_size"
-                  :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
+                  :text-before-input="t('go_to_page')" :text-after-input="t('forward')"
                   @page-changed="changePagination" @per-page-changed="onPageSizeChanged"/>
 
   </div>

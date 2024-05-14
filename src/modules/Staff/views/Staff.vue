@@ -156,37 +156,10 @@ const onShowFile = (item: any) => {
           <div class="dark:text-white">{{ $t("no_available_data") }}</div>
         </template>
 
-        <template #header-full_name="header">
+        <template #header="header">
           {{ $t(header.text) }}
         </template>
 
-        <template #header-photo="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-username="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-phone="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-role="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-is_active="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-status="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-actions="header">
-          {{ $t(header.text) }}
-        </template>
 
         <template #item-photo="items">
           <div class="py-3 flex justify-left gap-3">

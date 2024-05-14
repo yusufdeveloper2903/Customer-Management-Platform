@@ -52,13 +52,12 @@ export default [
         permissions: ["admin"],
     },
 
-
-    // {
-    //   name: "news",
-    //   icon: "Fire",
-    //   path: "/news",
-    //   permissions: ["admin"],
-    // },
+    {
+        name: "Recipes",
+        icon: "File",
+        path: "/recipes",
+        permissions: ["admin"],
+    },
 
 
     {

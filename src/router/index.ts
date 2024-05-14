@@ -9,6 +9,7 @@ import sms from "@/modules/sms/router";
 import promotion from "@/modules/Promotion/router"
 import transactions from "@/modules/Transactions/router"
 import promo_code from "@/modules/Products/router"
+import recipes from "@/modules/Recipes/router"
 
 const routes: Array<RouteRecordRaw> = [
     ...promo_code,
@@ -21,6 +22,7 @@ const routes: Array<RouteRecordRaw> = [
     ...sms,
     ...promotion,
     ...transactions,
+    ...recipes,
     {
         path: "/",
         redirect: () => {
