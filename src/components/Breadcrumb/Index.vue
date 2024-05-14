@@ -5,6 +5,7 @@ import {useSidebarStore} from "@/stores/layoutConfig";
 import {useRouter} from "vue-router";
 import {ListInterface} from '@/interface/index'
 
+
 //DECLARED VARIABLES
 const store = useSidebarStore();
 const router = useRouter();
@@ -12,6 +13,7 @@ defineProps<{ list: ListInterface[] }>();
 
 //FUNCTIONS
 const onBefore = (item: any) => {
+  console.log(item, 'item')
   if (!item.active) {
     router.go(-1);
   }

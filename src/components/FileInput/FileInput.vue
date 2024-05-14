@@ -94,11 +94,11 @@ const onInputFile = (value) => {
   <template v-if="typeof inputValue === 'string'">
     <div v-if="props.typeModal" class="flex justify-between items-center mt-3 mx-5" @click.prevent>
       <span class="rounded bg-primary px-4 pb-0.5 text-white">{{
-          inputValue.length < 26
+          inputValue.length < 15
               ? inputValue.split("/").at(-1)
-              : inputValue.split("/").at(-1)?.slice(0, 25) + "..."
+              : inputValue.split("/").at(-1)?.slice(0, 15) + "..."
         }}</span>
-      <div class="flex justify-end gap-3">
+      <div class="flex justify-end gap-3 ml-3" >
         <Icon
             v-if="props.eye"
             icon="Eye"
@@ -122,9 +122,9 @@ const onInputFile = (value) => {
         v-for="(item, index) in inputValue"
     >
       <span class="rounded bg-primary px-4 pb-0.5 text-white">{{
-          item.length < 26
+          item.length < 15
               ? item.split("/").at(-1)
-              : item.split("/").at(-1)?.slice(0, 25) + "..."
+              : item.split("/").at(-1)?.slice(0, 15) + "..."
         }}</span>
 
       <div class="flex justify-end gap-3">

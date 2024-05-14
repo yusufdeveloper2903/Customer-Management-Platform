@@ -72,7 +72,9 @@ export default defineStore("stories", {
         deleteStories(id: number | null) {
             return $axios.delete(`/knowledge_base/story/${id}/`);
         },
-
+        deleteStoriesSection(id: number | null) {
+            return $axios.delete(`/knowledge_base/story_sections/${id}/`);
+        },
 
     },
 });

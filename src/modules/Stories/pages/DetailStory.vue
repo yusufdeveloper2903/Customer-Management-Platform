@@ -78,6 +78,7 @@ const params = reactive({
 
 //MOUNTED LIEF CYCLE
 onMounted(async () => {
+  store.storiesDetailsList.results = []
   await getButtonType()
   if (route.params.id) {
     await refresh()
@@ -211,7 +212,7 @@ const addSection = async () => {
 const deleteAction = async () => {
   isLoading.value = true
   try {
-    await store.deleteStories(itemToDelete.value)
+    await store.deleteStoriesSection(itemToDelete.value)
     await UIKit.modal("#stories-detail-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
     if (store.storiesDetailsList.count > 1 && ((store.storiesDetailsList.count - 1) % params.page_size == 0)) {
@@ -227,7 +228,6 @@ const deleteAction = async () => {
 };
 
 const showRow = (val: any) => {
-  console.log(val, 'val')
   imageUrl.value = val['background_' + locale.value]
 }
 
@@ -266,7 +266,8 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 <template>
   <div>
 
-    <div class="flex gap-4">
+    <div class="flex gap-2">
+
       <div class="card w-1/4">
         <Tabs class="mb-4">
           <Tab title="UZ">
@@ -479,7 +480,8 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           </template>
           <template #item-actions="data">
             <div class="flex my-4 justify-left" @click.stop>
-              <button class="btn-warning btn-action" uk-toggle="target: #stories_section_modal" @click="editData= data">
+              <button class="btn-warning btn-action" uk-toggle="target: #stories_section_modal"
+                      @click="editData= data">
                 <Icon icon="Pen New Square" color="#fff" size="16"/>
               </button>
               <button
@@ -494,6 +496,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
         </EasyDataTable>
 
         <TwPagination
+            story="story"
             :total="store.storiesDetailsList.count"
             class="mt-10 tw-pagination"
             :current="params.page"
@@ -504,9 +507,10 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             @per-page-changed="onPageSizeChanged"
         />
       </div>
+
       <div class="card w-1/4 ">
         <div
-            class="mb-5 flex h-[88%] w-[80%] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
+            class="mb-5 flex h-[450px] w-[80%] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
           <span v-if="!imageUrl" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
           <img
               v-else
