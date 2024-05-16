@@ -103,7 +103,6 @@ const validate: Ref<Validation> = useVuelidate(rules, pollList);
                 id="nameUz"
                 type="text"
                 class="form-input"
-                :placeholder="$t('name')"
                 v-model="pollList.name"
                 :class="validate.name.$errors.length ? 'required-input' : ''"
             />

@@ -6,13 +6,16 @@ import Tabs from "@/components/Tab/Tabs.vue"
 import administrationStore from '../../store/index'
 import {
   onMounted,
-  ref,
+  ref, watch,
 } from "vue"
 import dayjs from 'dayjs'
 import {watchDebounced} from '@vueuse/core';
+import VueDatePicker from "@vuepic/vue-datepicker";
 
 
 //DECLARED VARIABLES
+const tabsStored = ref<any>('')
+const dateConfig = ref({})
 const administrationStorage = administrationStore()
 const isLoading = ref(false)
 const isLoading2 = ref(false)
@@ -24,42 +27,40 @@ let params = ref({
   start_date: '',
   end_date: '',
 })
-let filter = ref({
-  page: 1,
-  search: '',
-  start_date: '',
-  end_date: '',
-  offset: 0,
-  limit: 10,
-})
+
 
 //MOUNTED
 onMounted(async () => {
+  let storedTabs = localStorage.getItem('administration')
+  tabsStored.value = storedTabs
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.value.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.value.page_size = JSON.parse(page_size)
+  }
   await refresh()
-  await refresh2()
-
-})
+});
 
 
 //FUNCTIONS
 const refresh = async () => {
   isLoading.value = true
   try {
-    await administrationStorage.FETCH_JOURNAL_AUTHORIZATION_LIST(params.value)
+    if (tabsStored.value == 'authorization_log') {
+      await administrationStorage.FETCH_JOURNAL_AUTHORIZATION_LIST(params.value)
+    }
+    if (tabsStored.value == 'activity_log') {
+      await administrationStorage.FETCH_JOURNAL_AKTIVITIEST_LIST(params.value)
+    }
     isLoading.value = false
   } catch (error) {
     isError.value = true
   }
 }
-const refresh2 = async () => {
-  isLoading2.value = true
-  try {
-    await administrationStorage.FETCH_JOURNAL_AKTIVITIEST_LIST(filter.value)
-    isLoading2.value = false
-  } catch (error) {
-    isError.value = true
-  }
-}
+
 const downloadExcel = async () => {
   isLoading.value = true
   await administrationStorage.FETCH_JOURNAL_AUTHORIZATION_LIST_EXCEL({excel: true}).then((res) => {
@@ -107,13 +108,28 @@ const downloadExcel2 = async () => {
         isLoading2.value = false
       })
 }
-const onInput = async (event: number) => {
+const onPageSizeChangedLeft = async (event: number) => {
+  params.value.page = 1;
+  params.value.page_size = event;
+  refresh();
+};
+const onPageChange = async (event: number) => {
   params.value.page = event
   refresh()
 }
-const onInput2 = async (event: number) => {
-  filter.value.page = event
-  refresh2()
+
+const selectedTitle = (val: any) => {
+  tabsStored.value = val
+  params.value.page = 1;
+  params.value.page_size = 10;
+  params.value.search = '';
+  params.value.start_date = '';
+  params.value.end_date = '';
+  localStorage.setItem('page', '1')
+  localStorage.setItem('page_size', '10')
+  localStorage.setItem('administration', val)
+  refresh()
+
 }
 
 
@@ -122,48 +138,40 @@ watchDebounced(() => params.value.search, async function () {
   params.value.page = 1
   refresh()
 }, {deep: true, debounce: 500, maxWait: 5000,})
-watchDebounced(() => filter.value.search, async function () {
-  filter.value.offset = 0
-  filter.value.page = 1
-  refresh2()
+
+watchDebounced(() => params.value.start_date, async function () {
+  params.value.page = 1
+  refresh()
 }, {deep: true, debounce: 500, maxWait: 5000,})
-const datePicked = async () => {
-  if (params.value.start_date && params.value.end_date) {
-    params.value.start_date = dayjs(params.value.start_date).format("YYYY-MM-DD")
-    params.value.end_date = dayjs(params.value.end_date).format("YYYY-MM-DD")
-    refresh()
-  }
-  if (!params.value.start_date && !params.value.end_date) {
-    refresh()
-  }
-}
-const datePicked2 = async () => {
-  if (filter.value.start_date && filter.value.end_date) {
-    filter.value.start_date = dayjs(filter.value.start_date).format("YYYY-MM-DD")
-    filter.value.end_date = dayjs(filter.value.end_date).format("YYYY-MM-DD")
-    refresh2()
-  }
-  if (!filter.value.start_date && !filter.value.end_date) {
-    refresh2()
-  }
-}
-const onPageSizeChangedLeft = async (event: number) => {
-  params.value.page = 1;
-  params.value.page_size = event;
-  refresh();
-};
-const onPageSizeChangedRight = async (event: number) => {
-  filter.value.page = 1;
-  filter.value.limit = event;
-  refresh();
-};
+
+watch(
+    () => dateConfig.value,
+    (value: any) => {
+      if (value) {
+        let started_date = JSON.parse(JSON.stringify(value))[0]
+        let end_date = JSON.parse(JSON.stringify(value))[1]
+        if (!value) {
+          params.value.start_date = ""
+          params.value.end_date = ""
+        } else {
+          params.value.start_date = started_date.split('T')[0]
+          params.value.end_date = end_date.split('T')[0]
+        }
+      } else {
+        params.value.start_date = ""
+        params.value.end_date = ""
+      }
+    }
+)
+
+
 </script>
 
 
 <template>
   <div class="flex w-full gap-4">
-    <div class="w-full">
-      <Tabs>
+    <div class="card w-full">
+      <Tabs vertical pill @selectedTitle="selectedTitle" unique="unique">
         <Tab :title="'authorization_log'" class="w-full rounded bg-white p-5 pb-10 dark:bg-darkLayoutStorm ">
 
           <div class="flex w-full gap-4">
@@ -172,7 +180,7 @@ const onPageSizeChangedRight = async (event: number) => {
             <div class="flex items-start gap-10 w-full">
               <div class="w-full">
                 <div class="flex items-end justify-between flex-wrap mb-7">
-                  <div class="flex items-center justify-between">
+                  <div class="flex items-center md:w-5/12">
                     <form>
                       <label
                           for="search"
@@ -182,55 +190,15 @@ const onPageSizeChangedRight = async (event: number) => {
                           v-model="params.search"
                           id="search"
                           type="text"
-                          :placeholder="$t('Search')"
                           class="form-input mb-1"
                       >
                     </form>
-                    <div class="ml-4">
-                      <div class="flex justify-between">
-                        <label
-                            for="phone"
-                            class="text-sm text-gray-600 dark:text-gray-200"
-                        >{{ $t('date_from') }}:
-                        </label>
-                      </div>
-                      <div class="relative">
-                        <VueDatePicker
-                            auto-apply
-                            :locale="'ru'"
-                            :autoApply="true"
-                            format="dd.MM.yyyy"
-                            v-model="params.start_date"
-                            :placeholder="$t('date_from')"
-                            :enableTimePicker="false"
-                            @closed="datePicked()"
-                            @cleared="datePicked()"
-                        ></VueDatePicker>
-                      </div>
-
-                    </div>
-                    <div class="ml-4">
-                      <div class="flex justify-between">
-                        <label
-                            for="phone"
-                            class="text-sm text-gray-600 dark:text-gray-200"
-                        >{{ $t('date_to') }}:
-                        </label>
-                      </div>
-                      <div class="relative">
-                        <VueDatePicker
-                            auto-apply
-                            :locale="'ru'"
-                            :autoApply="true"
-                            format="dd.MM.yyyy"
-                            v-model="params.end_date"
-                            :placeholder="$t('date_to')"
-                            :enableTimePicker="false"
-                            @closed="datePicked()"
-                            @cleared="datePicked()"
-                        ></VueDatePicker>
-                      </div>
-
+                    <div class="ml-4 md:w-7/12 ">
+                      <label class="dark:text-gray-300">
+                        {{ $t("date_from") + ' - ' + $t("date_to") }}
+                      </label>
+                      <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }"
+                                     v-model="dateConfig"/>
                     </div>
                   </div>
                   <button class="btn-success " @click="downloadExcel()">
@@ -258,7 +226,6 @@ const onPageSizeChangedRight = async (event: number) => {
                   <template #header="header">
                     {{ $t(header.text) }}
                   </template>
-
 
 
                   <template #item-user="items">
@@ -294,7 +261,7 @@ const onPageSizeChangedRight = async (event: number) => {
                     :per-page="params.page_size"
                     :text-before-input="$t('go_to_page')"
                     :text-after-input="$t('forward')"
-                    @page-changed="onInput($event)"
+                    @page-changed="onPageChange($event)"
                     @per-page-changed="onPageSizeChangedLeft"
                 />
               </div>
@@ -313,65 +280,25 @@ const onPageSizeChangedRight = async (event: number) => {
             <div class="flex items-start gap-10 w-full">
               <div class="w-full">
                 <div class="flex items-end justify-between flex-wrap mb-7">
-                  <div class="flex items-center justify-between">
+                  <div class="flex items-center  md:w-5/12">
                     <form>
                       <label
                           for="search"
                           class="text-sm dark:text-white"
                       >{{ $t('Search') }}:</label>
                       <input
-                          v-model="filter.search"
+                          v-model="params.search"
                           id="search"
                           type="text"
-                          :placeholder="$t('Search')"
                           class="form-input mb-1"
                       >
                     </form>
-                    <div class="ml-4">
-                      <div class="flex justify-between">
-                        <label
-                            for="phone"
-                            class="text-sm text-gray-600 dark:text-gray-200"
-                        >{{ $t('date_from') }}:
-                        </label>
-                      </div>
-                      <div class="relative">
-                        <VueDatePicker
-                            auto-apply
-                            :locale="'ru'"
-                            :autoApply="true"
-                            format="dd.MM.yyyy"
-                            v-model="filter.start_date"
-                            :placeholder="$t('date_from')"
-                            :enableTimePicker="false"
-                            @closed="datePicked2()"
-                            @cleared="datePicked2()"
-                        ></VueDatePicker>
-                      </div>
-
-                    </div>
-                    <div class="ml-4">
-                      <div class="flex justify-between">
-                        <label
-                            for="phone"
-                            class="text-sm text-gray-600 dark:text-gray-200"
-                        >{{ $t('date_to') }}:
-                        </label>
-                      </div>
-                      <div class="relative">
-                        <VueDatePicker
-                            auto-apply
-                            :locale="'ru'"
-                            :autoApply="true"
-                            format="dd.MM.yyyy"
-                            v-model="filter.end_date"
-                            :placeholder="$t('date_to')"
-                            :enableTimePicker="false"
-                            @closed="datePicked2()"
-                            @cleared="datePicked2()"
-                        ></VueDatePicker>
-                      </div>
-
+                    <div class="ml-4 md:w-7/12 ">
+                      <label class="dark:text-gray-300">
+                        {{ $t("date_from") + ' - ' + $t("date_to") }}
+                      </label>
+                      <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }"
+                                     v-model="dateConfig"/>
                     </div>
                   </div>
                   <button class="btn-success" @click="downloadExcel2()">
@@ -422,13 +349,13 @@ const onPageSizeChangedRight = async (event: number) => {
                 </EasyDataTable>
                 <TwPagination
                     class="tw-pagination"
-                    :current="filter.page"
+                    :current="params.page"
                     :total="administrationStorage.journal_activities_list.count"
-                    :per-page="filter.limit"
+                    :per-page="params.page_size"
                     :text-before-input="$t('go_to_page')"
                     :text-after-input="$t('forward')"
-                    @page-changed="onInput2($event)"
-                    @per-page-changed="onPageSizeChangedRight"
+                    @page-changed="onPageChange($event)"
+                    @per-page-changed="onPageSizeChangedLeft"
                 />
               </div>
             </div>

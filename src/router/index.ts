@@ -68,6 +68,11 @@ router.beforeEach(async (to, _, next) => {
     if (to.fullPath !== '/stories-detail') {
         localStorage.setItem('createdData', '')
     }
+    let sidebar = localStorage.getItem('sidebar');
+    if (to.name !== sidebar) {
+        localStorage.setItem('page', '1')
+        localStorage.setItem('page_size', '10')
+    }
     if (to.meta.loginNotRequired) return next()
     next();
 });

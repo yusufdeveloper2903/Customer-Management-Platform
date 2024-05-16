@@ -51,6 +51,19 @@ watch(
 <style lang="less">
 @import "../node_modules/uikit/src/less/uikit.less";
 
+.vue3-easy-data-table__header {
+  tr {
+    th:last-child {
+      span {
+        div {
+          margin-right: 6px !important;
+
+        }
+      }
+    }
+  }
+}
+
 .height-200 {
   height: 200px;
 }
@@ -62,6 +75,7 @@ watch(
   line-height: 1.5;
   padding: 5px;
 }
+
 .prism-editor__textarea:focus {
   outline: none;
 }

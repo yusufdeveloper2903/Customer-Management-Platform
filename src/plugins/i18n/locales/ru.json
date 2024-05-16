@@ -56,6 +56,8 @@
     "question": "Вопрос",
     "audio": "Аудио"
   },
+  "Button Name": "Название кнопки",
+  "Button Url": "URL-адрес кнопки",
   "Promotions": "Акции",
   "PROMOTION": "Акции",
   "deactivate": "Деактивировать",
@@ -257,7 +259,6 @@
   "KR": "Ўз",
   "url": "URL",
   "URL": "URL",
-  "Published": "Опубликовано",
   "planned for(publish date)": "Запланированная дата",
   "go_to_page": "Перейти на страницу",
   "forward": "Вперед",

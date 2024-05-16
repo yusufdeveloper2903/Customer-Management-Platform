@@ -30,23 +30,37 @@ const params = reactive({
 });
 const props = defineProps<{
   knowledge: string
+  params: {
+    page: number,
+    page_size: number
+  }
 }>();
 let toRefresh = ref(false)
 
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.page_size = JSON.parse(page_size)
+  }
   let knowledgeBase = localStorage.getItem('knowledgeBase')
   if (knowledgeBase == 'version_control') {
     await refresh()
   }
-})
+});
 
 
 //WATCHERS
 watch(() => props.knowledge, async function (val) {
   toRefresh.value = !toRefresh.value
   if (val == 'version_control') {
+    params.page = props.params.page
+    params.page_size = props.params.page_size
     await refresh()
   }
 })
@@ -114,16 +128,16 @@ const onPageSizeChanged = (e) => {
   <div class="card">
 
     <div class="md:flex items-end justify-between mb-7">
-      <form class=" md:flex items-center gap-5 md:w-9/12">
+      <form class="md:flex items-center gap-5 md:w-9/12">
 
-        <div class="md:w-1/2 md:m-0 mt-2">
+        <div class="md:w-1/3 md:m-0 mt-2">
           <label for="from" class="dark:text-gray-300">
             {{ $t("from") }}
           </label>
           <VueDatePicker :enableTimePicker="false" auto-apply v-model="params.start_date"></VueDatePicker>
         </div>
 
-        <div class="md:w-1/2 md:m-0 mt-2">
+        <div class="md:w-1/3 md:m-0 mt-2">
           <label for="to" class="dark:text-gray-300">
             {{ $t("to") }}
           </label>
@@ -174,9 +188,13 @@ const onPageSizeChanged = (e) => {
               class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"/>
         </label>
       </template>
-
+      <template #header-actions="item">
+        <div class="flex justify-end">
+          {{ $t(item.text) }}
+        </div>
+      </template>
       <template #item-actions="item">
-        <div class="flex my-4 justify-center">
+        <div class="flex my-4 justify-end">
           <button class="btn-warning btn-action" uk-toggle="target: #version_control" @click="editData = item">
 
             <Icon icon="Pen New Square" color="#fff" size="16"/>

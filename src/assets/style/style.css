@@ -393,6 +393,7 @@ pre[class*="language-"] {
     left: -3px;
 }
 
+
 .tooltip-variant::after {
     content: '';
     width: 10px;

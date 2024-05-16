@@ -175,7 +175,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             <input
                 type="text"
                 class="form-input"
-                :placeholder="$t('name')"
                 v-model="productsData.title_uz"
                 :class="validate.title_uz.$errors.length ? 'required-input' : ''"
             />
@@ -191,7 +190,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   id="number"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('description')"
                   v-model="productsData.description_uz"
               />
 
@@ -202,7 +200,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             <input
                 type="text"
                 class="form-input"
-                :placeholder="$t('name')"
                 v-model="productsData.title_kr"
                 :class="validate.title_kr.$errors.length ? 'required-input' : ''"
             />
@@ -218,7 +215,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   id="number"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('description')"
                   v-model="productsData.description_kr"
               />
 
@@ -229,7 +225,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             <input
                 type="text"
                 class="form-input"
-                :placeholder="$t('name')"
                 v-model="productsData.title_ru"
                 :class="validate.title_ru.$errors.length ? 'required-input' : ''"
             />
@@ -245,7 +240,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   id="number"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('description')"
                   v-model="productsData.description_ru"
               />
 
@@ -260,7 +254,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   id="number"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('Number (multi-digit-code)')"
                   v-model="productsData.code"
                   :class="validate.code.$errors.length ? 'required-input' : ''"
               />
@@ -282,7 +275,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   id="quantity"
                   type="number"
                   class="form-input"
-                  :placeholder="$t('Quantity')"
                   v-model="productsData.quantity"
                   :class="validate.quantity.$errors.length ? 'required-input' : ''"
               />
@@ -293,7 +285,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   id="number"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('Measurement_type')"
                   v-model="productsData.measurement_type"
                   :class="validate.measurement_type.$errors.length ? 'required-input' : ''"
               />
@@ -310,7 +301,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   id="price"
                   type="number"
                   class="form-input"
-                  :placeholder="$t('price')"
                   v-model="productsData.price"
                   :class="validate.price.$errors.length ? 'required-input' : ''"
               />

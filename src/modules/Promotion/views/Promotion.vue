@@ -4,7 +4,7 @@
 //IMPORTED FILES
 import promotionBase from '../store/index'
 import {newsPromotionTable} from "../constants";
-import {reactive, ref,} from "vue";
+import {onMounted, reactive, ref,} from "vue";
 import CreatePromotionModal from "../components/CreatePromotionModal.vue"
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
@@ -54,6 +54,20 @@ watchDebounced(
 );
 
 
+//MOUNTED
+onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.page_size = JSON.parse(page_size)
+  }
+  await refresh(params)
+});
+
+
 //FUNCTIONS
 const refresh = async (val: any) => {
   isLoading.value = true;
@@ -64,7 +78,7 @@ const refresh = async (val: any) => {
   }
   isLoading.value = false;
 };
-refresh(params)
+
 
 function saveProducts() {
   refresh(params)
@@ -113,9 +127,9 @@ const onGetData = async (val: any) => {
 <template>
   <div class="card">
     <div class="flex justify-between items-end mb-7">
-      <label for="search" class="w-1/4">
+      <label for="search">
         {{ $t('Search') }}
-        <input type="text" class="form-input" :placeholder="$t('Search')" v-model="params.search"/>
+        <input type="text" class="form-input" v-model="params.search"/>
       </label>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
               uk-toggle="target: #create_edit_promotion" @click="editData={}">
@@ -170,8 +184,13 @@ const onGetData = async (val: any) => {
           ></div>
         </label>
       </template>
+      <template #header-actions="item">
+        <div class="flex justify-end">
+          {{ $t(item.text) }}
+        </div>
+      </template>
       <template #item-actions="item">
-        <div class="flex my-4 justify-left">
+        <div class="flex my-4 justify-end">
           <button class="btn-warning btn-action" uk-toggle="target: #create_edit_promotion" @click="onGetData(item.id)">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>

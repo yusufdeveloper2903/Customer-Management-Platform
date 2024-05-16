@@ -31,10 +31,10 @@ export const storiesTable = [
 export const storiesDetailTable = [
     {
         text: "ID",
-        value: "story_id",
+        value: "id",
     },
     {
-        text: "Photo",
+        text: "photo",
         value: 'background'
     },
     {

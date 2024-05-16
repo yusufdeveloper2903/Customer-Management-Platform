@@ -30,7 +30,15 @@ const filterUsers = reactive<params>({
 // MOUNTED
 
 onMounted(async () => {
-  await refresh();
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    filterUsers.page = JSON.parse(page)
+  }
+  if (page_size) {
+    filterUsers.page_size = JSON.parse(page_size)
+  }
+  await refresh()
 });
 
 
@@ -74,7 +82,7 @@ const showDetailPage = (item: any) => {
     <div class="card">
       <div class="md:flex items-center justify-between mb-9">
         <form class=" md:flex items-center gap-5 md:w-5/12">
-          <div class="md:w-1/2">
+          <div>
             <label for="search" class="dark:text-gray-300">
               {{ $t("Search") }}
             </label>
@@ -83,7 +91,6 @@ const showDetailPage = (item: any) => {
                 id="search"
                 type="text"
                 class="form-input"
-                :placeholder="$t('Search')"
                 v-model="filterUsers.search"
             />
           </div>
@@ -104,7 +111,6 @@ const showDetailPage = (item: any) => {
         <template #header="header">
           {{ $t(header.text) }}
         </template>
-
 
 
         <template #item-phone="items">

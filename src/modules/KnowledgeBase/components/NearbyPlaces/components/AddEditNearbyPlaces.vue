@@ -228,7 +228,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                     <div class="uk-form-controls">
                       <input
                           v-model="location.title_uz"
-                          :placeholder="$t('name') + ' ' +  $t('UZ')"
                           class="form-input"
                           id="form-stacked-text"
                           type="text"
@@ -248,7 +247,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                     <div class="uk-form-controls">
                     <textarea
                         v-model="location.address_uz"
-                        :placeholder="$t('address') + ' ' + $t('UZ')"
                         class="form-input"
                         rows="3"
                         :class="validate.address_uz.$errors.length ? 'required-input' : ''"
@@ -270,7 +268,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                     <div class="uk-form-controls">
                       <input
                           v-model="location.title_kr"
-                          :placeholder="$t('name') +  ' '  +  $t('KR')"
                           class="form-input"
                           id="form-stacked-text"
                           type="text"
@@ -290,7 +287,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                     <div class="uk-form-controls">
                     <textarea
                         v-model="location.address_kr"
-                        :placeholder="$t('address') + ' ' +  $t('UZ')"
                         class="form-input"
                         rows="3"
                         :class="validate.address_kr.$errors.length ? 'required-input' : ''"
@@ -312,7 +308,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                       <input
                           v-model="location.title_ru"
                           class="form-input"
-                          :placeholder="$t('name') + ' ' +  $t('RU')"
                           id="form-stacked-text"
                           type="text"
                           :class="validate.title_ru.$errors.length ? 'required-input' : ''"
@@ -331,7 +326,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                     <div class="uk-form-controls">
                     <textarea
                         v-model="location.address_ru"
-                        :placeholder="$t('address') + ' ' +  $t('RU')"
                         class="form-input"
                         :class="validate.address_ru.$errors.length ? 'required-input' : ''"
                         rows="3"
@@ -353,7 +347,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                 <v-select
                     :options="store.regionsList.results"
                     v-model="location.region"
-                    :placeholder="$t('region')"
                     :getOptionLabel="(name:any) => name['name_'+ $i18n.locale]"
                     :reduce="(name:any) => name.id"
 
@@ -374,7 +367,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                 <label for="status">
                   {{ $t("phone_number") }}
                   <input
-                      :placeholder="$t('phone_number')"
                       v-model="location.phones[0]"
                       v-maska
                       data-maska="+998#########"
@@ -396,7 +388,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
 
                     auto-apply
                     v-model="openTime"
-                    :placeholder="$t('Open hour')"
                     time-picker
                 ></VueDatePicker>
               </div>
@@ -405,7 +396,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                 <VueDatePicker
                     auto-apply
                     v-model="closeTime"
-                    :placeholder="$t('Close hour')"
                     time-picker
                 ></VueDatePicker>
 
@@ -438,7 +428,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                     <input
                         class="form-input"
                         id="form-stacked-text"
-                        :placeholder="$t('Lat')"
                         type="text"
                         v-model="location.coordinates.lat"
                         :class="validate.coordinates.lat.$errors.length ? 'required-input' : ''"
@@ -461,7 +450,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                         class="form-input"
                         id="form-stacked-text"
                         type="text"
-                        :placeholder="$t('Lng')"
                         :class="validate.coordinates.lng.$errors.length ? 'required-input' : ''"
                         v-model="location.coordinates.lng"
                     />

@@ -49,7 +49,7 @@ export default {
     },
   },
   setup(props, {slots, emit}) {
-    const { t} = useI18n();
+    const {t} = useI18n();
     const tabTitles = ref(
         slots.default().map((tab) => tab.props && tab.props.title)
     );
@@ -57,11 +57,16 @@ export default {
 
     const storeData = localStorage.getItem('knowledgeBase')
     const storeData2 = localStorage.getItem('sms')
+    const storeData3 = localStorage.getItem('administration')
     const storedModule = localStorage.getItem('sidebar')
     if (storeData && storedModule === 'knowledgeBase' && props.unique === 'unique') {
       selectedTitle.value = storeData
-    } else if (storeData2 && storedModule === 'sms-template' && props.unique === 'unique') {
+    }
+    if (storeData2 && storedModule === 'sms-template' && props.unique === 'unique') {
       selectedTitle.value = storeData2
+    }
+    if (storeData3 && storedModule === 'Logging' && props.unique === 'unique') {
+      selectedTitle.value = storeData3
     }
     provide("selectedTitle", selectedTitle);
 

@@ -30,9 +30,18 @@ const filterUsers = reactive({
 
 //MOUNTED
 onMounted(async () => {
-  await refresh();
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    filterUsers.page = JSON.parse(page)
+  }
+  if (page_size) {
+    filterUsers.page_size = JSON.parse(page_size)
+  }
+  await refresh()
   await store.getUsersRolesList()
-})
+});
+
 //FUNCTIONS
 const handleDeleteModal = (id: number) => {
   UIkit.modal("#staff-main-delete-modal").show();
@@ -104,8 +113,8 @@ const onShowFile = (item: any) => {
   <div>
     <div class="card">
       <div class="md:flex items-end justify-between mb-7">
-        <form class="md:flex items-center gap-5 md:w-5/12">
-          <div class="md:w-1/2">
+        <form class="md:flex items-center gap-5 md:w-7/12">
+          <div >
             <label for="search" class="dark:text-gray-300">
               {{ $t("Search") }}
             </label>
@@ -113,17 +122,15 @@ const onShowFile = (item: any) => {
                 id="search"
                 type="text"
                 class="form-input"
-                :placeholder="$t('Search')"
                 v-model="filterUsers.search"
             />
           </div>
 
-          <div class="md:w-1/2 md:m-0 mt-2">
+          <div class="md:w-1/3 md:m-0 mt-2">
             <label for="role" class="dark:text-gray-300">
               {{ $t("Role") }}
             </label>
             <v-select
-                :placeholder="$t('Role')"
                 :options="store.users_roles.results"
                 :getOptionLabel="(role:any) => role.name"
                 :reduce="(role:any) => role.id"
@@ -205,9 +212,13 @@ const onShowFile = (item: any) => {
             ></div>
           </label>
         </template>
-
+        <template #header-actions="item">
+          <div class="flex justify-end">
+            {{ $t(item.text) }}
+          </div>
+        </template>
         <template #item-actions="items">
-          <div class="flex justify-left">
+          <div class="flex justify-end">
             <button
                 class="btn-warning btn-action"
                 @click="

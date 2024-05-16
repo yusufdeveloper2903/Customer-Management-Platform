@@ -21,6 +21,8 @@
     "staffs": "Xodimlar",
     "contacts": "Kontaktlar"
   },
+  "Button Name": "Tugma nomi",
+  "Button Url": "Tugma URL manzili",
   "info_card": {
     "Time": "Vaqt",
     "Lessons": "Darslar",
@@ -225,7 +227,6 @@
   "UZ": "O'z",
   "RU": "Ру",
   "KR": "Ўз",
-  "Published": "Chop etilgan",
   "Transactions": "Bitimlar",
   "planned for(publish date)": "Rejalangan sana",
   "go_to_page": "Sahifaga o'ting",

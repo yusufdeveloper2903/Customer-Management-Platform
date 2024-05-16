@@ -159,7 +159,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('name')"
                     v-model="newsTemplateData.title_uz"
                     :class="validate.title_uz.$errors.length ? 'required-input' : ''"
                 />
@@ -178,7 +177,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="descriptionUz"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('description')"
                     v-model="newsTemplateData.description_uz"
                     :class="validate.description_uz.$errors.length
                       ? 'required-input'
@@ -203,7 +201,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('name')"
                     v-model="newsTemplateData.title_kr"
                     :class="validate.title_kr.$errors.length ? 'required-input' : ''"
                 />
@@ -222,7 +219,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="descriptionUz"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('description')"
                     v-model="newsTemplateData.description_kr"
                     :class="validate.description_kr.$errors.length
                       ? 'required-input'
@@ -248,7 +244,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="nameRu"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('name')"
                     v-model="newsTemplateData.title_ru"
                     :class="validate.title_ru.$errors.length ? 'required-input' : ''
                   "
@@ -268,7 +263,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="descriptionRu"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('description')"
                     v-model="newsTemplateData.description_ru"
                     :class=" validate.description_ru.$errors.length
                       ? 'required-input'
@@ -292,7 +286,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
               id="nameUz"
               type="text"
               class="form-input mb-4"
-              :placeholder="$t('Link')"
               v-model="newsTemplateData.url"
           />
         </label>

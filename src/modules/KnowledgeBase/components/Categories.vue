@@ -83,7 +83,7 @@ onMounted(() => {
     <div class="flex justify-between items-end mb-10">
       <label for="search" class="w-1/4">
         {{ $t('Search') }}
-        <input type="text" class="form-input" :placeholder="$t('Search')"/>
+        <input type="text" class="form-input" />
       </label>
       <button class="btn-primary" uk-toggle="target: #categories">
         {{ $t("Add") }}

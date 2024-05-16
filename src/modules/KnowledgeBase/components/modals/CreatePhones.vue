@@ -100,7 +100,7 @@ const validate: Ref<Validation> = useVuelidate(rules, editData);
         <form>
 
           <label for="phone">{{ $t('phone_number') }}</label>
-          <input id="phone" type="tel" class="form-input" :placeholder="$t('phone_number')" v-maska
+          <input id="phone" type="tel" class="form-input" v-maska
                  data-maska="+998 ### ## ## ##" :class="validate.number.$errors.length ? 'required-input' : ''"
                  v-model="editData.number"/>
           <p v-for="error in validate.number.$errors" :key="error.$uid" class="text-danger text-sm">

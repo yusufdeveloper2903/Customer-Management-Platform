@@ -96,7 +96,6 @@ const validate: Ref<Validation> = useVuelidate(rules, versionControlData);
           <input
               type="text"
               class="form-input"
-              :placeholder="$t('version_number')"
               v-model="versionControlData.number"
               :class="validate.number.$errors.length ? 'required-input' : ''"
           />
@@ -112,7 +111,6 @@ const validate: Ref<Validation> = useVuelidate(rules, versionControlData);
             <textarea
                 type="text"
                 class="form-input"
-                :placeholder="$t('Description')"
                 v-model="versionControlData.description"
                 :class="validate.number.$errors.length ? 'required-input' : ''"
             />
@@ -129,11 +127,6 @@ const validate: Ref<Validation> = useVuelidate(rules, versionControlData);
         </button>
 
         <button :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal">
-          <img
-              src="@/assets/image/loading.svg"
-              alt="loading.svg"
-              class="inline w-4 h-4 text-white animate-spin mr-2"
-          />
           <span>{{ propData.editData.id ? $t("Change") : $t('Add') }}</span>
         </button>
       </div>

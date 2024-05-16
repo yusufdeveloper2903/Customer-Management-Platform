@@ -35,25 +35,39 @@ const openModal = (data: any) => {
 };
 const props = defineProps<{
   knowledge: string
+  params: {
+    page: number,
+    page_size: number
+  }
 }>();
 let toRefresh = ref(false)
 
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.value.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.value.page_size = JSON.parse(page_size)
+  }
   let knowledgeBase = localStorage.getItem('knowledgeBase')
   if (knowledgeBase == 'Locations') {
     await getListForm()
     await store.getRegions({page_size: 1000})
 
   }
-})
+});
 
 
 //WATCHERS
 watch(() => props.knowledge, async function (val) {
   toRefresh.value = !toRefresh.value
   if (val == 'Locations') {
+    params.value.page = props.params.page
+    params.value.page_size = props.params.page_size
     await getListForm()
     await store.getRegions({page_size: 1000})
   }
@@ -115,14 +129,13 @@ const deleteAction = async () => {
 <template>
   <div class="card">
     <div class="flex items-end gap-2 mb-7 justify-between">
-      <div class="w-1/4">
+      <div>
         <label for="search" class="dark:text-gray-300">
           {{ t("Search") }}
           <input
               id="search"
               type="text"
               class="form-input"
-              :placeholder="t('Search')"
               v-model="params.search"
           />
         </label>
@@ -164,9 +177,13 @@ const deleteAction = async () => {
             {{ formatPhoneNumber(phone) }}
           </div>
         </template>
-
+        <template #header-actions="item">
+          <div class="flex justify-end">
+            {{ $t(item.text) }}
+          </div>
+        </template>
         <template #item-actions="item">
-          <div class="flex my-4">
+          <div class="flex my-4 justify-end">
             <button class="btn-warning btn-action" @click="openModal(item)">
               <Icon icon="Pen New Square" color="#fff" size="16"/>
             </button>

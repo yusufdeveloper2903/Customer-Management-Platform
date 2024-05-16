@@ -71,7 +71,6 @@ const validate: Ref<Validation> = useVuelidate(rules, {});
                   id="nameUz"
                   type="text"
                   class="form-input"
-                  placeholder="Nomi"
               />
 
               <label class="mt-5 block" for="fileUz">Fayl</label>
@@ -85,7 +84,6 @@ const validate: Ref<Validation> = useVuelidate(rules, {});
                   id="nameRu"
                   type="text"
                   class="form-input"
-                  :placeholder="$t('name')"
               />
 
               <label class="mt-4 block" for="fileRu">Файл</label>

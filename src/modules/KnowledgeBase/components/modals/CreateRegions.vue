@@ -116,7 +116,6 @@ const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('name')"
                     v-model="smsTemplateData.name_uz"
                     :class="validate.name_uz.$errors.length ? 'required-input' : ''"
                 />
@@ -139,7 +138,6 @@ const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('name')"
                     v-model="smsTemplateData.name_kr"
                     :class="validate.name_kr.$errors.length ? 'required-input' : ''"
                 />
@@ -162,7 +160,6 @@ const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('name')"
                     v-model="smsTemplateData.name_ru"
                     :class="validate.name_ru.$errors.length ? 'required-input' : ''"
                 />

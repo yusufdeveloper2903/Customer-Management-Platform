@@ -217,7 +217,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
               <input
                   type="text"
                   class="form-input "
-                  :placeholder="$t('name')"
                   v-model="productsData.title_uz"
                   :class="validate.title_uz.$errors.length ? 'required-input' : ''"
               />
@@ -233,7 +232,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   id="number"
                   type="text"
                   class="form-input ="
-                  :placeholder="$t('description')"
                   v-model="productsData.description_uz"
                   :class="validate.description_uz.$errors.length ? 'required-input' : ''"
               />
@@ -255,7 +253,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
               <input
                   type="text"
                   class="form-input "
-                  :placeholder="$t('name')"
                   v-model="productsData.title_kr"
                   :class="validate.title_kr.$errors.length ? 'required-input' : ''"
               />
@@ -271,7 +268,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   id="number"
                   type="text"
                   class="form-input "
-                  :placeholder="$t('description')"
                   v-model="productsData.description_kr"
                   :class="validate.description_kr.$errors.length ? 'required-input' : ''"
               />
@@ -293,7 +289,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
               <input
                   type="text"
                   class="form-input "
-                  :placeholder="$t('name')"
                   v-model="productsData.title_ru"
                   :class="validate.title_ru.$errors.length ? 'required-input' : ''"
               />
@@ -309,7 +304,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   id="number"
                   type="text"
                   class="form-input "
-                  :placeholder="$t('description')"
                   v-model="productsData.description_ru"
                   :class="validate.description_ru.$errors.length ? 'required-input' : ''"
               />

@@ -359,7 +359,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
         <h1 class="font-semibold text-lg mb-4">{{ $t('Receivers') }}</h1>
 
         <div class="flex items-center gap-4 mb-6">
-          <div class=" w-1/4">
+          <div >
             <label for="form-stacked-text">{{ $t('Search') }}</label>
             <div class="uk-form-controls">
               <input type="search" class="form-input" v-model="params.search"/>

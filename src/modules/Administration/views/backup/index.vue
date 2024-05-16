@@ -3,17 +3,19 @@
 
 //IMPORTED FILES
 import administrationStore from '../../store/index'
-import {onMounted, ref} from "vue"
+import {onMounted, ref, watch} from "vue"
 import {headerBackUp} from "../../constants/index";
 import dayjs from 'dayjs'
 import {toast} from "vue3-toastify";
 import {useI18n} from 'vue-i18n';
 import {watchDebounced} from '@vueuse/core';
 import UIkit from "uikit";
+import VueDatePicker from "@vuepic/vue-datepicker";
 
 
 //DECLARED VARIABLES
 const {t} = useI18n()
+const dateConfig = ref({})
 const administrationStorage = administrationStore()
 const isLoading = ref(false)
 const isError = ref(false)
@@ -30,9 +32,17 @@ const deletingID = ref()
 
 //MOUNTED
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.value.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.value.limit = JSON.parse(page_size)
+  }
   await refresh()
 
-})
+});
 
 
 //FUNCTIONS
@@ -137,8 +147,32 @@ watchDebounced(() => params.value.search, async function () {
   params.value.page = 1
   refresh()
 }, {deep: true, debounce: 500, maxWait: 5000,})
+watchDebounced(() => params.value.start_date, async function () {
+  params.value.offset = 0
+  params.value.page = 1
+  refresh()
+}, {deep: true, debounce: 500, maxWait: 5000,})
 
 
+watch(
+    () => dateConfig.value,
+    (value: any) => {
+      if (value) {
+        let started_date = JSON.parse(JSON.stringify(value))[0]
+        let end_date = JSON.parse(JSON.stringify(value))[1]
+        if (!value) {
+          params.value.start_date = ""
+          params.value.end_date = ""
+        } else {
+          params.value.start_date = started_date.split('T')[0]
+          params.value.end_date = end_date.split('T')[0]
+        }
+      } else {
+        params.value.start_date = ""
+        params.value.end_date = ""
+      }
+    }
+)
 </script>
 
 
@@ -149,8 +183,8 @@ watchDebounced(() => params.value.search, async function () {
 
       <div class="flex items-start gap-10 w-full">
         <div class="w-full">
-          <div class="flex items-end justify-between flex-wrap mb-7">
-            <div class="flex items-center justify-between">
+          <div class="flex items-end justify-between flex-wrap mb-7 ">
+            <div class="flex items-center  md:w-4/12">
               <form>
                 <label
                     for="search"
@@ -160,61 +194,17 @@ watchDebounced(() => params.value.search, async function () {
                     v-model="params.search"
                     id="search"
                     type="text"
-                    :placeholder="$t('Search')"
                     class="form-input mb-1"
                 >
               </form>
 
 
-              <div class="ml-4">
-                <div class="flex justify-between">
-                  <label
-                      for="phone"
-                      class="text-sm text-gray-600 dark:text-gray-200"
-                  >{{ $t('date_from') }}:
-                  </label>
-                </div>
-                <div class="relative">
-                  <VueDatePicker
-                      auto-apply
-                      :locale="'ru'"
-                      :autoApply="true"
-                      format="dd.MM.yyyy"
-                      v-model="params.start_date"
-                      :placeholder="$t('date_from')"
-                      :enableTimePicker="false"
-                      :clearable="true"
-                      @closed="datePicked()"
-                      @cleared="datePicked()"
-                  ></VueDatePicker>
-                </div>
-
-              </div>
-
-
-              <div class="ml-4">
-                <div class="flex justify-between">
-                  <label
-                      for="phone"
-                      class="text-sm text-gray-600 dark:text-gray-200"
-                  >{{ $t('date_to') }}:
-                  </label>
-                </div>
-                <div class="relative">
-                  <VueDatePicker
-                      auto-apply
-                      :locale="'ru'"
-                      :autoApply="true"
-                      format="dd.MM.yyyy"
-                      v-model="params.end_date"
-                      :placeholder="$t('date_to')"
-                      :enableTimePicker="false"
-                      :clearable="true"
-                      @closed="datePicked()"
-                      @cleared="datePicked()"
-                  ></VueDatePicker>
-                </div>
-
+              <div class="ml-4 md:w-7/12 ">
+                <label class="dark:text-gray-300">
+                  {{ $t("date_from") + ' - ' + $t("date_to") }}
+                </label>
+                <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }"
+                               v-model="dateConfig"/>
               </div>
 
 
@@ -257,9 +247,13 @@ watchDebounced(() => params.value.search, async function () {
                 {{ dayjs(items.created_at).format("DD-MM-YYYY") }}
               </div>
             </template>
-
+            <template #header-actions="item">
+              <div class="flex justify-end">
+                {{ $t(item.text) }}
+              </div>
+            </template>
             <template #item-actions="items">
-              <div class="flex justify-left">
+              <div class="flex justify-end">
                 <button
                     class="btn-warning btn-action ml-2"
                     @click="download(items.file_path)"

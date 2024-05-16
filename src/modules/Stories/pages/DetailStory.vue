@@ -2,7 +2,7 @@
 
 
 //IMPORTED FILES
-import {Ref, ref, computed, reactive, nextTick, onMounted} from "vue";
+import {Ref, ref, computed, reactive, nextTick, onMounted, watch} from "vue";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import Tabs from "@/components/Tab/Tabs.vue";
@@ -37,6 +37,7 @@ const router = useRouter()
 const routeParams = ref('')
 const isSubmitted = ref<boolean>(false);
 const url = ref('')
+const dateConfig = ref({})
 let storiesVariable = ref({
   id: '',
   subtitle: '',
@@ -50,7 +51,7 @@ let storiesVariable = ref({
 });
 const createdData = ref<string | null>('')
 const editData = ref<EditData | null>({
-  story_id: null,
+  story_section_id: null,
   duration: null,
   button_name: '',
   button_name_uz: '',
@@ -71,7 +72,7 @@ const editData = ref<EditData | null>({
 
 const params = reactive({
   page: 1,
-  page_size: 10,
+  page_size: 5,
   search: null
 })
 
@@ -84,6 +85,7 @@ onMounted(async () => {
     await refresh()
     await getDetail()
     storiesVariable.value = store.storiesDetailsId.data
+    dateConfig.value = [storiesVariable.value.start_date, storiesVariable.value.end_date]
     routeParams.value = String(route.params.id)
   } else {
     createdData.value = localStorage.getItem('createdData')
@@ -228,7 +230,7 @@ const deleteAction = async () => {
 };
 
 const showRow = (val: any) => {
-  imageUrl.value = val['background_' + locale.value]
+  imageUrl.value = val['background_' + locale.value].full_size
 }
 
 
@@ -238,7 +240,23 @@ watchDebounced(() => params.search, function () {
   refresh()
 }, {deep: true, debounce: 500, maxWait: 5000,})
 
+watch(
+    () => dateConfig.value,
+    (value: any) => {
+      if (value) {
+        let started_date = JSON.parse(JSON.stringify(value))[0]
+        let end_date = JSON.parse(JSON.stringify(value))[1]
+        if (!value) {
+          storiesVariable.value.start_date = ""
+          storiesVariable.value.end_date = ""
+        } else {
+          storiesVariable.value.start_date = started_date.toLocaleString('it-IT')
+          storiesVariable.value.end_date = end_date.toLocaleString('it-IT')
+        }
+      }
 
+    }
+)
 //COMPUTED
 const rules = computed(() => {
   return {
@@ -278,7 +296,6 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('name')"
                     v-model="storiesVariable.subtitle_uz"
                     :class="validate.subtitle_uz.$errors.length ? 'required-input' : ''"
                 />
@@ -300,7 +317,6 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('name')"
                     v-model="storiesVariable.subtitle_kr"
                     :class="validate.subtitle_kr.$errors.length ? 'required-input' : ''"
                 />
@@ -325,7 +341,6 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
                     id="nameRu"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('name')"
                     v-model="storiesVariable.subtitle_ru"
                     :class="validate.subtitle_ru.$errors.length ? 'required-input' : ''
                   "
@@ -344,12 +359,10 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           </Tab>
         </Tabs>
         <div class="mt-4">
-          <label class="dark:text-gray-300">
-            {{ $t("startDate") }}
+          <label for="from" class="dark:text-gray-300">
+            {{ $t("date_from") + ' - ' + $t("date_to") }}
           </label>
-          <VueDatePicker :enableTimePicker="false" auto-apply model-type="yyyy-MM-dd hh:mm:ss"
-                         :placeholder="$t('startDate')"
-                         v-model="storiesVariable.start_date"></VueDatePicker>
+          <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
           <p
               v-for="error in validate.start_date.$errors"
               :key="error.$uid"
@@ -358,24 +371,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             {{ $t(error.$message) }}
           </p>
         </div>
-
-        <div class="mt-4 ">
-          <label class="dark:text-gray-300">
-            {{ $t("endDate") }}
-          </label>
-          <VueDatePicker :teleport="true" :enableTimePicker="false" auto-apply
-                         model-type="yyyy-MM-dd hh:mm:ss"
-                         :placeholder="$t('endDate')"
-                         v-model="storiesVariable.end_date"/>
-          <p
-              v-for="error in validate.end_date.$errors"
-              :key="error.$uid"
-              class="text-danger text-sm"
-          >
-            {{ $t(error.$message) }}
-          </p>
-        </div>
-        <p class=" mt-4 ">{{ $t("Publish") }}</p>
+        <p class=" mt-4 ">{{ $t("Published") }}</p>
         <label className="relative inline-flex items-center cursor-pointer">
           <input
               type="checkbox"
@@ -401,13 +397,12 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
       </div>
       <div class="card w-2/4">
         <div class="flex justify-between items-end mb-7">
-          <label for="search" class="w-1/4">
+          <label for="search">
             {{ $t('Search') }}
             <input
                 v-model="params.search"
                 type="text"
                 class="form-input"
-                :placeholder="$t('Search')"
             />
           </label>
           <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
@@ -465,9 +460,9 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
               <div v-if="item['background_'+ locale]">
                 <img
                     class="w-[45px] h-[45px] rounded object-cover"
-                    :src="item['background_'+ locale]"
+                    :src="item['background_'+ locale].full_size"
                     alt="Rounded avatar"
-                    @click="onShowFile(item['background_'+ locale])"
+                    @click="onShowFile(item['background_'+ locale].full_size)"
                 />
               </div>
               <div
@@ -478,8 +473,13 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
               </div>
             </div>
           </template>
+          <template #header-actions="item">
+            <div class="flex justify-end">
+              {{ $t(item.text) }}
+            </div>
+          </template>
           <template #item-actions="data">
-            <div class="flex my-4 justify-left" @click.stop>
+            <div class="flex my-4 justify-end" @click.stop>
               <button class="btn-warning btn-action" uk-toggle="target: #stories_section_modal"
                       @click="editData= data">
                 <Icon icon="Pen New Square" color="#fff" size="16"/>

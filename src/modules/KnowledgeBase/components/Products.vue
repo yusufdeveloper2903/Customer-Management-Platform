@@ -26,6 +26,10 @@ const params = reactive({
 });
 const props = defineProps<{
   knowledge: string
+  params: {
+    page: number,
+    page_size: number
+  }
 }>();
 let toRefresh = ref(false)
 const editData = ref<EditDataProduct>({
@@ -50,17 +54,28 @@ const imageCard = ref();
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.page_size = JSON.parse(page_size)
+  }
   let knowledgeBase = localStorage.getItem('knowledgeBase')
   if (knowledgeBase == 'products') {
     await refresh()
   }
-})
+});
+
 
 
 //WATCHERS
 watch(() => props.knowledge, async function (val) {
   toRefresh.value = !toRefresh.value
   if (val == 'products') {
+    params.page = props.params.page
+    params.page_size = props.params.page_size
     await refresh()
   }
 })
@@ -131,9 +146,9 @@ const onShowFile = (item: any) => {
   <div class="card">
     <div class="flex justify-between items-end mb-7">
 
-      <label for="search" class="w-1/4">
+      <label for="search" >
         {{ $t('Search') }}
-        <input type="text" class="form-input" :placeholder="$t('Search')"
+        <input type="text" class="form-input"
                v-model="params.search"/>
       </label>
 
@@ -185,9 +200,13 @@ const onShowFile = (item: any) => {
       <template #item-description="item">
         {{ item['description_' + $i18n.locale] }}
       </template>
-
+      <template #header-actions="item">
+        <div class="flex justify-end">
+          {{ $t(item.text) }}
+        </div>
+      </template>
       <template #item-actions="item">
-        <div class="flex justify-left my-4">
+        <div class="flex justify-end my-4">
           <button class="btn-warning btn-action" uk-toggle="target: #create_products" @click="editData = item">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>

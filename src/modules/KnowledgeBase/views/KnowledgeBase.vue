@@ -19,9 +19,14 @@ import Polls from '../components/Polls.vue'
 
 //DECLARED VARIABLES
 const knowledge = ref('')
-
+let params = ref({
+  page: 1,
+  page_size: 10
+})
 //FUNCTIONS
 const selectedTitle = (val: any) => {
+  localStorage.setItem('page', '1')
+  localStorage.setItem('page_size', '10')
   localStorage.setItem('knowledgeBase', val)
   knowledge.value = val
 }
@@ -34,42 +39,42 @@ const selectedTitle = (val: any) => {
     <Tabs vertical pill @selectedTitle="selectedTitle" unique="unique">
 
       <Tab title="sms_template">
-        <SMSTemplate :knowledge="knowledge"/>
+        <SMSTemplate :knowledge="knowledge" :params="params"/>
       </Tab>
       <Tab title="Polls">
-        <Polls :knowledge="knowledge"/>
+        <Polls :knowledge="knowledge" :params="params"/>
       </Tab>
 
 
       <Tab title="News template">
-        <NewsTemplate :knowledge="knowledge"/>
+        <NewsTemplate :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="Locations">
-        <NearbyPlaces :knowledge="knowledge"/>
+        <NearbyPlaces :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="version_control">
-        <VersionControl :knowledge="knowledge"/>
+        <VersionControl :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="products">
-        <Products :knowledge="knowledge"/>
+        <Products :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="PrivacyPolicy">
-        <PrivacyPolicy :knowledge="knowledge"/>
+        <PrivacyPolicy :knowledge="knowledge" :params="params"/>
       </Tab>
       <Tab title="region">
-        <CreateRegions :knowledge="knowledge"/>
+        <CreateRegions :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="Terms_and_conditions">
-        <TermsAndConditions :knowledge="knowledge"/>
+        <TermsAndConditions :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="contacts">
-        <Contacts :knowledge="knowledge"/>
+        <Contacts :knowledge="knowledge" :params="params"/>
       </Tab>
     </Tabs>
   </div>

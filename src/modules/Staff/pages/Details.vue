@@ -181,7 +181,6 @@ const validate: Ref<Validation> = useVuelidate(rules, userData);
                   id="loginDetail"
                   v-model="userData.username"
                   type="text"
-                  :placeholder="$t('Login')"
                   class="form-input md:mb-0 mb-4"
               />
             </label>
@@ -192,7 +191,6 @@ const validate: Ref<Validation> = useVuelidate(rules, userData);
                   autocomplete="off"
                   id="passwordDetail"
                   :type="isPasswordShown ? 'text' : 'password'"
-                  placeholder="*********"
                   class="form-input"
                   v-model="userData.password"
               />
@@ -216,7 +214,6 @@ const validate: Ref<Validation> = useVuelidate(rules, userData);
                 :options="store.users_roles.results"
                 :getOptionLabel="role => role.name"
                 :reduce="(v) => v.id"
-                :placeholder="$t('Role')"
                 :class="validate.role.$errors.length ? 'required-input' : ''"
             >
               <template #no-options> {{ $t("no_matching_options") }}</template>
@@ -253,7 +250,6 @@ const validate: Ref<Validation> = useVuelidate(rules, userData);
         <input
             id="login"
             type="text"
-            :placeholder="$t('Full Name')"
             class="form-input"
             v-model="userData.full_name"
         />
@@ -262,7 +258,6 @@ const validate: Ref<Validation> = useVuelidate(rules, userData);
           {{ $t("phone_number") }}:
         </label>
         <input
-            :placeholder="$t('phone_number')"
             v-model="userData.phone"
             v-maska
             data-maska="+998 ## ### ## ##"

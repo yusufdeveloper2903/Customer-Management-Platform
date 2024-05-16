@@ -24,7 +24,7 @@ const store = sectionStoriesModal();
 const emit = defineEmits(["refresh"]);
 const propData = defineProps<{ editData: EditData | null }>();
 let sectionStories = ref<EditData>({
-  story_id: null,
+  story_section_id: null,
   duration: '',
   button_name: '',
   button_name_uz: '',
@@ -46,7 +46,8 @@ let sectionStories = ref<EditData>({
 
 //FUNCTIONS
 function openModal() {
-  if (propData.editData && propData.editData.story_id) {
+  if (propData.editData && propData.editData.story_section_id) {
+
     sectionStories.value.button_name = propData.editData?.button_name
     sectionStories.value.button_name_uz = propData.editData?.button_name_uz
     sectionStories.value.button_name_kr = propData.editData?.button_name_kr
@@ -57,12 +58,13 @@ function openModal() {
     sectionStories.value.duration = propData.editData.duration
     sectionStories.value.is_button = propData.editData.is_button
     sectionStories.value.is_active = propData.editData.is_active
-    sectionStories.value.story = propData.editData.story_id
+    sectionStories.value.story = propData.editData.story
+    sectionStories.value.story_section_id = propData.editData.story_section_id
     sectionStories.value.content_type = propData.editData.content_type
-    sectionStories.value.background = propData.editData.background
-    sectionStories.value.background_uz = propData.editData.background_uz
-    sectionStories.value.background_kr = propData.editData.background_kr
-    sectionStories.value.background_ru = propData.editData.background_ru
+    sectionStories.value.background = propData.editData.background?.full_size
+    sectionStories.value.background_uz = propData.editData.background_uz?.full_size
+    sectionStories.value.background_kr = propData.editData.background_kr?.full_size
+    sectionStories.value.background_ru = propData.editData.background_ru?.full_size
     store.storySectionButtonType.data.forEach((item: any) => {
       if (item.value == sectionStories.value.button_type) {
         item.first = 'first'
@@ -90,6 +92,7 @@ const hideModal = () => {
   sectionStories.value.background_uz = ''
   sectionStories.value.background_kr = ''
   sectionStories.value.background_ru = ''
+  sectionStories.value.story_section_id = null
 
 }
 watch(() => sectionStories.value.button_type, function (val: any) {
@@ -120,7 +123,6 @@ const saveEdit = async () => {
   sectionStories.value.background = sectionStories.value.background_uz
   sectionStories.value.button_name = sectionStories.value.button_name_uz
   sectionStories.value.story = String(route.params.id)
-  sectionStories.value.story_id = String(route.params.id)
   if (!sectionStories.value.is_button) {
     sectionStories.value.object_id = null
     sectionStories.value.button_name = ''
@@ -128,9 +130,8 @@ const saveEdit = async () => {
     sectionStories.value.button_name_kr = ''
     sectionStories.value.button_name_ru = ''
     sectionStories.value.button_url = ''
-
   }
-  if (propData.editData && propData.editData.story_id) {
+  if (propData.editData && propData.editData.story_section_id) {
     try {
       const fd = objectToFormData(['background', 'background_uz', 'background_kr', 'background_ru'], sectionStories.value);
       await store.updateSectionStories(fd)
@@ -174,7 +175,7 @@ const saveEdit = async () => {
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData && propData.editData.story_id ? $t("Edit") : $t("Add") }}
+          {{ propData.editData && propData.editData.story_section_id ? $t("Edit") : $t("Add") }}
         </h2>
       </div>
 
@@ -187,7 +188,6 @@ const saveEdit = async () => {
         <input
             type="text"
             class="form-input mb-3"
-            :placeholder="$t('Duration')"
             v-model="sectionStories.duration"
         />
         <div class="mt-4">
@@ -214,7 +214,6 @@ const saveEdit = async () => {
                   id="nameUz"
                   type="text"
                   class="form-input mb-3"
-                  :placeholder="$t('name')"
                   v-model="sectionStories.button_name_uz"
               />
 
@@ -224,7 +223,7 @@ const saveEdit = async () => {
             <FileInput
                 v-model="sectionStories.background_uz"
                 @remove="sectionStories.background_uz = null"
-                :typeModal="propData.editData && propData.editData.story_id"
+                :typeModal="propData.editData && propData.editData.story_section_id"
                 name="stories-detail-template-uz"
             />
 
@@ -237,7 +236,6 @@ const saveEdit = async () => {
                   id="nameUz"
                   type="text"
                   class="form-input mb-3"
-                  :placeholder="$t('name')"
                   v-model="sectionStories.button_name_kr"
               />
 
@@ -246,7 +244,7 @@ const saveEdit = async () => {
             <FileInput
                 v-model="sectionStories.background_kr"
                 @remove="sectionStories.background_kr = null"
-                :typeModal="propData.editData && propData.editData.story_id"
+                :typeModal="propData.editData && propData.editData.story_section_id"
                 name="stories-detail-template-kr"
             />
 
@@ -261,7 +259,6 @@ const saveEdit = async () => {
                   id="nameRu"
                   type="text"
                   class="form-input mb-3"
-                  :placeholder="$t('name')"
                   v-model="sectionStories.button_name_ru"
 
               />
@@ -271,7 +268,7 @@ const saveEdit = async () => {
             <FileInput
                 v-model="sectionStories.background_ru"
                 @remove="sectionStories.background_ru = null"
-                :typeModal="propData.editData && propData.editData.story_id"
+                :typeModal="propData.editData && propData.editData.story_section_id"
                 name="stories-detail-template-ru"
             />
 
@@ -303,7 +300,6 @@ const saveEdit = async () => {
                 type="text"
                 style="padding-top:12px;padding-bottom:12px"
                 class="form-input  "
-                :placeholder="$t('URL')"
                 v-model="sectionStories.button_url"
             />
           </div>
@@ -344,7 +340,7 @@ const saveEdit = async () => {
         </button>
 
         <button
-            :class="propData.editData && propData.editData.story_id ? 'btn-warning mr-2' : 'btn-success mr-2'"
+            :class="propData.editData && propData.editData.story_section_id ? 'btn-warning mr-2' : 'btn-success mr-2'"
             @click="saveEdit"
         >
           <img
@@ -354,7 +350,7 @@ const saveEdit = async () => {
               v-if="isSubmitted"
           />
           <span>{{
-              propData.editData && propData.editData.story_id ? $t("Edit") : $t("Add")
+              propData.editData && propData.editData.story_section_id ? $t("Edit") : $t("Add")
             }}</span>
         </button>
       </div>

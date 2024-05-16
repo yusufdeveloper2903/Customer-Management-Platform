@@ -126,7 +126,7 @@ const refresh = async () => {
       <tr>
         <th
             v-for="field in phoneNumberFields"
-            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider"
+            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider secondTable"
         >
           {{ $t(field.text) }}
 
@@ -149,7 +149,7 @@ const refresh = async () => {
 
         <td class="px-6 whitespace-no-wrap text-left">{{ item.number }}</td>
         <td class="px-6 whitespace-no-wrap text-left">
-          <div class="flex py-2 justify-left">
+          <div class="flex py-2 justify-end">
             <button
                 class="btn-warning btn-action"
                 uk-toggle="target: #phones"
@@ -190,3 +190,10 @@ const refresh = async () => {
 
   </div>
 </template>
+
+<style lang="scss" scoped>
+.secondTable:nth-child(3) {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>
