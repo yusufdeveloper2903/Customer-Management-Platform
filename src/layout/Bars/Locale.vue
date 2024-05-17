@@ -15,7 +15,7 @@ function onChangeLocale(lang: any) {
 }
 </script>
 <template>
-  <div class="mx-auto w-[35px] cursor-pointer lang flex justify-end">
+  <div class="mx-auto w-[35px] cursor-pointer lang flex justify-end" :lang="locale">
     <div class="inline-block w-[28px]">
       <img
           v-if="locale == 'ru'"

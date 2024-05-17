@@ -48,6 +48,8 @@ onMounted(async () => {
 //WATCHERS
 watchDebounced(() => params.search, function () {
   params.page = 1
+  localStorage.setItem('page', '1')
+
   refresh()
 }, {deep: true, debounce: 500, maxWait: 5000})
 

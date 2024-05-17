@@ -141,6 +141,8 @@ async function selectAllData() {
 
 //WATCHERS
 watchDebounced(() => params.search, async function () {
+  params.page = 1
+  localStorage.setItem('page', '1')
   await refresh()
 }, {deep: true, debounce: 500, maxWait: 5000,})
 
@@ -232,7 +234,7 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
         <h1 class="font-semibold text-lg mb-4">{{ $t('Receivers') }}</h1>
 
         <div class="flex items-center gap-4 mb-6">
-          <div >
+          <div>
             <label for="search" class="dark:text-gray-300">
               {{ $t("Search") }}
             </label>

@@ -136,6 +136,8 @@ const selectedTitle = (val: any) => {
 //WATCHERS
 watchDebounced(() => params.value.search, async function () {
   params.value.page = 1
+  localStorage.setItem('page', '1')
+
   refresh()
 }, {deep: true, debounce: 500, maxWait: 5000,})
 

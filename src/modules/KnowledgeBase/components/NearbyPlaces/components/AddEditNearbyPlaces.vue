@@ -406,7 +406,7 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                 >{{ $t('photo') }} </label>
                 <FileInput
                     v-model="location.photo"
-                    @remove="location.photo = ''"
+                    @remove="location.photo = null"
                     :typeModal="props.oldData?.id"
                     name="nearby-location"
                 />

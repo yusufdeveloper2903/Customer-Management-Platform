@@ -36,6 +36,8 @@ const validationForm = async () => {
     setRefreshToken(data.refresh);
     let userAbilities = [{subject: "all", action: "manage"}];
     localStorage.setItem("userAbilities", JSON.stringify(userAbilities));
+    localStorage.setItem("knowledgeBase", 'sms_template');
+    localStorage.setItem("sms", 'sms sending');
     ability.update(userAbilities);
     await router.push("/dashboard");
     toast.success(t("success"));

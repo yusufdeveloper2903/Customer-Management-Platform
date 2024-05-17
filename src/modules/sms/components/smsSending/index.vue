@@ -50,9 +50,6 @@ onMounted(async () => {
   if (sms == 'sms sending') {
     await refresh();
     await store.getStatus()
-  } else {
-    await refresh();
-    await store.getStatus()
   }
 });
 
@@ -74,6 +71,8 @@ watchDebounced(
     () => smsFilter.search,
     () => {
       smsFilter.page = 1
+      localStorage.setItem('page', '1')
+
       refresh()
     }, {deep: true, debounce: 500, maxWait: 5000}
 );

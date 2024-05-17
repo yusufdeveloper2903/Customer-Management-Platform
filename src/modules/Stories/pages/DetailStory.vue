@@ -38,7 +38,7 @@ const routeParams = ref('')
 const isSubmitted = ref<boolean>(false);
 const url = ref('')
 const dateConfig = ref({})
-let storiesVariable = ref({
+let storiesVariable = ref<any>({
   id: '',
   subtitle: '',
   subtitle_uz: '',
@@ -237,6 +237,8 @@ const showRow = (val: any) => {
 //WATCHERS
 watchDebounced(() => params.search, function () {
   params.page = 1
+  localStorage.setItem('page', '1')
+
   refresh()
 }, {deep: true, debounce: 500, maxWait: 5000,})
 
@@ -523,7 +525,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             class=" flex gap-4 justify-end"
         >
           <button class="btn-secondary" @click="router.push('/stories')">
-            {{ $t("Отмена") }}
+            {{ $t("Cancel") }}
           </button>
 
           <button @click="saveData('detail')"

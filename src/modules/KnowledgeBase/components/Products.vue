@@ -69,7 +69,6 @@ onMounted(async () => {
 });
 
 
-
 //WATCHERS
 watch(() => props.knowledge, async function (val) {
   toRefresh.value = !toRefresh.value
@@ -83,6 +82,7 @@ watchDebounced(
     () => params.search,
     async () => {
       params.page = 1;
+      localStorage.setItem('page', '1')
       await refresh()
     }, {deep: true, debounce: 500, maxWait: 5000}
 );
@@ -146,7 +146,7 @@ const onShowFile = (item: any) => {
   <div class="card">
     <div class="flex justify-between items-end mb-7">
 
-      <label for="search" >
+      <label for="search">
         {{ $t('Search') }}
         <input type="text" class="form-input"
                v-model="params.search"/>

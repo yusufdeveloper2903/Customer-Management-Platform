@@ -332,7 +332,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           <label class="mt-4 block" for="photo">{{ $t('Detail photo') }}
             <FileInput
                 v-model="productsData.detail_photo"
-                @remove="productsData.detail_photo = ''"
+                @remove="productsData.detail_photo = null"
                 :typeModal="propData.editData.id"
                 name="promotion-modal"
             />
@@ -345,7 +345,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           <label class="mt-4 block" for="photo">{{ $t('Background photo') }}
             <FileInput
                 v-model="productsData.background_photo"
-                @remove="productsData.background_photo = ''"
+                @remove="productsData.background_photo = null"
                 :typeModal="propData.editData.id"
                 name="second-promotion"
             />

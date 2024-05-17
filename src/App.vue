@@ -51,6 +51,9 @@ watch(
 <style lang="less">
 @import "../node_modules/uikit/src/less/uikit.less";
 
+
+
+
 .vue3-easy-data-table__header {
   tr {
     th:last-child {

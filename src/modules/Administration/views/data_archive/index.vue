@@ -111,6 +111,8 @@ const onInput = async (event: number) => {
 }
 
 watchDebounced(() => params.value.search, async function () {
+  localStorage.setItem('page', '1')
+
   params.value.offset = 0
   params.value.page = 1
 

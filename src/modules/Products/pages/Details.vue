@@ -102,6 +102,8 @@ watchDebounced(
     () => params.search,
     async () => {
       params.page = 1;
+      localStorage.setItem('page', '1')
+
       await refresh()
     }, {deep: true, debounce: 500, maxWait: 5000}
 );

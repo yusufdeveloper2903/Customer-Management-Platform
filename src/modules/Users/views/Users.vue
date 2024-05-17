@@ -47,7 +47,9 @@ onMounted(async () => {
 
 watchDebounced(() => filterUsers.search, async () => {
       filterUsers.page = 1
-      await refresh()
+  localStorage.setItem('page', '1')
+
+  await refresh()
     }, {deep: true, debounce: 500, maxWait: 5000}
 )
 

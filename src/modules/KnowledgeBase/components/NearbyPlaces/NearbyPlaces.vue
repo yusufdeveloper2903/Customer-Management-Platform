@@ -73,6 +73,8 @@ watch(() => props.knowledge, async function (val) {
   }
 })
 watchDebounced(() => params.value.search, async function () {
+  localStorage.setItem('page', '1')
+  params.value.page = 1
   getListForm()
 }, {deep: true, debounce: 500, maxWait: 5000,})
 

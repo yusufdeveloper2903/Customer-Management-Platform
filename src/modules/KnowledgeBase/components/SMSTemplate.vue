@@ -60,8 +60,6 @@ onMounted(async () => {
 
   if (knowledgeBase == 'sms_template') {
     await refresh()
-  } else {
-    await refresh()
   }
 });
 

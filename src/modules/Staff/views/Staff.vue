@@ -92,6 +92,7 @@ const filterByRole = () => {
 }
 
 watchDebounced(() => filterUsers.search, async function () {
+  localStorage.setItem('page', '1')
   filterUsers.page = 1
   refresh()
 }, {deep: true, debounce: 500, maxWait: 5000,})
@@ -114,7 +115,7 @@ const onShowFile = (item: any) => {
     <div class="card">
       <div class="md:flex items-end justify-between mb-7">
         <form class="md:flex items-center gap-5 md:w-7/12">
-          <div >
+          <div>
             <label for="search" class="dark:text-gray-300">
               {{ $t("Search") }}
             </label>
