@@ -14,7 +14,6 @@ import TermsAndConditions from "../components/TermsAndConditions.vue"
 import Contacts from "../components/Links.vue";
 import CreateRegions from '../components/Regions.vue'
 import {ref} from 'vue'
-import Polls from '../components/Polls.vue'
 
 
 //DECLARED VARIABLES
@@ -41,9 +40,7 @@ const selectedTitle = (val: any) => {
       <Tab title="sms_template">
         <SMSTemplate :knowledge="knowledge" :params="params"/>
       </Tab>
-      <Tab title="Polls">
-        <Polls :knowledge="knowledge" :params="params"/>
-      </Tab>
+
 
 
       <Tab title="News template">

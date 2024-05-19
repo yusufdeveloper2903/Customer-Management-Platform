@@ -11,7 +11,6 @@ import {
     Products,
     Link,
     Phones,
-    Polls
 
 } from "../interfaces";
 
@@ -20,10 +19,6 @@ export default defineStore("knowledgeBase", {
     state: () => {
         return {
             knowledge: '',
-            pollList: {
-                count: 0,
-                results: [] as Polls[]
-            } as Results<Polls>,
             smsTemplateList: {
                 count: 0,
                 results: [] as SmsTemplate[],
@@ -79,10 +74,7 @@ export default defineStore("knowledgeBase", {
             const {data} = await $axios.get("/knowledge_base/sms_template/", {params})
             this.smsTemplateList = data
         },
-        async getPolls(params: any) {
-            const {data} = await $axios.get("knowledge_base/poll/", {params})
-            this.pollList = data
-        },
+
         async getNewsTemplate(params: Params) {
             const {data} = await $axios.get(`/knowledge_base/news_template/`, {params});
             this.newTemplate = data;
@@ -129,9 +121,6 @@ export default defineStore("knowledgeBase", {
         createSmsTemplate(data: any) {
             return $axios.post("/knowledge_base/sms_template/", data);
         },
-        createPoll(data: any) {
-            return $axios.post("knowledge_base/poll/", data)
-        },
         createNewsTemplate(data: any) {
             return $axios.post(`/knowledge_base/news_template/`, data);
         },
@@ -166,9 +155,6 @@ export default defineStore("knowledgeBase", {
         //PATCH REQUEST
         updateSmsTemplate(data:any) {
             return $axios.patch(`/knowledge_base/sms_template/${data.id}/`, data);
-        },
-        updatePoll(data: any) {
-            return $axios.patch(`knowledge_base/poll/${data.id}/`, data);
         },
         updateNewsTemplate(data:any) {
             return $axios.patch(`/knowledge_base/news_template/${data.get("id")}/`, data);

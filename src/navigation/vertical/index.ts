@@ -19,6 +19,12 @@ export default [
         permissions: ["admin"],
     },
     {
+        name: "Polls",
+        icon: "File",
+        path: "/polls",
+        permissions: ["admin"],
+    },
+    {
         name: "Transactions",
         path: "/transactions",
         icon: "File",

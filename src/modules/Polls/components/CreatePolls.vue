@@ -1,0 +1,162 @@
+<script lang="ts" setup>
+
+
+//IMPORTED FILES
+import {computed, Ref, ref} from "vue";
+import UIkit from "uikit";
+import {useI18n} from "vue-i18n";
+import {toast} from "vue3-toastify";
+import storagePolls from "../store";
+import {EditData} from "../interfaces";
+import {helpers, required} from "@vuelidate/validators";
+import useVuelidate, {Validation} from "@vuelidate/core";
+
+
+//DECLARED VARIABLES
+const {t} = useI18n();
+const isSubmitted = ref<boolean>(false);
+const store = storagePolls();
+const emit = defineEmits(["refresh"]);
+const propData = defineProps<{ editData: EditData | null }>();
+let sectionStories = ref<EditData>({
+  id: null,
+  name: '',
+  status: '',
+});
+const listStatus = ref([
+  {
+    title: 'Active',
+    value: 'ACTIVE'
+  },
+  {
+    title: 'Waiting',
+    value: 'WAITING'
+  },
+  {
+    title: 'Finished',
+    value: 'FINISHED'
+  }
+])
+
+
+//FUNCTIONS
+function openModal() {
+  if (propData.editData && propData.editData.id) {
+    sectionStories.value.id = propData.editData?.id
+    sectionStories.value.name = propData.editData?.name
+    sectionStories.value.status = propData.editData?.status
+  }
+}
+
+const hideModal = () => {
+  validate.value.$reset()
+  sectionStories.value.id = ''
+  sectionStories.value.name = ''
+  sectionStories.value.status = ''
+
+}
+
+
+const saveEdit = async () => {
+  const success = await validate.value.$validate();
+  if (!success) return;
+  if (propData.editData && propData.editData.id) {
+    try {
+      await store.updatePolls(sectionStories.value)
+      await UIkit.modal("#polls-modal").hide();
+      toast.success(t("updated_successfully"));
+      isSubmitted.value = false;
+      emit("refresh");
+    } catch (error: any) {
+      isSubmitted.value = false;
+      toast.error(t("error"));
+    }
+  } else {
+    try {
+      await store.createPolls(sectionStories.value)
+      await UIkit.modal("#polls-modal").hide();
+      toast.success(t("created_successfully"));
+      emit("refresh");
+      isSubmitted.value = false;
+    } catch (error: any) {
+      isSubmitted.value = false;
+      toast.error(t('error'));
+    }
+  }
+};
+
+const rules = computed(() => {
+  return {
+    name: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+
+
+  };
+
+});
+
+const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
+</script>
+
+<template>
+  <div id="polls-modal" class="uk-flex-top" uk-modal @shown="openModal" @hidden="hideModal">
+    <div
+        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
+    >
+      <button class="uk-modal-close-default" type="button" uk-close/>
+      <div class="uk-modal-header">
+        <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
+          {{ propData.editData && propData.editData.id ? $t("Change") : $t('Add') }}
+        </h2>
+      </div>
+      <div class="uk-modal-body py-4">
+
+        <p>{{ $t("Status") }}</p>
+        <v-select
+            :options="listStatus"
+            v-model="sectionStories.status"
+            :getOptionLabel="(name:any) => t(name.title)"
+            :reduce="(item:any) => item.value"
+            :menu-props="{ top: true, offsetY: true }"
+        >
+          <template #no-options> {{ $t("no_matching_options") }}</template>
+        </v-select>
+
+
+        <div class="mt-5">
+          <label>{{ $t('name') }}</label>
+          <input
+              type="text"
+              class="form-input"
+              v-model="sectionStories.name"
+              :class="validate.name.$errors.length ? 'required-input' : ''"
+          />
+          <p
+              v-for="error in validate.name.$errors"
+              :key="error.$uid"
+              class="text-danger text-sm"
+          >
+            {{ $t(error.$message) }}
+          </p>
+        </div>
+
+
+      </div>
+
+      <div
+          class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
+      >
+        <button uk-toggle="target: #polls-modal" class="btn-secondary">
+          {{ $t("Cancel") }}
+        </button>
+
+        <button :class=" propData.editData  && propData.editData.id ? 'btn-warning' : 'btn-success'" @click="saveEdit"
+                :disabled="isSubmitted">
+
+          <span>{{ propData.editData && propData.editData.id ? $t("Change") : $t('Add') }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>

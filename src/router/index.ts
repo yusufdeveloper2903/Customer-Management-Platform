@@ -10,6 +10,7 @@ import promotion from "@/modules/Promotion/router"
 import transactions from "@/modules/Transactions/router"
 import promo_code from "@/modules/Products/router"
 import stories from '@/modules/Stories/router'
+import polls from "@/modules/Polls/router"
 import {isUserLoggedIn} from './utils'
 
 //DECLARED VARIABLES
@@ -24,6 +25,8 @@ const routes: Array<RouteRecordRaw> = [
     ...promotion,
     ...transactions,
     ...stories,
+    ...polls,
+
     {
         path: "/",
         redirect: () => {

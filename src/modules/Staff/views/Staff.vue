@@ -193,7 +193,7 @@ const onShowFile = (item: any) => {
         <template #item-role="items">
           <span
               v-if="items.role"
-              class="rounded bg-primary px-4 p-1 pt-0.5 inline m-1 text-white"
+              class="rounded bg-success px-4 p-1 pt-1 inline m-1 text-white"
           >
             {{ items.role.name }}
           </span>

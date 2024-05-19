@@ -24,7 +24,7 @@ export const fields = [
         value: "is_active",
     },
     {
-        text: "Detail",
+        text: "details",
         value: "detail",
     },
 ];
