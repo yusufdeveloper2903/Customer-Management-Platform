@@ -38,6 +38,9 @@ onMounted(async () => {
   if (sms == 'sms sending') {
     await refresh();
     await store.getStatus()
+  } else {
+    await refresh();
+    await store.getStatus()
   }
 })
 
@@ -76,7 +79,7 @@ const refresh = async () => {
     await store.getSmsSending(smsFilter)
     smsSendingList.value = store.smsSendingList.results;
   } catch (error: any) {
-    toast.error(error.response.message || "Error");
+    toast.error(t('error'));
   }
   isLoading.value = false;
 };
@@ -103,7 +106,7 @@ const deleteSms = async () => {
     await store.deleteSmsSending(smsId.value)
     UIkit.modal("#sms_sending-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.smsSendingList.count - 1) % smsFilter.page > 0) {
+    if (store.smsSendingList.count > 1 && ((store.smsSendingList.count - 1) % smsFilter.page_size == 0)) {
       smsFilter.page = smsFilter.page - 1
       await refresh()
     } else {
@@ -128,7 +131,6 @@ const deleteSms = async () => {
               id="search"
               type="text"
               class="form-input"
-              :placeholder="$t('Search')"
               v-model="smsFilter.search"
           />
         </div>
@@ -136,9 +138,9 @@ const deleteSms = async () => {
 
         <div class="md:w-1/3 md:m-0 mt-2">
           <label for="from" class="dark:text-gray-300">
-            {{ $t("from") }}
+            {{ $t("startDate") }}
           </label>
-          <VueDatePicker model-type="yyyy-MM-dd" :enable-time-picker="false"
+          <VueDatePicker auto-apply model-type="yyyy-MM-dd" :enable-time-picker="false"
                          v-model="smsFilter.start_time"></VueDatePicker>
         </div>
 
@@ -154,18 +156,15 @@ const deleteSms = async () => {
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="smsFields" :items="smsSendingList">
 
       <template #empty-message>
-        <span class="dark:text-neutral-400">{{ t('empty_text') }}</span>
+        <div>{{ $t('no_available_data') }}</div>
       </template>
 
-      <template #header="data">
-        {{ $t(data.text) }}
+      <template #header="header">
+        {{ $t(header.text) }}
       </template>
 
       <template #item-title="item">
         {{ item.title }}
-      </template>
-      <template #header-description="data">
-        {{ $t(data.text) }}
       </template>
 
 

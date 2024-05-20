@@ -1,119 +1,194 @@
 <script lang="ts" setup>
-import { Ref, ref, computed, inject, watch } from "vue";
+
+//IMPORTED FILES
+import {Ref, ref, computed} from "vue";
 import UIkit from "uikit";
-import { useI18n } from "vue-i18n";
-import { toast } from "vue3-toastify";
-// import { helpers, required } from "@vuelidate/validators";
-import useVuelidate, { Validation } from "@vuelidate/core";
+import {useI18n} from "vue-i18n";
+import {toast} from "vue3-toastify";
+import useVuelidate, {Validation} from "@vuelidate/core";
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
+import { helpers, required } from "@vuelidate/validators";
+import { RetseptCategory } from "@/modules/KnowledgeBase/interfaces/index"
+import KnowledgeBase from "@/modules/KnowledgeBase/store/index";
 
-const { t } = useI18n();
-const details = ref<string>("");
+
+
+//DECLARED VARIABLES
+const {t} = useI18n();
 const isSubmitted = ref<boolean>(false);
+const propData = defineProps<{ editData: RetseptCategory }>();
+const emits = defineEmits(["saveCategory"]);
+const store = KnowledgeBase()
+const categoryData = ref<RetseptCategory>({
+id: null,
+name: "",
+name_uz: "",
+name_ru: "",
+name_kr: ""
+})
 
+
+// validations
 const rules = computed(() => {
   return {
-    // carModel: {
-    //   required: helpers.withMessage("required", required),
-    // },
+    name_uz: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    name_ru: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    name_kr: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
   };
+
 });
 
-const validate: Ref<Validation> = useVuelidate(rules, {});
+const validate: Ref<Validation> = useVuelidate(rules, categoryData);
 
-interface Props {
-  details: any;
+//FUNCTIONS
+async function openModal() {
+  if (propData.editData.id) {
+    categoryData.value.id = propData.editData.id
+    categoryData.value.name_ru = propData.editData.name_ru
+    categoryData.value.name_uz = propData.editData.name_uz
+    categoryData.value.name_kr = propData.editData.name_kr
+
+  } else {
+    categoryData.value.id = null
+    categoryData.value.name_ru = ""
+    categoryData.value.name_uz = ""
+    categoryData.value.name_kr = ""
+  }
 }
 
-const props = defineProps<Props>();
-const showModal = inject("showModal");
+function hideModal() {
+  categoryData.value.id = null
+    categoryData.value.name_ru = ""
+    categoryData.value.name_uz = ""
+    categoryData.value.name_kr = ""
+  validate.value.$reset()
+}
 
-const onModalChange = (newVal) => {
-  if (newVal) {
-    details.value = props.details;
-  }
-};
 
-watch(showModal, onModalChange);
-
-const clearModal = () => {
-  details.value = "";
-};
+function getTitle() {
+  categoryData.value.name = categoryData.value.name_uz
+}
 
 const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
-  isSubmitted.value = true;
-  UIkit.modal("#categories").hide();
-  toast.success(t("updated_successfully"));
-  setTimeout(() => {
-    clearModal();
-    isSubmitted.value = false;
-  }, 500);
+
+  if (propData.editData.id) {
+    try {
+      await store.updateRecipeCategory(categoryData.value).then(() => {
+        emits("saveCategory");
+        setTimeout(() => {
+          toast.success(t("updated_successfully"));
+        }, 200);
+        UIkit.modal("#categories").hide();
+      });
+
+      isSubmitted.value = false;
+
+    } catch (error: any) {
+      isSubmitted.value = false;
+      toast.error(
+        error.response.message || error.response.data.msg || error.response.data.error || t('error')
+      );
+    }
+
+  } else {
+    try {
+      await store.createRecipeCategory(categoryData.value).then(() => {
+        emits("saveCategory");
+        setTimeout(() => {
+          toast.success(t("created_successfully"));
+        }, 200);
+        UIkit.modal("#categories").hide();
+      });
+
+      isSubmitted.value = false;
+
+    } catch (error: any) {
+      isSubmitted.value = false;
+      if (error) {
+        toast.error(
+          error.response.message || error.response.data.msg || error.response.data.error || t('error')
+        );
+      }
+    }
+  }
 };
+
+
 </script>
 
 <template>
-  <div id="categories" class="uk-flex-top" uk-modal>
+  <div id="categories" class="uk-flex-top" uk-modal @shown="openModal" @hidden="hideModal" >
     <div
-      class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
+        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
     >
-      <button class="uk-modal-close-default" type="button" uk-close />
+      <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ $t("Edit") }}
+          {{ propData.editData.id ? t("Change") : t('Add') }}
         </h2>
       </div>
 
       <div class="uk-modal-body py-4">
         <Tabs>
-          <Tab title="Uz">
+          <Tab title="O'z">
             <form>
-              <label for="nameUz">Nomi</label>
-              <input
-                id="nameUz"
-                type="text"
-                class="form-input"
-                placeholder="Nomi"
-              />
-
-              <label class="mt-5 block" for="fileUz">Fayl</label>
-              <input id="fileUz" type="file" class="form-file-input" />
+              <label for="nameUz">{{ t('name') }} O'z
+                <input id="nameUz" type="text" class="form-input" :placeholder="t('name')" v-model="categoryData.name_uz"
+                  :class="validate.name_uz.$errors.length ? 'required-input' : ''" @input="getTitle" />
+                <p v-for="error in validate.name_uz.$errors" :key="error.$uid" class="text-danger text-sm">
+                  {{ t(error.$message) }}
+                </p>
+              </label>
             </form>
           </Tab>
-          <Tab title="Ru">
-            <form>
-              <label for="nameRu">{{ $t('name') }}</label>
-              <input
-                id="nameRu"
-                type="text"
-                class="form-input"
-                :placeholder="$t('name')"
-              />
 
-              <label class="mt-4 block" for="fileRu">Файл</label>
-              <input id="fileRu" type="file" class="form-file-input" />
+          <Tab title="Ру">
+            <form>
+              <label for="nameRu">{{ t('name') }} Ру
+                <input id="nameRu" type="text" class="form-input" :placeholder="t('name')" v-model="categoryData.name_ru" :class="validate.name_ru.$errors.length ? 'required-input' : ''"/>
+                <p v-for="error in validate.name_ru.$errors" :key="error.$uid" class="text-danger text-sm">
+                  {{ t(error.$message) }}
+                </p>
+              </label>
+            </form>
+          </Tab>
+          <Tab title="Ўз">
+            <form>
+              <label for="nameRu">{{ t('name') }} Ўз
+                <input id="nameRu" type="text" class="form-input" :placeholder="t('name')" v-model="categoryData.name_kr" :class="validate.name_kr.$errors.length ? 'required-input' : ''"/>
+                <p v-for="error in validate.name_kr.$errors" :key="error.$uid" class="text-danger text-sm">
+                  {{ t(error.$message) }}
+                </p>
+              </label>
             </form>
           </Tab>
         </Tabs>
       </div>
 
       <div
-        class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
+          class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
       >
         <button uk-toggle="target: #categories" class="btn-secondary">
-          {{ $t("Cancel") }}
+          {{ t("Cancel") }}
         </button>
 
-        <button class="btn-success mr-2" @click="updateDeal" :disabled="isSubmitted">
+        <button :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'" @click="updateDeal" :disabled="isSubmitted">
           <img
-            src="@/assets/image/loading.svg"
-            alt="loading.svg"
-            class="inline w-4 h-4 text-white animate-spin mr-2"
-            v-if="isSubmitted"
+              src="@/assets/image/loading.svg"
+              alt="loading.svg"
+              class="inline w-4 h-4 text-white animate-spin mr-2"
+              v-if="isSubmitted"
           />
-          <span>{{ $t("Change") }}</span>
+          <span>{{ propData.editData.id ? t("Change") : t('Add') }}</span>
         </button>
       </div>
     </div>

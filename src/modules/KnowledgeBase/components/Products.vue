@@ -10,7 +10,7 @@ import knowledgeBase from "../store/index"
 import UIkit from "uikit";
 import {watchDebounced} from "@vueuse/core";
 import {useI18n} from "vue-i18n";
-import ShowFileModal from "@/modules/KnowledgeBase/components/ShowImageModal.vue";
+import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
 import {EditDataProduct} from '../interfaces/index'
 
 
@@ -108,7 +108,7 @@ const deleteAction = async () => {
     await store.deleteProducts(itemId.value)
     await UIkit.modal("#product-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.productsList.count - 1) % params.page_size == 0) {
+    if (store.productsList.count > 1 && ((store.productsList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -132,14 +132,14 @@ const onShowFile = (item: any) => {
     <div class="flex justify-between items-end mb-7">
 
       <label for="search" class="w-1/4">
-        {{ $t('Search') }}
-        <input type="text" class="form-input" :placeholder="$t('Search')"
+        {{ t('Search') }}
+        <input type="text" class="form-input" :placeholder="t('Search')"
                v-model="params.search"/>
       </label>
 
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
               uk-toggle="target: #create_products" @click="editData = {}">
-        {{ $t("Add") }}
+        {{ t("Add") }}
       </button>
     </div>
 
@@ -147,33 +147,14 @@ const onShowFile = (item: any) => {
                    :items="store.productsList.results">
 
       <template #empty-message>
-        <span>{{ $t('empty_text') }}</span>
+        <div>{{ $t('no_available_data') }}</div>
       </template>
 
-      <template #header-code="header">
-        {{ $t(header.text) }}
-      </template>
-
-      <template #header-title="header">
-        {{ $t(header.text) }}
-      </template>
-
-      <template #header-image="header">
-        {{ $t(header.text) }}
-      </template>
-
-      <template #header-actions="header">
-        {{ $t(header.text) }}
-      </template>
-
-      <template #header-price="header">
+      <template #header="header">
         {{ $t(header.text) }}
       </template>
       <template #item-price="data">
         {{ (`${data.price}`).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' Som' }}
-      </template>
-      <template #header-quantity="header">
-        {{ $t(header.text) }}
       </template>
 
       <template #item-title="item">

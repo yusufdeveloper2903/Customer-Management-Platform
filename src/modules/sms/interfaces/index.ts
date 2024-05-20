@@ -5,12 +5,12 @@ export interface Results<T> {
     results: T[];
 }
 
-export interface EditData {
+export interface EditDataNews {
     id: number | null,
-    title: {
-        uz: string,
-        ru: string
-    }
+    title: string,
+    title_uz: string,
+    title_ru: string,
+    title_kr: string,
     file: string,
     start_time: string,
     status: string
@@ -30,7 +30,7 @@ export interface NewsData {
     description: string,
     photo: string | null,
     receivers: number[],
-    template: object,
+    template: object | null,
     enable_push_notify: boolean
 }
 
@@ -40,7 +40,7 @@ export interface SmsSendingData {
         id: number | null;
         title: string
         description: string
-    }
+    } | null
     description: string
     receivers: number[]
     title: string
@@ -48,10 +48,10 @@ export interface SmsSendingData {
 
 export interface EditData {
     id: number | null,
-    title: {
-        uz: string,
-        ru: string
-    }
+    title: string,
+    title_uz: string,
+    title_ru: string,
+    title_kr: string,
     start_time: string,
 }
 

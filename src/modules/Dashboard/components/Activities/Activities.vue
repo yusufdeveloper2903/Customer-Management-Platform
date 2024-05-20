@@ -1,10 +1,9 @@
 <script setup lang="ts">
-//Imported files
+//IMPORTED FILES
+import {reactive} from "vue";
 
-import { reactive } from "vue";
 
-//Declared variables
-
+//DECLARED VARIABLES
 const activities = reactive([
   {
     id: 1,
@@ -61,25 +60,21 @@ const activities = reactive([
 <template>
   <div class="card">
     <div
-      class="flex items-center justify-between mb-5"
-      v-for="(item, index) in activities"
-      :key="index"
+        class="flex items-center justify-between mb-5"
+        v-for="(item, index) in activities"
+        :key="index"
     >
       <div class="flex items-center">
         <div
-          class="rounded-lg bg-gray-200 w-[40px] h-[40px] flex justify-center items-center"
+            class="rounded-lg bg-gray-200 w-[40px] h-[40px] flex justify-center items-center"
         >
-          <Icon :icon="item.icon" />
+          <Icon :icon="item.icon"/>
         </div>
 
-        <span class="dark:text-gray-200 text-gray-600 ml-2">{{
-          item.title
-        }}</span>
+        <span class="dark:text-gray-200 text-gray-600 ml-2">{{ item.title }}</span>
       </div>
       <div>
-        <span class="dark:text-gray-100 text-gray-300 text-sm">{{
-          item.time
-        }}</span>
+        <span class="dark:text-gray-100 text-gray-300 text-sm">{{item.time }}</span>
         <h5 class="font-medium dark:text-gray-200 text-gray-600 mb-0 pb-0">
           {{ item.date }}
         </h5>

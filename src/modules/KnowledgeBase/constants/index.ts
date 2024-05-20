@@ -16,7 +16,24 @@ export const categoryFields = [
         value: "actions",
     },
 ];
-
+export const PollsFields = [
+    {
+        text: "ID",
+        value: "id",
+    },
+    {
+        text: "name",
+        value: "name",
+    },
+    {
+        text: "Status",
+        value: "is_active",
+    },
+    {
+        text: "actions",
+        value: "actions",
+    },
+];
 export const categoryitems = [
     {
         id: 1,
@@ -61,58 +78,7 @@ export const introFields = [
     },
 ];
 
-export const splashFields = [
-    {
-        text: "ID",
-        value: "id",
-    },
-    {
-        text: "photo",
-        value: "photo",
-    },
-    {
-        text: "Version",
-        value: "version",
-    },
-    {
-        text: "Time",
-        value: "time",
-    },
-    {
-        text: "Status",
-        value: "is_active",
-    },
-    {
-        text: "actions",
-        value: "actions",
-    },
-];
-
-export const splashItems = [
-    {
-        id: 1,
-        photo: "https://picsum.photos/300",
-        version: "1.16",
-        time: "24-08-2023",
-        is_active: true,
-    },
-    {
-        id: 2,
-        photo: "",
-        version: "1.14",
-        time: "24-08-2023",
-        is_active: false,
-    },
-    {
-        id: 3,
-        photo: "",
-        version: "1.12",
-        time: "24-08-2023",
-        is_active: false,
-    },
-];
-
-export const locationFields = [
+export const SmsFields = [
     {
         text: "ID",
         value: "id",
@@ -338,6 +304,12 @@ export const recipedetailFields = [
     { text: "views", value: "views" },
     { text: "link", value: "link" },
     { text: "Status", value: "is_active" },
+    { text: "actions", value: "actions" },
+]
+
+export const recipeCategoryFields = [
+    { text: "ID", value: "id" },
+    { text: "name", value: "name" },
     { text: "actions", value: "actions" },
 ]
 

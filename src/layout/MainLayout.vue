@@ -25,8 +25,8 @@
 </template>
 
 <script setup>
-//Imported files
 
+//IMPORTED FILES
 import "./Bars/sidebar.css";
 import SideBar from "./Bars/Sidebar.vue";
 import Minisidebar from "./Bars/minisidebar.vue";
@@ -36,8 +36,7 @@ import BreadCrumb from "@/components/Breadcrumb/Index.vue";
 import {useRoute} from "vue-router";
 import ScrollToTop from '@/components/ScrollToTop.vue'
 
-//Declared variables
-
+//DECLARED VARIABLES
 const sidebar = useSidebarStore();
 const windowWidth = window.innerWidth;
 const checkMiniSidebar = () => {
@@ -65,17 +64,21 @@ let BreadcrumbList = ref([]);
 const route = useRoute();
 
 
+//WATCHERS
 watch(() => route.name, function (val) {
   breadCrumbStart(route.name);
 
 })
-onMounted(() => {
 
+
+//MOUNTED
+onMounted(() => {
   breadCrumbStart(route.name);
+
 });
 
 function breadCrumbStart(newPath) {
-  console.log(newPath, 'newpath')
+  console.log(newPath, 'newPath')
   localStorage.setItem('sidebar', newPath)
   switch (newPath) {
     case "dashboard":
@@ -87,6 +90,23 @@ function breadCrumbStart(newPath) {
       BreadcrumbList.value = [
         {title: 'Users', active: true},
       ];
+      break;
+    case "stories":
+      BreadcrumbList.value = [
+        {title: 'Stories', active: true},
+      ];
+      break;
+    case "stories-detail-id":
+      BreadcrumbList.value = [
+        {title: 'Stories', active: false},
+        {title: 'storiesDetail', active: true},
+      ];
+      break;
+    case "stories-detail":
+      BreadcrumbList.value = [
+        {title: 'Stories', active: false},
+        {title: 'storiesDetail', active: true},
+      ]
       break;
     case "user detail":
       BreadcrumbList.value = [

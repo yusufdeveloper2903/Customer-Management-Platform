@@ -38,7 +38,7 @@ const params = reactive({
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
   let knowledgeBase = localStorage.getItem('knowledgeBase')
-  if (knowledgeBase == 'Region') {
+  if (knowledgeBase == 'region') {
     await refresh()
   }
 })
@@ -47,7 +47,7 @@ onMounted(async () => {
 //WATCHERS
 watch(() => props.knowledge, async function (val) {
   toRefresh.value = !toRefresh.value
-  if (val == 'Region') {
+  if (val == 'region') {
     await refresh()
   }
 })
@@ -65,7 +65,7 @@ const deleteAction = async () => {
     await store.deleteRegion(userId.value);
     await UIkit.modal("#region-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.regionsList.count - 1) % params.page_size == 0) {
+    if (store.regionsList.count > 1 && ((store.regionsList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -125,17 +125,14 @@ const saveSmsTemplate = () => {
                    :items="regionList">
 
       <template #empty-message>
-        <span class="dark:text-neutral-400">{{ $t('empty_text') }}</span>
+        <div>{{ $t('no_available_data') }}</div>
       </template>
 
-      <template #header-name="header">
+      <template #header="header">
         {{ $t(header.text) }}
       </template>
 
 
-      <template #header-actions="header">
-        {{ $t(header.text) }}
-      </template>
 
       <template #item-name="item">
         {{ item['name_' + $i18n.locale] }}

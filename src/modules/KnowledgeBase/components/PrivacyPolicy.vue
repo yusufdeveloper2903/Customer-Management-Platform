@@ -8,6 +8,7 @@ import knowledgeBase from ".././store/index"
 import {toast} from "vue3-toastify";
 import {useI18n} from "vue-i18n";
 
+
 //DECLARED VARIABLES
 const store = knowledgeBase()
 const is_disabledUz = ref(false)
@@ -44,36 +45,27 @@ const refresh = async () => {
 };
 
 
-const updateText = () => {
+const updateText = async () => {
   store.pagesListPolicy.text = store.pagesListPolicy.text_uz
-  store.updatePages({...store.pagesListPolicy}).then(() => {
-    setTimeout(() => {
-      toast.success(t("updated_successfully"));
-    }, 200);
-    refresh()
-  })
+  await store.updatePages(store.pagesListPolicy)
+  await refresh()
+  toast.success(t("updated_successfully"));
   is_disabledUz.value = false
 
 }
-const updateText2 = () => {
+const updateText2 = async () => {
   store.pagesListPolicy.text = store.pagesListPolicy.text_uz
-  store.updatePages({...store.pagesListPolicy}).then(() => {
-    setTimeout(() => {
-      toast.success(t("updated_successfully"));
-    }, 200);
-    refresh()
-    is_disabledRu.value = false
-  })
+  await store.updatePages(store.pagesListPolicy)
+  await refresh()
+  toast.success(t("updated_successfully"));
+  is_disabledRu.value = false
 }
-const updateText3 = () => {
+const updateText3 = async () => {
   store.pagesListPolicy.text = store.pagesListPolicy.text_uz
-  store.updatePages({...store.pagesListPolicy}).then(() => {
-    setTimeout(() => {
-      toast.success(t("updated_successfully"));
-    }, 200);
-    refresh()
-    is_disabledKr.value = false
-  })
+  await store.updatePages(store.pagesListPolicy)
+  await refresh()
+  toast.success(t("updated_successfully"));
+  is_disabledKr.value = false
 }
 
 
@@ -85,7 +77,7 @@ const updateText3 = () => {
       <Tab title="UZ">
         <div v-if="store.pagesListPolicy.text_uz">
           <Editor
-              :placeholder="$t('enter_information')"
+              :placeholder="t('enter_information')"
               content-type="html"
               toolbar="full"
               class="scrollbar rounded border"
@@ -109,7 +101,7 @@ const updateText3 = () => {
         <div v-if="store.pagesListPolicy.text_kr">
           <Editor
 
-              :placeholder="$t('enter_information')"
+              :placeholder="t('enter_information')"
               content-type="html"
               toolbar="full"
               class="scrollbar rounded border"
@@ -134,7 +126,7 @@ const updateText3 = () => {
       <Tab title="RU">
         <div v-if="store.pagesListPolicy.text_ru">
           <Editor
-              :placeholder="$t('enter_information')"
+              :placeholder="t('enter_information')"
               content-type="html"
               toolbar="full"
               class="scrollbar rounded border"

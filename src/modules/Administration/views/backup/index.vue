@@ -1,7 +1,9 @@
 <script setup lang="ts">
-//Imported Files
-import {administrationStore} from '../../store/index'
-import {ref} from "vue"
+
+
+//IMPORTED FILES
+import administrationStore from '../../store/index'
+import {onMounted, ref} from "vue"
 import {headerBackUp} from "../../constants/index";
 import dayjs from 'dayjs'
 import {toast} from "vue3-toastify";
@@ -9,8 +11,8 @@ import {useI18n} from 'vue-i18n';
 import {watchDebounced} from '@vueuse/core';
 import UIkit from "uikit";
 
-//Declared variables
 
+//DECLARED VARIABLES
 const {t} = useI18n()
 const administrationStorage = administrationStore()
 const isLoading = ref(false)
@@ -25,8 +27,15 @@ let params = ref({
 })
 const deletingID = ref()
 
-//Functions
 
+//MOUNTED
+onMounted(async () => {
+  await refresh()
+
+})
+
+
+//FUNCTIONS
 const refresh = async () => {
   isLoading.value = true
   try {
@@ -36,7 +45,6 @@ const refresh = async () => {
     isError.value = true
   }
 }
-refresh()
 
 function download(url: string) {
   const url_parts = url.split('/')
@@ -54,12 +62,14 @@ const createBackup = async () => {
   isLoading.value = true
   try {
     await administrationStorage.CREATE_BACKUP()
-    UIkit.modal("#backup-add-modal").hide();
-    toast.success(t('created_successfully'));
+    await UIkit.modal("#backup-add-modal").hide();
     refresh()
+    toast.success(t('created_successfully'));
     isLoading.value = false
   } catch (error) {
     isError.value = true
+    toast.error(t('error'));
+
   }
 }
 
@@ -67,18 +77,26 @@ const deleteAction = async () => {
   isLoading.value = true
   try {
     await administrationStorage.DELETE_BACKUP(deletingID.value)
-    UIkit.modal("#global-delete-modal").hide();
+    await UIkit.modal("#backup-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    refresh()
+    if (administrationStorage.back_up_list.count > 1 && ((administrationStorage.back_up_list.count - 1) % params.value.limit == 0)) {
+      params.value.page = params.value.page - 1
+      await refresh()
+    } else {
+      await refresh()
+    }
+
     isLoading.value = false
   } catch (error) {
     isError.value = true
+    toast.error(t('error'));
+
   }
 }
 
 
-const openDeleteBackupModal = async (id) => {
-  UIkit.modal("#global-delete-modal").show();
+const openDeleteBackupModal = async (id: any) => {
+  UIkit.modal("#backup-delete-modal").show();
   deletingID.value = id
 }
 const onInput = (event: number) => {
@@ -112,9 +130,8 @@ const onPageSizeChanged = (event: number) => {
   refresh();
 };
 
-//Life Cycles
 
-
+//WATCHERS
 watchDebounced(() => params.value.search, async function () {
   params.value.offset = 0
   params.value.page = 1
@@ -159,6 +176,7 @@ watchDebounced(() => params.value.search, async function () {
                 </div>
                 <div class="relative">
                   <VueDatePicker
+                      auto-apply
                       :locale="'ru'"
                       :autoApply="true"
                       format="dd.MM.yyyy"
@@ -184,6 +202,7 @@ watchDebounced(() => params.value.search, async function () {
                 </div>
                 <div class="relative">
                   <VueDatePicker
+                      auto-apply
                       :locale="'ru'"
                       :autoApply="true"
                       format="dd.MM.yyyy"
@@ -200,7 +219,8 @@ watchDebounced(() => params.value.search, async function () {
 
 
             </div>
-            <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full " uk-toggle="target: #backup-add-modal">
+            <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full "
+                    uk-toggle="target: #backup-add-modal">
               {{ $t('create_a_backup') }}
             </button>
           </div>
@@ -212,28 +232,13 @@ watchDebounced(() => params.value.search, async function () {
               hide-footer
               class="mb-3"
           >
+
             <template #empty-message>
               <div>{{ $t('no_available_data') }}</div>
             </template>
-
-            <template #header-author="header">
-              {{ $t(header.text) }}
-
-            </template>
-
-            <template #header-title="header">
+            <template #header="header">
               {{ $t(header.text) }}
             </template>
-
-            <template #header-created_at="header">
-              {{ $t(header.text) }}
-            </template>
-
-            <template #header-actions="header">
-              {{ $t(header.text) }}
-            </template>
-
-
             <template #item-author="items">
               <div class="flex justify-left" style="overflow-wrap: anywhere;">
                 {{ items.author && items.author.name ? items.author.name : "" }}
@@ -287,8 +292,6 @@ watchDebounced(() => params.value.search, async function () {
 
     </div>
 
-
-    <!-- =========== Modal =========== -->
     <div
         id="backup-add-modal"
         class="uk-flex-top"
@@ -317,7 +320,7 @@ watchDebounced(() => params.value.search, async function () {
           </button>
           <button
               class="rounded-md bg-primary px-6 py-2 text-white duration-100 hover:opacity-90"
-              @click="createBackup()"
+              @click="createBackup"
               :disabled="isLoading"
           >
             {{ $t('yes') }}
@@ -327,9 +330,6 @@ watchDebounced(() => params.value.search, async function () {
         </div>
       </div>
     </div>
-
-
-    <!-- =========== Modal =========== -->
     <div
         id="backup-delete-modal"
         class="uk-flex-top"
@@ -368,7 +368,7 @@ watchDebounced(() => params.value.search, async function () {
       </div>
     </div>
 
-    <DeleteModal @delete-action="deleteAction"/>
+    <DeleteModal @delete-action="deleteAction" id="backup-delete-modal"/>
   </div>
 </template>
 

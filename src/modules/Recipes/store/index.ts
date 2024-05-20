@@ -4,7 +4,7 @@ import {
     Results,
     Params,
     Retsept,
-
+    RecipeDetail
 } from "../interfaces";
 
 
@@ -14,6 +14,8 @@ export default defineStore("recipes", {
             retseptList: {
                 results: [] as Retsept[]
             } as Results<Retsept>,
+
+            retseptDetailList: {} as RecipeDetail,
         };
     },
     actions: {
@@ -23,6 +25,11 @@ export default defineStore("recipes", {
         async getRetsept(params: Params) {
             const {data} = await $axios.get('/knowledge_base/retsept/', {params})
             this.retseptList = data
+        },
+
+        async getRetseptDetail(id: number) {
+            const {data} = await $axios.get(`/knowledge_base/retsept/${id}/`)
+            this.retseptDetailList = data
         },
 
 

@@ -1,70 +1,104 @@
 <script setup lang="ts">
 
-//Imported files
-
-import {onMounted, reactive, ref} from "vue";
-import {toast} from "vue3-toastify";
-import {categoryFields, categoryitems} from "../constants";
+//IMPORTED FILES
+import { onMounted, reactive, ref, watch } from "vue";
+import { toast } from "vue3-toastify";
+import { recipeCategoryFields } from "../constants";
 import CategoriesDetail from "./modals/CategoriesDetail.vue";
-import ConfirmModal from "@/components/ConfirmModals/ConfirmModal.vue";
-import {ICategory} from "../interfaces/index";
-import {useI18n} from "vue-i18n";
-//Declared variables
-const {t} = useI18n()
-const current = ref<number>(1);
+import { useI18n } from "vue-i18n";
+import KnowledgeBase from "../store/index";
+import UIkit from "uikit";
+import { watchDebounced } from "@vueuse/core";
+import {RetseptCategory} from "../interfaces/index"
+
+
+//DECLARED VARIABLES
+const { t } = useI18n()
+const store = KnowledgeBase()
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
-const paginationFilter = reactive({
+const params = reactive({
   page_size: 10,
   page: 1,
+  search: ""
 });
-const items = ref<ICategory[]>(categoryitems);
-const currentRow = ref<ICategory | null>(null);
-const dragStart = (item: any) => {
-  currentRow.value = item;
-};
+const props = defineProps<{
+  knowledge: string
+}>();
+let toRefresh = ref(false)
 
-const dragOver = (e) => {
-  e.preventDefault();
-};
+const editData = ref<RetseptCategory>({
+  id: null, 
+  name: "",
+  name_uz: "",
+  name_ru: "",
+  name_kr: ""
+})
 
-const dragDrop = (item: ICategory) => {
-  event?.preventDefault();
-  items.value = items.value.map((r) => {
-    if (r.id == item.id) {
-      return {...r, step_id: currentRow.value?.step_id || r.step_id};
-    }
 
-    if (r.id == currentRow.value?.id) {
-      return {...r, step_id: item.step_id || r.step_id};
-    }
-
-    return r;
-  });
-};
-
-const sortItems = (a, b) => {
-  if (a.step_id > b.step_id) {
-    return 1;
-  } else {
-    return -1;
+//MOUNTED LIFE CYCLE
+onMounted(async () => {
+  let knowledgeBase = localStorage.getItem('knowledgeBase')
+  if (knowledgeBase == 'categories') {
+    await refresh(params)
   }
+})
+
+
+
+//WATCHERS
+watch(() => props.knowledge, async function (val) {
+  toRefresh.value = !toRefresh.value
+  if (val == 'categories') {
+    await refresh(params)
+  }
+})
+
+watchDebounced(
+  () => params.search,
+  async () => {
+    params.page = 1;
+    await refresh(params)
+  }, { deep: true, debounce: 500, maxWait: 5000 }
+);
+
+
+
+// Functions
+const changePagination = (e: number) => {
+  params.page = e;
+  refresh(params);
 };
 
-const changePagionation = (e: number) => {
-  paginationFilter.page = e;
-  current.value = e;
-  refresh({...paginationFilter});
-};
+const onPageSizeChanged = (e) => {
+  params.page_size = e
+  params.page = 1
+  refresh(params)
+}
 
-const deleteCategory = () => {
-  console.log(itemId);
-};
+const deleteCategory = async () => {
+  isLoading.value = true
+  try {
+    await store.deleteRecipeCategory(itemId.value)
+    await UIkit.modal("#category-delete").hide();
+    toast.success(t('deleted_successfully'));
+    if (store.phonesList.count > 1 && ((store.retseptCategoryList.count - 1) % params.page_size == 0)) {
+      params.page = params.page - 1
+      await refresh(params)
+    } else {
+      await refresh(params)
+    }
+    isLoading.value = false
+  } catch (error: any) {
+    toast.error(t('error'));
+  }
+}
+
 
 const refresh = async (filter) => {
   isLoading.value = true;
   try {
-    console.log(filter);
+    store.getRetseptCategory(filter);
   } catch (error: any) {
     toast.error(t('error'))
   }
@@ -72,8 +106,13 @@ const refresh = async (filter) => {
   isLoading.value = false;
 };
 
+
+const saveCategory = () => {
+  refresh(params);
+}
+
 onMounted(() => {
-  refresh(paginationFilter);
+  refresh(params);
 });
 </script>
 
@@ -81,99 +120,46 @@ onMounted(() => {
   <div class="card">
     <div class="flex justify-between items-end mb-10">
       <label for="search" class="w-1/4">
-        {{ $t('Search') }}
-        <input type="text" class="form-input" :placeholder="$t('Search')"/>
+        {{ t('Search') }}
+        <input type="text" class="form-input" :placeholder="t('Search')" v-model="params.search" />
       </label>
-      <button class="btn-primary" uk-toggle="target: #categories">
-        {{ $t("Add") }}
+
+      <button class="btn-primary" uk-toggle="target: #categories" @click="editData = <RetseptCategory>{}">
+        {{ t("Add") }}
       </button>
     </div>
 
-    <table class="min-w-full bg-white border border-gray-300 dark:border-gray-600">
-      <thead>
-      <tr>
-        <th
-            v-for="field in categoryFields"
-            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider"
-        >
-          {{ field.text }}
+    <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="recipeCategoryFields"
+      :items="store.retseptCategoryList.results">
 
-        </th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr
-          v-for="item in items.sort(sortItems)"
-          :key="item.id"
-          class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
-          :draggable="true"
-          @dragstart="dragStart(item)"
-          @dragover="dragOver"
-          @drop="dragDrop(item)"
-      >
-        <td class="px-6 whitespace-no-wrap">
-          {{ item.id }}
-        </td>
-        <td class="px-6 whitespace-no-wrap">
-          <div class="py-3 flex items-center gap-3">
-            <img v-if="item.photo"
-                 class="w-[45px] h-[45px] rounded object-cover"
-                 :src="item.photo"
-                 alt="Rounded avatar"
-            />
-            <div
-                v-else
-                class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded"
-            >
-              <Icon
-                  icon="Camera"
-                  color="#356c2d"
-              />
-            </div>
-          </div>
-        </td>
-        <td class="px-6 whitespace-no-wrap">{{ item.name }}</td>
-        <td class="px-6 whitespace-no-wrap">
-          <div class="flex">
-            <button
-                class="btn-warning btn-action"
-                uk-toggle="target: #categories"
-            >
-              <Icon icon="Pen New Square" color="#fff" size="16"/>
-            </button>
-            <button
-                @click="itemId = item.id"
-                class="ml-3 btn-danger btn-action"
-                uk-toggle="target: #confirm-modal"
-            >
-              <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
-            </button>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+      <template #empty-message>
+        <div>{{ t('no_available_data') }}</div>
+      </template>
 
-    <TwPagination
-        class="mt-10 tw-pagination"
-        :current="current"
-        :total="5"
-        :per-page="10"
-        :text-before-input="$t('go_to_page')"
-        :text-after-input="$t('forward')"
-        @page-changed="changePagionation"
-    />
+      <template #header="header">
+        {{ t(header.text) }}
+      </template>
 
-    <CategoriesDetail details=""/>
 
-    <ConfirmModal
-        title="Delete"
-        cancel="cancel"
-        ok="delete"
-        @ok="deleteCategory"
-        @cancel="itemId = null"
-    >
-      <p>Are you sure?</p>
-    </ConfirmModal>
+      <template #item-actions="item">
+        <div class="flex justify-left my-4">
+          <button class="btn-warning btn-action" uk-toggle="target: #categories" @click="editData = item">
+            <Icon icon="Pen New Square" color="#fff" size="16" />
+          </button>
+          <button @click="itemId = item.id" class="ml-3 btn-danger btn-action" uk-toggle="target: #category-delete">
+            <Icon icon="Trash Bin Trash" color="#fff" size="16" />
+          </button>
+        </div>
+      </template>
+    </EasyDataTable>
+
+
+    <TwPagination class="mt-10 tw-pagination" :current="params.page" :total="store.retseptCategoryList.count"
+      :per-page="params.page_size" :text-before-input="t('go_to_page')" :text-after-input="t('forward')"
+      @page-changed="changePagination" @per-page-changed="onPageSizeChanged" />
+
+    <CategoriesDetail :edit-data="editData" @saveCategory="saveCategory"/>
+
+    <DeleteModal @delete-action="deleteCategory" id="category-delete" />
   </div>
 </template>

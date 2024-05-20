@@ -19,6 +19,8 @@ import {useI18n} from "vue-i18n";
 import Tab from "@/components/Tab/Tab.vue";
 import Tabs from "@/components/Tab/Tabs.vue";
 import FileInput from "@/components/FileInput/FileInput.vue";
+import {objectToFormData} from "@/mixins/formmatter";
+
 
 interface Props {
   oldData?: LocationPlace;
@@ -29,7 +31,7 @@ interface Props {
 const props = defineProps<Props>();
 const emit = defineEmits(["refresh", "getRegion"]);
 const store = knowledgeStore();
-const {t, locale} = useI18n();
+const {t} = useI18n();
 const showMap = ref(false);
 let openTime = ref()
 let closeTime = ref()
@@ -55,38 +57,21 @@ let location = reactive<LocationPlaceData>({
 //FUNCTIONS
 
 
-const onGetData = async () => {
-  emit('getRegion')
-}
 const onSubmit = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
-  const formData = new FormData()
-  formData.append('title', location.title)
-  formData.append('title_ru', location.title_ru)
-  formData.append('title_kr', location.title_kr)
-  formData.append('title_uz', location.title_uz)
-  formData.append('address', location.address)
-  formData.append('address_uz', location.address_uz)
-  formData.append('address_kr', location.address_kr)
-  formData.append('address_ru', location.address_ru)
-  formData.append('coordinates', JSON.stringify(location.coordinates))
-  formData.append('phones', `${location.phones}`)
-  formData.append('opened_at', location.opened_at)
-  formData.append('closed_at', location.closed_at)
-  formData.append('region', location.region)
-  formData.append('id', location.id)
-  if (typeof location.photo !== 'string') {
-    formData.append('photo', location.photo)
-  }
+  location.title = location.title_uz
+  location.address = location.address_uz
+  location.coordinates = JSON.stringify(location.coordinates)
+  const fd = objectToFormData(['photo'], location);
   if (location.id) {
-    await store.updateOneForm(formData);
+    await store.updateOneForm(fd);
     toast.success(t("success"));
   } else {
-    await store.AddForms(formData);
+    await store.AddForms(fd);
     toast.success(t("success"));
   }
-  UIkit.modal("#location-modal").hide();
+  await UIkit.modal("#location-modal").hide();
   emit("refresh");
 };
 
@@ -363,26 +348,26 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                 </Tab>
               </Tabs>
               <div class="w-full mt-4">
-                <label for="status">
-                  {{ $t("region") }}
-                  <LazySelect
-                      v-model="location.region"
-                      id="model"
-                      :placeholder="$t('region')"
-                      :options="store.regionsList"
-                      :fetch="onGetData"
-                      :reduce="(el) => el.id"
-                      :getOptionLabel="(v) => v.name[locale] || ''"
-                      :class="validate.region.$errors.length ? 'required-input' : ''"
-                  />
-                  <p
-                      v-for="error in validate.region.$errors"
-                      :key="error.$uid"
-                      class="text-danger text-sm"
-                  >
-                    {{ $t(error.$message) }}
-                  </p>
-                </label>
+                <p class="mt-5">{{ $t("region") }}</p>
+
+                <v-select
+                    :options="store.regionsList.results"
+                    v-model="location.region"
+                    :placeholder="$t('region')"
+                    :getOptionLabel="(name:any) => name['name_'+ $i18n.locale]"
+                    :reduce="(name:any) => name.id"
+
+                >
+                  <template #no-options> {{ $t("no_matching_options") }}</template>
+                </v-select>
+                <p
+                    v-for="error in validate.region.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ $t(error.$message) }}
+                </p>
+
               </div>
 
               <div class="w-full mt-4">
@@ -408,6 +393,8 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
               <div class="w-full mt-4">
                 <label class="relative"> {{ $t('Open hour') }}</label>
                 <VueDatePicker
+
+                    auto-apply
                     v-model="openTime"
                     :placeholder="$t('Open hour')"
                     time-picker
@@ -416,6 +403,7 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
               <div class="w-full mt-4">
                 <label class="relative"> {{ $t('Close hour') }} </label>
                 <VueDatePicker
+                    auto-apply
                     v-model="closeTime"
                     :placeholder="$t('Close hour')"
                     time-picker
@@ -428,7 +416,7 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                 >{{ $t('photo') }} </label>
                 <FileInput
                     v-model="location.photo"
-                    @remove="location.photo = ' '"
+                    @remove="location.photo = ''"
                     :typeModal="props.oldData?.id"
                     name="nearby-location"
                 />
@@ -508,10 +496,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
 </template>
 
 <style>
-.menu_xxl {
-  width: 1165px !important;
-}
-
 #map1 {
   height: 400px;
 }

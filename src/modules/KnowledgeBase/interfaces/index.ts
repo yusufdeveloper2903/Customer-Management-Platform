@@ -5,6 +5,7 @@ export interface Results<T> {
     results: T[];
 }
 
+
 export interface SmsTemplate {
     id: number;
     title: {
@@ -15,6 +16,12 @@ export interface SmsTemplate {
         uz: string | null;
         ru: string | null;
     };
+}
+
+export interface Polls {
+    id: number | null;
+    name: string;
+    is_active: boolean;
 }
 
 export interface NewsTemplate {
@@ -159,7 +166,7 @@ export interface LocationPlaceData {
     coordinates: {
         lat: number | null;
         lng: number | null;
-    };
+    } | {};
     photo: string,
     phones: [];
     opened_at: string,
@@ -237,7 +244,7 @@ export interface editSms {
 
 
 export interface RetseptCategory {
-    id: number;
+    id: number | null;
     name: string;
     name_uz: string;
     name_ru: string;

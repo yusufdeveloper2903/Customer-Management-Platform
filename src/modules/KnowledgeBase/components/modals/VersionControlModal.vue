@@ -42,9 +42,7 @@ const updateDeal = async () => {
       emits("saveVersionControl");
       toast.success(t("updated_successfully"));
     } catch (error: any) {
-      if (error) {
-        toast.error(error.response || "Error");
-      }
+      toast.error(t("error"))
     }
 
   } else {
@@ -54,9 +52,7 @@ const updateDeal = async () => {
       emits("saveVersionControl");
       toast.success(t("created_successfully"));
     } catch (error: any) {
-      if (error) {
-        toast.error(error.response || "Error");
-      }
+      toast.error(t('error'));
     }
   }
 };

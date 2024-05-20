@@ -44,6 +44,7 @@ onMounted(async () => {
   let knowledgeBase = localStorage.getItem('knowledgeBase')
   if (knowledgeBase == 'Locations') {
     await getListForm()
+    await store.getRegions({page_size: 1000})
 
   }
 })
@@ -95,7 +96,7 @@ const deleteAction = async () => {
     await store.deleteLokation(itemForDelete.value)
     await UIkit.modal("#location-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.locationList.count - 1) % params.value.page == 0) {
+    if (store.locationList.count > 1 && ((store.locationList.count - 1) % params.value.page == 0)) {
       params.value.page = params.value.page - 1
       getListForm()
     } else {
@@ -142,23 +143,13 @@ const deleteAction = async () => {
           :items="store.locationList.results"
       >
         <template #empty-message>
-          <span>{{ t("empty_text") }}</span>
+          <div>{{ $t('no_available_data') }}</div>
         </template>
-        <template #header-title="item">
-          {{ $t(item.text) }}
+        <template #header="header">
+          {{ $t(header.text) }}
         </template>
-        <template #header-phones="item">
-          {{ $t(item.text) }}
-        </template>
-        <template #header-region="item">
-          {{ $t(item.text) }}
-        </template>
-        <template #header-address="item">
-          {{ $t(item.text) }}
-        </template>
-        <template #header-actions="item">
-          {{ $t(item.text) }}
-        </template>
+
+
         <template #item-title="item">
           {{ item['title_' + $i18n.locale] }}
         </template>

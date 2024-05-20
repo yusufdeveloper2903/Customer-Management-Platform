@@ -1,12 +1,10 @@
 <script setup lang="ts">
 
-//Imported files
-import {useSidebarStore} from "@/stores/layoutConfig";
+//IMPORTED FILES
 import {useI18n} from "vue-i18n";
-import {ref, watch} from 'vue'
+import {ref} from 'vue'
 
-//Props
-const sidebar = useSidebarStore()
+//DECLARED VARIABLES
 const props = defineProps({
   firstData: {
     type: Array,
@@ -19,10 +17,7 @@ const props = defineProps({
     default: () => [90, 10]
   }
 })
-//Declared variables
-
 const {t} = useI18n();
-
 const chartOptions1 = ref({
   colors: ['#FF3B30', '#FFCC00'],
   plotOptions: {
@@ -64,13 +59,6 @@ const chartOptions1 = ref({
 
 const chartOptions2 = ref({
   colors: ['#480CA8', '#17183B'],
-//     chart: {
-//     background: 'none'
-// },
-
-//     theme: {
-//       mode: 'dark', 
-//   },
   plotOptions: {
     radialBar: {
       size: 100,
@@ -107,23 +95,6 @@ const chartOptions2 = ref({
   },
   labels: [t('used'), t('available')],
 })
-
-// watch(
-//     () => sidebar.currentTheme,
-//     () => {
-//       if (sidebar.currentTheme === "light") {
-//         chartOptions2.value.theme.mode = "light"    
-//         chartOptions2.value.chart.background = "gray"
-//         console.log(chartOptions2.value.theme.mode, 'light');
-
-//       } else {
-//         chartOptions2.value.theme.mode = "dark",
-//         chartOptions2.value.chart.background = "none"
-//         console.log(chartOptions2.value.theme.mode, 'dark');
-
-//       }
-//     }
-// );
 </script>
 
 <template>

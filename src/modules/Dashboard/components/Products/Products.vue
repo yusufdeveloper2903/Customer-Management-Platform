@@ -1,13 +1,14 @@
 <script setup lang="ts">
-//Imported files
 
+
+
+//IMPORTED FILES
 import { reactive } from "vue";
 import { productsFields } from "../../constants/index";
 import { formatCurrency } from "@/mixins/features";
 
 
-//Declared variables
-
+//DECLARED VARIABLES
 const tableData = reactive([
   {
     id: 1,
@@ -36,6 +37,12 @@ const tableData = reactive([
         :items="tableData"
         hide-footer
     >
+      <template #empty-message>
+        <div>{{ $t('no_available_data') }}</div>
+      </template>
+      <template #header="header">
+        {{ $t(header.text) }}
+      </template>
       <template #item-product="items">
         <div class="p-2 flex items-center">
           <img :src="items.product.img" class="w-[100px] rounded" />

@@ -1,9 +1,12 @@
-import { fileURLToPath } from "url";
 
+//IMPORT FILES
+import { fileURLToPath } from "url";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 
-// https://vitejs.dev/config/
+
+
+//CONFIGS
 export default defineConfig({
   plugins: [vue()],
   resolve: {
@@ -19,13 +22,8 @@ export default defineConfig({
       {
         test: /\.s[ac]ss$/i,
         use: [
-          // Creates `style` nodes from JS strings
           "style-loader",
-
-          // Translates CSS into CommonJS
           "css-loader",
-
-          // Compiles Sass to CSS
           "sass-loader",
         ],
       },
@@ -36,7 +34,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 1600,
   },
   proxy: {
-    // with options
     "/api": {
       target: "http://zk.uz:4023/api/v1",
       changeOrigin: true,

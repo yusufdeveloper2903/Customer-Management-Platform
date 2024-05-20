@@ -1,8 +1,6 @@
 <script setup lang="ts">
 
 //IMPORTED FILES
-
-
 import {onMounted, ref} from "vue"
 import users from "../store/index"
 import {useRoute} from "vue-router";
@@ -13,15 +11,13 @@ import {fieldsUserDetail} from "../constants/index"
 
 
 //DECLARED VARIABLES
-
 const store = users()
 const route = useRoute()
 const userItem = ref<object>({});
-const userId = ref(null)
+const userId = ref<null | number>(null)
 
 
 //MOUNTED LIFE CYCLE
-
 onMounted(async () => {
   let id = +route.params.id
   await store.getUserById(id)
@@ -30,8 +26,6 @@ onMounted(async () => {
 })
 
 // FUNCTION
-
-
 const showTerminateModal = (item) => {
   UIkit.modal("#terminate-session-modal").show();
   userId.value = item.id
@@ -103,7 +97,7 @@ const showUntieCardModal = (item) => {
 
           </li>
         </ul>
-        <h2 v-else class="text-center">{{ $t('no_data') }}</h2>
+        <h2 v-else class="text-center">{{ $t('no_available_data') }}</h2>
       </div>
     </div>
 
@@ -118,7 +112,9 @@ const showUntieCardModal = (item) => {
         <template #empty-message>
           <div class="dark:text-white">{{ $t("no_available_data") }}</div>
         </template>
-
+        <template #header="header">
+          {{ $t(header.text) }}
+        </template>
         <template #item-created="item">
           {{ item.created_date }}
         </template>

@@ -79,7 +79,7 @@ const deleteAction = async () => {
     await productStorage.deleteProductItem(itemId.value)
     await UIkit.modal("#product-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((productStorage.productListCategory.count - 1) % params.page_size == 0) {
+    if (productStorage.productListCategory.count > 1 && ((productStorage.productListCategory.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       refresh(params)
     } else {
@@ -183,7 +183,7 @@ const dragDrop = async (item: Link) => {
       </tbody>
 
     </table>
-    <div class="empty_table" v-if="!productStorage.productListCategory.results.length">{{ t("empty_text") }}</div>
+    <div class="empty_table" v-if="!productStorage.productListCategory.results.length">{{ $t('no_available_data') }}</div>
 
 
     <DeleteModal @delete-action="deleteAction" :id="'product-main-delete-modal'"/>

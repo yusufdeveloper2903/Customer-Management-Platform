@@ -2,7 +2,7 @@
 
 
 //IMPORTED FILES
-import {locationFields} from "../constants";
+import {SmsFields} from "../constants";
 import knowledgeBase from ".././store/index"
 import {onMounted, reactive, ref, watch} from "vue";
 import {toast} from "vue3-toastify";
@@ -18,6 +18,7 @@ const {t} = useI18n()
 const store = knowledgeBase()
 const isLoading = ref(false);
 let smsTemplateList = ref<object[]>([]);
+
 const userId = ref<number | null>(null);
 const props = defineProps<{
   knowledge: string
@@ -46,7 +47,10 @@ onMounted(async () => {
   let knowledgeBase = localStorage.getItem('knowledgeBase')
   if (knowledgeBase == 'sms_template') {
     await refresh()
+  } else {
+    await refresh()
   }
+
 })
 
 
@@ -68,9 +72,9 @@ const deleteAction = async () => {
   isLoading.value = true
   try {
     await store.deleteSmsTemplate(userId.value);
-    UIkit.modal("#sms-main-delete-modal").hide();
+    await UIkit.modal("#sms-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.smsTemplateList.count - 1) % params.page_size == 0) {
+    if (store.smsTemplateList.count > 1 && ((store.smsTemplateList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -94,9 +98,7 @@ const refresh = async () => {
     await store.getSmsTemplate(params);
     smsTemplateList.value = store.smsTemplateList.results;
   } catch (error: any) {
-    toast.error(
-        error.response || "Error"
-    );
+    toast.error(t('error'));
   }
   isLoading.value = false;
 };
@@ -128,24 +130,16 @@ const saveSmsTemplate = () => {
         {{ $t("Add") }}
       </button>
     </div>
-    <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="locationFields"
+    <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="SmsFields"
                    :items="smsTemplateList">
 
       <template #empty-message>
-        <span class="dark:text-neutral-400">{{ $t('empty_text') }}</span>
+        <div>{{ $t('no_available_data') }}</div>
       </template>
-
-      <template #header-title="header">
+      <template #header="header">
         {{ $t(header.text) }}
       </template>
 
-      <template #header-description="header">
-        {{ $t(header.text) }}
-      </template>
-
-      <template #header-actions="header">
-        {{ $t(header.text) }}
-      </template>
 
       <template #item-title="item">
         {{ item.title }}
@@ -169,7 +163,7 @@ const saveSmsTemplate = () => {
     <TwPagination :total="store.smsTemplateList.count" class="mt-10 tw-pagination"
                   :restart="toRefresh"
                   :current="params.page" :per-page="params.page_size"
-                  :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
+                  :text-before-input="t('go_to_page')" :text-after-input="t('forward')"
                   @page-changed="changePagination" @per-page-changed="onPageSizeChanged"/>
   </div>
 

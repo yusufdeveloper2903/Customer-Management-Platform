@@ -1,5 +1,3 @@
-// USER TYPE INTERFACES
-
 
 export interface UserListResults {
     id: number;
@@ -24,7 +22,6 @@ export interface UserList {
     results: UserListResults[];
 }
 
-// single user
 export interface User {
     id: number | null;
     sessions: Sessions[];

@@ -44,22 +44,6 @@ export default [
             permissions: ["admin"],
         },
     },
-    {
-        path: "/banner-detail/:id",
-        name: "banner-detail",
-        component: () => import("@/modules/sms/components/banner/AddBanner.vue"),
-        meta: {
-            layout: "MainLayout",
-            permissions: ["admin"],
-        },
-    },
-    {
-        path: "/add-banner",
-        name: "add-banner",
-        component: () => import("@/modules/sms/components/banner/AddBanner.vue"),
-        meta: {
-            layout: "MainLayout",
-            permissions: ["admin"],
-        },
-    },
+
+
 ];

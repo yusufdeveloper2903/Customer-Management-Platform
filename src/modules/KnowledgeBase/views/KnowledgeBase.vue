@@ -12,15 +12,13 @@ import Products from "../components/Products.vue"
 import PrivacyPolicy from "../components/PrivacyPolicy.vue";
 import TermsAndConditions from "../components/TermsAndConditions.vue"
 import Contacts from "../components/Links.vue";
+import Category from "../components/Categories.vue"
 import {ref} from 'vue'
+import Polls from '../components/Polls.vue'
 
 
 //DECLARED VARIABLES
 const knowledge = ref('')
-
-
-
-
 
 //FUNCTIONS
 const selectedTitle = (val: any) => {
@@ -38,6 +36,10 @@ const selectedTitle = (val: any) => {
       <Tab title="sms_template">
         <SMSTemplate :knowledge="knowledge"/>
       </Tab>
+      <Tab title="Polls">
+        <Polls :knowledge="knowledge"/>
+      </Tab>
+
 
       <Tab title="News template">
         <NewsTemplate :knowledge="knowledge"/>
@@ -65,6 +67,10 @@ const selectedTitle = (val: any) => {
 
       <Tab title="contacts">
         <Contacts :knowledge="knowledge"/>
+      </Tab>
+
+      <Tab title="recipe category">
+        <Category :knowledge="knowledge"/>
       </Tab>
     </Tabs>
   </div>

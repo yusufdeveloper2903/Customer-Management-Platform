@@ -84,7 +84,7 @@ const deletePhone = async () => {
     await store.deletePhones(itemId.value)
     await UIkit.modal("#phone-delete").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.phonesList.count - 1) % params.page_size == 0) {
+    if (store.phonesList.count > 1 && ((store.phonesList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -170,7 +170,7 @@ const refresh = async () => {
       </tr>
       </tbody>
     </table>
-    <div class="empty_table" v-if="!store.phonesList.results.length">{{ $t("empty_text") }}</div>
+    <div class="empty_table" v-if="!store.phonesList.results.length">{{ t('no_available_data') }}</div>
 
 
     <TwPagination
@@ -178,8 +178,8 @@ const refresh = async () => {
         :current="params.page"
         :total="store.phonesList.count"
         :per-page="params.page_size"
-        :text-before-input="$t('go_to_page')"
-        :text-after-input="$t('forward')"
+        :text-before-input="t('go_to_page')"
+        :text-after-input="t('forward')"
         @page-changed="changePagination"
         @per-page-changed="onPageSizeChanged"
     />

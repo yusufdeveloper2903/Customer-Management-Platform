@@ -2,15 +2,11 @@
 
 interface Props {
   image: string;
-  id?: string;
-  name:string
+  name: string
 }
 
 const props = defineProps<Props>();
 
-// const hideModal = () => {
-//   UIkit.modal(`${props.id || '#file-modal'}`).hide()
-// }
 </script>
 
 <template>
@@ -23,16 +19,7 @@ const props = defineProps<Props>();
 
         <img :src="props.image" alt="" class="w-full"/>
       </div>
-      <!-- <div
-        class="uk-modal-footer px-5 py-3 uk-text-right bg-white flex justify-end"
-      >
-        <button
-          @click="hideModal"
-          class="btn-small btn-danger mr-2"
-        >
-          {{ $t("Close") }}
-        </button>
-      </div> -->
+
     </div>
   </div>
 </template>

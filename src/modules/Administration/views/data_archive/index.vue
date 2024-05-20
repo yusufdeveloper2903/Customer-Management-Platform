@@ -1,20 +1,20 @@
 <script setup lang="ts">
 
-//Imported Files
+//IMPORTED FILES
 import {headerDataArchive} from '../../constants/index'
-import {administrationStore} from '../../store/index'
+import administrationStore from '../../store/index'
 import UIkit from "uikit";
 import {
+  onMounted,
   ref,
 } from "vue"
-
 import dayjs from 'dayjs'
 import {toast} from "vue3-toastify";
 import {useI18n} from 'vue-i18n';
 import {watchDebounced} from '@vueuse/core';
 
-//Declared variables
 
+//DECLARED VARIABLES
 const {t} = useI18n()
 const administrationStorage = administrationStore()
 const isLoading = ref(false)
@@ -29,8 +29,14 @@ let params = ref({
 })
 const deletingID = ref()
 
-//Functions
 
+//MOUNTED
+onMounted(async () => {
+  await refresh()
+})
+
+
+//FUNCTIONS
 const refresh = async () => {
   isLoading.value = true
   try {
@@ -40,7 +46,6 @@ const refresh = async () => {
     isError.value = true
   }
 }
-refresh()
 
 function download(url: string) {
   const url_parts = url.split('/')
@@ -58,11 +63,12 @@ const createBackup = async () => {
   isLoading.value = true
   try {
     await administrationStorage.CREATE_BACKUP_MEDIA()
-    UIkit.modal("#backup-add-modal").hide();
-    toast.success(t('created_successfully'));
+    await UIkit.modal("#backup-add-modal").hide();
     refresh()
+    toast.success(t('created_successfully'));
     isLoading.value = false
   } catch (error) {
+    toast.error(t('error'));
     isError.value = true
   }
 }
@@ -70,23 +76,28 @@ const deleteAction = async () => {
   isLoading.value = true
   try {
     await administrationStorage.DELETE_BACKUP_MEDIA(deletingID.value)
-    UIkit.modal("#global-delete-modal").hide();
+    await UIkit.modal("#data-archive-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    refresh()
+    if (administrationStorage.back_up_media_list.count > 1 && ((administrationStorage.back_up_media_list.count - 1) % params.value.limit == 0)) {
+      params.value.page = params.value.page - 1
+      await refresh()
+    } else {
+      await refresh()
+    }
     isLoading.value = false
   } catch (error) {
+    toast.error(t('error'));
     isError.value = true
   }
 }
 const openDeleteBackupModal = async (id) => {
-  UIkit.modal("#global-delete-modal").show();
+  UIkit.modal("#data-archive-delete-modal").show();
   deletingID.value = id
 }
 const onInput = async (event: number) => {
   params.value.page = event
   refresh()
 }
-
 
 watchDebounced(() => params.value.search, async function () {
   params.value.offset = 0
@@ -109,8 +120,6 @@ const onPageSizeChanged = (event: number) => {
   params.value.limit = event;
   refresh();
 };
-
-
 </script>
 
 
@@ -148,6 +157,7 @@ const onPageSizeChanged = (event: number) => {
                 </div>
                 <div class="relative">
                   <VueDatePicker
+                      auto-apply
                       :locale="'ru'"
                       :autoApply="true"
                       format="dd.MM.yyyy"
@@ -172,6 +182,7 @@ const onPageSizeChanged = (event: number) => {
                 </div>
                 <div class="relative">
                   <VueDatePicker
+                      auto-apply
                       :locale="'ru'"
                       :autoApply="true"
                       format="dd.MM.yyyy"
@@ -204,27 +215,9 @@ const onPageSizeChanged = (event: number) => {
             <template #empty-message>
               <div>{{ $t('no_available_data') }}</div>
             </template>
-
-            <template #header-id="header">
+            <template #header="header">
               {{ $t(header.text) }}
             </template>
-            <template #header-title="header">
-              {{ $t(header.text) }}
-            </template>
-
-            <template #header-author="header">
-              {{ $t(header.text) }}
-            </template>
-
-            <template #header-created_at="header">
-              {{ $t(header.text) }}
-            </template>
-
-            <template #header-actions="header">
-              {{ $t(header.text) }}
-            </template>
-
-
             <template #item-author="items">
               <div class="flex justify-left" style="overflow-wrap: anywhere;">
                 {{ items.author && items.author.name ? items.author.name : "" }}
@@ -316,7 +309,7 @@ const onPageSizeChanged = (event: number) => {
     </div>
 
 
-    <DeleteModal @delete-action="deleteAction"/>
+    <DeleteModal @delete-action="deleteAction" id="data-archive-delete-modal"/>
   </div>
 </template>
 

@@ -45,7 +45,7 @@ watchDebounced(() => filterUsers.search, async () => {
 
 // FUNCTIONS
 
-const refresh = async () => {  // REFRESH FUNCTION
+const refresh = async () => {
   isLoading.value = true;
   try {
     await store.getUsers(filterUsers);
@@ -55,16 +55,16 @@ const refresh = async () => {  // REFRESH FUNCTION
   }
   isLoading.value = false;
 };
-const changePagination = (e: number) => {  // CHANGE PAGINATION FUNCTION
+const changePagination = (e: number) => {
   filterUsers.page = e;
   refresh();
 };
-const onPageSizeChanged = (event: number) => {  // CHANGE PAGE SIZE FUNCTION
+const onPageSizeChanged = (event: number) => {
   filterUsers.page = 1
   filterUsers.page_size = event
   refresh()
 }
-const showDetailPage = (item: any) => {  // PUSH TO DETAILS
+const showDetailPage = (item: any) => {
   router.push({name: 'user detail', params: {id: item.id}})
 };
 </script>
@@ -101,34 +101,14 @@ const showDetailPage = (item: any) => {  // PUSH TO DETAILS
         <template #empty-message>
           <div class="dark:text-white">{{ $t("no_available_data") }}</div>
         </template>
-
-        <template #header-full_name="header">
+        <template #header="header">
           {{ $t(header.text) }}
         </template>
 
-        <template #header-last_login="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-phone="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-created_date="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-is_active="header">
-          {{ $t(header.text) }}
-        </template>
-
-        <template #header-detail="header">
-          {{ $t(header.text) }}
-        </template>
 
 
         <template #item-phone="items">
-          <span>
+          <span v-if="items.phone">
             {{ formatPhoneNumber(items.phone) }}
           </span>
         </template>

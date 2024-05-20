@@ -25,6 +25,7 @@ let productsCategory = ref({
   title_uz: '',
   title_ru: '',
   title_kr: '',
+  title: '',
   id: '',
   is_active: false
 })
@@ -34,6 +35,7 @@ let productsCategory = ref({
 const saveData = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
+  productsCategory.value.title = productsCategory.value.title_uz;
   isSubmitted.value = true
   if (propData.editData.id) {
     try {

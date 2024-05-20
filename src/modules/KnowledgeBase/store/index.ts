@@ -11,7 +11,8 @@ import {
     Products,
     Link,
     Phones,
-    RetseptCategory
+    RetseptCategory,
+    Polls
 
 } from "../interfaces";
 
@@ -20,6 +21,10 @@ export default defineStore("knowledgeBase", {
     state: () => {
         return {
             knowledge: '',
+            pollList: {
+                count: 0,
+                results: [] as Polls[]
+            } as Results<Polls>,
             smsTemplateList: {
                 count: 0,
                 results: [] as SmsTemplate[],
@@ -78,6 +83,10 @@ export default defineStore("knowledgeBase", {
             const {data} = await $axios.get("/knowledge_base/sms_template/", {params})
             this.smsTemplateList = data
         },
+        async getPolls(params: any) {
+            const {data} = await $axios.get("knowledge_base/poll/", {params})
+            this.pollList = data
+        },
         async getNewsTemplate(params: Params) {
             const {data} = await $axios.get(`/knowledge_base/news_template/`, {params});
             this.newTemplate = data;
@@ -119,20 +128,23 @@ export default defineStore("knowledgeBase", {
             this.phonesList = data
         },
 
-        async getRetseptCategory() {
-            const {data} = await $axios.get('/knowledge_base/retsept_category/')
+        async getRetseptCategory(params?: Params) {
+            const {data} = await $axios.get('/knowledge_base/retsept_category/', {params})
             this.retseptCategoryList = data
         },
 
 
         //CREATE REQUEST
-        createSmsTemplate(data: object) {
+        createSmsTemplate(data: any) {
             return $axios.post("/knowledge_base/sms_template/", data);
         },
-        createNewsTemplate(data: NewsTemplate) {
+        createPoll(data: any) {
+            return $axios.post("knowledge_base/poll/", data)
+        },
+        createNewsTemplate(data: any) {
             return $axios.post(`/knowledge_base/news_template/`, data);
         },
-        AddForms(data) {
+        AddForms(data:any) {
             return $axios.post("/knowledge_base/location/", data);
         },
         createRegions(data: object) {
@@ -141,62 +153,77 @@ export default defineStore("knowledgeBase", {
         createVersion(data: object) {
             return $axios.post(`/versions/create_version/`, data);
         },
-        createProducts(data) {
+        createProducts(data:any) {
             return $axios.post(`/products/products/`, data);
         },
-        create_drag_and_drop(data) {
+        create_drag_and_drop(data:any) {
             return $axios.post(`/knowledge_base/social_media_links/drag_and_drop/`, data);
         },
 
-        createSocialMediaLinks(data) {
+        createSocialMediaLinks(data:any) {
             return $axios.post(`/knowledge_base/social_media_links/`, data)
         },
 
-        createPhones(data) {
+        createPhones(data:any) {
             return $axios.post(`/knowledge_base/phones/`, data);
         },
-        create_phones_drag_and_drop(data) {
+        create_phones_drag_and_drop(data:any) {
             return $axios.post(`/knowledge_base/phones/drag_and_drop/`, data);
         },
+
+        createRecipeCategory(data: any) {
+            return $axios.post(`/knowledge_base/retsept_category/`, data);
+        },
+        
 
 
 
         //PATCH REQUEST
-        updateSmsTemplate(data) {
+        updateSmsTemplate(data:any) {
             return $axios.patch(`/knowledge_base/sms_template/${data.id}/`, data);
         },
-        updateNewsTemplate(data) {
+        updatePoll(data: any) {
+            return $axios.patch(`knowledge_base/poll/${data.id}/`, data);
+        },
+        updateNewsTemplate(data:any) {
             return $axios.patch(`/knowledge_base/news_template/${data.get("id")}/`, data);
         },
-        updateOneForm(data) {
-            return $axios.patch(`/knowledge_base/location/${data.id}/`, data);
+        updateOneForm(data:any) {
+            return $axios.patch(`/knowledge_base/location/${data.get('id')}/`, data);
         },
         updateRegions(data: any) {
             return $axios.patch(`knowledge_base/region/${data.id}/`, data)
         },
-        updateVersion(data) {
+        updateVersion(data:any) {
             return $axios.patch(`/versions/version/${data.id}/`, data);
         },
-        updateProducts(data) {
+        updateProducts(data:any) {
             return $axios.patch(
                 `/products/products/${data.id || data.get("id")}/`,
                 data
             );
         },
-        updatePages(data) {
+        updatePages(data:any) {
             return $axios.patch(`/knowledge_base/pages/${data.id}/`, data);
         },
-        updateSocialMediaLinks(data) {
+        updateSocialMediaLinks(data:any) {
             return $axios.patch(`/knowledge_base/social_media_links/${data.id}/`, data);
         },
-        updatePhones(data) {
+        updatePhones(data:any) {
             return $axios.patch(`/knowledge_base/phones/${data.id}/`, data);
+        },
+
+        updateRecipeCategory(data: any) {
+            return $axios.patch(`/knowledge_base/retsept_category/${data.id}/`, data);
         },
 
 
         //DELETE REQUEST
         deleteSmsTemplate(id: number | null) {
             return $axios.delete(`/knowledge_base/sms_template/${id}/`);
+        },
+        detelePoll(id: number | null) {
+            return $axios.delete(`knowledge_base/poll/${id}`)
         },
         deleteRegion(id: number | null) {
             return $axios.delete(`/knowledge_base/region/${id}/`);
@@ -218,6 +245,10 @@ export default defineStore("knowledgeBase", {
         },
         deletePhones(id: number | null) {
             return $axios.delete(`/knowledge_base/phones/${id}/`);
+        },
+
+        deleteRecipeCategory(food_category_id: number | null) {
+            return $axios.delete(`/knowledge_base/retsept_category/${food_category_id}/`);
         },
 
 

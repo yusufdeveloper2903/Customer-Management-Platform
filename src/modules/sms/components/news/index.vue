@@ -9,8 +9,8 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
 import {toast} from "vue3-toastify";
 import UIkit from "uikit";
 import {useRouter} from "vue-router";
-import ShowFileModal from "@/modules/KnowledgeBase/components/ShowImageModal.vue";
-import {EditData} from '../../interfaces'
+import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
+import {EditDataNews} from '../../interfaces'
 import {watchDebounced} from "@vueuse/core";
 
 //DECLARED VARIABLES
@@ -31,12 +31,12 @@ const params = reactive({
 });
 const image = ref<string>("");
 const imageCard = ref();
-const editData = ref<EditData>({
+const editData = ref<EditDataNews>({
   id: null,
-  title: {
-    uz: "",
-    ru: ""
-  },
+  title: '',
+  title_uz: '',
+  title_ru: '',
+  title_kr: '',
   file: "",
   start_time: "",
   status: ""
@@ -64,9 +64,7 @@ const refresh = async () => {
     await store.getNews(params)
     newsList.value = store.newsList.results;
   } catch (error: any) {
-    toast.error(
-        error.response.message || "Error"
-    );
+    toast.error(t('error'));
   }
   isLoading.value = false;
 };
@@ -98,9 +96,9 @@ const deleteNews = async () => {
   isLoading.value = true
   try {
     await store.deleteNews(newsId.value)
-    UIkit.modal("#news-delete-modal").hide();
+    await UIkit.modal("#news-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.newsList.count - 1) % params.page_size == 0) {
+    if (store.newsList.count > 1 && ((store.newsList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -159,18 +157,16 @@ watch(() => props.sms, async function (val) {
               id="search"
               type="text"
               class="form-input"
-              :placeholder="$t('Search')"
               v-model="params.search"
 
           />
         </div>
 
-        <div class="md:w-1/2 md:m-0 ">
+        <div class="md:w-1/2 ">
           <label for="role" class="dark:text-gray-300">
             {{ $t("Status") }}
           </label>
           <v-select
-              :placeholder="$t('Status')"
               :options="store.statusList && store.statusList.results"
               v-model="params.status"
               :getOptionLabel="(name:any) => name['title_'+$i18n.locale]"
@@ -180,12 +176,12 @@ watch(() => props.sms, async function (val) {
           </v-select>
         </div>
 
-        <div class="md:w-1/2 md:m-0 ">
+        <div class="md:w-1/2 ">
           <label for="from" class="dark:text-gray-300">
-            {{ $t("from") }}
+            {{ $t("startDate") }}
           </label>
-          <VueDatePicker v-model="params.start_time" model-type="yyyy-MM-dd"
-                         :enable-time-picker="false"></VueDatePicker>
+          <VueDatePicker :enableTimePicker="false" auto-apply v-model="params.start_time" model-type="yyyy-MM-dd"
+                         ></VueDatePicker>
         </div>
 
       </form>
@@ -200,11 +196,10 @@ watch(() => props.sms, async function (val) {
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="newsFields" :items="newsList">
 
       <template #empty-message>
-        <span class="dark:text-neutral-400">{{ t('empty_text') }}</span>
+        <div>{{ $t('no_available_data') }}</div>
       </template>
-
-      <template #header="data">
-        {{ t(data.text) }}
+      <template #header="header">
+        {{ $t(header.text) }}
       </template>
 
       <template #item-title="item">

@@ -1,114 +1,24 @@
+//IMPORTED FILES
 import {defineStore} from "pinia";
 import axios from "@/plugins/axios"
+import {
+    Regions,
+    Districts,
+    CarModels,
+    CarColors,
+    CarBodyTypes,
+    CarFuelTypes,
+    BankRequisites,
+    BackUpList,
+    backUpMedialist,
+    journalAuthorizationList,
+    journalActivitiesList,
+    Params,
+    DeleteId
+} from '../interface/index'
 
-interface Params {
-    page?: number | string;
-    page_size?: number | string;
-    total?: number | string;
-    search?: string;
-    pre_payment?: number | null;
-    parent?: number | null;
-}
-
-interface Regions {
-    id?: number;
-    name?: string;
-    is_active?: boolean;
-    parent?: {
-        id: number;
-        name?: string;
-        is_active?: boolean
-    };
-}
-
-interface DeleteId {
-    id: number;
-}
-
-interface Districts {
-    id: number;
-    name?: string;
-    is_active?: boolean;
-    parent?: {
-        id: number;
-        name?: string;
-        is_active?: boolean
-    };
-}
-
-interface CarModels {
-    id: number;
-    name?: string;
-    is_active?: boolean;
-}
-
-interface CarColors {
-    id: number;
-    name?: string;
-    is_active?: boolean;
-    model?: {
-        id: number;
-        name?: string;
-        is_active?: boolean
-    };
-}
-
-interface CarBodyTypes {
-    id: number;
-    name?: string;
-    is_active?: boolean;
-}
-
-interface CarFuelTypes {
-    id: number;
-    name?: string;
-    is_active?: boolean;
-}
-
-interface BankRequisites {
-    id: number;
-    name?: string;
-    phone_number?: string;
-    mfo?: string;
-    settlement_account?: string;
-    is_active?: boolean;
-}
-
-interface BackUpList {
-    author: object;
-    created_at: string;
-    file_path: string;
-    id: number;
-    title: string;
-}
-
-interface backUpMedialist {
-    author: object;
-    created_at: string;
-    file_path: string;
-    id: number;
-    title: string;
-}
-
-interface journalAuthorizationList {
-    datetime: string,
-    ip_address: string
-    mac_address: string
-    method: string
-    request: string
-    user: object
-}
-
-interface journalActivitiesList {
-    datetime: string,
-    ip_address: string
-    mac_address: string
-    method: string
-    request: string
-    user: object
-}
-
-export const administrationStore = defineStore('administrationStorage', {
+//EXPORT FILES
+export default defineStore('administrationStorage', {
     state: () => {
         return {
             regions: [] as Regions[],
@@ -118,11 +28,8 @@ export const administrationStore = defineStore('administrationStorage', {
             car_body_types: [] as CarBodyTypes[],
             car_fuel_types: [] as CarFuelTypes[],
             bank_requisites: [] as BankRequisites[],
-
             pre_payments: [],
             periods: [],
-
-
             back_up_list: {
                 count: 0,
                 results: [] as BackUpList[]
@@ -146,7 +53,7 @@ export const administrationStore = defineStore('administrationStorage', {
 
     actions: {
 
-
+        //GET REQUESTS
         async FETCH_PRE_PAYMENTS(params: Params) {
             return await axios({
                 method: "GET",
@@ -161,20 +68,7 @@ export const administrationStore = defineStore('administrationStorage', {
                     return error;
                 })
         },
-        async ADD_PRE_PAYMENTS(payload) {
-            return await axios({
-                method: "POST",
-                url: `/knowledge_base/pre_payments`,
-                data: payload.data,
-            })
-                .then(async (e) => {
-                    return e.data;
-                })
-                .catch((error) => {
-                    return error;
-                })
-        },
-        async FETCH_ONE_PRE_PAYMENTS(payload) {
+        async FETCH_ONE_PRE_PAYMENTS(payload: any) {
             return await axios({
                 method: "GET",
                 url: `/knowledge_base/pre_payments/${payload.id}`,
@@ -188,7 +82,195 @@ export const administrationStore = defineStore('administrationStorage', {
                     return error;
                 })
         },
-        async UPDATE_PUT_PRE_PAYMENTS(payload) {
+        async FETCH_PERIODS(params: Params) {
+            return await axios({
+                method: "GET",
+                url: '/knowledge_base/periods/',
+                params,
+            })
+                .then(async (e) => {
+                    this.periods = e.data
+                    return e.data;
+                })
+                .catch((error) => {
+                    return error;
+                })
+        },
+        async FETCH_BACKUP_LIST(params: any) {
+            return await axios({
+                method: "GET",
+                url: `/knowledge_base/back_up_list/`,
+                params
+            })
+                .then(async (e) => {
+                    this.back_up_list = e.data
+                })
+                .catch((error) => {
+                    return error;
+                })
+        },
+        async FETCH_BACKUP_MEDIA_LIST(params: any) {
+            return await axios({
+                method: "GET",
+                url: `/knowledge_base/back_up_media_list/`,
+                params
+            })
+                .then(async (e) => {
+                    this.back_up_media_list = e.data
+                    return e.data;
+                })
+                .catch((error) => {
+                    return error;
+                })
+        },
+        async FETCH_JOURNAL_AUTHORIZATION_LIST(params: any) {
+            return await axios({
+                method: "GET",
+                url: `/knowledge_base/journal_authorization_list/`,
+                params
+            })
+                .then(async (e) => {
+                    this.journal_authorization_list = e.data
+                    return e.data;
+                })
+                .catch((error) => {
+                    return error;
+                })
+        },
+        async FETCH_JOURNAL_AKTIVITIEST_LIST(params: any) {
+            return await axios({
+                method: "GET",
+                url: `/knowledge_base/journal_activities_list/`,
+                params
+            })
+                .then(async (e) => {
+                    this.journal_activities_list = e.data
+                    return e.data;
+                })
+                .catch((error) => {
+                    return error;
+                })
+        },
+
+
+        async FETCH_JOURNAL_AUTHORIZATION_LIST_EXCEL(params: any) {
+            return await axios({
+                method: "GET",
+                url: `/knowledge_base/journal_authorization_list/`,
+                params,
+                responseType: 'blob'
+            })
+                .then(async (e) => {
+                    return e.data;
+                })
+                .catch((error) => {
+                    return error;
+                })
+        },
+        async FETCH_JOURNAL_AKTIVITIEST_LIST_EXCEL(params: any) {
+            return await axios({
+                method: "GET",
+                url: `/knowledge_base/journal_activities_list/`,
+                params,
+                responseType: 'blob'
+            })
+                .then(async (e) => {
+                    return e.data;
+                })
+                .catch((error) => {
+                    return error;
+                })
+        },
+
+
+        async FETCH_OS_SYSTEM_INFO() {
+            return await axios({
+                method: "GET",
+                url: `/os_info/system_information/`,
+            })
+                .then(async (e) => {
+                    this.os_system_info = e.data
+                    return e.data;
+                })
+                .catch((error) => {
+                    return error;
+                })
+        },
+
+        //CREATE REQUESTS
+        async ADD_PRE_PAYMENTS(payload: any) {
+            return await axios({
+                method: "POST",
+                url: `/knowledge_base/pre_payments`,
+                data: payload.data,
+            })
+                .then(async (e) => {
+                    return e.data;
+                })
+                .catch((error) => {
+                    return error;
+                })
+        },
+        async ADD_PERIODS(payload: any) {
+            return await axios({
+                method: "POST",
+                url: `/knowledge_base/periods`,
+                data: payload.data,
+            })
+                .then(async (e) => {
+                    return e.data;
+                })
+                .catch((error) => {
+                    return error;
+                })
+        },
+        async CREATE_BACKUP() {
+            return await axios({
+                method: "GET",
+                url: `/knowledge_base/back_up_create/`,
+                responseType: 'blob'
+            })
+                .then(async (e) => {
+                    //   this.get_period_by_prepayment_amount = e.data
+                    return e.data;
+                })
+                .catch((error) => {
+                    return error;
+                })
+        },
+
+        async CREATE_BACKUP_MEDIA() {
+            return await axios({
+                method: "GET",
+                url: `/knowledge_base/back_up_media_create/`,
+                responseType: 'blob',
+            })
+                .then(async (e) => {
+                    return e.data;
+                })
+                .catch((error) => {
+                    return error;
+                })
+        },
+
+        async FETCH_ONE_PERIODS(payload: any) {
+            return await axios({
+                method: "GET",
+                url: `/knowledge_base/periods/${payload.id}`,
+                params: payload.params,
+            })
+                .then(async (e) => {
+                    this.periods = e.data
+                    return e.data;
+                })
+                .catch((error) => {
+                    return error;
+                })
+        },
+
+
+        //PATCH REQUESTS
+        async UPDATE_PUT_PRE_PAYMENTS(payload: any) {
             return await axios({
                 method: "PUT",
                 url: `/knowledge_base/pre_payments/${payload}`,
@@ -202,7 +284,7 @@ export const administrationStore = defineStore('administrationStorage', {
                     return error;
                 })
         },
-        async UPDATE_PATCH_PRE_PAYMENTS(payload) {
+        async UPDATE_PATCH_PRE_PAYMENTS(payload: any) {
             return await axios({
                 method: "PATCH",
                 url: `/knowledge_base/pre_payments/${payload.id}`,
@@ -230,48 +312,7 @@ export const administrationStore = defineStore('administrationStorage', {
         },
 
 
-        async FETCH_PERIODS(params: Params) {
-            return await axios({
-                method: "GET",
-                url: '/knowledge_base/periods/',
-                params,
-            })
-                .then(async (e) => {
-                    this.periods = e.data
-                    return e.data;
-                })
-                .catch((error) => {
-                    return error;
-                })
-        },
-        async ADD_PERIODS(payload) {
-            return await axios({
-                method: "POST",
-                url: `/knowledge_base/periods`,
-                data: payload.data,
-            })
-                .then(async (e) => {
-                    return e.data;
-                })
-                .catch((error) => {
-                    return error;
-                })
-        },
-        async FETCH_ONE_PERIODS(payload) {
-            return await axios({
-                method: "GET",
-                url: `/knowledge_base/periods/${payload.id}`,
-                params: payload.params,
-            })
-                .then(async (e) => {
-                    this.periods = e.data
-                    return e.data;
-                })
-                .catch((error) => {
-                    return error;
-                })
-        },
-        async UPDATE_PUT_PERIODS(payload) {
+        async UPDATE_PUT_PERIODS(payload: any) {
             return await axios({
                 method: "PUT",
                 url: `/knowledge_base/periods/${payload}`,
@@ -285,7 +326,7 @@ export const administrationStore = defineStore('administrationStorage', {
                     return error;
                 })
         },
-        async UPDATE_PATCH_PERIODS(payload) {
+        async UPDATE_PATCH_PERIODS(payload: any) {
             return await axios({
                 method: "PATCH",
                 url: `/knowledge_base/periods/${payload.id}`,
@@ -299,6 +340,9 @@ export const administrationStore = defineStore('administrationStorage', {
                     return error;
                 })
         },
+
+
+        //DELETE REQUESTS
         async DELETE_PERIODS(payload: DeleteId) {
             return await axios({
                 method: "DELETE",
@@ -313,36 +357,7 @@ export const administrationStore = defineStore('administrationStorage', {
         },
 
 
-        async CREATE_BACKUP() {
-            return await axios({
-                method: "GET",
-                url: `/knowledge_base/back_up_create/`,
-                responseType: 'blob'
-            })
-                .then(async (e) => {
-                    //   this.get_period_by_prepayment_amount = e.data
-                    return e.data;
-                })
-                .catch((error) => {
-                    return error;
-                })
-        },
-
-        async FETCH_BACKUP_LIST(params) {
-            return await axios({
-                method: "GET",
-                url: `/knowledge_base/back_up_list/`,
-                params
-            })
-                .then(async (e) => {
-                    this.back_up_list = e.data
-                })
-                .catch((error) => {
-                    return error;
-                })
-        },
-
-        async DELETE_BACKUP(payload) {
+        async DELETE_BACKUP(payload: any) {
             return await axios({
                 method: "DELETE",
                 url: `knowledge_base/back_up_delete/${payload}`,
@@ -355,118 +370,12 @@ export const administrationStore = defineStore('administrationStorage', {
                 })
         },
 
-
-        async CREATE_BACKUP_MEDIA() {
-            return await axios({
-                method: "GET",
-                url: `/knowledge_base/back_up_media_create/`,
-                responseType: 'blob',
-            })
-                .then(async (e) => {
-                    return e.data;
-                })
-                .catch((error) => {
-                    return error;
-                })
-        },
-
-        async FETCH_BACKUP_MEDIA_LIST(params: any) {
-            return await axios({
-                method: "GET",
-                url: `/knowledge_base/back_up_media_list/`,
-                params
-            })
-                .then(async (e) => {
-                    this.back_up_media_list = e.data
-                    return e.data;
-                })
-                .catch((error) => {
-                    return error;
-                })
-        },
-
-        async DELETE_BACKUP_MEDIA(payload) {
+        async DELETE_BACKUP_MEDIA(payload: any) {
             return await axios({
                 method: "DELETE",
                 url: `knowledge_base/back_up_media_delete/${payload}`,
             })
                 .then(async (e) => {
-                    return e.data;
-                })
-                .catch((error) => {
-                    return error;
-                })
-        },
-
-
-        async FETCH_JOURNAL_AUTHORIZATION_LIST(params: any) {
-            return await axios({
-                method: "GET",
-                url: `/knowledge_base/journal_authorization_list/`,
-                params
-            })
-                .then(async (e) => {
-                    this.journal_authorization_list = e.data
-                    return e.data;
-                })
-                .catch((error) => {
-                    return error;
-                })
-        },
-        async FETCH_JOURNAL_AKTIVITIEST_LIST(params) {
-            return await axios({
-                method: "GET",
-                url: `/knowledge_base/journal_activities_list/`,
-                params
-            })
-                .then(async (e) => {
-                    this.journal_activities_list = e.data
-                    return e.data;
-                })
-                .catch((error) => {
-                    return error;
-                })
-        },
-
-
-        async FETCH_JOURNAL_AUTHORIZATION_LIST_EXCEL(params) {
-            return await axios({
-                method: "GET",
-                url: `/knowledge_base/journal_authorization_list/`,
-                params,
-                responseType: 'blob'
-            })
-                .then(async (e) => {
-                    return e.data;
-                })
-                .catch((error) => {
-                    return error;
-                })
-        },
-        async FETCH_JOURNAL_AKTIVITIEST_LIST_EXCEL(params) {
-            return await axios({
-                method: "GET",
-                url: `/knowledge_base/journal_activities_list/`,
-                params,
-                responseType: 'blob'
-            })
-                .then(async (e) => {
-                    return e.data;
-                })
-                .catch((error) => {
-                    return error;
-                })
-        },
-
-
-        async FETCH_OS_SYSTEM_INFO(params) {
-            return await axios({
-                method: "GET",
-                url: `/os_info/system_information/`,
-                params,
-            })
-                .then(async (e) => {
-                    this.os_system_info = e.data
                     return e.data;
                 })
                 .catch((error) => {

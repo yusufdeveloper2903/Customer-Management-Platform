@@ -11,6 +11,7 @@ import knowledgeBase from "../../store/index";
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
 import {EditDataProductModal} from '../../interfaces/index'
+import {objectToFormData} from "@/mixins/formmatter";
 
 
 //DECLARED VARIABLES
@@ -23,6 +24,7 @@ const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase()
 const emits = defineEmits(["saveProducts"]);
 let productsData = ref({
+  id: '',
   title: '',
   title_uz: '',
   title_kr: '',
@@ -54,26 +56,10 @@ const getFile = (event: any) => {
 const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
-  const formData = new FormData()
-  formData.append('title', productsData.value.title)
-  formData.append('title_uz', productsData.value.title_uz)
-  formData.append('title_kr', productsData.value.title_kr)
-  formData.append('title_ru', productsData.value.title_ru)
-  formData.append('code', productsData.value.code)
-  formData.append('quantity', productsData.value.quantity)
-  formData.append('measurement_type', productsData.value.measurement_type)
-  formData.append('price', productsData.value.price)
-  formData.append('description', productsData.value.description)
-  formData.append('description_uz', productsData.value.description_uz)
-  formData.append('description_kr', productsData.value.description_kr)
-  formData.append('description_ru', productsData.value.description_ru)
-  if (imageDiv.value) {
-    formData.append('image', productsData.value.photo)
-  }
+  const fd = objectToFormData(['image'], productsData.value);
   if (propData.editData.id) {
     try {
-      formData.append('id', propData.editData.id)
-      await store.updateProducts(formData)
+      await store.updateProducts(fd)
       await UIkit.modal("#create_products").hide();
       emits("saveProducts");
       toast.success(t("updated_successfully"));
@@ -85,7 +71,7 @@ const updateDeal = async () => {
 
   } else {
     try {
-      await store.createProducts(formData)
+      await store.createProducts(fd)
       await UIkit.modal("#create_products").hide();
       toast.success(t("created_successfully"));
       emits("saveProducts");
@@ -111,6 +97,7 @@ function openModal() {
     productsData.value.price = propData.editData.price
     productsData.value.code = propData.editData.code
     productsData.value.photo = propData.editData.image
+    productsData.value.id = propData.editData.id
   }
 }
 
@@ -127,7 +114,7 @@ const onHide = () => {
   productsData.value.title_kr = ""
   productsData.value.price = ''
   productsData.value.photo = ""
-  imageDiv.value = ""
+  productsData.value.id = ""
   productsData.value.code = ""
   imageDiv.value = ''
   productsData.value.photo = ""
@@ -260,7 +247,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   class="form-input"
                   :placeholder="t('description')"
                   v-model="productsData.description_ru"
-              />
+              ></textarea>
 
             </label>
 

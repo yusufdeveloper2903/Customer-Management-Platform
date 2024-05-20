@@ -14,7 +14,6 @@ import clientsStore from "@/modules/Users/store/index"
 import {watchDebounced} from "@vueuse/core";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
-import {SmsSendingData} from '../../interfaces'
 import {addFields} from '../../constants/index'
 
 //DECLARED VARIABLES
@@ -34,25 +33,32 @@ const params = reactive({
   page: 1,
   search: null,
 });
-const smsSendingData = ref<SmsSendingData>({
+const smsSendingData = ref<any>({
   start_time: "",
-  template: '',
+  template: null,
   description: '',
   receivers: [],
   title: '',
+  id: null
 })
 
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
       await refresh()
-      await templateStore.getSmsTemplate()
-
+      await templateStore.getSmsTemplate({page_size: 1000})
       if (route.params.id) {
         await store.getSmsSendingDetail({id: Number(route.params.id)})
-        await store.getReseivers({object_id: route.params.id, notification_type: 'sms', search: params.search, page: params.page, page_size: params.page_size})
+        await store.getReseivers({
+          object_id: route.params.id,
+          notification_type: 'sms',
+          search: params.search,
+          page: params.page,
+          page_size: params.page_size
+        })
         smsSendingData.value.start_time = store.smsSendingDetail.start_time;
         smsSendingData.value.description = store.smsSendingDetail.description
+        smsSendingData.value.title = store.smsSendingDetail.title
         smsSendingData.value.template = store.smsSendingDetail.template
       }
     }
@@ -66,9 +72,7 @@ const refresh = async () => {
     await clientsStorage.getUsers(params)
     smsData.value = clientsStorage.usersList.results
   } catch (error: any) {
-    toast.error(
-        error.response || "Error"
-    );
+    toast.error(t('error'));
   }
   loading.value = false;
 };
@@ -77,49 +81,37 @@ const refresh = async () => {
 async function saveData() {
   const success = await validate.value.$validate();
   if (!success) return;
-  const formData = new FormData()
-  if (smsSendingData.value.title) {
-    formData.append('title', JSON.stringify(smsSendingData.value.title))
-    formData.append('description', JSON.stringify(smsSendingData.value.description))
-  }
-  formData.append('id', route.params.id)
-  formData.append('start_time', smsSendingData.value.start_time)
+
   if (itemSelected.value.length) {
     itemSelected.value.forEach(el => {
-      formData.append('receivers', el.id)
+      smsSendingData.value.receivers.push(el.id)
     })
   } else {
-    formData.append('receivers', 'null')
+    smsSendingData.value.receivers = []
+  }
+  if (smsSendingData.value.template) {
+    smsSendingData.value.template = smsSendingData.value.template?.id
+  } else {
+    smsSendingData.value.template = ''
   }
 
-  if (smsSendingData.value.template) {
-    formData.append('template', smsSendingData.value.template?.id)
-  }
   if (route.params.id) {
+    smsSendingData.value.id = Number(route.params.id)
     try {
-      store.updateSmsSending(formData).then(() => {
-        router.push("/sms-template");
-        toast.success(t("updated_successfully"));
-      })
+      await store.updateSmsSending(smsSendingData.value)
+      await router.push("/sms-template");
+      toast.success(t("updated_successfully"));
+
     } catch (error: any) {
-      if (error) {
-        toast.error(
-            error.response.message || "Error"
-        );
-      }
+      toast.error(t('error'));
     }
   } else {
     try {
-      store.createSmsSending(formData).then(() => {
-        router.push("/sms-template");
-        toast.success(t("created_successfully"));
-      })
+      await store.createSmsSending(smsSendingData.value)
+      await router.push("/sms-template");
+      toast.success(t("created_successfully"));
     } catch (error: any) {
-      if (error) {
-        toast.error(
-            error.response.message || "Error"
-        );
-      }
+      toast.error(t('error'));
     }
 
   }
@@ -188,7 +180,8 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
       <div class="uk-margin">
         <label for="form-stacked-text">{{ $t('start_date') }} </label>
         <div class="uk-form-controls">
-          <VueDatePicker :locale="'ru'" model-type="yyyy-MM-dd hh:mm:ss" v-model="smsSendingData.start_time"
+          <VueDatePicker :enableTimePicker="false" auto-apply :locale="'ru'" model-type="yyyy-MM-dd hh:mm:ss"
+                         v-model="smsSendingData.start_time"
                          :class="validate.start_time.$errors.length ? 'required-input' : ''"/>
           <p
               v-for="error in validate.start_time.$errors"
@@ -199,7 +192,6 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
           </p>
         </div>
       </div>
-
       <div class="uk-margin">
         <label for="form-stacked-text">{{ $t('template') }}</label>
         <div class="uk-form-controls">
@@ -248,7 +240,6 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
                 id="search"
                 type="text"
                 class="form-input"
-                :placeholder="$t('Search')"
                 v-model="params.search"
             />
           </div>
@@ -262,10 +253,10 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
 
 
           <template #empty-message>
-            <span class="dark:text-neutral-400">{{ t('empty_text') }}</span>
+            <div>{{ $t('no_available_data') }}</div>
           </template>
-          <template #header="data">
-            {{ t(data.text) }}
+          <template #header="header">
+            {{ $t(header.text) }}
           </template>
 
           <template #item-name="item">

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+
+//IMPORTED FILES
 import {useRouter} from "vue-router";
 import {login} from "@/auth/jwtService";
 import {Ref, computed, reactive, ref} from "vue";
@@ -9,22 +11,41 @@ import ability from "@/plugins/casl/ability";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import {required, helpers} from "@vuelidate/validators"
 import {useI18n} from "vue-i18n";
+import {Login} from '@/interface'
 
-// import { check } from "@/mixins/permissions";
 
-interface Login {
-  username: string;
-  password: string;
-}
-
+//DECLARED VARIABLES
 const router = useRouter();
 const {t} = useI18n();
-
 let formData = reactive<Login>({
   username: "",
   password: "",
 });
+const isPasswordShown = ref<Boolean>(false);
 
+
+//FUNCTIONS
+const validationForm = async () => {
+  const success = await validate.value.$validate();
+  if (!success) return;
+
+  try {
+    const sendData = JSON.parse(JSON.stringify(formData));
+    const {data} = await login(sendData);
+    setAccessToken(data.access);
+    setRefreshToken(data.refresh);
+    let userAbilities = [{subject: "all", action: "manage"}];
+    localStorage.setItem("userAbilities", JSON.stringify(userAbilities));
+    ability.update(userAbilities);
+    await router.push("/dashboard");
+    toast.success(t("success"));
+  } catch (error: any) {
+    toast.error(t('error'));
+  }
+};
+
+
+//COMPUTED
 const rules = computed(() => {
   return {
     username: {
@@ -37,36 +58,6 @@ const rules = computed(() => {
 });
 
 const validate: Ref<Validation> = useVuelidate(rules, formData);
-const isPasswordShown = ref<Boolean>(false);
-
-const validationForm = async () => {
-  const success = await validate.value.$validate();
-  if (!success) return;
-
-  try {
-    const sendData = JSON.parse(JSON.stringify(formData));
-    //   sendData.phone = sendData.phone.replace(/\D/g, "");
-    const {data} = await login(sendData);
-    setAccessToken(data.access);
-    setRefreshToken(data.refresh);
-    let userAbilities = [{subject: "all", action: "manage"}];
-    localStorage.setItem("userAbilities", JSON.stringify(userAbilities));
-    ability.update(userAbilities);
-
-    // if (check("car_showroom")) {
-    router.push("/dashboard");
-    // } else {
-    //   router.push("/dashboard");
-    // }
-    setTimeout(() => {
-      toast.success(t("success"));
-    }, 200);
-  } catch (error: any) {
-    toast.error(
-        t('error')
-    );
-  }
-};
 </script>
 
 <template>

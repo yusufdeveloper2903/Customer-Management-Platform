@@ -23,3 +23,18 @@ export interface Retsept {
     is_active: boolean,
     category: number | null
 }
+
+export interface RecipeDetail {
+    status_code: number;
+    message: string;
+    data: {
+        id: number;
+        title: string;
+        category: number;
+        rating: string;
+        calorie: number;
+        preparation_time: string;
+        is_active: boolean;
+        media_files: string | null;
+    }
+}

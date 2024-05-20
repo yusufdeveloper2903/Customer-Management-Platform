@@ -59,7 +59,7 @@ const deleteAction = async () => {
     await store.deleteVersion(userId.value)
     await UIkit.modal("#version-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if ((store.versionControlList.count - 1) % params.page_size == 0) {
+    if (store.versionControlList.count > 1 && ((store.versionControlList.count - 1) % params.page_size == 0)) {
       if (params.page > 1) {
         params.page = params.page - 1
         await refresh()
@@ -120,14 +120,14 @@ const onPageSizeChanged = (e) => {
           <label for="from" class="dark:text-gray-300">
             {{ t("from") }}
           </label>
-          <VueDatePicker v-model="params.start_date"></VueDatePicker>
+          <VueDatePicker :enableTimePicker="false" auto-apply v-model="params.start_date"></VueDatePicker>
         </div>
 
         <div class="md:w-1/2 md:m-0 mt-2">
           <label for="to" class="dark:text-gray-300">
             {{ t("to") }}
           </label>
-          <VueDatePicker v-model="params.end_date"></VueDatePicker>
+          <VueDatePicker :enableTimePicker="false" auto-apply v-model="params.end_date"></VueDatePicker>
         </div>
       </form>
       <button
@@ -143,30 +143,14 @@ const onPageSizeChanged = (e) => {
                    :items="store.versionControlList.results">
 
       <template #empty-message>
-        <span class="dark:text-neutral-400">{{ t('empty_text') }}</span>
+        <div>{{ t('no_available_data') }}</div>
       </template>
-
-      <template #header-datetime="header">
-        {{ t(header.text) }}
-      </template>
-      <template #header-description="header">
-        {{ t(header.text) }}
-      </template>
-      <template #header-modified_date="header">
+      <template #header="header">
         {{ t(header.text) }}
       </template>
 
-      <template #header-version_number="header">
-        {{ t(header.text) }}
-      </template>
 
-      <template #header-is_active="header">
-        {{ t(header.text) }}
-      </template>
 
-      <template #header-actions="header">
-        {{ t(header.text) }}
-      </template>
 
       <template #item-datetime="items">
         {{ formatDate(items.created_date) }}

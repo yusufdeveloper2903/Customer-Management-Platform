@@ -1,37 +1,22 @@
 <script setup lang="ts">
 
 //Imported files
-import { recipesFields } from "../constants";
+import { recipedetailFields } from "../constants";
 import recipes from "../store/index"
 import { reactive, ref } from "vue";
 import { toast } from "vue3-toastify";
 import UIkit from "uikit";
-import CreateRecipe from "../components/CreateRecipesModal.vue"
 import { useI18n } from "vue-i18n";
 import { watchDebounced } from "@vueuse/core";
-import { Retsept } from "../interfaces/index"
-import {useRouter} from "vue-router";
-import DoubleRight from "@/modules/Users/img/double-right-chevron-svgrepo-com.svg";
+import { useRouter } from "vue-router";
+
 
 //Declared variables
 const { t } = useI18n()
 const store = recipes()
-const router = useRouter()
 const isLoading = ref(false);
 const userId = ref<number | null>(null);
-
-const editData = ref<Retsept>({
-    id: null,
-    title: "",
-    title_uz: "",
-    title_ru: "",
-    title_kr: "",
-    rating: "",
-    calorie: 0,
-    preparation_time: "",
-    is_active: false,
-    category: null
-})
+const router = useRouter()
 
 const params = reactive({
     page_size: 10,
@@ -108,13 +93,6 @@ const onPageSizeChanged = (e: number) => {
     refresh(params)
 }
 
-const showDetailPage = (item: any) => {
-  router.push({name: 'recipe-detail', params: {id: item.id}})
-};
-
-const saveRecipes = () => {
-    refresh(params)
-}
 </script>
 
 <template>
@@ -124,12 +102,14 @@ const saveRecipes = () => {
                 {{ t('Search') }}
                 <input type="text" class="form-input" placeholder="Search" v-model="params.search" />
             </label>
-            <button class="btn-primary" uk-toggle="target: #create_recipes" @click="editData = <Retsept>{}">
+            <button class="btn-primary" @click="
+                router.push({ name: 'add-recipe'})
+              ">
                 {{ t("Add") }}
             </button>
         </div>
 
-        <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="recipesFields"
+        <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="recipedetailFields"
             :items="store.retseptList.results">
 
             <template #empty-message>
@@ -138,6 +118,18 @@ const saveRecipes = () => {
 
             <template #header="header">
                 {{ t(header.text) }}
+            </template>
+
+            <template #item-photo="items">
+                <div class="py-3 flex justify-left gap-3">
+                    <img v-if="items && items.photo" class="w-[45px] h-[45px] rounded object-cover" :src="items.photo"
+                        alt="Photo" />
+                    <div v-else
+                        class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded">
+                        <Icon icon="Camera" color="#356c2d" />
+                    </div>
+
+                </div>
             </template>
 
             <template #item-is_active="item">
@@ -150,13 +142,12 @@ const saveRecipes = () => {
 
             <template #item-actions="item">
                 <div class="py-3 flex justify-left items-center gap-3">
-                    <button @click="showDetailPage(item)" class="btn-success btn-action">
-                        <img :src="DoubleRight" alt="Icon">
-                    </button>
-                    <button class="btn-warning btn-action" uk-toggle="target: #create_recipes" @click="editData = item">
+                    <button class="btn-warning btn-action" @click="
+                        router.push({ name: 'recipe-detail', params: { id: item.id } })
+                        ">
                         <Icon icon="Pen New Square" color="#fff" size="16" />
                     </button>
-                    <button class=" btn-danger btn-action" @click="handleDeleteModal(item.id)">
+                    <button class="btn-danger btn-action" @click="handleDeleteModal(item.id)">
                         <Icon icon="Trash Bin Trash" color="#fff" size="16" />
                     </button>
                 </div>
@@ -164,12 +155,10 @@ const saveRecipes = () => {
 
         </EasyDataTable>
 
-        <TwPagination :total="2" class="mt-10 tw-pagination" :current="params.page"
-            :per-page="params.page_size" :text-before-input="t('go_to_page')" :text-after-input="t('forward')"
-            @page-changed="changePagionation" @per-page-changed="onPageSizeChanged" />
+        <TwPagination :total="2" class="mt-10 tw-pagination" :current="params.page" :per-page="params.page_size"
+            :text-before-input="t('go_to_page')" :text-after-input="t('forward')" @page-changed="changePagionation"
+            @per-page-changed="onPageSizeChanged" />
     </div>
 
     <DeleteModal @delete-action="deleteAction" :id="'recipes-delete-modal'" />
-
-    <CreateRecipe @saveRecipes="saveRecipes" :editData="editData" />
 </template>
