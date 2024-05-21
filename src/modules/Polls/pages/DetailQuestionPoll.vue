@@ -3,7 +3,7 @@
 
 //IMPORTED FILES
 import PollsStore from ".././store/index";
-import {computed, onMounted, Ref, ref} from "vue";
+import {computed, onMounted, Ref, ref, watch} from "vue";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
 import Tab from "@/components/Tab/Tab.vue";
@@ -18,13 +18,14 @@ const router = useRouter()
 let QuestionPollList = ref<object[]>([]);
 const {t} = useI18n()
 const store = PollsStore();
+const statusQuestion = ref(false)
 let pollAdd = ref<any>({
   description: '',
   title: '',
   description_uz: '',
   description_kr: '',
   description_ru: '',
-  question_type: 'Multiple',
+  question_type: 'Single',
   poll: null,
   options: [
     {
@@ -40,12 +41,25 @@ let pollAdd = ref<any>({
 })
 const isLoading = ref(false);
 
+//WATCHERS
+watch(() => statusQuestion.value, (val) => {
+  if (val) {
+    pollAdd.value.question_type = 'MULTIPLE'
+  } else {
+    pollAdd.value.question_type = 'SINGLE'
+  }
+})
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
   if (route.params.id) {
     await refresh()
     pollAdd.value = store.questionsPollsId.data
+    if (pollAdd.value.question_type == 'SINGLE') {
+      statusQuestion.value = false
+    } else {
+      statusQuestion.value = true
+    }
   }
 })
 
@@ -114,6 +128,7 @@ const refresh = async () => {
   }
 
 };
+
 
 const rules = computed(() => {
   return {
@@ -207,7 +222,8 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
         <input
             type="checkbox"
             class="sr-only peer"
-            v-model="pollAdd.question_type"
+            v-model="statusQuestion"
+            @input="questionType"
 
         />
         <div
