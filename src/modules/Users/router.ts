@@ -4,6 +4,7 @@ export default [
         name: "users",
         component: () => import("@/modules/Users/views/Users.vue"),
         meta: {
+            sidebar:'Users',
             layout: "MainLayout",
             permissions: ['admin'],
         },
@@ -13,6 +14,7 @@ export default [
         name: "user detail",
         component: () => import("@/modules/Users/pages/Details.vue"),
         meta: {
+            sidebar:'Users',
             layout: "MainLayout",
             permissions: ['admin'],
         },
@@ -22,6 +24,7 @@ export default [
         name: "add user",
         component: () => import("@/modules/Users/pages/Details.vue"),
         meta: {
+            sidebar:'Users',
             layout: "MainLayout",
             permissions: ['admin'],
         },

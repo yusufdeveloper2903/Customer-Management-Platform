@@ -3,61 +3,108 @@
 
 //IMPORTED FILES
 import PollsStore from ".././store/index";
-import {onMounted, reactive, ref} from "vue";
+import {computed, onMounted, Ref, ref} from "vue";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
 import Tab from "@/components/Tab/Tab.vue";
 import Tabs from "@/components/Tab/Tabs.vue";
-
+import {helpers, required} from "@vuelidate/validators";
+import useVuelidate, {Validation} from "@vuelidate/core";
+import {useRoute, useRouter} from "vue-router";
 
 //DECLARED VARIABLES
+const route = useRoute()
+const router = useRouter()
 let QuestionPollList = ref<object[]>([]);
 const {t} = useI18n()
 const store = PollsStore();
-let optionsList = ref([{
-  name: ''
-}])
-const isLoading = ref(false);
-// let questionPoll = ref({
-//   description: '',
-//   description_kr: '',
-//   description_ru: '',
-//   description_uz: '',
-//   question_type: ''
-// })
-const params = reactive({
-  page: 1,
-  page_size: 10,
-  search: null,
+let pollAdd = ref<any>({
+  description: '',
+  title: '',
+  description_uz: '',
+  description_kr: '',
+  description_ru: '',
+  question_type: 'Multiple',
+  poll: null,
+  options: [
+    {
+      context: '',
+      context_uz: '',
+      context_kr: '',
+      context_ru: '',
+      option_id: 0,
+      index: 0
+    }
+  ]
+
 })
+const isLoading = ref(false);
 
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
-  let page = localStorage.getItem('page')
-  let page_size = localStorage.getItem('page_size')
-  if (page) {
-    params.page = JSON.parse(page)
+  if (route.params.id) {
+    await refresh()
+    pollAdd.value = store.questionsPollsId.data
   }
-  if (page_size) {
-    params.page_size = JSON.parse(page_size)
-  }
-  await refresh()
-
 })
 
 
 //FUNCTIONS
+const saveEdit = async () => {
+  const success = await validate.value.$validate();
+  if (!success) return;
+  pollAdd.value.description = pollAdd.value.description_uz
+
+  if (route.params.id) {
+    pollAdd.value.poll = route.query.editId
+    pollAdd.value.options.forEach((item: any, index: any) => {
+      pollAdd.value.options[index].context = item.context_uz
+      pollAdd.value.options[index].index = index
+      if (item.option_id) {
+        pollAdd.value.options[index].option_id = item.option_id
+      } else {
+        pollAdd.value.options[index].option_id = 0
+
+      }
+    })
+    try {
+      await store.updatePollsQuestion(pollAdd.value)
+      toast.success(t("updated_successfully"));
+
+      router.go(-1);
+    } catch (error: any) {
+      toast.error(t("error"));
+    }
+  } else {
+    pollAdd.value.poll = route.query.id
+
+    pollAdd.value.options.forEach((item: any, index: any) => {
+      pollAdd.value.options[index].context = item.context_uz
+      pollAdd.value.options[index].index = index
+      pollAdd.value.options[index].option_id = 0
+    })
+    try {
+      await store.createSectionQuestion(pollAdd.value)
+      toast.success(t("created_successfully"));
+
+      router.go(-1);
+    } catch (error: any) {
+      toast.error(t('error'));
+    }
+  }
+};
+
 const addOption = () => {
-  optionsList.value.push({})
+  pollAdd.value.options.push({})
 }
-const removeOption = (val) => {
-  optionsList.value.splice(val, 1)
+const removeOption = (val: any) => {
+  pollAdd.value.options.splice(val, 1)
 }
 const refresh = async () => {
   isLoading.value = true;
   try {
-    await store.getQuestionPolls(params);
+    await store.getQuestionPollsId(route.params.id);
     QuestionPollList.value = store.questionsPolls.data.results
     isLoading.value = false;
   } catch (error: any) {
@@ -68,7 +115,22 @@ const refresh = async () => {
 
 };
 
+const rules = computed(() => {
+  return {
+    description_uz: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    description_kr: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    description_ru: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+  };
 
+});
+
+const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
 </script>
 
 <template>
@@ -81,9 +143,18 @@ const refresh = async () => {
             <textarea
                 type="text"
                 class="form-input"
-                rows="5"
+                rows="4"
+                v-model="pollAdd.description_uz"
+                :class="validate.description_uz.$errors.length ? 'required-input' : ''"
 
             />
+            <p
+                v-for="error in validate.description_uz.$errors"
+                :key="error.$uid"
+                class="text-danger text-sm"
+            >
+              {{ $t(error.$message) }}
+            </p>
           </label>
         </Tab>
         <Tab title="KR">
@@ -92,9 +163,18 @@ const refresh = async () => {
             <textarea
                 type="text"
                 class="form-input"
-                rows="5"
+                rows="4"
+                v-model="pollAdd.description_kr"
+                :class="validate.description_kr.$errors.length ? 'required-input' : ''"
 
             />
+            <p
+                v-for="error in validate.description_kr.$errors"
+                :key="error.$uid"
+                class="text-danger text-sm"
+            >
+              {{ $t(error.$message) }}
+            </p>
 
           </label>
 
@@ -107,9 +187,17 @@ const refresh = async () => {
             <textarea
                 type="text"
                 class="form-input"
-                rows="5"
-
+                rows="4"
+                v-model="pollAdd.description_ru"
+                :class="validate.description_ru.$errors.length ? 'required-input' : ''"
             />
+            <p
+                v-for="error in validate.description_ru.$errors"
+                :key="error.$uid"
+                class="text-danger text-sm"
+            >
+              {{ $t(error.$message) }}
+            </p>
           </label>
         </Tab>
       </Tabs>
@@ -119,6 +207,8 @@ const refresh = async () => {
         <input
             type="checkbox"
             class="sr-only peer"
+            v-model="pollAdd.question_type"
+
         />
         <div
             className="w-11 h-6 bg-gray-200 peer-focus:outline-none
@@ -129,22 +219,63 @@ const refresh = async () => {
 
     </div>
     <div class="card w-4/6">
-      <h4>Options</h4>
-      <div v-for="(_, index) in optionsList" :key="index" class="flex items-center p-3 mt-3"
-           style="border:1px solid green; border-radius:10px">
-        {{ index + 1 }}
-        <input
-            type="text"
-            class="form-input ml-2"
-            v-model="optionsList[index].name"
-        />
-        <button
-            class="ml-3 btn-danger btn-action"
-            @click="removeOption(index)"
-        >
-          <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
-        </button>
-      </div>
+      <Tabs class="mb-4">
+        <Tab title="UZ">
+          <label>{{ $t('options') + ' ' + $t('UZ') }}</label>
+          <div v-for="(_, index) in pollAdd.options" :key="index" class="flex items-center p-3 mt-3"
+               style="border:1px solid green; border-radius:10px">
+            {{ index + 1 }}
+            <input
+                type="text"
+                class="form-input ml-2"
+                v-model="pollAdd.options[index].context_uz"
+            />
+            <button
+                class="ml-3 btn-danger btn-action"
+                @click="removeOption(index)"
+            >
+              <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
+            </button>
+          </div>
+        </Tab>
+        <Tab title="KR">
+          <label>{{ $t('options') + ' ' + $t('KR') }}</label>
+          <div v-for="(_, index) in pollAdd.options" :key="index" class="flex items-center p-3 mt-3"
+               style="border:1px solid green; border-radius:10px">
+            {{ index + 1 }}
+            <input
+                type="text"
+                class="form-input ml-2"
+                v-model="pollAdd.options[index].context_kr"
+            />
+            <button
+                class="ml-3 btn-danger btn-action"
+                @click="removeOption(index)"
+            >
+              <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
+            </button>
+          </div>
+        </Tab>
+        <Tab title="RU">
+          <label>{{ $t('options') + ' ' + $t('RU') }}</label>
+
+          <div v-for="(_, index) in pollAdd.options" :key="index" class="flex items-center p-3 mt-3"
+               style="border:1px solid green; border-radius:10px">
+            {{ index + 1 }}
+            <input
+                type="text"
+                class="form-input ml-2"
+                v-model="pollAdd.options[index].context_ru"
+            />
+            <button
+                class="ml-3 btn-danger btn-action"
+                @click="removeOption(index)"
+            >
+              <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
+            </button>
+          </div>
+        </Tab>
+      </Tabs>
       <button class="btn-success btn-action mt-4 rounded-md" uk-icon="plus" @click="addOption"/>
       <div
           class=" flex gap-4 justify-end"
@@ -153,8 +284,8 @@ const refresh = async () => {
           {{ $t("Cancel") }}
         </button>
 
-        <button
-            class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full">
+        <button @click="saveEdit"
+                class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full">
           {{ $t('Add') }}
         </button>
       </div>

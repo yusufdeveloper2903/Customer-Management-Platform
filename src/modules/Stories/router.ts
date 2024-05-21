@@ -4,6 +4,7 @@ export default [
         name: "stories",
         component: () => import("@/modules/Stories/views/Stories.vue"),
         meta: {
+            sidebar: 'Stories',
             layout: "MainLayout",
             permissions: ['admin'],
         },
@@ -13,6 +14,7 @@ export default [
         name: "stories-detail",
         component: () => import("@/modules/Stories/pages/DetailStory.vue"),
         meta: {
+            sidebar: 'Stories',
             layout: "MainLayout",
             permissions: ['admin'],
         }
@@ -22,6 +24,7 @@ export default [
         name: "stories-detail-id",
         component: () => import("@/modules/Stories/pages/DetailStory.vue"),
         meta: {
+            sidebar: 'Stories',
             layout: "MainLayout",
             permissions: ['admin'],
         }

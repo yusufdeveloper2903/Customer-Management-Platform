@@ -16,6 +16,9 @@ export default defineStore("polls", {
                     results: [] as QuestionPoll[]
                 } as Results<QuestionPoll>,
             },
+            questionsPollsId: {
+                data: []
+            },
             contentButtonTypeList: {
                 results: []
             }
@@ -34,12 +37,16 @@ export default defineStore("polls", {
             const {data} = await $axios.get('/knowledge_base/poll_question/', {params})
             this.questionsPolls = data
         },
+        async getQuestionPollsId(id: any) {
+            const {data} = await $axios.get(`/knowledge_base/poll_question/${id}`,)
+            this.questionsPollsId = data
+        },
 
         //CREATE REQUEST
         createPolls(data: any) {
             return $axios.post("/knowledge_base/poll/", data);
         },
-        createSectionStories(data: any) {
+        createSectionQuestion(data: any) {
             return $axios.post("/knowledge_base/poll_question/", data);
         },
 

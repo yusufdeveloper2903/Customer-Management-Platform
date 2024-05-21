@@ -8,9 +8,10 @@ import {useI18n} from "vue-i18n";
 import UIKit from "uikit";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
-import {useRouter} from "vue-router";
+import {useRouter, useRoute} from "vue-router";
 
 //DECLARED VARIABLES
+const route = useRoute()
 const router = useRouter();
 let toRefresh = ref(false)
 let QuestionPollList = ref<object[]>([]);
@@ -22,6 +23,7 @@ const params = reactive({
   page: 1,
   page_size: 10,
   search: null,
+  poll: ''
 })
 
 
@@ -35,6 +37,7 @@ onMounted(async () => {
   if (page_size) {
     params.page_size = JSON.parse(page_size)
   }
+  params.poll = String(route.params.id)
   await refresh()
 
 })
@@ -93,8 +96,11 @@ const handleDeleteModal = (id: number) => {
   itemToDelete.value = id
   UIKit.modal("#detail-poll-delete-modal").show()
 };
+const editPage = (id: number) => {
+  router.push({name: 'polls-question-id', params: {id: id}, query: {editId: route.params.id}});
+}
 const showQuestionPoll = () => {
-  router.push('/polls-question-add')
+  router.push({path: '/polls-question-add', query: {id: route.params.id}})
 }
 
 </script>
@@ -120,15 +126,15 @@ const showQuestionPoll = () => {
         {{ $t("Add") }}
       </button>
     </div>
-    <section class="accordion mt-3">
+    <section class="accordion mt-3" v-if="store.questionsPolls.data.results">
       <div class="tab" v-for="item in  store.questionsPolls.data.results" :key="item.id">
         <input type="checkbox" name="accordion-1" :id="String(item.id)">
         <label :for="String(item.id)" class="tab__label card">
-          <small class="ml-4 mt-1 select-none">{{ item.id }}. {{ item['title_' + $i18n.locale] }}</small>
+          <small class="ml-4 mt-1 select-none">{{ item.id }}. {{ item['description_' + $i18n.locale] }}</small>
           <small class="ml-auto">
             <small class="flex my-4 justify-end">
 
-              <button class="btn-warning btn-action"
+              <button class="btn-warning btn-action" @click="editPage(item.id)"
               >
                 <Icon icon="Pen New Square" color="#fff" size="16"/>
               </button>
@@ -155,6 +161,9 @@ const showQuestionPoll = () => {
         </div>
       </div>
 
+    </section>
+    <section v-else class="card mt-3">
+      <div class="text-center">{{ $t('no_available_data') }}</div>
     </section>
     <TwPagination
         :total="store.questionsPolls.data.count"
@@ -195,6 +204,15 @@ const showQuestionPoll = () => {
   display: flex;
   color: black;
   background: #FFF;
+  cursor: pointer;
+}
+
+.dark .tab__label,
+.tab__close {
+  display: flex;
+  color: white;
+  --tw-bg-opacity: 1;
+  background-color: rgb(40 48 70 / var(--tw-bg-opacity));
   cursor: pointer;
 }
 

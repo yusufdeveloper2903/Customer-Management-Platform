@@ -4,6 +4,7 @@ export default [
         name: "staff",
         component: () => import("@/modules/Staff/views/Staff.vue"),
         meta: {
+            sidebar: 'nav.staffs',
             layout: "MainLayout",
             permissions: ["admin"],
         },
@@ -13,6 +14,7 @@ export default [
         name: "staff detail",
         component: () => import("@/modules/Staff/pages/Details.vue"),
         meta: {
+            sidebar: 'nav.staffs',
             layout: "MainLayout",
             permissions: ["admin"],
         },
@@ -23,6 +25,7 @@ export default [
         name: "add staff",
         component: () => import("@/modules/Staff/pages/Details.vue"),
         meta: {
+            sidebar: 'nav.staffs',
             layout: "MainLayout",
             permissions: ["admin"],
         },

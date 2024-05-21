@@ -4,6 +4,7 @@ export default [
         name: "sms-template",
         component: () => import("@/modules/sms/views/index.vue"),
         meta: {
+            sidebar:"Notifications",
             layout: "MainLayout",
             permissions: ["admin"],
         },
@@ -13,6 +14,7 @@ export default [
         name: "add-sms",
         component: () => import("@/modules/sms/components/smsSending/AddSms.vue"),
         meta: {
+            sidebar:"Notifications",
             layout: "MainLayout",
             permissions: ["admin"],
         },
@@ -22,6 +24,7 @@ export default [
         name: "sms-detail",
         component: () => import("@/modules/sms/components/smsSending/AddSms.vue"),
         meta: {
+            sidebar:"Notifications",
             layout: "MainLayout",
             permissions: ["admin"],
         },
@@ -31,6 +34,7 @@ export default [
         name: "news-detail",
         component: () => import("@/modules/sms/components/news/AddNews.vue"),
         meta: {
+            sidebar:"Notifications",
             layout: "MainLayout",
             permissions: ["admin"],
         },
@@ -40,6 +44,7 @@ export default [
         name: "add-news",
         component: () => import("@/modules/sms/components/news/AddNews.vue"),
         meta: {
+            sidebar:"Notifications",
             layout: "MainLayout",
             permissions: ["admin"],
         },

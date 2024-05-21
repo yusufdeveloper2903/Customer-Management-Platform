@@ -186,8 +186,9 @@ const saveEdit = async () => {
           {{ $t("Duration") }}
         </label>
         <input
-            type="text"
+            type="number"
             class="form-input mb-3"
+
             v-model="sectionStories.duration"
         />
         <div class="mt-4">

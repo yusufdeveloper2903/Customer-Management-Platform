@@ -24,6 +24,7 @@
     "adding_user": "Добавление пользователя",
     "editing_user": "Редактирование пользователя"
   },
+  "Poll Questions Edit": "Редактировать опрос",
   "Error from server!": "Ошибка с сервера!",
   "info_card": {
     "Time": "Время",
@@ -252,7 +253,10 @@
   "REJECTED": "отклоненный",
   "history": "История",
   "hour": "ч",
+  "options": "Variantlar",
   "minute": "м",
+  "Poll Details": "Подробности опроса",
+  "Poll Questions Add": "Вопросы для опроса добавить",
   "start_date": "Начало рассылки:",
   "end_date": "Конец рассылки:",
   "template": "Шаблон:",

@@ -122,9 +122,9 @@ const changeColor = (val: string) => {
   if (val == 'ACTIVE') {
     return t('bg-success')
   } else if (val == 'WAITING') {
-    return t('bg-secondary')
-  } else {
     return t('bg-warning')
+  } else {
+    return t('bg-secondary')
   }
 }
 const changeStatus = (val: string) => {
