@@ -13,7 +13,9 @@ export default defineStore("polls", {
             questionsPolls: {
                 data: {
                     count: 0,
-                    results: [] as QuestionPoll[]
+                    results: [
+
+                    ] as QuestionPoll[]
                 } as Results<QuestionPoll>,
             },
             questionsPollsId: {

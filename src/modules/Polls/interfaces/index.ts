@@ -9,7 +9,7 @@ export interface PollsHeaders {
 }
 
 export interface QuestionPoll {
-    "id": number ,
+    "id": number,
     "background": string,
     "background_uz": string,
     "background_ru": string,
@@ -19,6 +19,7 @@ export interface QuestionPoll {
     "title_kr": string,
     "title_ru": string,
     "title_uz": string,
+    "options": object
 }
 
 export interface EditData {

@@ -126,6 +126,7 @@ const showQuestionPoll = () => {
         {{ $t("Add") }}
       </button>
     </div>
+
     <section class="accordion mt-3" v-if="store.questionsPolls.data.results">
       <div class="tab" v-for="item in  store.questionsPolls.data.results" :key="item.id">
         <input type="checkbox" name="accordion-1" :id="String(item.id)">
@@ -147,17 +148,25 @@ const showQuestionPoll = () => {
             </small>
           </small>
         </label>
+
         <div class="tab__content mt-2 mb-2 ">
-          <p class="card ">Pure CSS accordion based on the "input:checked + label" style trickPure CSS accordion based
-            on the "input:checked + label" style trickPure CSS accordion based on the "input:checked + label" style
-            trickPure CSS accordion based on the "input:checked + label" style trickPure CSS accordion based on the
-            "input:checked + label" style trickPure CSS accordion based on the "input:checked + label" style trickPure
-            CSS accordion based on the "input:checked + label" style trickPure CSS accordion based on the "input:checked
-            + label" style trickPure CSS accordion based on the "input:checked + label" style trickPure CSS accordion
-            based on the "input:checked + label" style trickPure CSS accordion based on the "input:checked + label"
-            style trickPure CSS accordion based on the "input:checked + label" style trickPure CSS accordion based on
-            the "input:checked + label" style trickPure CSS accordion based on the "input:checked + label" style
-            trick.</p>
+          <div class="card">
+            <div v-if="item.options.length > 0">
+              <div v-if="item.question_type == 'SINGLE'">
+                <div v-for="data in item.options" :key="data.index">
+                  <input type="radio" id="test1" name="radio-group" disabled>
+                  <label class="mt-2 mb-2" for="test1">{{ data['context_' + $i18n.locale] }}</label>
+                </div>
+              </div>
+              <div v-if="item.question_type == 'MULTIPLE'">
+                <div class="form-group-checkbox pb-2 pt-2 " v-for="data in item.options" :key="data.index">
+                  <input type="checkbox" id="html" disabled>
+                  <label for="html">{{ data['context_' + $i18n.locale] }}</label>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
 
@@ -181,6 +190,111 @@ const showQuestionPoll = () => {
 
 </template>
 <style lang="scss" scoped>
+
+
+.new {
+  padding: 50px;
+}
+
+.form-group-checkbox {
+  display: block;
+
+  //margin-bottom: 10px;
+}
+
+.form-group-checkbox input {
+  padding: 0;
+  height: initial;
+  width: initial;
+  margin-bottom: 0;
+  display: none;
+  cursor: pointer;
+
+}
+
+.form-group-checkbox label {
+  position: relative;
+  cursor: pointer;
+}
+
+.form-group-checkbox label:before {
+  content: '';
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: 2px solid #ddd;
+;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+  padding: 8px;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.form-group-checkbox input:checked + label:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 2px;
+  left: 9px;
+  width: 6px;
+  height: 14px;
+  border: solid #0079bf;
+  border-width: 0 2px 2px 0;
+
+  transform: rotate(45deg);
+}
+
+[type="radio"]:checked,
+[type="radio"]:not(:checked) {
+  position: absolute;
+  left: -9999px;
+}
+
+[type="radio"]:checked + label,
+[type="radio"]:not(:checked) + label {
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  line-height: 20px;
+  display: inline-block;
+  color: #666;
+
+}
+
+[type="radio"]:checked + label:before,
+[type="radio"]:not(:checked) + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #ddd;
+  border-radius: 100%;
+  background: #fff;
+}
+
+[type="radio"]:checked + label:after,
+[type="radio"]:not(:checked) + label:after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background: #F87DA9;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  border-radius: 100%;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+[type="radio"]:not(:checked) + label:after {
+  opacity: 0;
+
+  transform: scale(0);
+}
 
 
 .tab input {

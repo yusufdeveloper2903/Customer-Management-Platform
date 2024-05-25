@@ -25,7 +25,7 @@ let pollAdd = ref<any>({
   description_uz: '',
   description_kr: '',
   description_ru: '',
-  question_type: 'Single',
+  question_type: 'SINGLE',
   poll: null,
   options: [
     {
