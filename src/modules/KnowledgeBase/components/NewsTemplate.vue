@@ -221,7 +221,7 @@ const handleDeleteModal = (id: number) => {
         @per-page-changed="onPageSizeChanged"
     />
   </div>
-  <DeleteModal @delete-action="deleteAction" :id="'newstemplate-main-delete-modal'"/>
+  <DeleteModal @delete-action="deleteAction" id="newstemplate-main-delete-modal"/>
   <NewsTemplateModal :edit-data="dataToEdit" @refresh="refresh"/>
   <ShowFileModal :image="image" id="file-modal-image" ref="imageCard"/>
 </template>

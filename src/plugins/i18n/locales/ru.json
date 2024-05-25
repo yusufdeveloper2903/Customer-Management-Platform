@@ -24,8 +24,6 @@
     "adding_user": "Добавление пользователя",
     "editing_user": "Редактирование пользователя"
   },
-  "Poll Questions Edit": "Редактировать опрос",
-  "Error from server!": "Ошибка с сервера!",
   "info_card": {
     "Time": "Время",
     "Lessons": "Уроки",
@@ -57,6 +55,8 @@
     "question": "Вопрос",
     "audio": "Аудио"
   },
+  "Poll Questions Edit": "Редактировать опрос",
+  "Error from server!": "Ошибка с сервера!",
   "Button Name": "Название кнопки",
   "Button Url": "URL-адрес кнопки",
   "Promotions": "Акции",

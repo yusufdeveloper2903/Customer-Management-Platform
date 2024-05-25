@@ -9,7 +9,7 @@
           :key="title"
           class="mr-2 cursor-pointer px-5 py-2"
           :class="
-          (title) == (selectedTitle)
+          (title) === (selectedTitle)
             ? !pill
               ? 'border-b-[3px] border-primary text-primary'
               : 'bg-primary active shadow shadow-primary text-white rounded'
@@ -85,7 +85,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .active {
   box-shadow: 0 4px 18px -4px rgba(70, 171, 70, 0.65);
 

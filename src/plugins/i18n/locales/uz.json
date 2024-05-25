@@ -6,8 +6,6 @@
     "show_from": "1 dan",
     "column": "qator"
   },
-  "are_you_really_going_to_delete_this_user": "Ishonchingiz komilmi?",
-  "deleted_successfully": "Muvaffaqiyatli oʻchirildi",
   "nav": {
     "Admin Page": "Admin",
     "Homepage": "Bosh sahifa",
@@ -21,8 +19,6 @@
     "staffs": "Xodimlar",
     "contacts": "Kontaktlar"
   },
-  "Button Name": "Tugma nomi",
-  "Button Url": "Tugma URL manzili",
   "info_card": {
     "Time": "Vaqt",
     "Lessons": "Darslar",
@@ -54,6 +50,10 @@
     "question": "Savol",
     "audio": "Audio"
   },
+  "are_you_really_going_to_delete_this_user": "Ishonchingiz komilmi?",
+  "deleted_successfully": "Muvaffaqiyatli oʻchirildi",
+  "Button Name": "Tugma nomi",
+  "Button Url": "Tugma URL manzili",
   "Promotions": "Aksiyalar",
   "PROMOTION": "Aksiyalar",
   "success": "Muvaffaqiyatli",

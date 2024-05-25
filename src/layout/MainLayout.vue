@@ -78,7 +78,6 @@ onMounted(() => {
 });
 
 function breadCrumbStart(newPath) {
-  console.log(newPath, 'newPath')
   localStorage.setItem('sidebar', newPath)
   switch (newPath) {
     case "dashboard":

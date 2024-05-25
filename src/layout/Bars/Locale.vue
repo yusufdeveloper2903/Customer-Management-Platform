@@ -9,7 +9,7 @@ const {locale} = useI18n();
 
 
 //FUNCTIONS
-function onChangeLocale(lang: any) {
+function onChangeLocale(lang: string) {
   i18n.global.locale.value = lang;
   localStorage.setItem("last-locale", lang);
 }
@@ -30,6 +30,12 @@ function onChangeLocale(lang: any) {
           src="@/assets/image/flags/uz.png"
           alt="uz"
       />
+      <img
+          v-if="locale == 'kr'"
+          class="w-[48px]"
+          src="@/assets/image/flags/uz.png"
+          alt="uz"
+      />
     </div>
 
     <div
@@ -45,7 +51,7 @@ function onChangeLocale(lang: any) {
             src="@/assets/image/flags/ru.png"
             alt="ru"
         />
-        <span>Russian</span>
+        <span>Русский</span>
       </div>
 
       <div
@@ -57,7 +63,18 @@ function onChangeLocale(lang: any) {
             src="@/assets/image/flags/uz.png"
             alt="uz"
         />
-        <span>Uzbek</span>
+        <span>Oʻzbek</span>
+      </div>
+      <div
+          class="p-3 hover:bg-primary/10 hover:text-primary"
+          @click="onChangeLocale('kr')"
+      >
+        <img
+            class="mr-2 inline-block w-[28px]"
+            src="@/assets/image/flags/uz.png"
+            alt="uz"
+        />
+        <span>Ўзбек</span>
       </div>
     </div>
   </div>

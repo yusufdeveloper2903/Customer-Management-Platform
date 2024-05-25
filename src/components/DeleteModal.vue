@@ -1,6 +1,16 @@
 <script lang="ts" setup>
-const emit = defineEmits(['deleteAction'])
-const props = defineProps(['id'])
+
+
+//INTERFACES TYPE
+interface Emits {
+  (event: "deleteAction"): void;
+}
+interface Props {
+  id: string
+}
+
+const emit = defineEmits<Emits>()
+const props = defineProps<Props>()
 </script>
 
 

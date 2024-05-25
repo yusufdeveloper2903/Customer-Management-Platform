@@ -11,20 +11,16 @@ const store = useSidebarStore();
 const router = useRouter();
 defineProps<{ list: ListInterface[] }>();
 
+
+
 //FUNCTIONS
-const onBefore = (item: any) => {
-  console.log(item, 'item')
+const onBefore = (item: ListInterface) => {
   if (!item.active) {
     router.go(-1);
   }
 };
 
 </script>
-<style>
-.breadcolor {
-  color: #356c2d
-}
-</style>
 <template>
   <div>
     <nav class="mb-5 mt-1 flex card">
@@ -91,4 +87,8 @@ const onBefore = (item: any) => {
     </nav>
   </div>
 </template>
-
+<style>
+.breadcolor {
+  color: #356c2d
+}
+</style>
