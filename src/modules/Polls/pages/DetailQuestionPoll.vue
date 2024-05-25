@@ -223,7 +223,6 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
             type="checkbox"
             class="sr-only peer"
             v-model="statusQuestion"
-            @input="questionType"
 
         />
         <div
@@ -296,7 +295,7 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
       <div
           class=" flex gap-4 justify-end"
       >
-        <button class="btn-secondary">
+        <button class="btn-secondary" @click="router.go(-1);">
           {{ $t("Cancel") }}
         </button>
 
