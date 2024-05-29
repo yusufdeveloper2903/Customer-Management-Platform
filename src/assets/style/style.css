@@ -384,7 +384,9 @@ pre[class*="language-"] {
 .dark .apexcharts-datalabel-label {
     fill: white
 }
-
+.dark .text-danger{
+    color: red
+}
 .dark .apexcharts-datalabel-value {
 
     fill: white

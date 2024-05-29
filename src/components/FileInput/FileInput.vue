@@ -50,7 +50,6 @@ const onShowFile = (item: string) => {
   });
 };
 
-
 //WATCHERS
 watch(
     () => props.modelValue,
@@ -93,15 +92,17 @@ const textFileInput = (val: any) => {
 <template>
   <div class="file_data">
     <input
-        v-if="input"
+        title=""
+        v-if="input "
         :id="props.id"
         class="form-file-input "
-        :class="props.class"
+        :class="input && data ? `fileUpload ${props.class}` :'fileEmpty'"
         @input="onInputFile"
         v-on="emit"
         v-bind="props"
         type="file"
         :multiple="multiple"
+
     />
     <button v-if="data" @click.prevent="clearData" class="ml-3 btn-danger btn-action button_cancel"
     >
@@ -169,4 +170,28 @@ const textFileInput = (val: any) => {
   border-radius: 7px
 
 }
+
+.fileEmpty {
+  color: transparent !important;
+}
+
+.fileUpload {
+  color: black !important;
+}
+
+
+input[type=file]::before {
+  content: "📁";
+  color: black;
+  margin-right: 10px;
+}
+
+[type="file"]::file-selector-button {
+  width: 0;
+  margin-inline-end: 0;
+  padding: 0;
+  border: none;
+}
+
+
 </style>

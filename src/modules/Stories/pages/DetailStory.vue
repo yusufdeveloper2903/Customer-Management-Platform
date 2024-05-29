@@ -4,7 +4,7 @@
 //IMPORTED FILES
 import {Ref, ref, computed, reactive, nextTick, onMounted, watch} from "vue";
 import {helpers, required} from "@vuelidate/validators";
-import useVuelidate, {Validation} from "@vuelidate/core";
+import {useVuelidate, Validation} from "@vuelidate/core";
 import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
 import FileInput from "@/components/FileInput/FileInput.vue";
@@ -14,7 +14,6 @@ import {storiesDetailTable} from '../constants'
 import {toast} from "vue3-toastify";
 import {useI18n} from 'vue-i18n';
 import UIKit from "uikit";
-import ShowPhotoGlobal from "@/components/ShowPhotoGlobal.vue";
 import ShowTextModal from "@/components/ShowTextModal.vue";
 
 
@@ -28,7 +27,7 @@ import {objectToFormData} from "@/mixins/formmatter";
 //DECLARED VARIABLES
 const store = StoriesDetail()
 const itemToDelete = ref<number | null>(null);
-const image = ref<string>("");
+
 const imageUrl = ref('')
 const {t, locale} = useI18n()
 const isLoading = ref(false);
@@ -69,10 +68,9 @@ const editData = ref<EditData | null>({
   background_kr: '',
   background_ru: '',
 })
-
 const params = reactive({
   page: 1,
-  page_size: 5,
+  page_size: 10,
   search: null
 })
 
@@ -125,34 +123,22 @@ const saveData = async (val: string) => {
 
       if (val == 'detail') {
         await router.push('/stories')
+        toast.success(t("created_successfully"));
       }
-      toast.success(t("created_successfully"));
     } catch (error: any) {
       isSubmitted.value = false;
       toast.error(t('error'));
     }
   }
 };
-const changePagination = (page: number) => {
-  params.page = page;
-  refresh();
-};
-const onPageSizeChanged = (e: number) => {
-  params.page_size = e
-  params.page = 1
-  refresh()
-}
+
+
 const handleDeleteModal = (id: number) => {
   itemToDelete.value = id
   UIKit.modal("#stories-detail-main-delete-modal").show()
 };
 
-const onShowFile = (item: any) => {
-  image.value = item;
-  nextTick(() => {
-    UIKit.modal("#stories-detail-modal-image").show();
-  });
-};
+
 const onShowFileLink = (item: any) => {
   url.value = item;
   nextTick(() => {
@@ -216,13 +202,8 @@ const deleteAction = async () => {
   try {
     await store.deleteStoriesSection(itemToDelete.value)
     await UIKit.modal("#stories-detail-main-delete-modal").hide();
+    await refresh()
     toast.success(t('deleted_successfully'));
-    if (store.storiesDetailsList.count > 1 && ((store.storiesDetailsList.count - 1) % params.page_size == 0)) {
-      params.page = params.page - 1
-      await refresh()
-    } else {
-      await refresh()
-    }
     isLoading.value = false
   } catch (error: any) {
     toast.error(t('error'));
@@ -274,9 +255,10 @@ const rules = computed(() => {
     start_date: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
-    end_date: {
+    avatar: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
+
 
   };
 });
@@ -286,9 +268,10 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 <template>
   <div>
 
-    <div class="flex gap-2">
+    <div class="flex gap-2 items-start">
 
       <div class="card w-1/4">
+        <h3 class="text-balance ...">{{ $t('Main')}}</h3>
         <Tabs class="mb-4">
           <Tab title="UZ">
             <form>
@@ -392,21 +375,22 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
               @remove="storiesVariable.avatar = null"
               :typeModal="routeParams"
               name="stories-modal-input"/>
+          <p
+              v-for="error in validate.avatar.$errors"
+              :key="error.$uid"
+              class="text-danger text-sm"
+          >
+            {{ $t(error.$message) }}
+          </p>
 
         </div>
 
 
       </div>
       <div class="card w-2/4">
+        <h3 class="text-balance ...">{{ $t('addPhoto')}}</h3>
         <div class="flex justify-between items-end mb-7">
-          <label for="search">
-            {{ $t('Search') }}
-            <input
-                v-model="params.search"
-                type="text"
-                class="form-input"
-            />
-          </label>
+          <label/>
           <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
                   @click="addSection">
             {{ $t("Add") }}
@@ -464,7 +448,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
                     class="w-[45px] h-[45px] rounded object-cover"
                     :src="item['background_'+ locale].full_size"
                     alt="Rounded avatar"
-                    @click="onShowFile(item['background_'+ locale].full_size)"
+
                 />
               </div>
               <div
@@ -497,32 +481,26 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           </template>
         </EasyDataTable>
 
-        <TwPagination
-            story="story"
-            :total="store.storiesDetailsList.count"
-            class="mt-10 tw-pagination"
-            :current="params.page"
-            :per-page="params.page_size"
-            :text-before-input="$t('go_to_page')"
-            :text-after-input="$t('forward')"
-            @page-changed="changePagination"
-            @per-page-changed="onPageSizeChanged"
-        />
+
       </div>
 
-      <div class="card w-1/4 ">
-        <div
-            class="mb-5 flex h-[450px] w-[80%] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
-          <span v-if="!imageUrl" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
-          <img
-              v-else
-              class="h-full"
-              :src="imageUrl"
-              alt=""
-          />
+      <div class=" w-1/4 ">
+        <div class="card">
+          <h3 class="text-balance mb-2">{{ $t('previewPhoto')}}</h3>
+
+          <div
+              class="mb-5 flex h-[450px] w-[240px] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
+            <span v-if="!imageUrl" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
+            <img
+                v-else
+                class="h-full h-[450px] w-[240px]"
+                :src="imageUrl"
+                alt=""
+            />
+          </div>
         </div>
         <div
-            class=" flex gap-4 justify-end"
+            class="mt-4 flex gap-4 justify-end"
         >
           <button class="btn-secondary" @click="router.push('/stories')">
             {{ $t("Cancel") }}
@@ -537,7 +515,6 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
     </div>
     <DetailsModal :editData="editData" @refresh="refresh"/>
     <DeleteModal @delete-action="deleteAction" id="stories-detail-main-delete-modal"/>
-    <ShowPhotoGlobal :image="image" id="stories-detail-modal-image"/>
     <ShowTextModal :url="url" id="stories-detail-url-image"/>
   </div>
 

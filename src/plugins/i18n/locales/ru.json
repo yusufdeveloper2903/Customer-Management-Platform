@@ -55,6 +55,7 @@
     "question": "Вопрос",
     "audio": "Аудио"
   },
+  "multipleAnswers": "Несколько ответов",
   "Poll Questions Edit": "Редактировать опрос",
   "Error from server!": "Ошибка с сервера!",
   "Button Name": "Название кнопки",
@@ -255,6 +256,8 @@
   "hour": "ч",
   "options": "Variantlar",
   "minute": "м",
+  "addPhoto": "Добавить фото и кнопку",
+  "previewPhoto": "Посмотреть картинку",
   "Poll Details": "Подробности опроса",
   "Poll Questions Add": "Вопросы для опроса добавить",
   "start_date": "Начало рассылки:",

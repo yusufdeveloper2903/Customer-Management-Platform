@@ -217,7 +217,7 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
         </Tab>
       </Tabs>
 
-      <p class=" mt-4 ">{{ $t("Несколько ответов") }}</p>
+      <p class=" mt-4 ">{{ $t("multipleAnswers") }}</p>
       <label className="relative inline-flex items-center cursor-pointer">
         <input
             type="checkbox"

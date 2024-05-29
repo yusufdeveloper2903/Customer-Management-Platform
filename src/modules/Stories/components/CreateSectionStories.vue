@@ -2,7 +2,9 @@
 
 
 //IMPORTED FILES
-import {ref, watch} from "vue";
+import {Ref, ref, computed, watch} from "vue";
+import {helpers, required} from "@vuelidate/validators";
+import {useVuelidate, Validation} from "@vuelidate/core";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
@@ -14,7 +16,6 @@ import FileInput from "@/components/FileInput/FileInput.vue";
 import {objectToFormData} from "@/mixins/formmatter";
 import {EditData} from "../interfaces";
 import {useRoute} from 'vue-router'
-
 
 //DECLARED VARIABLES
 const {t} = useI18n();
@@ -42,7 +43,6 @@ let sectionStories = ref<EditData>({
   background_kr: '',
   background_ru: '',
 });
-
 
 //FUNCTIONS
 function openModal() {
@@ -117,7 +117,10 @@ watch(() => sectionStories.value.is_button, function (val: boolean) {
 
   }
 })
+
 const saveEdit = async () => {
+  const success = await validate.value.$validate();
+  if (!success) return;
   if (!route.params.id) return;
   sectionStories.value.button_type = sectionStories.value.button_type?.value
   sectionStories.value.background = sectionStories.value.background_uz
@@ -158,7 +161,21 @@ const saveEdit = async () => {
   }
 };
 
-
+//COMPUTED
+const rules = computed(() => {
+  return {
+    background_uz: {
+      // required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    background_kr: {
+      // required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    background_ru: {
+      // required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+  };
+});
+const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
 </script>
 
 <template>
@@ -209,69 +226,94 @@ const saveEdit = async () => {
         </div>
         <Tabs class="mt-1">
           <Tab title="UZ">
-            <form v-if="sectionStories.is_button">
-              <label for="nameUz">{{ $t('name') + ' ' + $t('UZ') }} </label>
-              <input
-                  id="nameUz"
-                  type="text"
-                  class="form-input mb-3"
-                  v-model="sectionStories.button_name_uz"
-              />
 
-            </form>
 
             <label>{{ $t('photo') }}</label>
             <FileInput
+                class="mb-3"
                 v-model="sectionStories.background_uz"
                 @remove="sectionStories.background_uz = null"
                 :typeModal="propData.editData && propData.editData.story_section_id"
                 name="stories-detail-template-uz"
             />
+            <p
+                v-for="error in validate.background_uz.$errors"
+                :key="error.$uid"
+                class="text-danger text-sm"
+            >
+              {{ $t(error.$message) }}
+            </p>
+            <form v-if="sectionStories.is_button">
+              <label for="nameUz">{{ $t('name') + ' ' + $t('UZ') }} </label>
+              <input
+                  id="nameUz"
+                  type="text"
+                  class="form-input "
+                  v-model="sectionStories.button_name_uz"
+              />
 
+            </form>
           </Tab>
           <Tab title="KR">
+
+            <label>{{ $t('photo') }}</label>
+            <FileInput
+                class="mb-3"
+                v-model="sectionStories.background_kr"
+                @remove="sectionStories.background_kr = null"
+                :typeModal="propData.editData && propData.editData.story_section_id"
+                name="stories-detail-template-kr"
+            />
+            <p
+                v-for="error in validate.background_kr.$errors"
+                :key="error.$uid"
+                class="text-danger text-sm"
+            >
+              {{ $t(error.$message) }}
+            </p>
             <form v-if="sectionStories.is_button">
               <label for="nameUz">{{ $t('name') + ' ' + $t('KR') }} </label>
 
               <input
                   id="nameUz"
                   type="text"
-                  class="form-input mb-3"
+                  class="form-input "
                   v-model="sectionStories.button_name_kr"
               />
 
             </form>
-            <label>{{ $t('photo') }}</label>
-            <FileInput
-                v-model="sectionStories.background_kr"
-                @remove="sectionStories.background_kr = null"
-                :typeModal="propData.editData && propData.editData.story_section_id"
-                name="stories-detail-template-kr"
-            />
-
 
           </Tab>
 
-          <Tab title="Ru">
+          <Tab title="RU">
+
+            <label>{{ $t('photo') }} </label>
+            <FileInput
+                class="mb-3"
+                v-model="sectionStories.background_ru"
+                @remove="sectionStories.background_ru = null"
+                :typeModal="propData.editData && propData.editData.story_section_id"
+                name="stories-detail-template-ru"
+            />
+            <p
+                v-for="error in validate.background_ru.$errors"
+                :key="error.$uid"
+                class="text-danger text-sm"
+            >
+              {{ $t(error.$message) }}
+            </p>
             <form v-if="sectionStories.is_button">
               <label for="nameRu">{{ $t('name') + ' ' + $t('RU') }}</label>
 
               <input
                   id="nameRu"
                   type="text"
-                  class="form-input mb-3"
+                  class="form-input"
                   v-model="sectionStories.button_name_ru"
 
               />
 
             </form>
-            <label>{{ $t('photo') }} </label>
-            <FileInput
-                v-model="sectionStories.background_ru"
-                @remove="sectionStories.background_ru = null"
-                :typeModal="propData.editData && propData.editData.story_section_id"
-                name="stories-detail-template-ru"
-            />
 
 
           </Tab>
@@ -282,7 +324,7 @@ const saveEdit = async () => {
               class="select w-2/4"
 
           >
-            <p class=" mt-5 ">{{ $t("Button Type") }}</p>
+            <p class=" mt-3 ">{{ $t("Button Type") }}</p>
             <v-select
                 class="style-chooser"
                 :options="store.storySectionButtonType.data"
@@ -296,7 +338,7 @@ const saveEdit = async () => {
             </v-select>
           </div>
           <div v-if="sectionStories.button_type?.value == 'URL'" class=" w-2/4">
-            <p class="mt-5"> {{ $t('URL') }}</p>
+            <p class="mt-3"> {{ $t('URL') }}</p>
             <input
                 type="text"
                 style="padding-top:12px;padding-bottom:12px"
@@ -307,7 +349,7 @@ const saveEdit = async () => {
           <div v-else-if="sectionStories.button_type?.value !== 'URL' && sectionStories.button_type?.value"
                class="select-chooser w-2/4"
           >
-            <p class="mt-5">{{ $t(`${sectionStories.button_type?.value}`) }}</p>
+            <p class="mt-3">{{ $t(`${sectionStories.button_type?.value}`) }}</p>
             <v-select
                 :options="store.contentButtonTypeList.results"
                 v-model="sectionStories.object_id"
@@ -320,7 +362,7 @@ const saveEdit = async () => {
 
           </div>
           <div v-else
-               class="select-chooser w-2/4 mt-11"
+               class="select-chooser w-2/4 mt-9"
           >
             <v-select
                 disabled="true"

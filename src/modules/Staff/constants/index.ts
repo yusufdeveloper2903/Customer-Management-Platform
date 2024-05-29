@@ -24,7 +24,7 @@ export const fields = [
         value: "role",
     },
     {
-        text: "status",
+        text: "Status",
         value: "is_active",
     },
     {

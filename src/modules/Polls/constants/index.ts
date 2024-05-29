@@ -4,7 +4,7 @@ export const PollsTable = [
         value: "id",
     },
     {
-        text: "Name",
+        text: "name",
         value: "name",
     },
     {
