@@ -2,9 +2,7 @@
 
 
 //IMPORTED FILES
-import {Ref, ref, computed, watch} from "vue";
-import {helpers, required} from "@vuelidate/validators";
-import {useVuelidate, Validation} from "@vuelidate/core";
+import {ref, watch} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
@@ -24,6 +22,7 @@ const isSubmitted = ref<boolean>(false);
 const store = sectionStoriesModal();
 const emit = defineEmits(["refresh"]);
 const propData = defineProps<{ editData: EditData | null }>();
+const validated = ref(false)
 let sectionStories = ref<EditData>({
   story_section_id: null,
   duration: '',
@@ -43,11 +42,11 @@ let sectionStories = ref<EditData>({
   background_kr: '',
   background_ru: '',
 });
+const title = ref('')
 
 //FUNCTIONS
 function openModal() {
   if (propData.editData && propData.editData.story_section_id) {
-
     sectionStories.value.button_name = propData.editData?.button_name
     sectionStories.value.button_name_uz = propData.editData?.button_name_uz
     sectionStories.value.button_name_kr = propData.editData?.button_name_kr
@@ -93,7 +92,6 @@ const hideModal = () => {
   sectionStories.value.background_kr = ''
   sectionStories.value.background_ru = ''
   sectionStories.value.story_section_id = null
-
 }
 watch(() => sectionStories.value.button_type, function (val: any) {
   if (val?.url) {
@@ -119,8 +117,7 @@ watch(() => sectionStories.value.is_button, function (val: boolean) {
 })
 
 const saveEdit = async () => {
-  const success = await validate.value.$validate();
-  if (!success) return;
+  validated.value = true
   if (!route.params.id) return;
   sectionStories.value.button_type = sectionStories.value.button_type?.value
   sectionStories.value.background = sectionStories.value.background_uz
@@ -134,48 +131,36 @@ const saveEdit = async () => {
     sectionStories.value.button_name_ru = ''
     sectionStories.value.button_url = ''
   }
-  if (propData.editData && propData.editData.story_section_id) {
-    try {
-      const fd = objectToFormData(['background', 'background_uz', 'background_kr', 'background_ru'], sectionStories.value);
-      await store.updateSectionStories(fd)
-      await UIkit.modal("#stories_section_modal").hide();
-      toast.success(t("updated_successfully"));
-      isSubmitted.value = false;
-      emit("refresh");
-    } catch (error: any) {
-      isSubmitted.value = false;
-      toast.error(t("error"));
-    }
-  } else {
-    try {
-      const fd = objectToFormData(['background', 'background_uz', 'background_kr', 'background_ru'], sectionStories.value);
-      await store.createSectionStories(fd)
-      await UIkit.modal("#stories_section_modal").hide();
-      toast.success(t("created_successfully"));
-      emit("refresh");
-      isSubmitted.value = false;
-    } catch (error: any) {
-      isSubmitted.value = false;
-      toast.error(t('error'));
+  if (sectionStories.value.background_uz && sectionStories.value.background_kr && sectionStories.value.background_ru) {
+    if (propData.editData && propData.editData.story_section_id) {
+      try {
+        const fd = objectToFormData(['background', 'background_uz', 'background_kr', 'background_ru'], sectionStories.value);
+        await store.updateSectionStories(fd)
+        await UIkit.modal("#stories_section_modal").hide();
+        toast.success(t("updated_successfully"));
+        isSubmitted.value = false;
+        emit("refresh");
+      } catch (error: any) {
+        isSubmitted.value = false;
+        toast.error(t("error"));
+      }
+    } else {
+      try {
+        const fd = objectToFormData(['background', 'background_uz', 'background_kr', 'background_ru'], sectionStories.value);
+        await store.createSectionStories(fd)
+        await UIkit.modal("#stories_section_modal").hide();
+        toast.success(t("created_successfully"));
+        emit("refresh");
+        isSubmitted.value = false;
+      } catch (error: any) {
+        isSubmitted.value = false;
+        toast.error(t('error'));
+      }
     }
   }
 };
 
-//COMPUTED
-const rules = computed(() => {
-  return {
-    background_uz: {
-      // required: helpers.withMessage("validation.this_field_is_required", required),
-    },
-    background_kr: {
-      // required: helpers.withMessage("validation.this_field_is_required", required),
-    },
-    background_ru: {
-      // required: helpers.withMessage("validation.this_field_is_required", required),
-    },
-  };
-});
-const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
+
 </script>
 
 <template>
@@ -192,7 +177,7 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData && propData.editData.story_section_id ? $t("Edit") : $t("Add") }}
+          {{ propData.editData && propData.editData.story_section_id ? $t("EditStory") : $t("AddStory") }}
         </h2>
       </div>
 
@@ -224,11 +209,11 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
 
           </label>
         </div>
-        <Tabs class="mt-1">
+        <Tabs class="mt-1" :title="title">
           <Tab title="UZ">
 
 
-            <label>{{ $t('photo') }}</label>
+            <label>{{ $t('photo') + ' ' + $t("UZ") }}</label>
             <FileInput
                 class="mb-3"
                 v-model="sectionStories.background_uz"
@@ -237,11 +222,10 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
                 name="stories-detail-template-uz"
             />
             <p
-                v-for="error in validate.background_uz.$errors"
-                :key="error.$uid"
+                v-if="!sectionStories.background_uz && validated"
                 class="text-danger text-sm"
             >
-              {{ $t(error.$message) }}
+              {{ $t('validation.this_field_is_required') }}
             </p>
             <form v-if="sectionStories.is_button">
               <label for="nameUz">{{ $t('name') + ' ' + $t('UZ') }} </label>
@@ -256,7 +240,7 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
           </Tab>
           <Tab title="KR">
 
-            <label>{{ $t('photo') }}</label>
+            <label>{{ $t('photo') + ' ' + $t("KR") }}</label>
             <FileInput
                 class="mb-3"
                 v-model="sectionStories.background_kr"
@@ -265,11 +249,10 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
                 name="stories-detail-template-kr"
             />
             <p
-                v-for="error in validate.background_kr.$errors"
-                :key="error.$uid"
+                v-if="!sectionStories.background_kr && validated"
                 class="text-danger text-sm"
             >
-              {{ $t(error.$message) }}
+              {{ $t('validation.this_field_is_required') }}
             </p>
             <form v-if="sectionStories.is_button">
               <label for="nameUz">{{ $t('name') + ' ' + $t('KR') }} </label>
@@ -287,7 +270,7 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
 
           <Tab title="RU">
 
-            <label>{{ $t('photo') }} </label>
+            <label>{{ $t('photo') + ' ' + $t("RU") }}</label>
             <FileInput
                 class="mb-3"
                 v-model="sectionStories.background_ru"
@@ -296,11 +279,10 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
                 name="stories-detail-template-ru"
             />
             <p
-                v-for="error in validate.background_ru.$errors"
-                :key="error.$uid"
+                v-if="!sectionStories.background_ru && validated"
                 class="text-danger text-sm"
             >
-              {{ $t(error.$message) }}
+              {{ $t('validation.this_field_is_required') }}
             </p>
             <form v-if="sectionStories.is_button">
               <label for="nameRu">{{ $t('name') + ' ' + $t('RU') }}</label>
@@ -393,7 +375,7 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
               v-if="isSubmitted"
           />
           <span>{{
-              propData.editData && propData.editData.story_section_id ? $t("Edit") : $t("Add")
+              propData.editData && propData.editData.story_section_id ? $t("Edit") : $t("Add ")
             }}</span>
         </button>
       </div>

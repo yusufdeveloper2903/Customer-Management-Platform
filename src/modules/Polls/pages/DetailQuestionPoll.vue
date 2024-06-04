@@ -11,7 +11,6 @@ import Tabs from "@/components/Tab/Tabs.vue";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import {useRoute, useRouter} from "vue-router";
-
 //DECLARED VARIABLES
 const route = useRoute()
 const router = useRouter()
@@ -19,6 +18,7 @@ let QuestionPollList = ref<object[]>([]);
 const {t} = useI18n()
 const store = PollsStore();
 const statusQuestion = ref(false)
+const validated = ref(false);
 let pollAdd = ref<any>({
   description: '',
   title: '',
@@ -66,6 +66,7 @@ onMounted(async () => {
 
 //FUNCTIONS
 const saveEdit = async () => {
+  validated.value = true
   const success = await validate.value.$validate();
   if (!success) return;
   pollAdd.value.description = pollAdd.value.description_uz
@@ -252,6 +253,12 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
               <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
             </button>
           </div>
+          <p
+              v-if="!pollAdd.options[0].context_uz && validated"
+              class="text-danger text-sm"
+          >
+            {{ $t('validation.this_field_is_required') }}
+          </p>
         </Tab>
         <Tab title="KR">
           <label>{{ $t('options') + ' ' + $t('KR') }}</label>
@@ -270,6 +277,12 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
               <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
             </button>
           </div>
+          <p
+              v-if="!pollAdd.options[0].context_kr && validated"
+              class="text-danger text-sm"
+          >
+            {{ $t('validation.this_field_is_required') }}
+          </p>
         </Tab>
         <Tab title="RU">
           <label>{{ $t('options') + ' ' + $t('RU') }}</label>
@@ -289,6 +302,12 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
               <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
             </button>
           </div>
+          <p
+              v-if="!pollAdd.options[0].context_ru && validated"
+              class="text-danger text-sm"
+          >
+            {{ $t('validation.this_field_is_required') }}
+          </p>
         </Tab>
       </Tabs>
       <button class="btn-success btn-action mt-4 rounded-md" uk-icon="plus" @click="addOption"/>

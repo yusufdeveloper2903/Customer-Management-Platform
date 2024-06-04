@@ -165,7 +165,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? $t("Change") : $t('Add') }}
+          {{ propData.editData.id ? $t("ChangeProduct") : $t('AddProduct') }}
         </h2>
       </div>
       <div class="uk-modal-body py-4">

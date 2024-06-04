@@ -32,6 +32,10 @@ import {useI18n} from "vue-i18n";
 
 export default {
   props: {
+    title: {
+      type: String,
+      required: false,
+    },
     vertical: {
       type: Boolean,
       required: false,
@@ -54,11 +58,13 @@ export default {
         slots.default().map((tab) => tab.props && tab.props.title)
     );
     const selectedTitle = ref(tabTitles.value[0]);
-
     const storeData = localStorage.getItem('knowledgeBase')
     const storeData2 = localStorage.getItem('sms')
     const storeData3 = localStorage.getItem('administration')
     const storedModule = localStorage.getItem('sidebar')
+    if (props.title) {
+      selectedTitle.value = props.title
+    }
     if (storeData && storedModule === 'knowledgeBase' && props.unique === 'unique') {
       selectedTitle.value = storeData
     }

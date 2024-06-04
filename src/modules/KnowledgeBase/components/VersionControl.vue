@@ -10,6 +10,8 @@ import {useI18n} from "vue-i18n";
 import AddVersionControl from "./modals/VersionControlModal.vue"
 import {formatDate} from "@/mixins/features";
 import {EditDataVersion} from '../interfaces/index'
+import VueDatePicker from "@vuepic/vue-datepicker";
+import {watchDebounced} from "@vueuse/core";
 
 
 //DECLARED VARIABLES
@@ -36,7 +38,7 @@ const props = defineProps<{
   }
 }>();
 let toRefresh = ref(false)
-
+const dateConfig = ref({})
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
@@ -64,7 +66,22 @@ watch(() => props.knowledge, async function (val) {
     await refresh()
   }
 })
+watch(
+    () => dateConfig.value,
+    (value: any) => {
+      if (value) {
+        let started_date = JSON.parse(JSON.stringify(value))[0]
+        let end_date = JSON.parse(JSON.stringify(value))[1]
 
+        params.start_date = started_date.toLocaleString('it-IT').split('T')[0]
+        params.end_date = end_date.toLocaleString('it-IT').split('T')[0]
+      } else {
+        params.start_date = ""
+        params.end_date = ""
+      }
+
+    }
+)
 
 //FUNCTIONS
 const deleteAction = async () => {
@@ -110,13 +127,10 @@ const saveVersionControl = () => {
   refresh()
 }
 
-watch(
-    () => params.end_date,
-    () => {
-      params.page = 1
-      refresh();
-    },
-);
+watchDebounced(() => params.start_date, function () {
+  params.page = 1
+  refresh()
+}, {deep: true, debounce: 500, maxWait: 5000,})
 const onPageSizeChanged = (e) => {
   params.page_size = e
   params.page = 1
@@ -132,17 +146,12 @@ const onPageSizeChanged = (e) => {
 
         <div class="md:w-1/3 md:m-0 mt-2">
           <label for="from" class="dark:text-gray-300">
-            {{ $t("from") }}
+            {{ $t("date_from") + ' - ' + $t("date_to") }}
           </label>
-          <VueDatePicker :enableTimePicker="false" auto-apply v-model="params.start_date"></VueDatePicker>
+          <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
         </div>
 
-        <div class="md:w-1/3 md:m-0 mt-2">
-          <label for="to" class="dark:text-gray-300">
-            {{ $t("to") }}
-          </label>
-          <VueDatePicker :enableTimePicker="false" auto-apply v-model="params.end_date"></VueDatePicker>
-        </div>
+
       </form>
       <button
           class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
@@ -162,8 +171,6 @@ const onPageSizeChanged = (e) => {
       <template #header="header">
         {{ $t(header.text) }}
       </template>
-
-
 
 
       <template #item-datetime="items">

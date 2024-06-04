@@ -58,7 +58,8 @@ export interface EditDataVersion {
 export interface EditVersion {
     id: number | null
     number: string,
-    description: string
+    description: string,
+    is_active: boolean
 }
 
 

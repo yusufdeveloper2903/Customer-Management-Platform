@@ -123,6 +123,10 @@ export const newsTemplateTable = [
         value: "id",
     },
     {
+        text: "photo",
+        value: "photo",
+    },
+    {
         text: "name",
         value: "title",
     },
@@ -130,10 +134,7 @@ export const newsTemplateTable = [
         text: "description",
         value: "description",
     },
-    {
-        text: "photo",
-        value: "photo",
-    },
+
 
     {
         text: "actions",
@@ -178,17 +179,19 @@ export const productsFields = [
         value: 'id'
     },
     {
-        text: "Number (multi-digit-code)",
-        value: "code"
+        text: "photo",
+        value: "image"
     },
     {
         text: "name",
         value: "title"
     },
     {
-        text: "photo",
-        value: "image"
+        text: "Number (multi-digit-code)",
+        value: "code"
     },
+
+
     {
         text: "price",
         value: "price"

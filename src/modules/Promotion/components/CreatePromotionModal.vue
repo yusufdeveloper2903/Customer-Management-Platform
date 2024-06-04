@@ -85,13 +85,13 @@ watch(
       if (value) {
         let started_date = JSON.parse(JSON.stringify(value))[0]
         let end_date = JSON.parse(JSON.stringify(value))[1]
-        if (!value) {
-          productsData.value.start_date = ""
-          productsData.value.end_date = ""
-        } else {
-          productsData.value.start_date = started_date.toLocaleString('it-IT')
-          productsData.value.end_date = end_date.toLocaleString('it-IT')
-        }
+
+        productsData.value.start_date = started_date.toLocaleString('it-IT')
+        productsData.value.end_date = end_date.toLocaleString('it-IT')
+
+      } else {
+        productsData.value.start_date = ""
+        productsData.value.end_date = ""
       }
 
     }
@@ -205,7 +205,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? $t("Change") : $t('Add') }}
+          {{ propData.editData.id ? $t("ChangePromotion") : $t('AddPromotion') }}
         </h2>
       </div>
 
@@ -228,12 +228,13 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 {{ $t(error.$message) }}
               </p>
               <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('UZ') }} </label>
-              <textarea
-                  id="number"
-                  type="text"
-                  class="form-input ="
-                  v-model="productsData.description_uz"
-                  :class="validate.description_uz.$errors.length ? 'required-input' : ''"
+              <Editor
+                  :placeholder="$t('enter_information')"
+                  content-type="html"
+                  toolbar="full"
+                  class="scrollbar rounded border"
+                  style="height: 15vh; overflow-y: auto;"
+                  v-model:content="productsData.description_uz"
               />
               <p
                   v-for="error in validate.description_uz.$errors"
@@ -264,13 +265,16 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 {{ $t(error.$message) }}
               </p>
               <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('KR') }} </label>
-              <textarea
-                  id="number"
-                  type="text"
-                  class="form-input "
-                  v-model="productsData.description_kr"
-                  :class="validate.description_kr.$errors.length ? 'required-input' : ''"
-              />
+              <Editor
+                  :placeholder="$t('enter_information')"
+                  content-type="html"
+                  toolbar="full"
+                  class="scrollbar rounded border"
+                  style="height: 15vh; overflow-y: auto;"
+                  v-model:content="productsData.description_kr"
+              >
+
+              </Editor>
               <p
                   v-for="error in validate.description_kr.$errors"
                   :key="error.$uid"
@@ -300,12 +304,13 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 {{ $t(error.$message) }}
               </p>
               <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('RU') }}</label>
-              <textarea
-                  id="number"
-                  type="text"
-                  class="form-input "
-                  v-model="productsData.description_ru"
-                  :class="validate.description_ru.$errors.length ? 'required-input' : ''"
+              <Editor
+                  :placeholder="$t('enter_information')"
+                  content-type="html"
+                  toolbar="full"
+                  class="scrollbar rounded border"
+                  style="height: 15vh; overflow-y: auto;"
+                  v-model:content="productsData.description_ru"
               />
               <p
                   v-for="error in validate.description_ru.$errors"
@@ -326,7 +331,13 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           </label>
           <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
         </div>
+        <!--        <p class=" mt-5 mb-1">{{ $t("Published") }}:</p>-->
 
+        <!--        <v-select id="type" :options="PublishStatus" :get-option-label="(name) => name.title"-->
+        <!--                  class="mb-4"-->
+        <!--                  v-model="productsData.is_published">-->
+        <!--          <template #no-options> {{ $t("no_matching_options") }}</template>-->
+        <!--        </v-select>-->
         <div>
 
           <label class="mt-4 block" for="photo">{{ $t('Detail photo') }}

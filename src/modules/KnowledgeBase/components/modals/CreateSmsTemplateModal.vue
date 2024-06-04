@@ -101,7 +101,7 @@ const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
       <button class="uk-modal-close-default" @click="clearData" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? $t("Change") : $t('Add') }}
+          {{ propData.editData.id ? $t("ChangeSmsTemplate") : $t('AddSmsTemplate') }}
         </h2>
       </div>
       <div class="uk-modal-body py-4">

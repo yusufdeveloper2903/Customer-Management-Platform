@@ -145,7 +145,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? $t("Edit") : $t("Add") }}
+          {{ propData.editData.id ? $t("EditNestTemplate") : $t("AddNewsTemplate") }}
         </h2>
       </div>
 

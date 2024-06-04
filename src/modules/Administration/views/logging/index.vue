@@ -152,13 +152,8 @@ watch(
       if (value) {
         let started_date = JSON.parse(JSON.stringify(value))[0]
         let end_date = JSON.parse(JSON.stringify(value))[1]
-        if (!value) {
-          params.value.start_date = ""
-          params.value.end_date = ""
-        } else {
-          params.value.start_date = started_date.split('T')[0]
-          params.value.end_date = end_date.split('T')[0]
-        }
+        params.value.start_date = started_date.split('T')[0]
+        params.value.end_date = end_date.split('T')[0]
       } else {
         params.value.start_date = ""
         params.value.end_date = ""

@@ -27,7 +27,6 @@ import {objectToFormData} from "@/mixins/formmatter";
 //DECLARED VARIABLES
 const store = StoriesDetail()
 const itemToDelete = ref<number | null>(null);
-
 const imageUrl = ref('')
 const {t, locale} = useI18n()
 const isLoading = ref(false);
@@ -197,6 +196,7 @@ const addSection = async () => {
 
 
 }
+
 const deleteAction = async () => {
   isLoading.value = true
   try {
@@ -229,13 +229,13 @@ watch(
       if (value) {
         let started_date = JSON.parse(JSON.stringify(value))[0]
         let end_date = JSON.parse(JSON.stringify(value))[1]
-        if (!value) {
-          storiesVariable.value.start_date = ""
-          storiesVariable.value.end_date = ""
-        } else {
-          storiesVariable.value.start_date = started_date.toLocaleString('it-IT')
-          storiesVariable.value.end_date = end_date.toLocaleString('it-IT')
-        }
+
+        storiesVariable.value.start_date = started_date.toLocaleString('it-IT')
+        storiesVariable.value.end_date = end_date.toLocaleString('it-IT')
+
+      } else {
+        storiesVariable.value.start_date = ""
+        storiesVariable.value.end_date = ""
       }
 
     }
@@ -271,7 +271,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
     <div class="flex gap-2 items-start">
 
       <div class="card w-1/4">
-        <h3 class="text-balance ...">{{ $t('Main')}}</h3>
+        <h3 class="text-balance mb-3">{{ $t('Main') }}</h3>
         <Tabs class="mb-4">
           <Tab title="UZ">
             <form>
@@ -388,7 +388,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 
       </div>
       <div class="card w-2/4">
-        <h3 class="text-balance ...">{{ $t('addPhoto')}}</h3>
+        <h3 class="text-balance mb-3">{{ $t('addPhoto') }}</h3>
         <div class="flex justify-between items-end mb-7">
           <label/>
           <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
@@ -467,7 +467,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           <template #item-actions="data">
             <div class="flex my-4 justify-end" @click.stop>
               <button class="btn-warning btn-action" uk-toggle="target: #stories_section_modal"
-                      @click="editData= data">
+                      @click="editData=data">
                 <Icon icon="Pen New Square" color="#fff" size="16"/>
               </button>
               <button
@@ -486,7 +486,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 
       <div class=" w-1/4 ">
         <div class="card">
-          <h3 class="text-balance mb-2">{{ $t('previewPhoto')}}</h3>
+          <h3 class="text-balance mb-3">{{ $t('previewPhoto') }}</h3>
 
           <div
               class="mb-5 flex h-[450px] w-[240px] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">

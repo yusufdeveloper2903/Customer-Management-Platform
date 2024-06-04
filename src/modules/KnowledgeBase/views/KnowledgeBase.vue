@@ -40,9 +40,6 @@ const selectedTitle = (val: any) => {
       <Tab title="sms_template">
         <SMSTemplate :knowledge="knowledge" :params="params"/>
       </Tab>
-
-
-
       <Tab title="News template">
         <NewsTemplate :knowledge="knowledge" :params="params"/>
       </Tab>

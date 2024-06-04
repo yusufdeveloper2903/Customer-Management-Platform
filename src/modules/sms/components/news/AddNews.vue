@@ -77,9 +77,16 @@ watch(() => newsData.value.template, (val: any) => {
     newsData.value.description_ru = val?.description_ru
     newsData.value.description_kr = val?.description_kr
     newsData.value.description = val?.description
+  } else {
+    newsData.value.title_uz = ''
+    newsData.value.title_ru = ''
+    newsData.value.title_kr = ''
+    newsData.value.description_uz = ''
+    newsData.value.description_ru = ''
+    newsData.value.description_kr = ''
+    newsData.value.description = ''
   }
 })
-
 
 //MOUNTED
 onMounted(async () => {
@@ -340,7 +347,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
       <div class="uk-margin">
         <label for="form-stacked-text">{{ $t('Url') }}</label>
         <div class="uk-form-controls">
-          <input type="text" class="form-input p-1" v-model="newsData.url"/>
+          <input type="url" class="form-input p-1" v-model="newsData.url"/>
         </div>
       </div>
       <p class=" mt-5 mb-1">{{ $t("push_notification") }}:</p>

@@ -80,14 +80,12 @@ const hideModal = () => {
   closeTime.value = '';
   Object.assign(location, {
     id: undefined,
-    title: {
-      uz: "",
-      ru: "",
-    },
-    address: {
-      uz: "",
-      ru: "",
-    },
+    title_uz: '',
+    title_ru: '',
+    title_kr: '',
+    address_uz: '',
+    address_kr: '',
+    address_ru: '',
     closed_at: '',
     opened_at: '',
     phones: [],
@@ -212,7 +210,7 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ $t("Add") }}
+          {{ props.oldData ? $t("ChangeLocation") : $t('AddLocation') }}
         </h2>
       </div>
 

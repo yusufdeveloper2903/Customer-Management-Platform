@@ -151,7 +151,12 @@ watch(() => store.receiversList.results, function () {
   itemSelected.value = store.receiversList.results
   select.value = true
 })
-
+watch(() => smsSendingData.value.template, (val) => {
+  if (!val) {
+    smsSendingData.value.title = ''
+    smsSendingData.value.description = ''
+  }
+})
 watch(() => smsSendingData.value.template, function (val) {
   if (val?.id) {
     smsSendingData.value.title = val.title
