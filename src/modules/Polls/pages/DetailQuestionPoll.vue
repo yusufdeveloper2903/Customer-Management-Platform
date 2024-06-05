@@ -21,7 +21,6 @@ const statusQuestion = ref(false)
 const validated = ref(false);
 let pollAdd = ref<any>({
   description: '',
-  title: '',
   description_uz: '',
   description_kr: '',
   description_ru: '',
@@ -67,8 +66,21 @@ onMounted(async () => {
 //FUNCTIONS
 const saveEdit = async () => {
   validated.value = true
+  let successValue = ref(false);
   const success = await validate.value.$validate();
-  if (!success) return;
+
+  pollAdd.value.options.forEach((item, index) => {
+    if (success || item.context_uz || item.context_kr || item.context_ru) {
+      console.log(index, 'index')
+      successValue.value = false
+    }
+    if (success && item.context_uz && item.context_kr && item.context_ru) {
+      console.log(index, 'index')
+      successValue.value = true
+    }
+  })
+  console.log(successValue.value, 'value')
+  if (!successValue.value) return;
   pollAdd.value.description = pollAdd.value.description_uz
 
   if (route.params.id) {
@@ -238,12 +250,13 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
       <Tabs class="mb-4">
         <Tab title="UZ">
           <label>{{ $t('options') + ' ' + $t('UZ') }}</label>
-          <div v-for="(_, index) in pollAdd.options" :key="index" class="flex items-center p-3 mt-3"
+          <div v-for="(_, index) in pollAdd.options" :key="index" class="flex items-center p-4 mt-3"
                style="border:1px solid green; border-radius:10px">
             {{ index + 1 }}
             <input
                 type="text"
                 class="form-input ml-2"
+                :class="!pollAdd.options[index].context_uz && validated ? 'required-input' : ''"
                 v-model="pollAdd.options[index].context_uz"
             />
             <button
@@ -252,22 +265,24 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
             >
               <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
             </button>
+            <p style="position:absolute;margin-top:60px;margin-left:20px"
+               v-if="!pollAdd.options[index].context_uz && validated"
+               class="text-danger text-sm"
+            >
+              {{ $t('validation.this_field_is_required') }}
+            </p>
           </div>
-          <p
-              v-if="!pollAdd.options[0].context_uz && validated"
-              class="text-danger text-sm"
-          >
-            {{ $t('validation.this_field_is_required') }}
-          </p>
+
         </Tab>
         <Tab title="KR">
           <label>{{ $t('options') + ' ' + $t('KR') }}</label>
-          <div v-for="(_, index) in pollAdd.options" :key="index" class="flex items-center p-3 mt-3"
+          <div v-for="(_, index) in pollAdd.options" :key="index" class="flex items-center p-4 mt-3"
                style="border:1px solid green; border-radius:10px">
             {{ index + 1 }}
             <input
                 type="text"
                 class="form-input ml-2"
+                :class="!pollAdd.options[index].context_kr && validated ? 'required-input' : ''"
                 v-model="pollAdd.options[index].context_kr"
             />
             <button
@@ -276,23 +291,26 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
             >
               <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
             </button>
+            <p
+                style="position:absolute;margin-top:60px;margin-left:20px"
+                v-if="!pollAdd.options[index].context_kr && validated"
+                class="text-danger text-sm"
+            >
+              {{ $t('validation.this_field_is_required') }}
+            </p>
           </div>
-          <p
-              v-if="!pollAdd.options[0].context_kr && validated"
-              class="text-danger text-sm"
-          >
-            {{ $t('validation.this_field_is_required') }}
-          </p>
+
         </Tab>
         <Tab title="RU">
           <label>{{ $t('options') + ' ' + $t('RU') }}</label>
 
-          <div v-for="(_, index) in pollAdd.options" :key="index" class="flex items-center p-3 mt-3"
+          <div v-for="(_, index) in pollAdd.options" :key="index" class="flex items-center p-4 mt-3"
                style="border:1px solid green; border-radius:10px">
             {{ index + 1 }}
             <input
                 type="text"
                 class="form-input ml-2"
+                :class="!pollAdd.options[index].context_ru && validated ? 'required-input' : ''"
                 v-model="pollAdd.options[index].context_ru"
             />
             <button
@@ -301,13 +319,15 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
             >
               <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
             </button>
+            <p
+                style="position:absolute;margin-top:60px;margin-left:20px"
+                v-if="!pollAdd.options[index].context_ru && validated"
+                class="text-danger text-sm"
+            >
+              {{ $t('validation.this_field_is_required') }}
+            </p>
           </div>
-          <p
-              v-if="!pollAdd.options[0].context_ru && validated"
-              class="text-danger text-sm"
-          >
-            {{ $t('validation.this_field_is_required') }}
-          </p>
+
         </Tab>
       </Tabs>
       <button class="btn-success btn-action mt-4 rounded-md" uk-icon="plus" @click="addOption"/>
@@ -322,6 +342,7 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
                 class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full">
           {{ $t('Add') }}
         </button>
+
       </div>
     </div>
   </div>

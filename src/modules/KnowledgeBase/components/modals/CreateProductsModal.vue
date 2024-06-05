@@ -35,7 +35,7 @@ let productsData = ref({
   description_ru: '',
   quantity: "",
   price: '',
-  photo: '',
+  image: '',
   code: "",
   measurement_type: ''
 })
@@ -43,7 +43,7 @@ let productsData = ref({
 
 //FUNCTIONS
 const getFile = (event: any) => {
-  productsData.value.photo = event.target.files[0]
+  productsData.value.image = event.target.files[0]
   let input = event.target;
   if (input.files && input.files[0]) {
     let reader = new FileReader();
@@ -96,7 +96,7 @@ function openModal() {
     productsData.value.quantity = propData.editData.quantity
     productsData.value.price = propData.editData.price
     productsData.value.code = propData.editData.code
-    productsData.value.photo = propData.editData.image
+    productsData.value.image = propData.editData.image
     productsData.value.id = propData.editData.id
   }
 }
@@ -113,11 +113,11 @@ const onHide = () => {
   productsData.value.title_ru = ""
   productsData.value.title_kr = ""
   productsData.value.price = ''
-  productsData.value.photo = ""
+  productsData.value.image = ""
   productsData.value.id = ""
   productsData.value.code = ""
-  imageDiv.value = ''
-  productsData.value.photo = ""
+  imageDiv.value = '';
+  (document.getElementById(`fileInput`) as HTMLInputElement).value = ''
 }
 
 
@@ -139,7 +139,7 @@ const rules = computed(() => {
     price: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
-    photo: {
+    image: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
     quantity: {
@@ -318,17 +318,18 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
         <label class="mt-4 block" for="photo">{{ $t('photo') }}
           <input @change="getFile" id="fileInput" type="file"
                  class="form-file-input p-1"
-                 :class="validate.photo.$errors.length  ? 'required-input' : ''"/>
+                 accept="image/png,image/jpeg"
+                 :class="validate.image.$errors.length  ? 'required-input' : ''"/>
 
         </label>
         <div v-if="propData.editData.image || imageDiv">
           <img v-if="propData.editData.image && !imageDiv"
-               class="w-[100%] h-[200px] rounded object-contain mt-3"
+               class="w-[100%] h-[200px] rounded object-cover mt-3"
                :src="propData.editData.image "
                alt="Rounded avatar"
           />
           <img v-else
-               class="w-[100%] h-[200px] rounded object-contain mt-3"
+               class="w-[100%] h-[200px] rounded object-cover mt-3"
                :src="imageDiv"
                alt="Rounded avatar"
           />

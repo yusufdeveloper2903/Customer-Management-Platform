@@ -157,6 +157,7 @@ const validate: Ref<Validation> = useVuelidate(rules, userData);
                 id="upload"
                 class="form-file-input"
                 type="file"
+                accept="image/png,image/jpeg"
                 @change="handleFileUpload"
             />
           </div>

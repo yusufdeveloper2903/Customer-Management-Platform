@@ -74,7 +74,7 @@ const validate: Ref<Validation> = useVuelidate(rules, {});
               />
 
               <label class="mt-5 block" for="fileUz">Fayl</label>
-              <input id="fileUz" type="file" class="form-file-input"/>
+              <input accept="image/png,image/jpeg" id="fileUz" type="file" class="form-file-input"/>
             </form>
           </Tab>
           <Tab title="Ru">
@@ -87,7 +87,7 @@ const validate: Ref<Validation> = useVuelidate(rules, {});
               />
 
               <label class="mt-4 block" for="fileRu">Файл</label>
-              <input id="fileRu" type="file" class="form-file-input"/>
+              <input accept="image/png,image/jpeg" id="fileRu" type="file" class="form-file-input"/>
             </form>
           </Tab>
         </Tabs>

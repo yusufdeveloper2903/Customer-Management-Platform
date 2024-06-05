@@ -102,6 +102,7 @@ const textFileInput = (val: any) => {
         v-bind="props"
         type="file"
         :multiple="multiple"
+        accept="image/png,image/jpeg"
 
     />
     <button v-if="data" @click.prevent="clearData" class="ml-3 btn-danger btn-action button_cancel"
