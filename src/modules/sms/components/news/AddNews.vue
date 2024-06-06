@@ -22,7 +22,7 @@ import {objectToFormData} from "@/mixins/formmatter";
 
 //DECLARED VARIABLES
 const newTemplate = newsTemplate()
-const {t} = useI18n()
+const {t, locale} = useI18n()
 const store = knowledgeBase()
 const router = useRouter()
 const route = useRoute()
@@ -202,10 +202,10 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
 <template>
   <div class="flex gap-6">
     <div class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm w-1/2">
-      <h1 class="font-semibold text-lg">{{ $t('news') }}</h1>
+      <h1 class="font-semibold text-lg">{{ t('news') }}</h1>
 
       <div class="uk-margin">
-        <label for="form-stacked-text">{{ $t('start_date') }} </label>
+        <label for="form-stacked-text">{{ t('start_date') }} </label>
         <div class="uk-form-controls">
           <VueDatePicker :enableTimePicker="false" auto-apply :locale="'ru'" model-type="yyyy-MM-dd hh:mm:ss"
                          :class="validate.start_time.$errors.length ? 'required-input' : ''"
@@ -216,24 +216,24 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
               :key="error.$uid"
               class="text-danger text-sm"
           >
-            {{ $t(error.$message) }}
+            {{ t(error.$message) }}
           </p>
         </div>
       </div>
       <div class="uk-margin">
-        <label for="form-stacked-text" class="mt-4 block">{{ $t('Status') }}
+        <label for="form-stacked-text" class="mt-4 block">{{ t('Status') }}
           <VSelect v-model="newsData.status"
                    :options="store.statusList.results"
-                   :getOptionLabel="(item) => item['title_'+ $i18n.locale]"
+                   :getOptionLabel="(item) => item['title_'+ locale]"
                    :reduce="(name) => name.id"
           />
         </label>
       </div>
 
       <div class="uk-margin">
-        <label for="form-stacked-text" class="mt-4 block">{{ $t('template') }}
+        <label for="form-stacked-text" class="mt-4 block">{{ t('template') }}
           <VSelect v-model="newsData.template"
-                   :getOptionLabel="(name) => name['title_'+ $i18n.locale]"
+                   :getOptionLabel="(name) => name['title_'+ locale]"
                    :options="newTemplate.newTemplate && newTemplate.newTemplate.results"
                    :reduce="(name) => name"
           />
@@ -242,7 +242,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
       <Tabs>
         <Tab title="UZ">
           <div class="uk-margin">
-            <label for="form-stacked-text">{{ $t('name') + ' ' + $t('UZ') }}</label>
+            <label for="form-stacked-text">{{ t('name') + ' ' + t('UZ') }}</label>
             <div class="uk-form-controls">
               <input @input="newsData.template = null" v-model="newsData.title_uz" class="form-input"
                      :class="validate.title_uz.$errors.length ? 'required-input' : ''"/>
@@ -251,12 +251,12 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
                   :key="error.$uid"
                   class="text-danger text-sm"
               >
-                {{ $t(error.$message) }}
+                {{ t(error.$message) }}
               </p>
             </div>
           </div>
           <div class="uk-margin">
-            <label for="form-stacked-text">{{ $t('description') + ' ' + $t('UZ') }}</label>
+            <label for="form-stacked-text">{{ t('description') + ' ' + t('UZ') }}</label>
             <div class="uk-form-controls">
           <textarea
               @input="newsData.template = null"
@@ -269,7 +269,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
         <Tab title="KR">
 
           <div class="uk-margin">
-            <label for="form-stacked-text">{{ $t('name') + ' ' + $t('KR') }}</label>
+            <label for="form-stacked-text">{{ t('name') + ' ' + t('KR') }}</label>
             <div class="uk-form-controls">
               <input @input="newsData.template = null" :class="validate.title_kr.$errors.length ? 'required-input' : ''"
                      v-model="newsData.title_kr"
@@ -279,12 +279,12 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
                   :key="error.$uid"
                   class="text-danger text-sm"
               >
-                {{ $t(error.$message) }}
+                {{ t(error.$message) }}
               </p>
             </div>
           </div>
           <div class="uk-margin">
-            <label for="form-stacked-text">{{ $t('description') + ' ' + $t('KR') }}</label>
+            <label for="form-stacked-text">{{ t('description') + ' ' + t('KR') }}</label>
             <div class="uk-form-controls">
           <textarea
               @input="newsData.template = null"
@@ -296,7 +296,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
         <Tab title="RU">
 
           <div class="uk-margin">
-            <label for="form-stacked-text">{{ $t('name') + ' ' + $t('RU') }}</label>
+            <label for="form-stacked-text">{{ t('name') + ' ' + t('RU') }}</label>
             <div class="uk-form-controls">
               <input @input="newsData.template = null" :class="validate.title_ru.$errors.length ? 'required-input' : ''"
                      v-model="newsData.title_ru"
@@ -306,12 +306,12 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
                   :key="error.$uid"
                   class="text-danger text-sm"
               >
-                {{ $t(error.$message) }}
+                {{ t(error.$message) }}
               </p>
             </div>
           </div>
           <div class="uk-margin">
-            <label for="form-stacked-text">{{ $t('description') + ' ' + $t('RU') }}</label>
+            <label for="form-stacked-text">{{ t('description') + ' ' + t('RU') }}</label>
             <div class="uk-form-controls">
           <textarea
               @input="newsData.template = null"
@@ -325,7 +325,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
 
       <div class="uk-margin">
         <label
-        >{{ $t('photo') }}
+        >{{ t('photo') }}
           <FileInput
               v-model="newsData.file"
               @remove="newsData.file = ''"
@@ -336,12 +336,12 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
       </div>
 
       <div class="uk-margin">
-        <label for="form-stacked-text">{{ $t('Url') }}</label>
+        <label for="form-stacked-text">{{ t('Url') }}</label>
         <div class="uk-form-controls">
           <input type="text" class="form-input p-1" v-model="newsData.url"/>
         </div>
       </div>
-      <p class=" mt-5 mb-1">{{ $t("push_notification") }}:</p>
+      <p class=" mt-5 mb-1">{{ t("push_notification") }}:</p>
       <label className="relative inline-flex items-center cursor-pointer">
         <input
             type="checkbox"
@@ -356,11 +356,11 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
     </div>
     <div class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm w-full">
       <div>
-        <h1 class="font-semibold text-lg mb-4">{{ $t('Receivers') }}</h1>
+        <h1 class="font-semibold text-lg mb-4">{{ t('Receivers') }}</h1>
 
         <div class="flex items-center gap-4 mb-6">
           <div class=" w-1/4">
-            <label for="form-stacked-text">{{ $t('Search') }}</label>
+            <label for="form-stacked-text">{{ t('Search') }}</label>
             <div class="uk-form-controls">
               <input type="search" class="form-input" v-model="params.search"/>
             </div>
@@ -372,10 +372,10 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
                        @select-all="selectAllData"
                        hide-footer>
           <template #empty-message>
-            <div>{{ $t('no_available_data') }}</div>
+            <div>{{ t('no_available_data') }}</div>
           </template>
           <template #header="header">
-            {{ $t(header.text) }}
+            {{ t(header.text) }}
           </template>
 
           <template #item-fio="item">
@@ -385,17 +385,17 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
       </div>
       <TwPagination class="mt-10 tw-pagination"
                     :total="store.receiversList && store.receiversList.count"
-                    :current="params.page" :per-page="params.page_size" :text-before-input="$t('go_to_page')"
-                    :text-after-input="$t('forward')" @page-changed="changePagination"
+                    :current="params.page" :per-page="params.page_size" :text-before-input="t('go_to_page')"
+                    :text-after-input="t('forward')" @page-changed="changePagination"
                     @per-page-changed="changePageSize"/>
     </div>
   </div>
   <div class="flex justify-end mt-4">
     <button class="btn-secondary" @click="router.back('/sms-template')">
-      {{ $t('Cancel') }}
+      {{ t('Cancel') }}
     </button>
     <button class="btn-success ml-2" @click="saveData">
-      {{ $t('Save') }}
+      {{ t('Save') }}
     </button>
   </div>
 </template>

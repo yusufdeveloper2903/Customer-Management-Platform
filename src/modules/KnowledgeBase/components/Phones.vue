@@ -115,10 +115,10 @@ const refresh = async () => {
 <template>
   <div>
     <div class="flex justify-between items-end mb-7">
-      <h1 class="font-semibold text-lg text-success">{{ $t('phone_numbers') }}</h1>
+      <h1 class="font-semibold text-lg text-success">{{ t('phone_numbers') }}</h1>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full "
-              uk-toggle="target: #phones" @click="editPhone = {}">
-        {{ $t("Add") }}
+              uk-toggle="target: #phones" @click="editPhone = <EditPhone>{}">
+        {{ t("Add") }}
       </button>
     </div>
 

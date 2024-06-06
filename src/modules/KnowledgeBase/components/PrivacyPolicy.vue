@@ -11,7 +11,7 @@ import {useI18n} from "vue-i18n";
 
 //DECLARED VARIABLES
 const store = knowledgeBase()
-const is_disabledUz = ref(false)
+const is_disabledUz = ref(true)
 const is_disabledKr = ref(false)
 const is_disabledRu = ref(false)
 const {t} = useI18n()
@@ -80,20 +80,22 @@ const updateText3 = async () => {
               :placeholder="t('enter_information')"
               content-type="html"
               toolbar="full"
+              aria-readonly="true"
               class="scrollbar rounded border"
               style="height: 45vh; overflow-y: auto;"
               v-model:content="store.pagesListPolicy.text_uz"
+              
           >
           </Editor>
         </div>
 
         <div class="flex justify-end mt-2">
-          <button v-if="is_disabledUz == false" class="btn-warning" @click="is_disabledUz = true">{{
+          <button v-if="is_disabledUz == true" class="btn-warning" @click="is_disabledUz = false">{{
               t('Edit')
             }}
           </button>
 
-          <button v-if="is_disabledUz == true" class="btn-success" @click="updateText">{{ t('Save') }}</button>
+          <button v-if="is_disabledUz == false" class="btn-success" @click="updateText">{{ t('Save') }}</button>
 
         </div>
       </Tab>

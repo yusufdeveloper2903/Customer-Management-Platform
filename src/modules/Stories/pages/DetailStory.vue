@@ -273,12 +273,12 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           <Tab title="UZ">
             <form>
               <label for="nameUz"
-              >{{ $t('name') + ' ' + $t('UZ') }}
+              >{{ t('name') + ' ' + t('UZ') }}
                 <input
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('name')"
+                    :placeholder="t('name')"
                     v-model="storiesVariable.subtitle_uz"
                     :class="validate.subtitle_uz.$errors.length ? 'required-input' : ''"
                 />
