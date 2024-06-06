@@ -175,6 +175,9 @@ export default defineStore("knowledgeBase", {
             return $axios.post(`/knowledge_base/retsept_category/`, data);
         },
         
+        createPages(data: any) {
+            return $axios.post(`/knowledge_base/pages/`, data);
+        },
 
 
 
