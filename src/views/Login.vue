@@ -95,7 +95,7 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
                 :key="error.$uid"
                 class="whitespace-nowrap text-danger text-sm"
             >
-              {{ $t(error.$message) }}
+              {{ t(error.$message) }}
             </p>
           </div>
 
@@ -104,7 +104,7 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
               <label
                   for="password"
                   class="text-sm text-gray-600 dark:text-gray-200"
-              >{{ $t("Password") }}</label
+              >{{ t("Password") }}</label
               >
             </div>
 
@@ -113,7 +113,7 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
                 id="password"
                 :type="isPasswordShown ? 'text' : 'password'"
                 name="password"
-                :placeholder="$t('Password')"
+                :placeholder="t('Password')"
                 class="form-input"
                 :class="validate.password.$errors.length ? 'required-input' : ''"
             />
@@ -133,13 +133,13 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
                 v-for="error in validate.password.$errors"
                 :key="error.$uid"
             >
-              {{ $t(error.$message) }}
+              {{ t(error.$message) }}
             </p>
           </div>
 
           <div class="mt-12">
             <button type="submit" class="btn-primary w-full">
-              {{ $t("Login") }}
+              {{ t("Login") }}
             </button>
           </div>
         </form>

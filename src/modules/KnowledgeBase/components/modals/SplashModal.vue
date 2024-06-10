@@ -80,7 +80,7 @@ const updateDeal = async () => {
     try {
       const fd = objectToFormData(['file'], newsTemplateData.value);
       await store.updateNewsTemplate(fd)
-      await UIkit.modal("#news_template").hide();
+      await UIkit.modal("#splash").hide();
       toast.success(t("updated_successfully"));
       isSubmitted.value = false;
       emit("refresh");
@@ -92,7 +92,7 @@ const updateDeal = async () => {
     try {
       const fd = objectToFormData(['file'], newsTemplateData.value);
       await store.createNewsTemplate(fd)
-      await UIkit.modal("#news_template").hide();
+      await UIkit.modal("#splash").hide();
       toast.success(t("created_successfully"));
       emit("refresh");
       isSubmitted.value = false;
@@ -133,7 +133,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
 
 <template>
   <div
-      id="news_template"
+      id="splash"
       class="uk-flex-top"
       uk-modal
       @shown="openModal"
@@ -311,7 +311,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
       <div
           class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
       >
-        <button uk-toggle="target: #news_template" class="btn-secondary">
+        <button uk-toggle="target: #splash" class="btn-secondary">
           {{ t("Отмена") }}
         </button>
 

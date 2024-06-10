@@ -13,6 +13,7 @@ import PrivacyPolicy from "../components/PrivacyPolicy.vue";
 import TermsAndConditions from "../components/TermsAndConditions.vue"
 import Contacts from "../components/Links.vue";
 import Category from "../components/Categories.vue"
+import Splash from "../components/Splash.vue";
 import {ref} from 'vue'
 import Polls from '../components/Polls.vue'
 
@@ -67,6 +68,10 @@ const selectedTitle = (val: any) => {
 
       <Tab title="contacts">
         <Contacts :knowledge="knowledge"/>
+      </Tab>
+
+      <Tab title="splash">
+        <Splash :knowledge="knowledge"/>
       </Tab>
 
       <Tab title="recipe category">
