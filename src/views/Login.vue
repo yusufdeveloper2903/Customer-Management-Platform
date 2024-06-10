@@ -69,7 +69,7 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
         <h2
             class="text-center text-4xl font-bold text-gray-700 dark:text-white"
         >
-          {{ $t("Login") }}
+          {{ t("Login") }}
         </h2>
       </div>
 
@@ -80,7 +80,7 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
               <label
                   for="login"
                   class="text-sm text-gray-600 dark:text-gray-200"
-              >{{ $t("Login") }}</label
+              >{{ t("Login") }}</label
               >
             </div>
             <input

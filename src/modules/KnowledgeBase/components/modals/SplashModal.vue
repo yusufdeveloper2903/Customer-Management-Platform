@@ -8,12 +8,15 @@ import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
-import Tabs from "@/components/Tab/Tabs.vue";
-import Tab from "@/components/Tab/Tab.vue";
 import knowledgeBase from "../../store/index";
-import {NewsTemplate} from "../../interfaces";
+import {Splash} from "../../interfaces";
 import FileInput from "@/components/FileInput/FileInput.vue";
 import {objectToFormData} from "@/mixins/formmatter";
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
+
+
+
 
 
 //DECLARED VARIABLES
@@ -21,65 +24,48 @@ const {t} = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase();
 const emit = defineEmits(["refresh"]);
-const propData = defineProps<{ editData: NewsTemplate }>();
-let newsTemplateData = ref<NewsTemplate>({
+const propData = defineProps<{ editData: Splash }>();
+let splashData = ref<Splash>({
   id: null,
-  title: '',
   title_ru: '',
   title_uz: '',
   title_kr: '',
-  description: '',
-  description_ru: '',
-  description_kr: '',
-  description_uz: '',
-  file: null,
-  url: "",
+  color: "",
+  image: null,
+  version: "",
+  is_active: false,
+
 });
 
 
 //FUNCTIONS
 function openModal() {
   if (propData.editData.id) {
-    newsTemplateData.value.title = propData.editData.title
-    newsTemplateData.value.title_ru = propData.editData.title_ru
-    newsTemplateData.value.title_uz = propData.editData.title_uz
-    newsTemplateData.value.title_kr = propData.editData.title_kr
-    newsTemplateData.value.description = propData.editData.description
-    newsTemplateData.value.description_ru = propData.editData.description_ru
-    newsTemplateData.value.description_kr = propData.editData.description_kr
-    newsTemplateData.value.description_uz = propData.editData.description_uz
-    newsTemplateData.value.file = propData.editData.file
-    newsTemplateData.value.url = propData.editData.url
-    newsTemplateData.value.id = propData.editData.id
+    splashData.value.title_ru = propData.editData.title_ru
+    splashData.value.title_uz = propData.editData.title_uz
+    splashData.value.title_kr = propData.editData.title_kr
+    splashData.value.image = propData.editData.image
+    splashData.value.id = propData.editData.id
   }
 }
 
 const hideModal = () => {
   validate.value.$reset()
-  newsTemplateData.value.title = ''
-  newsTemplateData.value.title_ru = ''
-  newsTemplateData.value.title_uz = ''
-  newsTemplateData.value.title_kr = ''
-  newsTemplateData.value.description = ''
-  newsTemplateData.value.description_ru = ''
-  newsTemplateData.value.description_kr = ''
-  newsTemplateData.value.description_uz = ''
-  newsTemplateData.value.file = null
-  newsTemplateData.value.url = ""
-  newsTemplateData.value.id = null
+  splashData.value.title_ru = ''
+  splashData.value.title_uz = ''
+  splashData.value.title_kr = ''
+  splashData.value.image = null
+  splashData.value.id = null
 
 }
 const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
-  newsTemplateData.value.title = newsTemplateData.value.title_uz;
-  newsTemplateData.value.description = newsTemplateData.value.description_uz;
-
 
   if (propData.editData.id) {
     try {
-      const fd = objectToFormData(['file'], newsTemplateData.value);
-      await store.updateNewsTemplate(fd)
+      const fd = objectToFormData(['image'], splashData.value);
+      await store.updateSplash(fd)
       await UIkit.modal("#splash").hide();
       toast.success(t("updated_successfully"));
       isSubmitted.value = false;
@@ -90,8 +76,8 @@ const updateDeal = async () => {
     }
   } else {
     try {
-      const fd = objectToFormData(['file'], newsTemplateData.value);
-      await store.createNewsTemplate(fd)
+      const fd = objectToFormData(['image'], splashData.value);
+      await store.createSplash(fd)
       await UIkit.modal("#splash").hide();
       toast.success(t("created_successfully"));
       emit("refresh");
@@ -115,19 +101,10 @@ const rules = computed(() => {
     title_uz: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
-    description_ru: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
-    },
-    description_kr: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
-    },
-    description_uz: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
-    },
   };
 });
 
-const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
+const validate: Ref<Validation> = useVuelidate(rules, splashData);
 
 </script>
 
@@ -150,8 +127,8 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
       </div>
 
       <div class="uk-modal-body py-4">
-        <Tabs class="mb-4">
-          <Tab title="UZ">
+        <ModalTabs class="mb-4">
+          <ModalTab title="UZ">
             <form>
               <label for="nameUz"
               >{{ t('name') + ' ' + t('UZ') }}
@@ -159,8 +136,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="t('name')"
-                    v-model="newsTemplateData.title_uz"
+                    v-model="splashData.title_uz"
                     :class="validate.title_uz.$errors.length ? 'required-input' : ''"
                 />
                 <p
@@ -172,30 +148,9 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                 </p>
               </label>
 
-              <label class="mt-4 block" for="descriptionUz"
-              >{{ t('description') + ' ' + t('UZ') }}
-                <input
-                    id="descriptionUz"
-                    type="text"
-                    class="form-input"
-                    :placeholder="t('description')"
-                    v-model="newsTemplateData.description_uz"
-                    :class="validate.description_uz.$errors.length
-                      ? 'required-input'
-                      : ''
-                  "
-                />
-                <p
-                    v-for="error in validate.description_uz.$errors"
-                    :key="error.$uid"
-                    class="text-danger text-sm"
-                >
-                  {{ t(error.$message) }}
-                </p>
-              </label>
             </form>
-          </Tab>
-          <Tab title="KR">
+          </ModalTab>
+          <ModalTab title="KR">
             <form>
               <label for="nameUz"
               >{{ t('name') + ' ' + t('KR') }}
@@ -203,8 +158,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="t('name')"
-                    v-model="newsTemplateData.title_kr"
+                    v-model="splashData.title_kr"
                     :class="validate.title_kr.$errors.length ? 'required-input' : ''"
                 />
                 <p
@@ -215,32 +169,10 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                   {{ t(error.$message) }}
                 </p>
               </label>
-
-              <label class="mt-4 block" for="descriptionUz"
-              >{{ t('description') + ' ' + t('KR') }}
-                <input
-                    id="descriptionUz"
-                    type="text"
-                    class="form-input"
-                    :placeholder="t('description')"
-                    v-model="newsTemplateData.description_kr"
-                    :class="validate.description_kr.$errors.length
-                      ? 'required-input'
-                      : ''
-                  "
-                />
-                <p
-                    v-for="error in validate.description_kr.$errors"
-                    :key="error.$uid"
-                    class="text-danger text-sm"
-                >
-                  {{ t(error.$message) }}
-                </p>
-              </label>
             </form>
-          </Tab>
+          </ModalTab>
 
-          <Tab title="Ru">
+          <ModalTab title="RU">
             <form>
               <label for="nameRu"
               >{{ t('name') + ' ' + t('RU') }}
@@ -248,8 +180,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="nameRu"
                     type="text"
                     class="form-input"
-                    :placeholder="t('name')"
-                    v-model="newsTemplateData.title_ru"
+                    v-model="splashData.title_ru"
                     :class="validate.title_ru.$errors.length ? 'required-input' : ''
                   "
                 />
@@ -262,50 +193,56 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                 </p>
               </label>
 
-              <label class="mt-4 block" for="descriptionRu"
-              >{{ t('description') + ' ' + t('RU') }}
+            </form>
+          </ModalTab>
+        </ModalTabs>
+
+        <label for="version"
+              >{{ t('version') }}
                 <input
-                    id="descriptionRu"
+                    id="version"
                     type="text"
                     class="form-input"
-                    :placeholder="t('description')"
-                    v-model="newsTemplateData.description_ru"
-                    :class=" validate.description_ru.$errors.length
-                      ? 'required-input'
-                      : ''
-                  "
+                    v-model="splashData.version"
                 />
-                <p
-                    v-for="error in validate.description_ru.$errors"
-                    :key="error.$uid"
-                    class="text-danger text-sm"
-                >
-                  {{ t(error.$message) }}
-                </p>
-              </label>
-            </form>
-          </Tab>
-        </Tabs>
-        <label for="nameUz"
-        >{{ t('Link') }}
-          <input
-              id="nameUz"
-              type="text"
-              class="form-input mb-4"
-              :placeholder="t('Link')"
-              v-model="newsTemplateData.url"
-          />
-        </label>
 
+              </label>
+
+              <label for="color" class="my-4 block"
+              >{{ t('color') }}
+                <input
+                    id="color"
+                    type="text"
+                    class="form-input"
+                    v-model="splashData.color"
+                />
+              </label>
+
+            
         <label
         >{{ t('photo') }}
           <FileInput
-              v-model="newsTemplateData.file"
-              @remove="newsTemplateData.file = null"
+              v-model="splashData.image"
+              @remove="splashData.image = null"
               :typeModal="propData.editData.id"
               name="news-template"
           />
         </label>
+
+        <div class="flex items-center mt-5">
+        <p class="mr-2">{{ t("Status") }}:</p>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+                type="checkbox"
+                v-model="splashData.is_active"
+                class="sr-only peer"
+            />
+            <div
+                className="w-11 h-6 bg-gray-200 peer-focus:outline-none
+          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
+            ></div>
+          </label>
+        </div>
       </div>
 
       <div

@@ -341,4 +341,14 @@ export const recipeCategoryFields = [
     { text: "actions", value: "actions" },
 ]
 
+export const splashFields = [
+    { text: "ID", value: "id" },
+    { text: "title", value: "title" },
+    { text: "image", value: "image" },
+    { text: "version", value: "version" },
+    { text: "color", value: "color" },
+    { text: "is_active", value: "is_active" },
+    { text: "actions", value: "actions" },
+]
+
 

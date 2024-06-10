@@ -2,13 +2,13 @@
 
 
 //IMPORTED FILES
-import {newsTemplateTable} from "../constants";
+import {splashFields} from "../constants";
 import knowledgeBase from ".././store/index";
 import {nextTick, onMounted, reactive, ref, watch} from "vue";
 import {useI18n} from "vue-i18n";
 import UIKit from "uikit";
 import SplashModal from "./modals/SplashModal.vue";
-import {NewsTemplate} from "../interfaces/index";
+import {Splash} from "../interfaces/index";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
 import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
@@ -20,18 +20,15 @@ const {t, locale} = useI18n()
 const store = knowledgeBase();
 const isLoading = ref(false);
 const itemToDelete = ref<number | null>(null);
-const dataToEdit = ref<NewsTemplate>({
-  id: null,
-  title: '',
+const dataToEdit = ref<Splash>({
+    id: null,
+  title_ru: '',
   title_uz: '',
   title_kr: '',
-  title_ru: '',
-  description: '',
-  description_uz: '',
-  description_kr: '',
-  description_ru: '',
-  file: null,
-  url: "",
+  color: "",
+  image: null,
+  version: "",
+  is_active: false,
 });
 const params = reactive({
   page: 1,
@@ -72,11 +69,11 @@ watchDebounced(() => params.search, async function () {
 
 //FUNCTIONS
 const refresh = async () => {
-  await store.getNewsTemplate(params);
+  await store.getSplash(params);
 };
 const openModal = () => {
   UIkit.modal("#splash").show()
-  dataToEdit.value = <NewsTemplate>{};
+  dataToEdit.value = <Splash>{};
 }
 
 
@@ -89,10 +86,10 @@ const onShowFile = (item: any) => {
 const deleteAction = async () => {
   isLoading.value = true
   try {
-    await store.deleteNewsTemplate(itemToDelete.value)
-    await UIKit.modal("#newstemplate-main-delete-modal").hide();
+    await store.deleteSplash(itemToDelete.value)
+    await UIKit.modal("#splash-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if (store.newTemplate.count > 1 && ((store.newTemplate.count - 1) % params.page_size == 0)) {
+    if (store.splashList.count > 1 && ((store.splashList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -114,7 +111,7 @@ const onPageSizeChanged = (e: number) => {
 }
 const handleDeleteModal = (id: number) => {
   itemToDelete.value = id
-  UIKit.modal("#newstemplate-main-delete-modal").show()
+  UIKit.modal("#splash-delete-modal").show()
 };
 
 </script>
@@ -140,32 +137,29 @@ const handleDeleteModal = (id: number) => {
         theme-color="#7367f0"
         hide-footer
         :loading="isLoading"
-        :headers="newsTemplateTable"
-        :items="store.newTemplate.results"
+        :headers="splashFields"
+        :items="store.splashList.results"
     >
       <template #empty-message>
         <div>{{ t('no_available_data') }}</div>
       </template>
+
       <template #header="header">
         {{ t(header.text) }}
       </template>
+
       <template #item-title="item">
         {{ item['title_' + locale] }}
       </template>
-      <template #item-description="item">
-        {{ item['description_' + locale] }}
-      </template>
-      <template #item-url="{ url }">
-        <a :href="url" class="">{{ url }}</a>
-      </template>
-      <template #item-photo="{ file }">
+
+      <template #item-image="{ image }">
         <div class="py-3 flex justify-left gap-3">
           <img
-              v-if="file"
+              v-if="image"
               class="w-[45px] h-[45px] rounded object-cover"
-              :src="file"
+              :src="image"
               alt="Rounded avatar"
-              @click="onShowFile(file)"
+              @click="onShowFile(image)"
           />
           <div
               v-else
@@ -175,6 +169,20 @@ const handleDeleteModal = (id: number) => {
           </div>
         </div>
       </template>
+
+      <template #item-is_active="items">
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+              type="checkbox"
+              :checked="items.is_active"
+              disabled
+              class="sr-only peer"
+          />
+          <div
+              class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"/>
+        </label>
+      </template>
+
       <template #item-actions="data">
         <div class="flex my-4 justify-left">
           <button uk-toggle="target: #splash" class="btn-warning btn-action" @click="dataToEdit = data">
@@ -192,7 +200,7 @@ const handleDeleteModal = (id: number) => {
     </EasyDataTable>
 
     <TwPagination
-        :total="store.newTemplate.count"
+        :total="store.splashList.count"
         class="mt-10 tw-pagination"
         :current="params.page"
         :restart="toRefresh"
@@ -203,7 +211,7 @@ const handleDeleteModal = (id: number) => {
         @per-page-changed="onPageSizeChanged"
     />
   </div>
-  <DeleteModal @delete-action="deleteAction" :id="'newstemplate-main-delete-modal'"/>
+  <DeleteModal @delete-action="deleteAction" :id="'splash-delete-modal'"/>
   <SplashModal :edit-data="dataToEdit" @refresh="refresh"/>
   <ShowFileModal :image="image" id="file-modal-image" ref="imageCard"/>
 </template>
