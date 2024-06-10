@@ -22,6 +22,10 @@ let smsTemplateList = ref<object[]>([]);
 const userId = ref<number | null>(null);
 const props = defineProps<{
   knowledge: string
+  params: {
+    page: number,
+    page_size: number
+  }
 }>();
 let toRefresh = ref(false)
 const params = reactive({
@@ -44,21 +48,30 @@ const editData = ref<editSms>({
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.page_size = JSON.parse(page_size)
+  }
   let knowledgeBase = localStorage.getItem('knowledgeBase')
+
   if (knowledgeBase == 'sms_template') {
     await refresh()
-  } else {
-    await refresh()
   }
-
-})
+});
 
 
 //WATCHERS
 watch(() => props.knowledge, async function (val) {
   toRefresh.value = !toRefresh.value
   if (val == 'sms_template') {
+    params.page = props.params.page
+    params.page_size = props.params.page_size
     await refresh()
+
   }
 })
 watchDebounced(() => params.search, async function () {
@@ -120,9 +133,9 @@ const saveSmsTemplate = () => {
 <template>
   <div class="card">
     <div class="flex justify-between items-end mb-7">
-      <label for="search" class="w-1/4">
+      <label for="search">
         {{ $t('Search') }}
-        <input type="text" class="form-input" :placeholder="$t('Search')"
+        <input type="text" class="form-input"
                v-model="params.search"/>
       </label>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
@@ -148,9 +161,13 @@ const saveSmsTemplate = () => {
       <template #item-description="item">
         {{ item.description }}
       </template>
-
+      <template #header-actions="item">
+        <div class="flex justify-end">
+          {{ $t(item.text) }}
+        </div>
+      </template>
       <template #item-actions="item">
-        <div class="flex my-4 justify-left">
+        <div class="flex my-4 justify-end">
           <button class="btn-warning btn-action" uk-toggle="target: #sms_template" @click="editData = item">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>

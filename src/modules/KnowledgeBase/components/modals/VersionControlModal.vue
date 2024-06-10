@@ -18,7 +18,8 @@ const store = knowledgeBase()
 const emits = defineEmits(["saveVersionControl"]);
 let versionControlData = ref({
   number: "",
-  description: ""
+  description: "",
+  is_active: false,
 })
 const propData = defineProps<{ editData: EditVersion }>();
 
@@ -28,6 +29,7 @@ function openModal() {
   if (propData.editData.id) {
     versionControlData.value.number = propData.editData.number
     versionControlData.value.description = propData.editData.description
+    versionControlData.value.is_active = propData.editData.is_active
   }
 }
 
@@ -86,7 +88,7 @@ const validate: Ref<Validation> = useVuelidate(rules, versionControlData);
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? $t("Change") : $t('Add') }}
+          {{ propData.editData.id ? $t("ChangeVersion") : $t('AddVersion') }}
         </h2>
       </div>
 
@@ -96,7 +98,6 @@ const validate: Ref<Validation> = useVuelidate(rules, versionControlData);
           <input
               type="text"
               class="form-input"
-              :placeholder="$t('version_number')"
               v-model="versionControlData.number"
               :class="validate.number.$errors.length ? 'required-input' : ''"
           />
@@ -108,16 +109,26 @@ const validate: Ref<Validation> = useVuelidate(rules, versionControlData);
             {{ $t(error.$message) }}
           </p>
           <div class="mt-3">
-            <label>{{ $t('Description') }} </label>
+            <label>{{ $t('description') }} </label>
             <textarea
                 type="text"
                 class="form-input"
-                :placeholder="$t('Description')"
                 v-model="versionControlData.description"
                 :class="validate.number.$errors.length ? 'required-input' : ''"
             />
           </div>
-
+          <p class=" mt-5 mb-1">{{ $t("Status") }}:</p>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+                type="checkbox"
+                v-model="versionControlData.is_active"
+                class="sr-only peer"
+            />
+            <div
+                className="w-11 h-6 bg-gray-200 peer-focus:outline-none
+          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
+            ></div>
+          </label>
         </form>
       </div>
 
@@ -129,11 +140,6 @@ const validate: Ref<Validation> = useVuelidate(rules, versionControlData);
         </button>
 
         <button :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal">
-          <img
-              src="@/assets/image/loading.svg"
-              alt="loading.svg"
-              class="inline w-4 h-4 text-white animate-spin mr-2"
-          />
           <span>{{ propData.editData.id ? $t("Change") : $t('Add') }}</span>
         </button>
       </div>

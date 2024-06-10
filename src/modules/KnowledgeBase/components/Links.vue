@@ -23,6 +23,10 @@ const items = ref<Link[]>([]);
 const currentRow = ref<Link | null>(null);
 const props = defineProps<{
   knowledge: string
+  params: {
+    page: number,
+    page_size: number
+  }
 }>();
 const params = reactive({
   page_size: 10,
@@ -38,6 +42,14 @@ const editLink = ref<EditLink>({
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.page_size = JSON.parse(page_size)
+  }
   let knowledgeBase = localStorage.getItem('knowledgeBase')
   if (knowledgeBase == 'contacts') {
     await refresh()
@@ -48,6 +60,8 @@ onMounted(async () => {
 //WATCHERS
 watch(() => props.knowledge, async function (val) {
   if (val == 'contacts') {
+    params.page = props.params.page
+    params.page_size = props.params.page_size
     await refresh()
   }
 })
@@ -140,7 +154,7 @@ const refresh = async () => {
         <td class="px-6 whitespace-no-wrap text-left">{{ item.type }}</td>
         <td class="px-6 whitespace-no-wrap text-left">{{ item.url }}</td>
         <td class="px-6 whitespace-no-wrap">
-          <div class="flex py-2 justify-left">
+          <div class="flex py-2 justify-end">
             <button class="btn-warning btn-action" uk-toggle="target: #links" @click="editLink = item">
               <Icon icon="Pen New Square" color="#fff" size="16"/>
             </button>
@@ -174,3 +188,10 @@ const refresh = async () => {
     <PhoneNumbers :knowledge="props.knowledge"/>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.firstTable:nth-child(4) {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>

@@ -8,18 +8,20 @@ import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
-import Tabs from "@/components/Tab/Tabs.vue";
-import Tab from "@/components/Tab/Tab.vue";
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
 import knowledgeBase from "../../store/index";
 import {NewsTemplate} from "../../interfaces";
 import FileInput from "@/components/FileInput/FileInput.vue";
 import {objectToFormData} from "@/mixins/formmatter";
-
+import {useSidebarStore} from '@/stores/layoutConfig'
 
 //DECLARED VARIABLES
+const emptyData = ref(false)
 const {t} = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase();
+const general = useSidebarStore()
 const emit = defineEmits(["refresh"]);
 const propData = defineProps<{ editData: NewsTemplate }>();
 let newsTemplateData = ref<NewsTemplate>({
@@ -39,6 +41,7 @@ let newsTemplateData = ref<NewsTemplate>({
 
 //FUNCTIONS
 function openModal() {
+  emptyData.value = true
   if (propData.editData.id) {
     newsTemplateData.value.title = propData.editData.title
     newsTemplateData.value.title_ru = propData.editData.title_ru
@@ -56,6 +59,9 @@ function openModal() {
 
 const hideModal = () => {
   validate.value.$reset()
+  emptyData.value = false
+
+  general.tabs = 'UZ'
   newsTemplateData.value.title = ''
   newsTemplateData.value.title_ru = ''
   newsTemplateData.value.title_uz = ''
@@ -70,6 +76,13 @@ const hideModal = () => {
 
 }
 const updateDeal = async () => {
+  if (!newsTemplateData.value.title_uz && !newsTemplateData.value.description_uz) {
+    general.tabs = 'UZ'
+  } else if (!newsTemplateData.value.title_kr && !newsTemplateData.value.description_kr) {
+    general.tabs = 'KR'
+  } else if (!newsTemplateData.value.title_ru && !newsTemplateData.value.description_ru) {
+    general.tabs = 'RU'
+  }
   const success = await validate.value.$validate();
   if (!success) return;
   newsTemplateData.value.title = newsTemplateData.value.title_uz;
@@ -134,8 +147,8 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
 <template>
   <div
       id="news_template"
-      class="uk-flex-top"
-      uk-modal
+      class="uk-flex-top "
+      uk-modal="bgClose:false"
       @shown="openModal"
       @hidden="hideModal"
   >
@@ -145,13 +158,12 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? t("Edit") : t("Add") }}
+          {{ propData.editData.id ? $t("EditNestTemplate") : $t("AddNewsTemplate") }}
         </h2>
       </div>
-
       <div class="uk-modal-body py-4">
-        <Tabs class="mb-4">
-          <Tab title="UZ">
+        <ModalTabs class="mb-4">
+          <ModalTab title="UZ">
             <form>
               <label for="nameUz"
               >{{ t('name') + ' ' + t('UZ') }}
@@ -159,7 +171,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="t('name')"
                     v-model="newsTemplateData.title_uz"
                     :class="validate.title_uz.$errors.length ? 'required-input' : ''"
                 />
@@ -178,7 +189,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="descriptionUz"
                     type="text"
                     class="form-input"
-                    :placeholder="t('description')"
                     v-model="newsTemplateData.description_uz"
                     :class="validate.description_uz.$errors.length
                       ? 'required-input'
@@ -194,8 +204,8 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                 </p>
               </label>
             </form>
-          </Tab>
-          <Tab title="KR">
+          </ModalTab>
+          <ModalTab title="KR">
             <form>
               <label for="nameUz"
               >{{ t('name') + ' ' + t('KR') }}
@@ -203,7 +213,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="t('name')"
                     v-model="newsTemplateData.title_kr"
                     :class="validate.title_kr.$errors.length ? 'required-input' : ''"
                 />
@@ -222,7 +231,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="descriptionUz"
                     type="text"
                     class="form-input"
-                    :placeholder="t('description')"
                     v-model="newsTemplateData.description_kr"
                     :class="validate.description_kr.$errors.length
                       ? 'required-input'
@@ -238,9 +246,9 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                 </p>
               </label>
             </form>
-          </Tab>
+          </ModalTab>
 
-          <Tab title="Ru">
+          <ModalTab title="RU">
             <form>
               <label for="nameRu"
               >{{ t('name') + ' ' + t('RU') }}
@@ -248,7 +256,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="nameRu"
                     type="text"
                     class="form-input"
-                    :placeholder="t('name')"
                     v-model="newsTemplateData.title_ru"
                     :class="validate.title_ru.$errors.length ? 'required-input' : ''
                   "
@@ -268,7 +275,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="descriptionRu"
                     type="text"
                     class="form-input"
-                    :placeholder="t('description')"
                     v-model="newsTemplateData.description_ru"
                     :class=" validate.description_ru.$errors.length
                       ? 'required-input'
@@ -284,15 +290,14 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                 </p>
               </label>
             </form>
-          </Tab>
-        </Tabs>
+          </ModalTab>
+        </ModalTabs>
         <label for="nameUz"
         >{{ t('Link') }}
           <input
               id="nameUz"
               type="text"
               class="form-input mb-4"
-              :placeholder="t('Link')"
               v-model="newsTemplateData.url"
           />
         </label>
@@ -300,10 +305,12 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
         <label
         >{{ t('photo') }}
           <FileInput
+              :empty="emptyData"
               v-model="newsTemplateData.file"
               @remove="newsTemplateData.file = null"
               :typeModal="propData.editData.id"
               name="news-template"
+              id="news-template-id"
           />
         </label>
       </div>
@@ -312,7 +319,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
           class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
       >
         <button uk-toggle="target: #news_template" class="btn-secondary">
-          {{ t("Отмена") }}
+          {{ $t("Cancel") }}
         </button>
 
         <button

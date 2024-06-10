@@ -112,10 +112,14 @@ export const Regions = [
 ];
 
 
-export const newsTemplateTable = [
+export const OnboardingTable = [
     {
         text: "ID",
         value: "id",
+    },
+    {
+        text: "photo",
+        value: "image",
     },
     {
         text: "name",
@@ -125,10 +129,32 @@ export const newsTemplateTable = [
         text: "description",
         value: "description",
     },
+
+
+    {
+        text: "actions",
+        value: "actions",
+    },
+];
+
+export const newsTemplateTable = [
+    {
+        text: "ID",
+        value: "id",
+    },
     {
         text: "photo",
         value: "photo",
     },
+    {
+        text: "name",
+        value: "title",
+    },
+    {
+        text: "description",
+        value: "description",
+    },
+
 
     {
         text: "actions",
@@ -173,17 +199,19 @@ export const productsFields = [
         value: 'id'
     },
     {
-        text: "Number (multi-digit-code)",
-        value: "code"
+        text: "photo",
+        value: "image"
     },
     {
         text: "name",
         value: "title"
     },
     {
-        text: "photo",
-        value: "image"
+        text: "Number (multi-digit-code)",
+        value: "code"
     },
+
+
     {
         text: "price",
         value: "price"

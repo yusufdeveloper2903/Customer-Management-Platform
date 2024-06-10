@@ -3,7 +3,7 @@
 
 //IMPORTED FILES
 import {headerProduct} from "../constants";
-import {reactive, ref,} from "vue";
+import {onMounted, reactive, ref,} from "vue";
 import CreateProducts from "../components/CreateProductModal.vue";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
@@ -41,9 +41,26 @@ watchDebounced(
     () => params.search,
     async () => {
       params.page = 1;
+      localStorage.setItem('page', '1')
+
       await refresh(params)
     }, {deep: true, debounce: 500, maxWait: 5000}
 );
+
+
+
+//MOUNTED
+onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.page_size = JSON.parse(page_size)
+  }
+  await refresh(params)
+});
 
 //FUNCTIONS
 const changePagionation = (e: number) => {
@@ -72,7 +89,6 @@ const refresh = async (params: any) => {
   }
   isLoading.value = false;
 };
-refresh(params)
 const deleteAction = async () => {
   isLoading.value = true
   try {
@@ -114,9 +130,9 @@ const dragDrop = async (item: Link) => {
 <template>
   <div class="card">
     <div class="flex justify-between items-end mb-7">
-      <label for="search" class="w-1/4">
+      <label for="search" >
         {{ $t('Search') }}
-        <input type="text" class="form-input" :placeholder="$t('Search')" v-model="params.search"/>
+        <input type="text" class="form-input"  v-model="params.search"/>
       </label>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
               uk-toggle="target: #create_and_edit_category" @click="editData={}">

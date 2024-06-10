@@ -1,37 +1,30 @@
 <script setup lang="ts">
 
 //IMPORTED FILES
-import {useSidebarStore} from "@/stores/layoutConfig";
 import {useRouter} from "vue-router";
 import {ListInterface} from '@/interface/index'
 
 
 //DECLARED VARIABLES
-const store = useSidebarStore();
 const router = useRouter();
 defineProps<{ list: ListInterface[] }>();
 
+
 //FUNCTIONS
-const onBefore = (item: any) => {
-  console.log(item, 'item')
+const onBefore = (item: ListInterface) => {
   if (!item.active) {
     router.go(-1);
   }
 };
 
 </script>
-<style>
-.breadcolor {
-  color: #356c2d
-}
-</style>
 <template>
   <div>
     <nav class="mb-5 mt-1 flex card">
       <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <Icon
             icon="Home"
-            :color="store.currentTheme == 'light' ? '#356c2d' : '#356c2d'"
+            color="green"
             size="20"
             class="mb-1"
             style="cursor: pointer"
@@ -61,7 +54,7 @@ const onBefore = (item: any) => {
               style="margin-top: 2px"
               :class="
               item && !item.active
-                ? 'inline-flex items-center breadcolor hover:text-secondary hover:no-underline ml-1 '
+                ? 'inline-flex items-center  text-success hover:text-secondary hover:no-underline ml-1 '
                 : 'ml-1 text-gray-500        hover:no-underline hover:text-gray-500'
             "
           >
@@ -83,7 +76,9 @@ const onBefore = (item: any) => {
                   />
                 </svg>
               </span>
-              <span>{{ $t(item.title) }}</span>
+              <span
+                  :class="item && !item.active ? 'dark:text-success' :''"
+              >{{ $t(item.title) }}</span>
             </div>
           </a>
         </li>
@@ -91,4 +86,8 @@ const onBefore = (item: any) => {
     </nav>
   </div>
 </template>
-
+<style>
+.breadcolor {
+  color: #356c2d
+}
+</style>

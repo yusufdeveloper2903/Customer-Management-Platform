@@ -27,28 +27,39 @@ const smsFilter = reactive({
   start_time: null,
 });
 const props = defineProps<{
-  sms: string
+  sms: string,
+  params: {
+    page: number,
+    page_size: number
+  },
 }>();
 let toRefresh = ref(false)
 
 
 //MOUNTED
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    smsFilter.page = JSON.parse(page)
+  }
+  if (page_size) {
+    smsFilter.page_size = JSON.parse(page_size)
+  }
   let sms = localStorage.getItem('sms')
   if (sms == 'sms sending') {
     await refresh();
     await store.getStatus()
-  } else {
-    await refresh();
-    await store.getStatus()
   }
-})
+});
 
 
 // WATCHERS
 watch(() => props.sms, async function (val) {
   toRefresh.value = !toRefresh.value
   if (val == 'sms sending') {
+    smsFilter.page = props.params.page
+    smsFilter.page_size = props.params.page_size
     await refresh();
     await store.getStatus()
   }
@@ -60,6 +71,8 @@ watchDebounced(
     () => smsFilter.search,
     () => {
       smsFilter.page = 1
+      localStorage.setItem('page', '1')
+
       refresh()
     }, {deep: true, debounce: 500, maxWait: 5000}
 );
@@ -123,7 +136,7 @@ const deleteSms = async () => {
   <div>
     <div class="md:flex items-end justify-between mb-7">
       <form class="md:flex items-center gap-5 md:w-9/12">
-        <div class="md:w-1/3">
+        <div>
           <label for="search" class="dark:text-gray-300">
             {{ $t("Search") }}
           </label>
@@ -172,9 +185,13 @@ const deleteSms = async () => {
         <div>{{ (item.start_time) }}</div>
       </template>
 
-
+      <template #header-actions="item">
+        <div class="flex justify-end">
+          {{ $t(item.text) }}
+        </div>
+      </template>
       <template #item-actions="items">
-        <div class="flex my-2">
+        <div class="flex my-2 justify-end">
           <button class="btn-warning btn-action" @click="
                 router.push(`/sms-detail/${items.id}`)
               ">

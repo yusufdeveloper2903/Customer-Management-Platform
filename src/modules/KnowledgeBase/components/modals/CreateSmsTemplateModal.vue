@@ -101,7 +101,7 @@ const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
       <button class="uk-modal-close-default" @click="clearData" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? $t("Change") : $t('Add') }}
+          {{ propData.editData.id ? $t("ChangeSmsTemplate") : $t('AddSmsTemplate') }}
         </h2>
       </div>
       <div class="uk-modal-body py-4">
@@ -112,7 +112,6 @@ const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
                 id="nameUz"
                 type="text"
                 class="form-input"
-                :placeholder="$t('name')"
                 v-model="smsTemplateData.title"
                 :class="validate.title.$errors.length ? 'required-input' : ''"
             />
@@ -131,7 +130,6 @@ const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
                 id="descriptionUz"
                 type="text"
                 class="form-input"
-                :placeholder="$t('description')"
                 v-model="smsTemplateData.description"
                 :class="validate.description.$errors.length ? 'required-input' : ''"
             />

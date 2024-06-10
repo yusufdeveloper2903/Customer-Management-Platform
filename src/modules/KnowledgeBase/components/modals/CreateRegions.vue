@@ -7,14 +7,15 @@ import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
-import Tabs from "@/components/Tab/Tabs.vue";
-import Tab from "@/components/Tab/Tab.vue";
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
 import knowledgeBase from "../../store/index";
 import {editRegionModal} from '../../interfaces/index'
-
+import {useSidebarStore} from '@/stores/layoutConfig'
 
 //DECLARED VARIABLES
 const {t} = useI18n();
+const general = useSidebarStore()
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase()
 const emits = defineEmits(["saveSmsTemplate"]);
@@ -39,12 +40,20 @@ function openModal() {
 
 function hideModal() {
   validate.value.$reset()
+  general.tabs = 'UZ'
   smsTemplateData.value.name_uz = ''
   smsTemplateData.value.name_ru = ''
   smsTemplateData.value.name_kr = ''
 }
 
 const updateDeal = async () => {
+  if (!smsTemplateData.value.name_uz) {
+    general.tabs = 'UZ'
+  } else if (!smsTemplateData.value.name_kr) {
+    general.tabs = 'KR'
+  } else if (!smsTemplateData.value.name_ru) {
+    general.tabs = 'RU'
+  }
   smsTemplateData.value.name = smsTemplateData.value.name_uz
   const success = await validate.value.$validate();
   if (!success) return;
@@ -108,15 +117,14 @@ const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
         </h2>
       </div>
       <div class="uk-modal-body py-4">
-        <Tabs class="mb-4">
-          <Tab title="UZ">
+        <ModalTabs class="mb-4">
+          <ModalTab title="UZ">
             <form>
               <label for="nameUz">{{ $t('name') + ' ' + $t('UZ') }}
                 <input
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('name')"
                     v-model="smsTemplateData.name_uz"
                     :class="validate.name_uz.$errors.length ? 'required-input' : ''"
                 />
@@ -131,15 +139,14 @@ const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
 
 
             </form>
-          </Tab>
-          <Tab title="KR">
+          </ModalTab>
+          <ModalTab title="KR">
             <form>
               <label for="nameUz">{{ $t('name') + ' ' + $t('KR') }}
                 <input
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('name')"
                     v-model="smsTemplateData.name_kr"
                     :class="validate.name_kr.$errors.length ? 'required-input' : ''"
                 />
@@ -154,15 +161,14 @@ const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
 
 
             </form>
-          </Tab>
-          <Tab title="RU">
+          </ModalTab>
+          <ModalTab title="RU">
             <form>
               <label for="nameUz">{{ $t('name') + ' ' + $t('RU') }}
                 <input
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    :placeholder="$t('name')"
                     v-model="smsTemplateData.name_ru"
                     :class="validate.name_ru.$errors.length ? 'required-input' : ''"
                 />
@@ -177,8 +183,8 @@ const validate: Ref<Validation> = useVuelidate(rules, smsTemplateData);
 
 
             </form>
-          </Tab>
-        </Tabs>
+          </ModalTab>
+        </ModalTabs>
       </div>
 
       <div

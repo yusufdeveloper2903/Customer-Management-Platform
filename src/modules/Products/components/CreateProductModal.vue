@@ -5,18 +5,19 @@ import productStore from '../store/index'
 import {Ref, ref, computed} from "vue";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
-import Tabs from "@/components/Tab/Tabs.vue";
-import Tab from "@/components/Tab/Tab.vue";
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
 import {useI18n} from 'vue-i18n'
 import {toast} from "vue3-toastify";
 import UIkit from "uikit";
 import {EditDataFirst} from '../Interfaces/index'
-
+import {useSidebarStore} from '@/stores/layoutConfig'
 
 //DECLARED VARIABLES
 const propData = defineProps<{
   editData: EditDataFirst
 }>();
+const general = useSidebarStore()
 const emits = defineEmits(["saveProducts"]);
 const productStorage = productStore()
 const {t} = useI18n()
@@ -33,6 +34,13 @@ let productsCategory = ref({
 
 //FUNCTIONS
 const saveData = async () => {
+  if (!productsCategory.value.title_uz) {
+    general.tabs = 'UZ'
+  } else if (!productsCategory.value.title_kr) {
+    general.tabs = 'KR'
+  } else if (!productsCategory.value.title_ru) {
+    general.tabs = 'RU'
+  }
   const success = await validate.value.$validate();
   if (!success) return;
   productsCategory.value.title = productsCategory.value.title_uz;
@@ -83,6 +91,7 @@ function openModal() {
 
 
 const onHide = () => {
+  general.tabs = 'UZ'
   productsCategory.value.title_uz = ""
   productsCategory.value.title_ru = ""
   productsCategory.value.title_kr = ""
@@ -120,13 +129,13 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? $t("Change") : $t('Add') }}
+          {{ propData.editData.id ? $t("ChangeCategoryProduct") : $t('AddCategoryProduct') }}
         </h2>
       </div>
 
       <div class="uk-modal-body py-4">
-        <Tabs>
-          <Tab title="UZ">
+        <ModalTabs>
+          <ModalTab title="UZ">
             <form>
               <label>{{ t('name') + ' ' + t('UZ') }} </label>
               <input
@@ -145,8 +154,8 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
 
 
             </form>
-          </Tab>
-          <Tab title="KR">
+          </ModalTab>
+          <ModalTab title="KR">
             <form>
               <label>{{ t('name') + ' ' + t('KR') }}</label>
               <input
@@ -165,10 +174,10 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
 
 
             </form>
-          </Tab>
+          </ModalTab>
 
 
-          <Tab title="RU">
+          <ModalTab title="RU">
             <form>
               <label for="nameRu">{{ t('name') + ' ' + t('RU') }}</label>
               <input
@@ -186,8 +195,8 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
                 {{ $t(error.$message) }}
               </p>
             </form>
-          </Tab>
-        </Tabs>
+          </ModalTab>
+        </ModalTabs>
         <p class=" mt-5 mb-1">{{ $t("Status") }}:</p>
         <label className="relative inline-flex items-center cursor-pointer">
           <input

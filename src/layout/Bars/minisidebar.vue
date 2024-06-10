@@ -107,7 +107,6 @@
               v-model="search"
               type="search"
               autofocus
-              :placeholder="$t('Search')"
               class="mt-1 block w-full rounded-md border border-slate-300 bg-white py-3 pl-9 pr-3 text-xl text-gray-600 shadow-sm duration-150 placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-1"
               @keyup.enter="onEnter($event)"
               @input="onSearch($event.target.value)"

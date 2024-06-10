@@ -2,26 +2,19 @@
 
 //IMPORTED FILES
 import {nextTick, ref, watch} from "vue";
-import ShowFileModal from "./showFileModal.vue";
+import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
 import UIkit from "uikit";
+import {ReturnValue, FileInput} from '@/interface'
 
 
-
-
-//DECLARED VARIABLES
-interface ReturnValue {
-  item: string;
-  index: number;
-}
-
+//Interfaces Type
 interface Emits {
   (event: "update:modelValue", value: File | File[]): void;
 
-  (event: "remove", value: ReturnValue | string): void;
+  (event: "remove", value: ReturnValue | string);
 
   (event: "show", value: ReturnValue | string): void;
 }
-
 
 interface Props {
   modelValue: string | string[] | null;
@@ -30,22 +23,30 @@ interface Props {
   minus?: boolean;
   class?: string;
   multiple?: boolean;
-  name: string
+  name: string;
+  empty: boolean;
+  id: number | null | string
 }
 
+
+//DECLARED VARIABLES
 const props = withDefaults(defineProps<Props>(), {
   eye: true,
   minus: true,
   multiple: false,
+  empty: false,
   typeModal: null,
-  name: ''
+  name: '',
+  id: null
 });
+const pictureName = ref('')
+const changePhoto = ref<any>();
+const data = ref<FileInput | ''>()
 const emit = defineEmits<Emits>();
-const inputValue = ref<string | string[] | null>();
+const inputValue = ref<any>();
 const input = ref<boolean>(true);
-const image = ref<string>("");
-const imageCard = ref();
-const onShowFile = (item) => {
+const image = ref<string>('');
+const onShowFile = (item: string) => {
   image.value = item;
   nextTick(() => {
     UIkit.modal(`#${props.name}`).show();
@@ -59,6 +60,7 @@ watch(
     () => props.modelValue,
     () => {
       if (!props.modelValue) {
+        data.value = ''
         input.value = false;
         nextTick(() => {
           input.value = true;
@@ -69,36 +71,75 @@ watch(
       }
     }
 );
-const onInputFile = (value) => {
+watch(() => props.empty, (val) => {
+  if (!val) {
+    data.value = '';
+    changePhoto.value = '';
+    (document.getElementById(`${props.name}`) as HTMLInputElement).value = '';
+  }
+})
+const onInputFile = (value: any) => {
   const valueSize: File[] = Object.values(value.target.files);
-  if (valueSize.length === 1) emit("update:modelValue", value.target.files[0]);
-  else {
+  data.value = value.target.files[0];
+  if (valueSize.length === 1) {
+    emit("update:modelValue", value.target.files[0]);
+  } else {
     emit("update:modelValue", valueSize);
   }
 };
 
+const clearData = () => {
+  data.value = ''
+  changePhoto.value = ''
+  emit('remove', inputValue.value)
+  (document.getElementById(`${props.name}`) as HTMLInputElement).value = ''
+}
+const textFileInput = (val: any) => {
+  return val.length < 15
+      ? val.split("/").at(-1)
+      : val.split("/").at(-1)?.slice(0, 15) + "..."
+}
+const getFile = (event: any) => {
+  let input = event.target;
+  if (input.files && input.files[0]) {
+    pictureName.value = input.files[0].name;
+    let reader = new FileReader();
+    reader.onload = (e) => {
+      changePhoto.value = e?.target?.result;
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
 </script>
 
 <template>
-  <input
-      v-if="input"
-      class="form-file-input"
-      :class="props.class"
-      @input="onInputFile"
-      v-on="emit"
+  <div class="file_data">
+    <input
+        @change="getFile"
+        title=""
+        v-if="input "
+        :id="props.id"
+        class="form-file-input "
+        :class="input && data ? `fileUpload ${props.class}` :'fileEmpty'"
+        @input="onInputFile"
+        v-on="emit"
+        v-bind="props"
+        type="file"
+        :multiple="multiple"
+        accept="image/png,image/jpeg"
 
-      v-bind="props"
-      type="file"
-      :multiple="multiple"
-  />
+    />
+    <button v-if="data" @click.prevent="clearData" class="ml-3 btn-danger btn-action button_cancel"
+    >
+      <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
+    </button>
+  </div>
+
   <template v-if="typeof inputValue === 'string'">
     <div v-if="props.typeModal" class="flex justify-between items-center mt-3 mx-5" @click.prevent>
-      <span class="rounded bg-primary px-4 pb-0.5 text-white">{{
-          inputValue.length < 15
-              ? inputValue.split("/").at(-1)
-              : inputValue.split("/").at(-1)?.slice(0, 15) + "..."
-        }}</span>
-      <div class="flex justify-end gap-3 ml-3" >
+      <span class="rounded bg-primary px-4 pb-0.5 text-white">{{ textFileInput(inputValue) }}</span>
+      <div class="flex justify-end gap-3 ml-3">
         <Icon
             v-if="props.eye"
             icon="Eye"
@@ -116,34 +157,61 @@ const onInputFile = (value) => {
       </div>
     </div>
   </template>
-  <template v-else-if="Array.isArray(inputValue)">
+  <template v-else-if="changePhoto">
     <div
         class="flex justify-between items-center mt-3 mx-5"
-        v-for="(item, index) in inputValue"
+
     >
-      <span class="rounded bg-primary px-4 pb-0.5 text-white">{{
-          item.length < 15
-              ? item.split("/").at(-1)
-              : item.split("/").at(-1)?.slice(0, 15) + "..."
-        }}</span>
+      <span class="rounded bg-primary px-4 pb-0.5 text-white">{{ pictureName }}</span>
 
       <div class="flex justify-end gap-3">
         <Icon
             v-if="props.eye"
             icon="Eye"
-            @click="onShowFile(item)"
+            @click.prevent="onShowFile(changePhoto)"
             class="cursor-pointer"
             color="#909498"
         />
-        <Icon
-            v-if="props.minus"
-            icon="Minus Circle"
-            @click="emit('remove', { item, index })"
-            class="cursor-pointer"
-            color="#ea5455"
-        />
+
       </div>
     </div>
   </template>
-  <ShowFileModal :name="props.name" :image="image" ref="imageCard"/>
+  <ShowFileModal :id="props.name" :image="image"/>
 </template>
+<style lang="scss" scoped>
+.file_data {
+  position: relative;
+}
+
+.button_cancel {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  border-radius: 7px
+
+}
+
+.fileEmpty {
+  color: transparent !important;
+}
+
+//.fileUpload {
+//  color: black !important;
+//}
+
+
+input[type=file]::before {
+  content: "📁";
+  color: black;
+  margin-right: 10px;
+}
+
+[type="file"]::file-selector-button {
+  width: 0;
+  margin-inline-end: 0;
+  padding: 0;
+  border: none;
+}
+
+
+</style>

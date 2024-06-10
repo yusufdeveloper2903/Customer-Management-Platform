@@ -78,7 +78,6 @@ onMounted(() => {
 });
 
 function breadCrumbStart(newPath) {
-  console.log(newPath, 'newPath')
   localStorage.setItem('sidebar', newPath)
   switch (newPath) {
     case "dashboard":
@@ -91,6 +90,32 @@ function breadCrumbStart(newPath) {
         {title: 'Users', active: true},
       ];
       break;
+    case "polls":
+      BreadcrumbList.value = [
+        {title: 'Polls', active: true},
+      ];
+      break;
+    case "polls-detail-id":
+      BreadcrumbList.value = [
+        {title: 'Polls', active: false},
+        {title: 'Poll Details', active: true},
+      ];
+      break
+    case "polls-question-add":
+      BreadcrumbList.value = [
+        {title: 'Polls', active: false},
+        {title: 'Poll Details', active: false},
+        {title: 'Poll Questions Add', active: true},
+      ];
+      break;
+    case "polls-question-id":
+      BreadcrumbList.value = [
+        {title: 'Polls', active: false},
+        {title: 'Poll Details', active: false},
+        {title: 'Poll Questions Edit', active: true},
+      ];
+      break;
+
     case "stories":
       BreadcrumbList.value = [
         {title: 'Stories', active: true},

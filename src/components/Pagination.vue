@@ -69,10 +69,13 @@ export default defineComponent({
     changePage: function (page: number) {
       if (page > 0 && page <= this.totalPages) {
         this.$emit("page-changed", page);
+        localStorage.setItem('page', JSON.stringify(page))
       }
     },
     changePerPage: function (val: any) {
       this.$emit("per-page-changed", val.target.value);
+      localStorage.setItem('page_size', val.target.value);
+      localStorage.setItem('page', '1')
     },
   },
   watch: {

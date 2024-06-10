@@ -63,13 +63,14 @@ export const newsFields = [
         value: "id",
     },
     {
-        text: "name",
-        value: "title",
-    },
-    {
         text: "photo",
         value: "file",
     },
+    {
+        text: "name",
+        value: "title",
+    },
+
     {
         text: "Status",
         value: "status",

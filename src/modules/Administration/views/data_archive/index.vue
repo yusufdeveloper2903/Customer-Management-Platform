@@ -6,12 +6,13 @@ import administrationStore from '../../store/index'
 import UIkit from "uikit";
 import {
   onMounted,
-  ref,
+  ref, watch,
 } from "vue"
 import dayjs from 'dayjs'
 import {toast} from "vue3-toastify";
 import {useI18n} from 'vue-i18n';
 import {watchDebounced} from '@vueuse/core';
+import VueDatePicker from "@vuepic/vue-datepicker";
 
 
 //DECLARED VARIABLES
@@ -19,6 +20,7 @@ const {t} = useI18n()
 const administrationStorage = administrationStore()
 const isLoading = ref(false)
 const isError = ref(false)
+const dateConfig = ref({})
 let params = ref({
   page: 1,
   search: '',
@@ -32,8 +34,17 @@ const deletingID = ref()
 
 //MOUNTED
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.value.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.value.limit = JSON.parse(page_size)
+  }
   await refresh()
-})
+
+});
 
 
 //FUNCTIONS
@@ -62,10 +73,13 @@ function download(url: string) {
 const createBackup = async () => {
   isLoading.value = true
   try {
-    await administrationStorage.CREATE_BACKUP_MEDIA()
+    await administrationStorage.CREATE_BACKUP_MEDIA().then((res) => {
+      if (res) {
+        refresh()
+        toast.success(t('created_successfully'));
+      }
+    })
     await UIkit.modal("#backup-add-modal").hide();
-    refresh()
-    toast.success(t('created_successfully'));
     isLoading.value = false
   } catch (error) {
     toast.error(t('error'));
@@ -100,10 +114,33 @@ const onInput = async (event: number) => {
 }
 
 watchDebounced(() => params.value.search, async function () {
+  localStorage.setItem('page', '1')
+
   params.value.offset = 0
+  params.value.page = 1
+
   await refresh()
 }, {deep: true, debounce: 500, maxWait: 5000,})
+watchDebounced(() => params.value.start_date, async function () {
+  params.value.offset = 0
+  params.value.page = 1
+  refresh()
+}, {deep: true, debounce: 500, maxWait: 5000,})
 
+watch(
+    () => dateConfig.value,
+    (value: any) => {
+      if (value) {
+        let started_date = JSON.parse(JSON.stringify(value))[0]
+        let end_date = JSON.parse(JSON.stringify(value))[1]
+        params.value.start_date = started_date.split('T')[0]
+        params.value.end_date = end_date.split('T')[0]
+      } else {
+        params.value.start_date = ""
+        params.value.end_date = ""
+      }
+    }
+)
 
 const datePicked = async () => {
   if (params.value.start_date && params.value.end_date) {
@@ -131,7 +168,7 @@ const onPageSizeChanged = (event: number) => {
       <div class="flex items-start gap-10 w-full">
         <div class="w-full">
           <div class="flex items-end justify-between flex-wrap mb-7">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center md:w-4/12">
               <form>
                 <label
                     for="search"
@@ -141,59 +178,17 @@ const onPageSizeChanged = (event: number) => {
                     v-model="params.search"
                     id="search"
                     type="text"
-                    :placeholder="$t('Search')"
                     class="form-input mb-1"
                 >
               </form>
 
 
-              <div class="ml-4">
-                <div class="flex justify-between">
-                  <label
-                      for="phone"
-                      class="text-sm text-gray-600 dark:text-gray-200"
-                  >{{ $t('date_from') }}:
-                  </label>
-                </div>
-                <div class="relative">
-                  <VueDatePicker
-                      auto-apply
-                      :locale="'ru'"
-                      :autoApply="true"
-                      format="dd.MM.yyyy"
-                      v-model="params.start_date"
-                      :placeholder="$t('date_from')"
-                      :enableTimePicker="false"
-                      @closed="datePicked()"
-                      @cleared="datePicked()"
-                  ></VueDatePicker>
-                </div>
-
-              </div>
-
-
-              <div class="ml-4">
-                <div class="flex justify-between">
-                  <label
-                      for="phone"
-                      class="text-sm text-gray-600 dark:text-gray-200"
-                  >{{ $t('date_to') }}:
-                  </label>
-                </div>
-                <div class="relative">
-                  <VueDatePicker
-                      auto-apply
-                      :locale="'ru'"
-                      :autoApply="true"
-                      format="dd.MM.yyyy"
-                      v-model="params.end_date"
-                      :placeholder="$t('date_to')"
-                      :enableTimePicker="false"
-                      @closed="datePicked()"
-                      @cleared="datePicked()"
-                  ></VueDatePicker>
-                </div>
-
+              <div class="ml-4 md:w-7/12 ">
+                <label class="dark:text-gray-300">
+                  {{ $t("date_from") + ' - ' + $t("date_to") }}
+                </label>
+                <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }"
+                               v-model="dateConfig"/>
               </div>
 
 
@@ -235,9 +230,13 @@ const onPageSizeChanged = (event: number) => {
                 {{ dayjs(items.created_at).format("DD-MM-YYYY") }}
               </div>
             </template>
-
+            <template #header-actions="item">
+              <div class="flex justify-end">
+                {{ $t(item.text) }}
+              </div>
+            </template>
             <template #item-actions="items">
-              <div class="flex justify-flex">
+              <div class="flex justify-end">
                 <button
                     class="btn-warning btn-action"
                     @click="download(items.file_path)"

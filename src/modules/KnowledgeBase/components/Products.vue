@@ -13,7 +13,6 @@ import {useI18n} from "vue-i18n";
 import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
 import {EditDataProduct} from '../interfaces/index'
 
-
 //DECLARED VARIABLES
 const {t} = useI18n()
 const isLoading = ref<boolean>(false);
@@ -26,6 +25,10 @@ const params = reactive({
 });
 const props = defineProps<{
   knowledge: string
+  params: {
+    page: number,
+    page_size: number
+  }
 }>();
 let toRefresh = ref(false)
 const editData = ref<EditDataProduct>({
@@ -50,17 +53,27 @@ const imageCard = ref();
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.page_size = JSON.parse(page_size)
+  }
   let knowledgeBase = localStorage.getItem('knowledgeBase')
   if (knowledgeBase == 'products') {
     await refresh()
   }
-})
+});
 
 
 //WATCHERS
 watch(() => props.knowledge, async function (val) {
   toRefresh.value = !toRefresh.value
   if (val == 'products') {
+    params.page = props.params.page
+    params.page_size = props.params.page_size
     await refresh()
   }
 })
@@ -68,6 +81,7 @@ watchDebounced(
     () => params.search,
     async () => {
       params.page = 1;
+      localStorage.setItem('page', '1')
       await refresh()
     }, {deep: true, debounce: 500, maxWait: 5000}
 );
@@ -185,9 +199,13 @@ const onShowFile = (item: any) => {
       <template #item-description="item">
         {{ item['description_' + $i18n.locale] }}
       </template>
-
+      <template #header-actions="item">
+        <div class="flex justify-end">
+          {{ $t(item.text) }}
+        </div>
+      </template>
       <template #item-actions="item">
-        <div class="flex justify-left my-4">
+        <div class="flex justify-end my-4">
           <button class="btn-warning btn-action" uk-toggle="target: #create_products" @click="editData = item">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>

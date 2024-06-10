@@ -177,11 +177,36 @@ pre[class*="language-"] {
 }
 
 .dark .dp__overlay_row {
-    background-color: #9e9e9e;
+    background-color: rgb(40 48 70 / var(--tw-bg-opacity));
+
+    .dp__time_col {
+        color: white
+    }
+
+    .dp__btn {
+        color: white !important;
+    }
 }
 
 .dark .dp__menu_inner {
-    background-color: #9e9e9e;
+    --tw-bg-opacity: 1;
+    background-color: rgb(40 48 70 / var(--tw-bg-opacity));
+
+    .dp__btn {
+        color: white
+    }
+
+    .dp__calendar_header {
+        color: white
+    }
+
+    .dp__calendar_item {
+        color: gray
+    }
+
+    .dp__today {
+        color: gray !important
+    }
 
 }
 
@@ -368,6 +393,10 @@ pre[class*="language-"] {
     fill: white
 }
 
+.dark .text-danger {
+    color: red
+}
+
 .dark .apexcharts-datalabel-value {
 
     fill: white
@@ -392,6 +421,7 @@ pre[class*="language-"] {
     top: -8px;
     left: -3px;
 }
+
 
 .tooltip-variant::after {
     content: '';

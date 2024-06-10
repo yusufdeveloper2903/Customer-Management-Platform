@@ -93,14 +93,14 @@ const validate: Ref<Validation> = useVuelidate(rules, editData);
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? $t("Change") : $t('Add') }}
+          {{ propData.editData.id ? $t("ChangeSocial") : $t('AddSocial') }}
         </h2>
       </div>
 
       <div class="uk-modal-body py-4">
         <label>
           <p class=" mt-5 mb-1">{{ $t("type") }}:</p>
-          <v-select id="type" :options="linkType" :get-option-label="(name) => name.name" :placeholder="$t('type')"
+          <v-select id="type" :options="linkType" :get-option-label="(name) => name.name"
                     class="mb-4" :class="validate.type.$errors.length ? 'required-input' : ''"
                     :reduce="name => name.type"
                     v-model="editData.type">
@@ -113,7 +113,7 @@ const validate: Ref<Validation> = useVuelidate(rules, editData);
 
 
         <label for="url">{{ $t('url') }}:</label>
-        <input id="url" type="text" class="form-input" :placeholder="$t('url')"
+        <input id="url" type="text" class="form-input"
                :class="validate.url.$errors.length ? 'required-input' : ''" v-model="editData.url"/>
         <p v-for="error in validate.url.$errors" :key="error.$uid" class="text-danger text-sm">
           {{ $t(error.$message) }}

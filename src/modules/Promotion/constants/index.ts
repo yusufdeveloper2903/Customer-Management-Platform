@@ -45,10 +45,7 @@ export const newsPromotionTable = [
         text: "Published",
         value: "is_published",
     },
-    {
-        text: "Status",
-        value: "is_active",
-    },
+
     {
         text: "actions",
         value: "actions",

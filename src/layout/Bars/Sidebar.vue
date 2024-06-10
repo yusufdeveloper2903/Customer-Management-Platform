@@ -22,16 +22,17 @@
               (isOpenLink[index] &&
                 sidebar.isSidebarOpen &&
                 'open_dropdown multiple-item') ||
-              ($route.path === route.path && 'active-module')
+              ($route.meta.sidebar ==  route.name && 'active-module')
             "
           >
+
             <a
                 class="link"
                 @click="toggleDropdwon(route, index)"
                 v-if="check(route.permissions)"
             >
               <i class="flex w-[30px] items-center justify-center text-white">
-                <Icon :icon="route.icon" :color="$route.path === route.path ? '#FFCC00' : '#fff'"/>
+                <Icon :icon="route.icon" :color="$route.meta.sidebar ==  route.name ? '#FFCC00' : '#fff'"/>
               </i>
               <span class="links_name">
                 {{ $t(route.name) }}

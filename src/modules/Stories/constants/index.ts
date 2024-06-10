@@ -4,6 +4,14 @@ export const storiesTable = [
         value: "id",
     },
     {
+        text: "photo",
+        value: "avatar",
+    },
+    {
+        text: "name",
+        value: "subtitle",
+    },
+    {
         text: "startDate",
         value: "start_date",
     },
@@ -11,18 +19,12 @@ export const storiesTable = [
         text: "endDate",
         value: "end_date",
     },
-    {
-        text: "subtitle",
-        value: "subtitle",
-    },
+
     {
         text: "Published",
         value: "is_active",
     },
-    {
-        text: "photo",
-        value: "avatar",
-    },
+
     {
         text: "actions",
         value: "actions",
@@ -31,10 +33,10 @@ export const storiesTable = [
 export const storiesDetailTable = [
     {
         text: "ID",
-        value: "story_id",
+        value: "id",
     },
     {
-        text: "Photo",
+        text: "photo",
         value: 'background'
     },
     {

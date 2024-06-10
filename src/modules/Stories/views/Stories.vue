@@ -32,13 +32,24 @@ const imageCard = ref();
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.page_size = JSON.parse(page_size)
+  }
   await refresh()
+
 })
 
 
 //WATCHERS
 watchDebounced(() => params.search, function () {
   params.page = 1
+  localStorage.setItem('page', '1')
+
   refresh()
 }, {deep: true, debounce: 500, maxWait: 5000})
 
@@ -99,14 +110,13 @@ const onShowFile = (item: any) => {
 
 <template>
   <div class="card">
-    <div class="flex justify-between items-end mb-7">
-      <label for="search" class="w-1/4">
+    <div class="flex justify-between items-end mb-7  ">
+      <label for="search">
         {{ $t('Search') }}
         <input
             v-model="params.search"
             type="text"
             class="form-input"
-            :placeholder="$t('Search')"
         />
       </label>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
@@ -161,8 +171,13 @@ const onShowFile = (item: any) => {
           </div>
         </div>
       </template>
+      <template #header-actions="item">
+        <div class="flex justify-end">
+          {{ $t(item.text) }}
+        </div>
+      </template>
       <template #item-actions="data">
-        <div class="flex my-4 justify-left">
+        <div class="flex my-4 justify-end">
           <button class="btn-warning btn-action"
                   @click="router.push(`/stories-detail/${data.id}`)">
             <Icon icon="Pen New Square" color="#fff" size="16"/>

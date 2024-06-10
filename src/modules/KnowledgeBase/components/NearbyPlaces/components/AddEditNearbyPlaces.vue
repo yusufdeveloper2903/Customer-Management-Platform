@@ -16,11 +16,11 @@ import useVuelidate, {Validation} from "@vuelidate/core";
 import knowledgeStore from "@/modules/KnowledgeBase/store";
 import {toast} from "vue3-toastify";
 import {useI18n} from "vue-i18n";
-import Tab from "@/components/Tab/Tab.vue";
-import Tabs from "@/components/Tab/Tabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
 import FileInput from "@/components/FileInput/FileInput.vue";
 import {objectToFormData} from "@/mixins/formmatter";
-
+import {useSidebarStore} from '@/stores/layoutConfig'
 
 interface Props {
   oldData?: LocationPlace;
@@ -28,13 +28,17 @@ interface Props {
 
 
 //DECLARED VARIABLES
+const emptyData = ref(false)
+const general = useSidebarStore()
 const props = defineProps<Props>();
 const emit = defineEmits(["refresh", "getRegion"]);
 const store = knowledgeStore();
+
 const {t} = useI18n();
 const showMap = ref(false);
 let openTime = ref()
 let closeTime = ref()
+
 let location = reactive<LocationPlaceData>({
   id: '',
   title: '',
@@ -48,8 +52,9 @@ let location = reactive<LocationPlaceData>({
   photo: '',
   closed_at: '',
   opened_at: '',
-  phones: [],
+  phones: '',
   region: '',
+  coordinatesData: {lat: null, lng: null},
   coordinates: {lat: null, lng: null},
 });
 
@@ -58,11 +63,18 @@ let location = reactive<LocationPlaceData>({
 
 
 const onSubmit = async () => {
+  if (!location.title_uz && !location.address_uz) {
+    general.tabs = 'UZ'
+  } else if (!location.title_kr && !location.address_kr) {
+    general.tabs = 'KR'
+  } else if (!location.title_ru && !location.address_ru) {
+    general.tabs = 'RU'
+  }
   const success = await validate.value.$validate();
   if (!success) return;
   location.title = location.title_uz
   location.address = location.address_uz
-  location.coordinates = JSON.stringify(location.coordinates)
+  location.coordinates = JSON.stringify(location.coordinatesData)
   const fd = objectToFormData(['photo'], location);
   if (location.id) {
     await store.updateOneForm(fd);
@@ -78,28 +90,36 @@ const onSubmit = async () => {
 const hideModal = () => {
   openTime.value = '';
   closeTime.value = '';
+  general.tabs = ''
+  emptyData.value = false
   Object.assign(location, {
     id: undefined,
-    title: {
-      uz: "",
-      ru: "",
-    },
-    address: {
-      uz: "",
-      ru: "",
-    },
+    title_uz: '',
+    title_ru: '',
+    title_kr: '',
+    address_uz: '',
+    address_kr: '',
+    address_ru: '',
     closed_at: '',
     opened_at: '',
-    phones: [],
+    phones: '',
     region: null,
+
     coordinates: {lat: null, lng: null},
+    coordinatesData: {lat: null, lng: null},
   });
+
 
 }
 const onShowModal = () => {
+      emptyData.value = true
       if (props.oldData?.id) {
-        const {region, opened_at, closed_at, ...rest} = props.oldData;
+        const {region, opened_at, closed_at, coordinates, ...rest} = props.oldData;
         Object.assign(location, {region: region.id, ...rest});
+        if (coordinates) {
+          location.coordinatesData = coordinates
+        }
+
         if (opened_at) {
           let time = opened_at.split(':')
           openTime.value = {
@@ -122,16 +142,20 @@ const onShowModal = () => {
           attribution:
               '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         }).addTo(map);
-
-        let marker = L.marker(location.coordinates).addTo(map);
+        let markerIcon = L.icon({
+          iconUrl: '/marker-icon.png',
+          iconSize: [25, 41],
+          // iconAnchor: [12, 36]
+        });
+        let marker = L.marker(location.coordinatesData, {icon: markerIcon}).addTo(map);
 
         map.on("click", function (e) {
-          location.coordinates = e.latlng;
+          location.coordinatesData = e.latlng;
 
           if (marker) {
             map.removeLayer(marker);
           }
-          marker = L.marker(location.coordinates).addTo(map);
+          marker = L.marker(location.coordinatesData, {icon: markerIcon}).addTo(map);
         });
       }, 800);
     }
@@ -152,14 +176,20 @@ onMounted(() => {
 
 //WATCHERS
 watch(() => openTime.value, function (val) {
-  if (val.hours && val.minutes) {
+  if (val && val.hours && val.minutes) {
     location.opened_at = val.hours + ':' + val.minutes
+  } else {
+    location.opened_at = ''
   }
 })
+
 watch(() => closeTime.value, function (val) {
-  if (val.hours && val.minutes) {
+  if (val && val.hours && val.minutes) {
     location.closed_at = val.hours + ':' + val.minutes
+  } else {
+    location.closed_at = ''
   }
+
 })
 
 
@@ -190,7 +220,7 @@ const rules = computed(() => {
         region: {
           required: helpers.withMessage("validation.this_field_is_required", required)
         },
-        coordinates: {
+        coordinatesData: {
           lat: {
             required: helpers.withMessage("validation.this_field_is_required", required)
           },
@@ -212,7 +242,7 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ $t("Add") }}
+          {{ props.oldData ? $t("ChangeLocation") : $t('AddLocation') }}
         </h2>
       </div>
 
@@ -220,15 +250,14 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
         <form>
           <div class="flex gap-4">
             <div class="w-1/2">
-              <Tabs>
-                <Tab title="UZ">
+              <ModalTabs>
+                <ModalTab title="UZ">
                   <div class="w-full">
 
                     <label for="form-stacked-text">{{ $t("name") + ' ' + $t('UZ') }} </label>
                     <div class="uk-form-controls">
                       <input
                           v-model="location.title_uz"
-                          :placeholder="$t('name') + ' ' +  $t('UZ')"
                           class="form-input"
                           id="form-stacked-text"
                           type="text"
@@ -248,7 +277,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                     <div class="uk-form-controls">
                     <textarea
                         v-model="location.address_uz"
-                        :placeholder="$t('address') + ' ' + $t('UZ')"
                         class="form-input"
                         rows="3"
                         :class="validate.address_uz.$errors.length ? 'required-input' : ''"
@@ -262,15 +290,14 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                       </p>
                     </div>
                   </div>
-                </Tab>
-                <Tab title="KR">
+                </ModalTab>
+                <ModalTab title="KR">
                   <div class="w-full">
 
                     <label for="form-stacked-text">{{ $t("name") + ' ' + $t('KR') }} </label>
                     <div class="uk-form-controls">
                       <input
                           v-model="location.title_kr"
-                          :placeholder="$t('name') +  ' '  +  $t('KR')"
                           class="form-input"
                           id="form-stacked-text"
                           type="text"
@@ -290,7 +317,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                     <div class="uk-form-controls">
                     <textarea
                         v-model="location.address_kr"
-                        :placeholder="$t('address') + ' ' +  $t('UZ')"
                         class="form-input"
                         rows="3"
                         :class="validate.address_kr.$errors.length ? 'required-input' : ''"
@@ -304,15 +330,14 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                       </p>
                     </div>
                   </div>
-                </Tab>
-                <Tab title="RU">
+                </ModalTab>
+                <ModalTab title="RU">
                   <div class="w-full">
                     <label for="form-stacked-text">{{ $t("name") + ' ' + $t('RU') }}</label>
                     <div class="uk-form-controls">
                       <input
                           v-model="location.title_ru"
                           class="form-input"
-                          :placeholder="$t('name') + ' ' +  $t('RU')"
                           id="form-stacked-text"
                           type="text"
                           :class="validate.title_ru.$errors.length ? 'required-input' : ''"
@@ -331,7 +356,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                     <div class="uk-form-controls">
                     <textarea
                         v-model="location.address_ru"
-                        :placeholder="$t('address') + ' ' +  $t('RU')"
                         class="form-input"
                         :class="validate.address_ru.$errors.length ? 'required-input' : ''"
                         rows="3"
@@ -345,15 +369,14 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                       </p>
                     </div>
                   </div>
-                </Tab>
-              </Tabs>
+                </ModalTab>
+              </ModalTabs>
               <div class="w-full mt-4">
                 <p class="mt-5">{{ $t("region") }}</p>
 
                 <v-select
                     :options="store.regionsList.results"
                     v-model="location.region"
-                    :placeholder="$t('region')"
                     :getOptionLabel="(name:any) => name['name_'+ $i18n.locale]"
                     :reduce="(name:any) => name.id"
 
@@ -374,8 +397,7 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                 <label for="status">
                   {{ $t("phone_number") }}
                   <input
-                      :placeholder="$t('phone_number')"
-                      v-model="location.phones[0]"
+                      v-model="location.phones"
                       v-maska
                       data-maska="+998#########"
                       class="form-input"
@@ -396,7 +418,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
 
                     auto-apply
                     v-model="openTime"
-                    :placeholder="$t('Open hour')"
                     time-picker
                 ></VueDatePicker>
               </div>
@@ -405,7 +426,6 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                 <VueDatePicker
                     auto-apply
                     v-model="closeTime"
-                    :placeholder="$t('Close hour')"
                     time-picker
                 ></VueDatePicker>
 
@@ -415,8 +435,9 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                 <label
                 >{{ $t('photo') }} </label>
                 <FileInput
+                    :empty="emptyData"
                     v-model="location.photo"
-                    @remove="location.photo = ''"
+                    @remove="location.photo = null"
                     :typeModal="props.oldData?.id"
                     name="nearby-location"
                 />
@@ -438,14 +459,13 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                     <input
                         class="form-input"
                         id="form-stacked-text"
-                        :placeholder="$t('Lat')"
                         type="text"
-                        v-model="location.coordinates.lat"
-                        :class="validate.coordinates.lat.$errors.length ? 'required-input' : ''"
+                        v-model="location.coordinatesData.lat"
+                        :class="validate.coordinatesData.lat.$errors.length ? 'required-input' : ''"
 
                     />
                     <p
-                        v-for="error in validate.coordinates.lat.$errors"
+                        v-for="error in validate.coordinatesData.lat.$errors"
                         :key="error.$uid"
                         class="text-danger text-sm"
                     >
@@ -461,12 +481,11 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
                         class="form-input"
                         id="form-stacked-text"
                         type="text"
-                        :placeholder="$t('Lng')"
-                        :class="validate.coordinates.lng.$errors.length ? 'required-input' : ''"
-                        v-model="location.coordinates.lng"
+                        :class="validate.coordinatesData.lng.$errors.length ? 'required-input' : ''"
+                        v-model="location.coordinatesData.lng"
                     />
                     <p
-                        v-for="error in validate.coordinates.lng.$errors"
+                        v-for="error in validate.coordinatesData.lng.$errors"
                         :key="error.$uid"
                         class="text-danger text-sm"
                     >

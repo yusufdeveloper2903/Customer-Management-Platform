@@ -42,13 +42,25 @@ const editData = ref<EditDataNews>({
   status: ""
 })
 const props = defineProps<{
-  sms: string
+  sms: string,
+  params: {
+    page: number,
+    page_size: number
+  },
 }>();
 let toRefresh = ref(false)
 
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.page_size = JSON.parse(page_size)
+  }
   let sms = localStorage.getItem('sms')
   if (sms == 'directory.News') {
     await refresh();
@@ -114,6 +126,7 @@ watchDebounced(
     () => params.search,
     () => {
       params.page = 1
+      localStorage.setItem('page', '1')
       refresh()
     }, {deep: true, debounce: 500, maxWait: 5000}
 );
@@ -135,6 +148,8 @@ watchDebounced(
 watch(() => props.sms, async function (val) {
   toRefresh.value = !toRefresh.value
   if (val == 'directory.News') {
+    params.page = props.params.page
+    params.page_size = props.params.page_size
     await refresh();
     await store.getStatus()
   }
@@ -149,7 +164,7 @@ watch(() => props.sms, async function (val) {
 
     <div class="md:flex items-end justify-between mb-7">
       <form class=" md:flex items-center gap-5 md:w-9/12">
-        <div class="md:w-1/2">
+        <div>
           <label for="search" class="dark:text-gray-300">
             {{ $t("Search") }}
           </label>
@@ -162,7 +177,7 @@ watch(() => props.sms, async function (val) {
           />
         </div>
 
-        <div class="md:w-1/2 ">
+        <div class="md:w-1/3 ">
           <label for="role" class="dark:text-gray-300">
             {{ $t("Status") }}
           </label>
@@ -176,12 +191,12 @@ watch(() => props.sms, async function (val) {
           </v-select>
         </div>
 
-        <div class="md:w-1/2 ">
+        <div class="md:w-1/3 ">
           <label for="from" class="dark:text-gray-300">
             {{ $t("startDate") }}
           </label>
           <VueDatePicker :enableTimePicker="false" auto-apply v-model="params.start_time" model-type="yyyy-MM-dd"
-                         ></VueDatePicker>
+          ></VueDatePicker>
         </div>
 
       </form>
@@ -207,8 +222,8 @@ watch(() => props.sms, async function (val) {
       </template>
 
       <template #item-status="item">
-        <span
-            :class="item.status.unique_name == 'not_sent' ? 'rounded-md bg-danger px-4 pb-0.5 text-white' : item.status.unique_name == 'in_progress' ? 'rounded-md bg-warning px-4 pb-0.5 text-white' : 'rounded-md bg-primary px-4 pb-0.5 text-white'">{{
+        <span v-if="item.status"
+              :class="item.status.unique_name == 'not_sent' ? 'rounded-md bg-danger px-4 pb-0.5 text-white' : item.status.unique_name == 'in_progress' ? 'rounded-md bg-warning px-4 pb-0.5 text-white' : 'rounded-md bg-primary px-4 pb-0.5 text-white'">{{
             item.status['title_' + $i18n.locale]
           }}</span>
       </template>
@@ -236,9 +251,13 @@ watch(() => props.sms, async function (val) {
         </div>
       </template>
 
-
+      <template #header-actions="item">
+        <div class="flex justify-end">
+          {{ $t(item.text) }}
+        </div>
+      </template>
       <template #item-actions="item">
-        <div class="flex my-2">
+        <div class="flex my-2 justify-end">
           <button class="btn-warning btn-action" @click="
                 router.push(`/news-detail/${item.id}`)
               ">

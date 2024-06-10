@@ -40,6 +40,10 @@ const params = reactive({
 })
 const props = defineProps<{
   knowledge: string
+  params: {
+    page: number,
+    page_size: number
+  }
 }>();
 let toRefresh = ref(false)
 const image = ref<string>("");
@@ -48,24 +52,34 @@ const imageCard = ref();
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.page_size = JSON.parse(page_size)
+  }
   let knowledgeBase = localStorage.getItem('knowledgeBase')
   if (knowledgeBase == 'News template') {
     await refresh()
-
   }
-})
+});
 
 
 //WATCHERS
 watch(() => props.knowledge, async function (val) {
   toRefresh.value = !toRefresh.value
   if (val == 'News template') {
+    params.page = props.params.page
+    params.page_size = props.params.page_size
     await refresh()
   }
 
 })
 watchDebounced(() => params.search, async function () {
   params.page = 1
+  localStorage.setItem('page', '1')
   await refresh()
 }, {deep: true, debounce: 500, maxWait: 5000})
 
@@ -75,7 +89,10 @@ const refresh = async () => {
   await store.getNewsTemplate(params);
 };
 const openModal = () => {
-  UIkit.modal("#news_template").show()
+  UIkit.modal("#news_template", {
+    selPanel: '.uk-modal-dialog',
+    stack: false
+  }).show()
   dataToEdit.value = {};
 }
 
@@ -122,13 +139,12 @@ const handleDeleteModal = (id: number) => {
 <template>
   <div class="card">
     <div class="flex justify-between items-end mb-7">
-      <label for="search" class="w-1/4">
+      <label for="search">
         {{ $t('Search') }}
         <input
             v-model="params.search"
             type="text"
             class="form-input"
-            :placeholder="$t('Search')"
         />
       </label>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
@@ -175,8 +191,13 @@ const handleDeleteModal = (id: number) => {
           </div>
         </div>
       </template>
+      <template #header-actions="item">
+        <div class="flex justify-end">
+          {{ $t(item.text) }}
+        </div>
+      </template>
       <template #item-actions="data">
-        <div class="flex my-4 justify-left">
+        <div class="flex my-4 justify-end">
           <button uk-toggle="target: #news_template" class="btn-warning btn-action" @click="dataToEdit = data">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>
@@ -203,7 +224,7 @@ const handleDeleteModal = (id: number) => {
         @per-page-changed="onPageSizeChanged"
     />
   </div>
-  <DeleteModal @delete-action="deleteAction" :id="'newstemplate-main-delete-modal'"/>
+  <DeleteModal @delete-action="deleteAction" id="newstemplate-main-delete-modal"/>
   <NewsTemplateModal :edit-data="dataToEdit" @refresh="refresh"/>
   <ShowFileModal :image="image" id="file-modal-image" ref="imageCard"/>
 </template>
