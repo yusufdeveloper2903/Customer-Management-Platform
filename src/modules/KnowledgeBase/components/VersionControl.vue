@@ -144,12 +144,17 @@ const onPageSizeChanged = (e) => {
 
         <div class="md:w-1/3 md:m-0 mt-2">
           <label for="from" class="dark:text-gray-300">
-            {{ $t("date_from") + ' - ' + $t("date_to") }}
+            {{ t("from") }}
           </label>
           <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
         </div>
 
-
+        <div class="md:w-1/2 md:m-0 mt-2">
+          <label for="to" class="dark:text-gray-300">
+            {{ t("to") }}
+          </label>
+          <VueDatePicker :enableTimePicker="false" auto-apply v-model="params.end_date"></VueDatePicker>
+        </div>
       </form>
       <button
           class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
@@ -195,7 +200,7 @@ const onPageSizeChanged = (e) => {
       </template>
       <template #header-actions="item">
         <div class="flex justify-end">
-          {{ $t(item.text) }}
+          {{ t(item.text) }}
         </div>
       </template>
       <template #item-actions="item">

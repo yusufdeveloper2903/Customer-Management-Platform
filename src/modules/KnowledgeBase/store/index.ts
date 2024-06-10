@@ -11,7 +11,8 @@ import {
     Products,
     Link,
     Phones,
-    Polls
+    RetseptCategory,
+    OnBoarding
 
 } from "../interfaces";
 

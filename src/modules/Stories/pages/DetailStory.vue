@@ -301,7 +301,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
     <div class="flex gap-2 items-start">
 
       <div class="card w-1/4">
-        <h3 class="text-balance mb-3">{{ $t('Main') }}</h3>
+        <h3 class="text-balance mb-3">{{ t('Main') }}</h3>
         <ModalTabs class="mb-4">
           <ModalTab title="UZ">
             <form>
@@ -319,7 +319,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
-                  {{ $t(error.$message) }}
+                  {{ t(error.$message) }}
                 </p>
               </label>
             </form>
@@ -327,7 +327,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           <ModalTab title="KR">
             <form>
               <label for="nameUz"
-              >{{ $t('name') + ' ' + $t('KR') }}
+              >{{ t('name') + ' ' + t('KR') }}
                 <input
                     id="nameUz"
                     type="text"
@@ -340,7 +340,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
-                  {{ $t(error.$message) }}
+                  {{ t(error.$message) }}
                 </p>
               </label>
 
@@ -351,7 +351,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           <ModalTab title="RU">
             <form>
               <label for="nameRu"
-              >{{ $t('name') + ' ' + $t('RU') }}
+              >{{ t('name') + ' ' + t('RU') }}
                 <input
                     id="nameRu"
                     type="text"
@@ -365,7 +365,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
-                  {{ $t(error.$message) }}
+                  {{ t(error.$message) }}
                 </p>
               </label>
 
@@ -375,7 +375,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
         </ModalTabs>
         <div class="mt-4">
           <label for="from" class="dark:text-gray-300">
-            {{ $t("date_from") + ' - ' + $t("date_to") }}
+            {{ t("date_from") + ' - ' + t("date_to") }}
           </label>
           <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
           <p
@@ -383,21 +383,21 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
               :key="error.$uid"
               class="text-danger text-sm"
           >
-            {{ $t(error.$message) }}
+            {{ t(error.$message) }}
           </p>
         </div>
-        <p class=" mt-4 ">{{ $t("Published") }}</p>
+        <p class=" mt-4 ">{{ t("Published") }}</p>
 <!--        v-model="storiesVariable.is_active"-->
 
         <v-select
             :options="Status"
-            :getOptionLabel="(role:any) => $t(`${role.title}`)"
+            :getOptionLabel="(role:any) => t(`${role.title}`)"
             :reduce="(role:any) => role.value"
         >
-          <template #no-options> {{ $t("no_matching_options") }}</template>
+          <template #no-options> {{ t("no_matching_options") }}</template>
         </v-select>
         <div class="mt-2">
-          <label> {{ $t('photo') }}</label>
+          <label> {{ t('photo') }}</label>
           <FileInput
               v-model="storiesVariable.avatar"
               @remove="storiesVariable.avatar = null"
@@ -408,7 +408,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
               :key="error.$uid"
               class="text-danger text-sm"
           >
-            {{ $t(error.$message) }}
+            {{ t(error.$message) }}
           </p>
 
         </div>
@@ -416,12 +416,12 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 
       </div>
       <div class="card w-2/4">
-        <h3 class="text-balance mb-3">{{ $t('addPhoto') }}</h3>
+        <h3 class="text-balance mb-3">{{ t('addPhoto') }}</h3>
         <div class="flex justify-between items-end mb-7">
           <label/>
           <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
                   @click="addSection">
-            {{ $t("Add") }}
+            {{ t("Add") }}
           </button>
         </div>
         <EasyDataTable
@@ -433,11 +433,11 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             @click-row="showRow"
         >
           <template #empty-message>
-            <div class="dark:text-white">{{ $t("no_available_data") }}</div>
+            <div class="dark:text-white">{{ t("no_available_data") }}</div>
           </template>
 
           <template #header="header">
-            {{ $t(header.text) }}
+            {{ t(header.text) }}
           </template>
 
 
@@ -489,7 +489,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           </template>
           <template #header-actions="item">
             <div class="flex justify-end">
-              {{ $t(item.text) }}
+              {{ t(item.text) }}
             </div>
           </template>
           <template #item-actions="data">
@@ -514,11 +514,11 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 
       <div class=" w-1/4 ">
         <div class="card">
-          <h3 class="text-balance mb-3">{{ $t('previewPhoto') }}</h3>
+          <h3 class="text-balance mb-3">{{ t('previewPhoto') }}</h3>
 
           <div
               class="mb-5 flex h-[450px] w-[240px] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
-            <span v-if="!imageUrl" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
+            <span v-if="!imageUrl" class="font-medium dark:text-white">{{ t("no_photo") }}</span>
             <img
                 v-else
                 class="h-full h-[450px] w-[240px]"
@@ -531,12 +531,12 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             class="mt-4 flex gap-4 justify-end"
         >
           <button class="btn-secondary" @click="router.push('/stories')">
-            {{ $t("Cancel") }}
+            {{ t("Cancel") }}
           </button>
 
           <button @click="saveData('detail')"
                   class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full">
-            {{ $t('Add') }}
+            {{ t('Add') }}
           </button>
         </div>
       </div>

@@ -14,7 +14,7 @@ import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
 import {EditDataProduct} from '../interfaces/index'
 
 //DECLARED VARIABLES
-const {t} = useI18n()
+const {t, locale} = useI18n()
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
 const store = knowledgeBase()
@@ -161,18 +161,18 @@ const onShowFile = (item: any) => {
                    :items="store.productsList.results">
 
       <template #empty-message>
-        <div>{{ $t('no_available_data') }}</div>
+        <div>{{ t('no_available_data') }}</div>
       </template>
 
       <template #header="header">
-        {{ $t(header.text) }}
+        {{ t(header.text) }}
       </template>
       <template #item-price="data">
         {{ (`${data.price}`).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' Som' }}
       </template>
 
       <template #item-title="item">
-        {{ item['title_' + $i18n.locale] }}
+        {{ item['title_' + locale] }}
       </template>
 
 
@@ -197,11 +197,11 @@ const onShowFile = (item: any) => {
       </template>
 
       <template #item-description="item">
-        {{ item['description_' + $i18n.locale] }}
+        {{ item['description_' + locale] }}
       </template>
       <template #header-actions="item">
         <div class="flex justify-end">
-          {{ $t(item.text) }}
+          {{ t(item.text) }}
         </div>
       </template>
       <template #item-actions="item">
@@ -222,7 +222,7 @@ const onShowFile = (item: any) => {
     <TwPagination :restart="toRefresh" :total="store.productsList.count" class="mt-10 tw-pagination"
                   :current="params.page"
                   :per-page="params.page_size"
-                  :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
+                  :text-before-input="t('go_to_page')" :text-after-input="t('forward')"
                   @page-changed="changePagionation" @per-page-changed="onPageSizeChanged"/>
 
     <CreateProducts :editData="editData" @saveProducts="saveProducts"/>

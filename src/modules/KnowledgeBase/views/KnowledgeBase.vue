@@ -83,13 +83,6 @@ const selectedTitle = (val: any) => {
         <Category :knowledge="knowledge"/>
       </Tab>
 
-      <Tab title="splash">
-        <Splash :knowledge="knowledge"/>
-      </Tab>
-
-      <Tab title="recipe category">
-        <Category :knowledge="knowledge"/>
-      </Tab>
     </Tabs>
   </div>
 </template>
