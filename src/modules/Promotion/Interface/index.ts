@@ -13,7 +13,7 @@ export interface EditData {
     end_date: string,
     description: string,
     title: string,
-    is_published: boolean,
+    status: string,
     modified_date: string
 
 }

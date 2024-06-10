@@ -22,7 +22,7 @@ export const storiesTable = [
 
     {
         text: "Published",
-        value: "is_active",
+        value: "status",
     },
 
     {

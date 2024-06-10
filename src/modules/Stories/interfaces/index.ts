@@ -39,7 +39,7 @@ export interface EditData {
     button_type: string | null | object,
     button_url: string | null,
     is_button: boolean,
-    is_active: boolean,
+    status: string,
     object_id: number | null,
     story: number | string | null,
     content_type: number | null,

@@ -47,7 +47,7 @@ let storiesVariable = ref<any>({
   start_date: '',
   end_date: '',
   avatar: '',
-  is_active: false,
+  status: '',
 });
 const createdData = ref<string | null>('')
 const editData = ref<EditData | null>({
@@ -60,7 +60,7 @@ const editData = ref<EditData | null>({
   button_type: '',
   button_url: '',
   is_button: false,
-  is_active: false,
+  status: '',
   object_id: null,
   story: null,
   content_type: null,
@@ -77,15 +77,15 @@ const params = reactive({
 const Status = reactive([
   {
     title: 'Active',
-    value: 'Active'
+    value: 'ACTIVE'
   },
   {
     title: 'Draft',
-    value: 'Draft'
+    value: 'DRAFT'
   },
   {
     title: 'Finished',
-    value: 'Finished'
+    value: 'FINISHED'
   }
 ])
 
@@ -387,12 +387,13 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           </p>
         </div>
         <p class=" mt-4 ">{{ $t("Published") }}</p>
-<!--        v-model="storiesVariable.is_active"-->
 
         <v-select
             :options="Status"
             :getOptionLabel="(role:any) => $t(`${role.title}`)"
             :reduce="(role:any) => role.value"
+            v-model="storiesVariable.status"
+
         >
           <template #no-options> {{ $t("no_matching_options") }}</template>
         </v-select>

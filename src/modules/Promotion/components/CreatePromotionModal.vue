@@ -37,7 +37,7 @@ let productsData = ref({
   description_ru: "",
   description_uz: "",
   description_kr: "",
-  is_published: false,
+  status: '',
   background_photo: '',
   detail_photo: '',
   start_date: '',
@@ -47,15 +47,15 @@ let productsData = ref({
 const Status = reactive([
   {
     title: 'Active',
-    value: 'Active'
+    value: 'ACTIVE'
   },
   {
     title: 'Draft',
-    value: 'Draft'
+    value: 'DRAFT'
   },
   {
     title: 'Finished',
-    value: 'Finished'
+    value: 'FINISHED'
   }
 ])
 
@@ -130,7 +130,7 @@ function openModal() {
     productsData.value.description_uz = propData.editData.description_uz
     productsData.value.description_kr = propData.editData.description_kr
     productsData.value.background_photo = propData.editData.background_photo
-    productsData.value.is_published = propData.editData.is_published
+    productsData.value.status = propData.editData.status
     productsData.value.detail_photo = propData.editData.detail_photo
     dateConfig.value = [propData.editData.start_date, propData.editData.end_date]
   }
@@ -150,6 +150,7 @@ const onHide = () => {
   productsData.value.title_uz = ''
   productsData.value.title_ru = ''
   productsData.value.title_kr = ''
+  productsData.value.status = ''
 
   productsData.value.start_date = ""
   productsData.value.end_date = ""
@@ -387,12 +388,13 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
         </div>
         <p class=" mt-4 ">{{ $t("Published") }}</p>
-<!--        v-model="productsData.is_published"-->
+
 
         <v-select
             :options="Status"
             :getOptionLabel="(role:any) => $t(`${role.title}`)"
             :reduce="(role:any) => role.value"
+            v-model="productsData.status"
         >
           <template #no-options> {{ $t("no_matching_options") }}</template>
         </v-select>
