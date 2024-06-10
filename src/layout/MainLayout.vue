@@ -103,11 +103,15 @@ function breadCrumbStart(newPath) {
       break
     case "polls-question-add":
       BreadcrumbList.value = [
+        {title: 'Polls', active: false},
+        {title: 'Poll Details', active: false},
         {title: 'Poll Questions Add', active: true},
       ];
       break;
     case "polls-question-id":
       BreadcrumbList.value = [
+        {title: 'Polls', active: false},
+        {title: 'Poll Details', active: false},
         {title: 'Poll Questions Edit', active: true},
       ];
       break;

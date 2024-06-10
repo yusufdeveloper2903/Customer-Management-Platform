@@ -1,28 +1,31 @@
 <script lang="ts" setup>
 
 //IMPORTED FILES
-import {Ref, ref, computed} from "vue";
+import {Ref, ref, computed, watch} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
-import {helpers, required} from "@vuelidate/validators";
+import {helpers, minLength, maxLength, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import knowledgeBase from "../../store/index";
-import Tabs from "@/components/Tab/Tabs.vue";
-import Tab from "@/components/Tab/Tab.vue";
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
 import {EditDataProductModal} from '../../interfaces/index'
 import {objectToFormData} from "@/mixins/formmatter";
+import {useSidebarStore} from '@/stores/layoutConfig'
 
 
 //DECLARED VARIABLES
 const propData = defineProps<{
   editData: EditDataProductModal
 }>();
+const general = useSidebarStore()
 const imageDiv = ref<string | undefined | null | object>('')
 const {t} = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase()
 const emits = defineEmits(["saveProducts"]);
+const savedImage = ref('')
 let productsData = ref({
   id: '',
   title: '',
@@ -45,6 +48,10 @@ let productsData = ref({
 const getFile = (event: any) => {
   productsData.value.image = event.target.files[0]
   let input = event.target;
+
+  if (event.target.files[0]) {
+    savedImage.value = event.target.files[0]
+  }
   if (input.files && input.files[0]) {
     let reader = new FileReader();
     reader.onload = (e) => {
@@ -54,6 +61,13 @@ const getFile = (event: any) => {
   }
 }
 const updateDeal = async () => {
+  if (!productsData.value.title_uz && !productsData.value.description_uz) {
+    general.tabs = 'UZ'
+  } else if (!productsData.value.title_kr && !productsData.value.description_kr) {
+    general.tabs = 'KR'
+  } else if (!productsData.value.title_ru && !productsData.value.description_ru) {
+    general.tabs = 'RU'
+  }
   const success = await validate.value.$validate();
   if (!success) return;
   const fd = objectToFormData(['image'], productsData.value);
@@ -104,6 +118,7 @@ function openModal() {
 
 const onHide = () => {
   validate.value.$reset()
+  general.tabs = 'UZ'
   productsData.value.title_uz = ""
   productsData.value.description_uz = ''
   productsData.value.description_ru = ''
@@ -121,6 +136,13 @@ const onHide = () => {
 }
 
 
+watch(() => productsData.value.image, (val) => {
+  if (!val) {
+    productsData.value.image = savedImage.value
+  }
+})
+
+
 //COMPUTED
 const rules = computed(() => {
   return {
@@ -135,6 +157,12 @@ const rules = computed(() => {
     },
     code: {
       required: helpers.withMessage("validation.this_field_is_required", required),
+      minLength: helpers.withMessage(
+          "codeCountSmall",
+          minLength(13)),
+      maxLength: helpers.withMessage(
+          "codeCountBigger",
+          maxLength(13))
     },
     price: {
       required: helpers.withMessage("validation.this_field_is_required", required),
@@ -169,8 +197,8 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
         </h2>
       </div>
       <div class="uk-modal-body py-4">
-        <Tabs>
-          <Tab title="UZ">
+        <ModalTabs>
+          <ModalTab title="UZ">
             <label>{{ $t('name') + ' ' + $t('UZ') }}</label>
             <input
                 type="text"
@@ -194,8 +222,8 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
               />
 
             </label>
-          </Tab>
-          <Tab title="KR">
+          </ModalTab>
+          <ModalTab title="KR">
             <label>{{ $t('name') + ' ' + $t('KR') }}</label>
             <input
                 type="text"
@@ -219,8 +247,8 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
               />
 
             </label>
-          </Tab>
-          <Tab title="RU">
+          </ModalTab>
+          <ModalTab title="RU">
             <label>{{ $t('name') + ' ' + $t('RU') }}</label>
             <input
                 type="text"
@@ -245,14 +273,14 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
 
             </label>
 
-          </Tab>
-        </Tabs>
+          </ModalTab>
+        </ModalTabs>
         <form>
           <div class="flex gap-4">
             <label class="w-full mt-4">{{ $t('Number (multi-digit-code)') }}
               <input
                   id="number"
-                  type="text"
+                  type="number"
                   class="form-input"
                   v-model="productsData.code"
                   :class="validate.code.$errors.length ? 'required-input' : ''"
@@ -313,23 +341,28 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
               </p>
             </label>
           </div>
-
         </form>
         <label class="mt-4 block" for="photo">{{ $t('photo') }}
           <input @change="getFile" id="fileInput" type="file"
                  class="form-file-input p-1"
                  accept="image/png,image/jpeg"
                  :class="validate.image.$errors.length  ? 'required-input' : ''"/>
-
+          <p
+              v-for="error in validate.image.$errors"
+              :key="error.$uid"
+              class="text-danger text-sm"
+          >
+            {{ $t(error.$message) }}
+          </p>
         </label>
         <div v-if="propData.editData.image || imageDiv">
           <img v-if="propData.editData.image && !imageDiv"
-               class="w-[100%] h-[200px] rounded object-cover mt-3"
-               :src="propData.editData.image "
+               class="w-[100%] h-[200px] rounded object-contain mt-3"
+               :src="propData.editData.image"
                alt="Rounded avatar"
           />
           <img v-else
-               class="w-[100%] h-[200px] rounded object-cover mt-3"
+               class="w-[100%] h-[200px] rounded object-contain mt-3"
                :src="imageDiv"
                alt="Rounded avatar"
           />

@@ -11,10 +11,27 @@ export interface SmsTemplate {
     title: {
         uz: string | null;
         ru: string | null;
+        kr: string | null;
     };
     description: {
         uz: string | null;
         ru: string | null;
+        kr: string | null;
+
+    };
+}
+
+export interface OnBoarding {
+    id: number;
+    title: {
+        uz: string | null;
+        ru: string | null;
+        kr: string | null;
+    };
+    description: {
+        uz: string | null;
+        ru: string | null;
+        kr: string | null;
     };
 }
 
@@ -36,6 +53,19 @@ export interface NewsTemplate {
     description_ru: string;
     file: null | string;
     url: string;
+}
+export interface Onboarding {
+    id: number | null;
+    title: string;
+    title_uz: string;
+    title_kr: string;
+    title_ru: string;
+    description: string;
+    description_uz: string;
+    description_kr: string;
+    description_ru: string;
+    image: null | string;
+
 }
 
 export interface Params {
@@ -167,9 +197,13 @@ export interface LocationPlaceData {
     coordinates: {
         lat: number | null;
         lng: number | null;
-    } | {};
+    };
+    coordinatesData: {
+        lat: number | null;
+        lng: number | null;
+    },
     photo: string,
-    phones: [];
+    phones: '';
     opened_at: string,
     region: string;
 }

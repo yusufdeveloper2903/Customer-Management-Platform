@@ -6,12 +6,14 @@ import PollsStore from ".././store/index";
 import {computed, onMounted, Ref, ref, watch} from "vue";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
-import Tab from "@/components/Tab/Tab.vue";
-import Tabs from "@/components/Tab/Tabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import {useRoute, useRouter} from "vue-router";
+import {useSidebarStore} from '@/stores/layoutConfig'
 //DECLARED VARIABLES
+const general = useSidebarStore()
 const route = useRoute()
 const router = useRouter()
 let QuestionPollList = ref<object[]>([]);
@@ -65,11 +67,25 @@ onMounted(async () => {
 
 //FUNCTIONS
 const saveEdit = async () => {
+  if (!pollAdd.value.description_uz) {
+    general.tabs = 'UZ'
+  } else if (!pollAdd.value.description_kr) {
+    general.tabs = 'KR'
+  } else if (!pollAdd.value.description_ru) {
+    general.tabs = 'RU'
+  }
   validated.value = true
   let successValue = ref(false);
   const success = await validate.value.$validate();
 
   pollAdd.value.options.forEach((item, index) => {
+    if (!item.context_uz) {
+      general.tabs = 'UZ'
+    } else if (!item.context_kr) {
+      general.tabs = 'KR'
+    } else if (!item.context_ru) {
+      general.tabs = 'RU'
+    }
     if (success || item.context_uz || item.context_kr || item.context_ru) {
       console.log(index, 'index')
       successValue.value = false
@@ -164,8 +180,8 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
 <template>
   <div class="flex items-start gap-4">
     <div class="card w-2/6">
-      <Tabs class="mb-4">
-        <Tab title="UZ">
+      <ModalTabs class="mb-4">
+        <ModalTab title="UZ">
           <label
           >{{ $t('description') + ' ' + $t('UZ') }}
             <textarea
@@ -184,8 +200,8 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
               {{ $t(error.$message) }}
             </p>
           </label>
-        </Tab>
-        <Tab title="KR">
+        </ModalTab>
+        <ModalTab title="KR">
           <label
           >{{ $t('description') + ' ' + $t('KR') }}
             <textarea
@@ -207,9 +223,9 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
           </label>
 
 
-        </Tab>
+        </ModalTab>
 
-        <Tab title="RU">
+        <ModalTab title="RU">
           <label
           >{{ $t('description') + ' ' + $t('RU') }}
             <textarea
@@ -227,8 +243,8 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
               {{ $t(error.$message) }}
             </p>
           </label>
-        </Tab>
-      </Tabs>
+        </ModalTab>
+      </ModalTabs>
 
       <p class=" mt-4 ">{{ $t("multipleAnswers") }}</p>
       <label className="relative inline-flex items-center cursor-pointer">
@@ -247,8 +263,8 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
 
     </div>
     <div class="card w-4/6">
-      <Tabs class="mb-4">
-        <Tab title="UZ">
+      <ModalTabs class="mb-4">
+        <ModalTab title="UZ">
           <label>{{ $t('options') + ' ' + $t('UZ') }}</label>
           <div v-for="(_, index) in pollAdd.options" :key="index" class="flex items-center p-4 mt-3"
                style="border:1px solid green; border-radius:10px">
@@ -273,8 +289,8 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
             </p>
           </div>
 
-        </Tab>
-        <Tab title="KR">
+        </ModalTab>
+        <ModalTab title="KR">
           <label>{{ $t('options') + ' ' + $t('KR') }}</label>
           <div v-for="(_, index) in pollAdd.options" :key="index" class="flex items-center p-4 mt-3"
                style="border:1px solid green; border-radius:10px">
@@ -300,8 +316,8 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
             </p>
           </div>
 
-        </Tab>
-        <Tab title="RU">
+        </ModalTab>
+        <ModalTab title="RU">
           <label>{{ $t('options') + ' ' + $t('RU') }}</label>
 
           <div v-for="(_, index) in pollAdd.options" :key="index" class="flex items-center p-4 mt-3"
@@ -328,8 +344,8 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
             </p>
           </div>
 
-        </Tab>
-      </Tabs>
+        </ModalTab>
+      </ModalTabs>
       <button class="btn-success btn-action mt-4 rounded-md" uk-icon="plus" @click="addOption"/>
       <div
           class=" flex gap-4 justify-end"

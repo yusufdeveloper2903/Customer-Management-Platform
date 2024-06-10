@@ -11,7 +11,7 @@ import useVuelidate, {Validation} from "@vuelidate/core";
 import ModalTabs from "@/components/Tab/ModalTabs.vue";
 import ModalTab from "@/components/Tab/ModalTab.vue";
 import knowledgeBase from "../../store/index";
-import {NewsTemplate} from "../../interfaces";
+import {Onboarding} from "../../interfaces";
 import FileInput from "@/components/FileInput/FileInput.vue";
 import {objectToFormData} from "@/mixins/formmatter";
 import {useSidebarStore} from '@/stores/layoutConfig'
@@ -23,8 +23,8 @@ const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase();
 const general = useSidebarStore()
 const emit = defineEmits(["refresh"]);
-const propData = defineProps<{ editData: NewsTemplate }>();
-let newsTemplateData = ref<NewsTemplate>({
+const propData = defineProps<{ editData: Onboarding }>();
+let onBoarding = ref<Onboarding>({
   id: null,
   title: '',
   title_ru: '',
@@ -34,8 +34,7 @@ let newsTemplateData = ref<NewsTemplate>({
   description_ru: '',
   description_kr: '',
   description_uz: '',
-  file: null,
-  url: "",
+  image: null,
 });
 
 
@@ -43,57 +42,54 @@ let newsTemplateData = ref<NewsTemplate>({
 function openModal() {
   emptyData.value = true
   if (propData.editData.id) {
-    newsTemplateData.value.title = propData.editData.title
-    newsTemplateData.value.title_ru = propData.editData.title_ru
-    newsTemplateData.value.title_uz = propData.editData.title_uz
-    newsTemplateData.value.title_kr = propData.editData.title_kr
-    newsTemplateData.value.description = propData.editData.description
-    newsTemplateData.value.description_ru = propData.editData.description_ru
-    newsTemplateData.value.description_kr = propData.editData.description_kr
-    newsTemplateData.value.description_uz = propData.editData.description_uz
-    newsTemplateData.value.file = propData.editData.file
-    newsTemplateData.value.url = propData.editData.url
-    newsTemplateData.value.id = propData.editData.id
+    onBoarding.value.title = propData.editData.title
+    onBoarding.value.title_ru = propData.editData.title_ru
+    onBoarding.value.title_uz = propData.editData.title_uz
+    onBoarding.value.title_kr = propData.editData.title_kr
+    onBoarding.value.description = propData.editData.description
+    onBoarding.value.description_ru = propData.editData.description_ru
+    onBoarding.value.description_kr = propData.editData.description_kr
+    onBoarding.value.description_uz = propData.editData.description_uz
+    onBoarding.value.image = propData.editData.image
+    onBoarding.value.id = propData.editData.id
   }
 }
 
 const hideModal = () => {
   validate.value.$reset()
   emptyData.value = false
-
   general.tabs = 'UZ'
-  newsTemplateData.value.title = ''
-  newsTemplateData.value.title_ru = ''
-  newsTemplateData.value.title_uz = ''
-  newsTemplateData.value.title_kr = ''
-  newsTemplateData.value.description = ''
-  newsTemplateData.value.description_ru = ''
-  newsTemplateData.value.description_kr = ''
-  newsTemplateData.value.description_uz = ''
-  newsTemplateData.value.file = null
-  newsTemplateData.value.url = ""
-  newsTemplateData.value.id = null
+  onBoarding.value.title = ''
+  onBoarding.value.title_ru = ''
+  onBoarding.value.title_uz = ''
+  onBoarding.value.title_kr = ''
+  onBoarding.value.description = ''
+  onBoarding.value.description_ru = ''
+  onBoarding.value.description_kr = ''
+  onBoarding.value.description_uz = ''
+  onBoarding.value.image = null
+  onBoarding.value.id = null
 
 }
 const updateDeal = async () => {
-  if (!newsTemplateData.value.title_uz && !newsTemplateData.value.description_uz) {
+  if (!onBoarding.value.title_uz && !onBoarding.value.description_uz) {
     general.tabs = 'UZ'
-  } else if (!newsTemplateData.value.title_kr && !newsTemplateData.value.description_kr) {
+  } else if (!onBoarding.value.title_kr && !onBoarding.value.description_kr) {
     general.tabs = 'KR'
-  } else if (!newsTemplateData.value.title_ru && !newsTemplateData.value.description_ru) {
+  } else if (!onBoarding.value.title_ru && !onBoarding.value.description_ru) {
     general.tabs = 'RU'
   }
   const success = await validate.value.$validate();
   if (!success) return;
-  newsTemplateData.value.title = newsTemplateData.value.title_uz;
-  newsTemplateData.value.description = newsTemplateData.value.description_uz;
+  onBoarding.value.title = onBoarding.value.title_uz;
+  onBoarding.value.description = onBoarding.value.description_uz;
 
 
   if (propData.editData.id) {
     try {
-      const fd = objectToFormData(['file'], newsTemplateData.value);
-      await store.updateNewsTemplate(fd)
-      await UIkit.modal("#news_template").hide();
+      const fd = objectToFormData(['file'], onBoarding.value);
+      await store.updateOnboarding(fd)
+      await UIkit.modal("#onboarding_template").hide();
       toast.success(t("updated_successfully"));
       isSubmitted.value = false;
       emit("refresh");
@@ -103,9 +99,9 @@ const updateDeal = async () => {
     }
   } else {
     try {
-      const fd = objectToFormData(['file'], newsTemplateData.value);
-      await store.createNewsTemplate(fd)
-      await UIkit.modal("#news_template").hide();
+      const fd = objectToFormData(['file'], onBoarding.value);
+      await store.createOnboarding(fd)
+      await UIkit.modal("#onboarding_template").hide();
       toast.success(t("created_successfully"));
       emit("refresh");
       isSubmitted.value = false;
@@ -140,13 +136,13 @@ const rules = computed(() => {
   };
 });
 
-const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
+const validate: Ref<Validation> = useVuelidate(rules, onBoarding);
 
 </script>
 
 <template>
   <div
-      id="news_template"
+      id="onboarding_template"
       class="uk-flex-top "
       uk-modal="bgClose:false"
       @shown="openModal"
@@ -171,7 +167,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    v-model="newsTemplateData.title_uz"
+                    v-model="onBoarding.title_uz"
                     :class="validate.title_uz.$errors.length ? 'required-input' : ''"
                 />
                 <p
@@ -189,7 +185,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="descriptionUz"
                     type="text"
                     class="form-input"
-                    v-model="newsTemplateData.description_uz"
+                    v-model="onBoarding.description_uz"
                     :class="validate.description_uz.$errors.length
                       ? 'required-input'
                       : ''
@@ -213,7 +209,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="nameUz"
                     type="text"
                     class="form-input"
-                    v-model="newsTemplateData.title_kr"
+                    v-model="onBoarding.title_kr"
                     :class="validate.title_kr.$errors.length ? 'required-input' : ''"
                 />
                 <p
@@ -231,7 +227,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="descriptionUz"
                     type="text"
                     class="form-input"
-                    v-model="newsTemplateData.description_kr"
+                    v-model="onBoarding.description_kr"
                     :class="validate.description_kr.$errors.length
                       ? 'required-input'
                       : ''
@@ -256,7 +252,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="nameRu"
                     type="text"
                     class="form-input"
-                    v-model="newsTemplateData.title_ru"
+                    v-model="onBoarding.title_ru"
                     :class="validate.title_ru.$errors.length ? 'required-input' : ''
                   "
                 />
@@ -275,7 +271,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     id="descriptionRu"
                     type="text"
                     class="form-input"
-                    v-model="newsTemplateData.description_ru"
+                    v-model="onBoarding.description_ru"
                     :class=" validate.description_ru.$errors.length
                       ? 'required-input'
                       : ''
@@ -292,25 +288,15 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
             </form>
           </ModalTab>
         </ModalTabs>
-        <label for="nameUz"
-        >{{ $t('Link') }}
-          <input
-              id="nameUz"
-              type="text"
-              class="form-input mb-4"
-              v-model="newsTemplateData.url"
-          />
-        </label>
-
         <label
         >{{ $t('photo') }}
           <FileInput
               :empty="emptyData"
-              v-model="newsTemplateData.file"
-              @remove="newsTemplateData.file = null"
+              v-model="onBoarding.image"
+              @remove="onBoarding.image = null"
               :typeModal="propData.editData.id"
-              name="news-template"
-              id="news-template-id"
+              name="onboarding-template"
+              id="onboarding-id"
           />
         </label>
       </div>
@@ -318,7 +304,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
       <div
           class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
       >
-        <button uk-toggle="target: #news_template" class="btn-secondary">
+        <button uk-toggle="target: #onboarding_template" class="btn-secondary">
           {{ $t("Cancel") }}
         </button>
 

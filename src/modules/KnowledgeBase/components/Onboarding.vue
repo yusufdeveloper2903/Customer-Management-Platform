@@ -2,13 +2,13 @@
 
 
 //IMPORTED FILES
-import {newsTemplateTable} from "../constants";
+import {OnboardingTable} from "../constants";
 import knowledgeBase from ".././store/index";
 import {nextTick, onMounted, reactive, ref, watch} from "vue";
 import {useI18n} from "vue-i18n";
 import UIKit from "uikit";
-import NewsTemplateModal from "../components/modals/NewsTemplateModal.vue";
-import {NewsTemplate} from "../interfaces/index";
+import onBoardingModal from "../components/modals/OnboardingModal.vue";
+import {Onboarding} from "../interfaces/index";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
 import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
@@ -20,7 +20,7 @@ const {t} = useI18n()
 const store = knowledgeBase();
 const isLoading = ref(false);
 const itemToDelete = ref<number | null>(null);
-const dataToEdit = ref<NewsTemplate>({
+const dataToEdit = ref<Onboarding>({
   id: null,
   title: '',
   title_uz: '',
@@ -30,8 +30,7 @@ const dataToEdit = ref<NewsTemplate>({
   description_uz: '',
   description_kr: '',
   description_ru: '',
-  file: null,
-  url: "",
+  image: null,
 });
 const params = reactive({
   page: 1,
@@ -61,7 +60,7 @@ onMounted(async () => {
     params.page_size = JSON.parse(page_size)
   }
   let knowledgeBase = localStorage.getItem('knowledgeBase')
-  if (knowledgeBase == 'News template') {
+  if (knowledgeBase == 'Onboarding') {
     await refresh()
   }
 });
@@ -70,7 +69,7 @@ onMounted(async () => {
 //WATCHERS
 watch(() => props.knowledge, async function (val) {
   toRefresh.value = !toRefresh.value
-  if (val == 'News template') {
+  if (val == 'Onboarding') {
     params.page = props.params.page
     params.page_size = props.params.page_size
     await refresh()
@@ -86,13 +85,10 @@ watchDebounced(() => params.search, async function () {
 
 //FUNCTIONS
 const refresh = async () => {
-  await store.getNewsTemplate(params);
+  await store.getOnboarding(params);
 };
 const openModal = () => {
-  UIkit.modal("#news_template", {
-    selPanel: '.uk-modal-dialog',
-    stack: false
-  }).show()
+  UIkit.modal("#onboarding_template").show()
   dataToEdit.value = {};
 }
 
@@ -100,16 +96,16 @@ const openModal = () => {
 const onShowFile = (item: any) => {
   image.value = item;
   nextTick(() => {
-    UIkit.modal("#file-modal-image").show();
+    UIkit.modal("#onboarding-file-modal-image").show();
   });
 };
 const deleteAction = async () => {
   isLoading.value = true
   try {
-    await store.deleteNewsTemplate(itemToDelete.value)
-    await UIKit.modal("#newstemplate-main-delete-modal").hide();
+    await store.deleteOnboarding(itemToDelete.value)
+    await UIKit.modal("#onboarding-main-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if (store.newTemplate.count > 1 && ((store.newTemplate.count - 1) % params.page_size == 0)) {
+    if (store.onBoarding.count > 1 && ((store.onBoarding.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -131,7 +127,7 @@ const onPageSizeChanged = (e: number) => {
 }
 const handleDeleteModal = (id: number) => {
   itemToDelete.value = id
-  UIKit.modal("#newstemplate-main-delete-modal").show()
+  UIKit.modal("#onboarding-main-delete-modal").show()
 };
 
 </script>
@@ -156,8 +152,8 @@ const handleDeleteModal = (id: number) => {
         theme-color="#7367f0"
         hide-footer
         :loading="isLoading"
-        :headers="newsTemplateTable"
-        :items="store.newTemplate.results"
+        :headers="OnboardingTable"
+        :items="store.onBoarding.results"
     >
       <template #empty-message>
         <div>{{ $t('no_available_data') }}</div>
@@ -171,17 +167,15 @@ const handleDeleteModal = (id: number) => {
       <template #item-description="item">
         {{ item['description_' + $i18n.locale] }}
       </template>
-      <template #item-url="{ url }">
-        <a :href="url" class="">{{ url }}</a>
-      </template>
-      <template #item-photo="{ file }">
+
+      <template #item-image="{ image }">
         <div class="py-3 flex justify-left gap-3">
           <img
-              v-if="file"
+              v-if="image"
               class="w-[45px] h-[45px] rounded object-cover"
-              :src="file"
+              :src="image"
               alt="Rounded avatar"
-              @click="onShowFile(file)"
+              @click="onShowFile(image)"
           />
           <div
               v-else
@@ -198,7 +192,7 @@ const handleDeleteModal = (id: number) => {
       </template>
       <template #item-actions="data">
         <div class="flex my-4 justify-end">
-          <button uk-toggle="target: #news_template" class="btn-warning btn-action" @click="dataToEdit = data">
+          <button uk-toggle="target: #onboarding_template" class="btn-warning btn-action" @click="dataToEdit = data">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>
           <button
@@ -213,7 +207,7 @@ const handleDeleteModal = (id: number) => {
     </EasyDataTable>
 
     <TwPagination
-        :total="store.newTemplate.count"
+        :total="store.onBoarding.count"
         class="mt-10 tw-pagination"
         :current="params.page"
         :restart="toRefresh"
@@ -224,7 +218,7 @@ const handleDeleteModal = (id: number) => {
         @per-page-changed="onPageSizeChanged"
     />
   </div>
-  <DeleteModal @delete-action="deleteAction" id="newstemplate-main-delete-modal"/>
-  <NewsTemplateModal :edit-data="dataToEdit" @refresh="refresh"/>
-  <ShowFileModal :image="image" id="file-modal-image" ref="imageCard"/>
+  <DeleteModal @delete-action="deleteAction" id="onboarding-main-delete-modal"/>
+  <onBoardingModal :edit-data="dataToEdit" @refresh="refresh"/>
+  <ShowFileModal :image="image" id="onboarding-file-modal-image" ref="imageCard"/>
 </template>

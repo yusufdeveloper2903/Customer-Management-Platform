@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 
 //IMPORTED FILES
-import {Ref, ref, computed, watch} from "vue";
+import {Ref, ref, computed, watch, nextTick, reactive} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import prmotionBase from "../store/index";
-import Tabs from "@/components/Tab/Tabs.vue";
-import Tab from "@/components/Tab/Tab.vue";
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
 import FileInput from '@/components/FileInput/FileInput.vue'
 import {EditData} from '../Interface/index'
 import {objectToFormData} from "@/mixins/formmatter";
-
+import {useSidebarStore} from '@/stores/layoutConfig'
 
 //DECLARED VARIABLES
 const propData = defineProps<{
@@ -24,6 +24,7 @@ const imageDiv = ref<string | undefined | null | object>('')
 const imageDivBackground = ref<string | undefined | null | object>('')
 const {t} = useI18n();
 const isSubmitted = ref<boolean>(false);
+const general = useSidebarStore()
 const store = prmotionBase()
 const emits = defineEmits(["saveProducts"]);
 let productsData = ref({
@@ -33,9 +34,9 @@ let productsData = ref({
   title_uz: '',
   title_kr: '',
   description: '',
-  description_ru: '',
-  description_uz: '',
-  description_kr: '',
+  description_ru: "",
+  description_uz: "",
+  description_kr: "",
   is_published: false,
   background_photo: '',
   detail_photo: '',
@@ -43,10 +44,30 @@ let productsData = ref({
   end_date: '',
   modified_date: 'string'
 })
-
+const Status = reactive([
+  {
+    title: 'Active',
+    value: 'Active'
+  },
+  {
+    title: 'Draft',
+    value: 'Draft'
+  },
+  {
+    title: 'Finished',
+    value: 'Finished'
+  }
+])
 
 //FUNCTIONS
 const updateDeal = async () => {
+  if (!productsData.value.title_uz && !productsData.value.description_uz) {
+    general.tabs = 'UZ'
+  } else if (!productsData.value.title_kr && !productsData.value.description_kr) {
+    general.tabs = 'KR'
+  } else if (!productsData.value.title_ru && !productsData.value.description_ru) {
+    general.tabs = 'RU'
+  }
   const success = await validate.value.$validate();
   if (!success) return;
   productsData.value.title = productsData.value.title_uz;
@@ -82,10 +103,9 @@ const updateDeal = async () => {
 watch(
     () => dateConfig.value,
     (value: any) => {
-      if (value) {
+      if (value.length > 1) {
         let started_date = JSON.parse(JSON.stringify(value))[0]
         let end_date = JSON.parse(JSON.stringify(value))[1]
-
         productsData.value.start_date = started_date.toLocaleString('it-IT')
         productsData.value.end_date = end_date.toLocaleString('it-IT')
 
@@ -98,11 +118,13 @@ watch(
 )
 
 function openModal() {
+
   if (propData.editData.id) {
     productsData.value.title = propData.editData.title_uz
     productsData.value.title_uz = propData.editData.title_uz
     productsData.value.title_kr = propData.editData.title_kr
     productsData.value.title_ru = propData.editData.title_ru
+    document.getElementsByClassName('ql-editor')[0].innerHTML = propData.editData.description_uz
     productsData.value.description = propData.editData.description_uz
     productsData.value.description_ru = propData.editData.description_ru
     productsData.value.description_uz = propData.editData.description_uz
@@ -116,6 +138,9 @@ function openModal() {
 
 
 const onHide = () => {
+  general.tabs = 'UZ'
+  document.getElementsByClassName('ql-editor')[0].innerHTML = ''
+
   validate.value.$reset()
   dateConfig.value = {}
   imageDiv.value = ''
@@ -125,13 +150,14 @@ const onHide = () => {
   productsData.value.title_uz = ''
   productsData.value.title_ru = ''
   productsData.value.title_kr = ''
-  productsData.value.description = ''
-  productsData.value.description_uz = ''
-  productsData.value.description_ru = ''
-  productsData.value.description_kr = ''
+
   productsData.value.start_date = ""
   productsData.value.end_date = ""
   productsData.value.background_photo = ""
+  productsData.value.description = ''
+  productsData.value.description_uz = ""
+  productsData.value.description_ru = ""
+  productsData.value.description_kr = ""
   const firstTab = document.querySelectorAll('.first_tab');
   const secondTab = document.querySelectorAll('.second_tab');
   const thirdTab = document.querySelectorAll('.third_tab');
@@ -210,8 +236,8 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
       </div>
 
       <div class="uk-modal-body py-4">
-        <Tabs>
-          <Tab title="UZ">
+        <ModalTabs>
+          <ModalTab title="UZ">
             <div class="first_tab">
               <label>{{ $t('name') + ' ' + $t('UZ') }}</label>
               <input
@@ -229,13 +255,24 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
               </p>
               <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('UZ') }} </label>
               <Editor
+                  v-if="productsData.description_uz"
                   :placeholder="$t('enter_information')"
                   content-type="html"
+                  id="editorFirst"
                   toolbar="full"
                   class="scrollbar rounded border"
                   style="height: 15vh; overflow-y: auto;"
                   v-model:content="productsData.description_uz"
               />
+              <Editor
+                  v-else
+                  :placeholder="$t('enter_information')"
+                  content-type="html"
+                  toolbar="full"
+                  class="scrollbar rounded border"
+                  style="height: 15vh; overflow-y: auto;"
+                  v-model:content="productsData.description_uz">
+              </Editor>
               <p
                   v-for="error in validate.description_uz.$errors"
                   :key="error.$uid"
@@ -247,8 +284,8 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             </div>
 
 
-          </Tab>
-          <Tab title="KR">
+          </ModalTab>
+          <ModalTab title="KR">
             <div class="second_tab">
               <label>{{ $t('name') + ' ' + $t('KR') }}</label>
               <input
@@ -266,14 +303,22 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
               </p>
               <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('KR') }} </label>
               <Editor
+                  v-if="productsData.description_kr"
                   :placeholder="$t('enter_information')"
                   content-type="html"
                   toolbar="full"
                   class="scrollbar rounded border"
                   style="height: 15vh; overflow-y: auto;"
                   v-model:content="productsData.description_kr"
-              >
-
+              />
+              <Editor
+                  v-else
+                  :placeholder="$t('enter_information')"
+                  content-type="html"
+                  toolbar="full"
+                  class="scrollbar rounded border"
+                  style="height: 15vh; overflow-y: auto;"
+                  v-model:content="productsData.description_kr">
               </Editor>
               <p
                   v-for="error in validate.description_kr.$errors"
@@ -286,8 +331,8 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             </div>
 
 
-          </Tab>
-          <Tab title="RU">
+          </ModalTab>
+          <ModalTab title="RU">
             <div class="third_tab">
               <label>{{ $t('name') + ' ' + $t('RU') }}</label>
               <input
@@ -305,6 +350,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
               </p>
               <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('RU') }}</label>
               <Editor
+                  v-if="productsData.description_ru"
                   :placeholder="$t('enter_information')"
                   content-type="html"
                   toolbar="full"
@@ -312,6 +358,15 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   style="height: 15vh; overflow-y: auto;"
                   v-model:content="productsData.description_ru"
               />
+              <Editor
+                  v-else
+                  :placeholder="$t('enter_information')"
+                  content-type="html"
+                  toolbar="full"
+                  class="scrollbar rounded border"
+                  style="height: 15vh; overflow-y: auto;"
+                  v-model:content="productsData.description_ru">
+              </Editor>
               <p
                   v-for="error in validate.description_ru.$errors"
                   :key="error.$uid"
@@ -323,21 +378,25 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             </div>
 
 
-          </Tab>
-        </Tabs>
+          </ModalTab>
+        </ModalTabs>
         <div class="mt-2">
           <label for="from" class="dark:text-gray-300">
             {{ $t("date_from") + ' - ' + $t("date_to") }}
           </label>
           <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
         </div>
-        <!--        <p class=" mt-5 mb-1">{{ $t("Published") }}:</p>-->
+        <p class=" mt-4 ">{{ $t("Published") }}</p>
+<!--        v-model="productsData.is_published"-->
 
-        <!--        <v-select id="type" :options="PublishStatus" :get-option-label="(name) => name.title"-->
-        <!--                  class="mb-4"-->
-        <!--                  v-model="productsData.is_published">-->
-        <!--          <template #no-options> {{ $t("no_matching_options") }}</template>-->
-        <!--        </v-select>-->
+        <v-select
+            :options="Status"
+            :getOptionLabel="(role:any) => $t(`${role.title}`)"
+            :reduce="(role:any) => role.value"
+        >
+          <template #no-options> {{ $t("no_matching_options") }}</template>
+        </v-select>
+
         <div>
 
           <label class="mt-4 block" for="photo">{{ $t('Detail photo') }}
@@ -365,18 +424,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           </label>
 
         </div>
-        <p class=" mt-5 mb-1">{{ $t("Published") }}:</p>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-              type="checkbox"
-              v-model="productsData.is_published"
-              class="sr-only peer"
-          />
-          <div
-              className="w-11 h-6 bg-gray-200 peer-focus:outline-none
-          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-          ></div>
-        </label>
+
       </div>
 
       <div

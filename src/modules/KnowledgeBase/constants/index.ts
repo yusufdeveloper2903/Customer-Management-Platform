@@ -117,6 +117,31 @@ export const Regions = [
 ];
 
 
+export const OnboardingTable = [
+    {
+        text: "ID",
+        value: "id",
+    },
+    {
+        text: "photo",
+        value: "image",
+    },
+    {
+        text: "name",
+        value: "title",
+    },
+    {
+        text: "description",
+        value: "description",
+    },
+
+
+    {
+        text: "actions",
+        value: "actions",
+    },
+];
+
 export const newsTemplateTable = [
     {
         text: "ID",

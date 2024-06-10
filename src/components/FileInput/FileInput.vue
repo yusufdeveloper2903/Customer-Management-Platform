@@ -23,8 +23,9 @@ interface Props {
   minus?: boolean;
   class?: string;
   multiple?: boolean;
-  name: string
-  id: number | null
+  name: string;
+  empty: boolean;
+  id: number | null | string
 }
 
 
@@ -33,10 +34,13 @@ const props = withDefaults(defineProps<Props>(), {
   eye: true,
   minus: true,
   multiple: false,
+  empty: false,
   typeModal: null,
   name: '',
   id: null
 });
+const pictureName = ref('')
+const changePhoto = ref<any>();
 const data = ref<FileInput | ''>()
 const emit = defineEmits<Emits>();
 const inputValue = ref<any>();
@@ -49,6 +53,7 @@ const onShowFile = (item: string) => {
     emit("show", item);
   });
 };
+
 
 //WATCHERS
 watch(
@@ -66,6 +71,13 @@ watch(
       }
     }
 );
+watch(() => props.empty, (val) => {
+  if (!val) {
+    data.value = '';
+    changePhoto.value = '';
+    (document.getElementById(`${props.name}`) as HTMLInputElement).value = '';
+  }
+})
 const onInputFile = (value: any) => {
   const valueSize: File[] = Object.values(value.target.files);
   data.value = value.target.files[0];
@@ -75,8 +87,10 @@ const onInputFile = (value: any) => {
     emit("update:modelValue", valueSize);
   }
 };
+
 const clearData = () => {
   data.value = ''
+  changePhoto.value = ''
   emit('remove', inputValue.value)
   (document.getElementById(`${props.name}`) as HTMLInputElement).value = ''
 }
@@ -85,13 +99,24 @@ const textFileInput = (val: any) => {
       ? val.split("/").at(-1)
       : val.split("/").at(-1)?.slice(0, 15) + "..."
 }
-
+const getFile = (event: any) => {
+  let input = event.target;
+  if (input.files && input.files[0]) {
+    pictureName.value = input.files[0].name;
+    let reader = new FileReader();
+    reader.onload = (e) => {
+      changePhoto.value = e?.target?.result;
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
 
 </script>
 
 <template>
   <div class="file_data">
     <input
+        @change="getFile"
         title=""
         v-if="input "
         :id="props.id"
@@ -132,28 +157,22 @@ const textFileInput = (val: any) => {
       </div>
     </div>
   </template>
-  <template v-else-if="Array.isArray(inputValue)">
+  <template v-else-if="changePhoto">
     <div
         class="flex justify-between items-center mt-3 mx-5"
-        v-for="(item, index) in inputValue"
+
     >
-      <span class="rounded bg-primary px-4 pb-0.5 text-white">{{ textFileInput(item) }}</span>
+      <span class="rounded bg-primary px-4 pb-0.5 text-white">{{ pictureName }}</span>
 
       <div class="flex justify-end gap-3">
         <Icon
             v-if="props.eye"
             icon="Eye"
-            @click="onShowFile(item)"
+            @click.prevent="onShowFile(changePhoto)"
             class="cursor-pointer"
             color="#909498"
         />
-        <Icon
-            v-if="props.minus"
-            icon="Minus Circle"
-            @click="emit('remove', { item, index })"
-            class="cursor-pointer"
-            color="#ea5455"
-        />
+
       </div>
     </div>
   </template>
@@ -176,9 +195,9 @@ const textFileInput = (val: any) => {
   color: transparent !important;
 }
 
-.fileUpload {
-  color: black !important;
-}
+//.fileUpload {
+//  color: black !important;
+//}
 
 
 input[type=file]::before {

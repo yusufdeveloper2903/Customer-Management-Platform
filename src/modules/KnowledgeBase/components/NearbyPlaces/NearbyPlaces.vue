@@ -112,11 +112,11 @@ const deleteAction = async () => {
     await store.deleteLokation(itemForDelete.value)
     await UIkit.modal("#location-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if (store.locationList.count > 1 && ((store.locationList.count - 1) % params.value.page == 0)) {
+    if (store.locationList.count > 1 && ((store.locationList.count - 1) % params.value.page_size == 0)) {
       params.value.page = params.value.page - 1
-      getListForm()
+      await getListForm()
     } else {
-      getListForm()
+      await getListForm()
     }
     loading.value = false
   } catch (error: any) {

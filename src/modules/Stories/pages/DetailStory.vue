@@ -5,8 +5,8 @@
 import {Ref, ref, computed, reactive, nextTick, onMounted, watch} from "vue";
 import {helpers, required} from "@vuelidate/validators";
 import {useVuelidate, Validation} from "@vuelidate/core";
-import Tabs from "@/components/Tab/Tabs.vue";
-import Tab from "@/components/Tab/Tab.vue";
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
 import FileInput from "@/components/FileInput/FileInput.vue";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import {useRoute, useRouter} from "vue-router";
@@ -15,6 +15,7 @@ import {toast} from "vue3-toastify";
 import {useI18n} from 'vue-i18n';
 import UIKit from "uikit";
 import ShowTextModal from "@/components/ShowTextModal.vue";
+import {useSidebarStore} from '@/stores/layoutConfig'
 
 
 import StoriesDetail from '../store'
@@ -25,6 +26,7 @@ import {objectToFormData} from "@/mixins/formmatter";
 
 
 //DECLARED VARIABLES
+const general = useSidebarStore()
 const store = StoriesDetail()
 const itemToDelete = ref<number | null>(null);
 const imageUrl = ref('')
@@ -72,7 +74,20 @@ const params = reactive({
   page_size: 10,
   search: null
 })
-
+const Status = reactive([
+  {
+    title: 'Active',
+    value: 'Active'
+  },
+  {
+    title: 'Draft',
+    value: 'Draft'
+  },
+  {
+    title: 'Finished',
+    value: 'Finished'
+  }
+])
 
 //MOUNTED LIEF CYCLE
 onMounted(async () => {
@@ -93,6 +108,13 @@ onMounted(async () => {
 
 //FUNCTION
 const saveData = async (val: string) => {
+  if (!storiesVariable.value.subtitle_uz) {
+    general.tabs = 'UZ'
+  } else if (!storiesVariable.value.subtitle_kr) {
+    general.tabs = 'KR'
+  } else if (!storiesVariable.value.subtitle_ru) {
+    general.tabs = 'RU'
+  }
   const success = await validate.value.$validate();
   if (!success) return;
   storiesVariable.value.subtitle = storiesVariable.value.subtitle_uz
@@ -182,6 +204,13 @@ const getDetail = async () => {
 
 };
 const addSection = async () => {
+  if (!storiesVariable.value.subtitle_uz) {
+    general.tabs = 'UZ'
+  } else if (!storiesVariable.value.subtitle_kr) {
+    general.tabs = 'KR'
+  } else if (!storiesVariable.value.subtitle_ru) {
+    general.tabs = 'RU'
+  }
   const success = await validate.value.$validate();
   if (!success) return;
   editData.value = null
@@ -190,6 +219,7 @@ const addSection = async () => {
   } else if (createdData.value && createdData.value == '201') {
     await UIKit.modal("#stories_section_modal").show();
   } else {
+
     await saveData('modal')
     await UIKit.modal("#stories_section_modal").show();
   }
@@ -272,8 +302,8 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 
       <div class="card w-1/4">
         <h3 class="text-balance mb-3">{{ $t('Main') }}</h3>
-        <Tabs class="mb-4">
-          <Tab title="UZ">
+        <ModalTabs class="mb-4">
+          <ModalTab title="UZ">
             <form>
               <label for="nameUz"
               >{{ $t('name') + ' ' + $t('UZ') }}
@@ -293,8 +323,8 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
                 </p>
               </label>
             </form>
-          </Tab>
-          <Tab title="KR">
+          </ModalTab>
+          <ModalTab title="KR">
             <form>
               <label for="nameUz"
               >{{ $t('name') + ' ' + $t('KR') }}
@@ -316,9 +346,9 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 
 
             </form>
-          </Tab>
+          </ModalTab>
 
-          <Tab title="RU">
+          <ModalTab title="RU">
             <form>
               <label for="nameRu"
               >{{ $t('name') + ' ' + $t('RU') }}
@@ -341,8 +371,8 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 
 
             </form>
-          </Tab>
-        </Tabs>
+          </ModalTab>
+        </ModalTabs>
         <div class="mt-4">
           <label for="from" class="dark:text-gray-300">
             {{ $t("date_from") + ' - ' + $t("date_to") }}
@@ -357,17 +387,15 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           </p>
         </div>
         <p class=" mt-4 ">{{ $t("Published") }}</p>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-              type="checkbox"
-              v-model="storiesVariable.is_active"
-              class="sr-only peer"
-          />
-          <div
-              className="w-11 h-6 bg-gray-200 peer-focus:outline-none
-          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-          ></div>
-        </label>
+<!--        v-model="storiesVariable.is_active"-->
+
+        <v-select
+            :options="Status"
+            :getOptionLabel="(role:any) => $t(`${role.title}`)"
+            :reduce="(role:any) => role.value"
+        >
+          <template #no-options> {{ $t("no_matching_options") }}</template>
+        </v-select>
         <div class="mt-2">
           <label> {{ $t('photo') }}</label>
           <FileInput

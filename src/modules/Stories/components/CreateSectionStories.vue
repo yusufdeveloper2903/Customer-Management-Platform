@@ -7,15 +7,19 @@ import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
 
-import Tabs from "@/components/Tab/Tabs.vue";
-import Tab from "@/components/Tab/Tab.vue";
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
 import sectionStoriesModal from "../store";
 import FileInput from "@/components/FileInput/FileInput.vue";
 import {objectToFormData} from "@/mixins/formmatter";
 import {EditData} from "../interfaces";
 import {useRoute} from 'vue-router'
+import {useSidebarStore} from '@/stores/layoutConfig'
+
 
 //DECLARED VARIABLES
+const emptyData = ref(false)
+const general = useSidebarStore()
 const {t} = useI18n();
 const route = useRoute()
 const isSubmitted = ref<boolean>(false);
@@ -46,6 +50,7 @@ const title = ref('')
 
 //FUNCTIONS
 function openModal() {
+  emptyData.value = true
   if (propData.editData && propData.editData.story_section_id) {
     sectionStories.value.button_name = propData.editData?.button_name
     sectionStories.value.button_name_uz = propData.editData?.button_name_uz
@@ -75,6 +80,8 @@ function openModal() {
 }
 
 const hideModal = () => {
+  emptyData.value = false
+  general.tabs = 'UZ'
   sectionStories.value.button_name = ''
   sectionStories.value.button_name_uz = ''
   sectionStories.value.button_name_kr = ''
@@ -117,6 +124,13 @@ watch(() => sectionStories.value.is_button, function (val: boolean) {
 })
 
 const saveEdit = async () => {
+  if (!sectionStories.value.background_uz) {
+    general.tabs = 'UZ'
+  } else if (!sectionStories.value.background_kr) {
+    general.tabs = 'KR'
+  } else if (!sectionStories.value.background_ru) {
+    general.tabs = 'RU'
+  }
   validated.value = true
   if (!route.params.id) return;
   sectionStories.value.button_type = sectionStories.value.button_type?.value
@@ -182,44 +196,46 @@ const saveEdit = async () => {
       </div>
 
       <div class="uk-modal-body py-4">
-
-
-        <label for="from" class="dark:text-gray-300">
-          {{ $t("Duration") }}
-        </label>
-        <input
-            type="number"
-            class="form-input mb-3"
-
-            v-model="sectionStories.duration"
-        />
-        <div class="mt-4">
-          <p class="mb-1">{{ $t("Add Button") }}</p>
-
-          <label className="relative inline-flex items-center cursor-pointer">
+        <div class="flex ">
+          <label for="from" class="dark:text-gray-300 md:w-1/3">
+            {{ $t("Duration") }}
             <input
-                type="checkbox"
-                v-model="sectionStories.is_button"
-                class="sr-only peer"
-            />
-            <div
-                className="w-11 h-6 bg-gray-200 peer-focus:outline-none
-          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-            ></div>
+                type="number"
+                class="form-input mb-3"
 
+                v-model="sectionStories.duration"
+            />
           </label>
+
+          <div class="mt-4 " style="margin-left:130px">
+            <p class="mb-1">{{ $t("Add Button") }}</p>
+
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                  type="checkbox"
+                  v-model="sectionStories.is_button"
+                  class="sr-only peer"
+              />
+              <div
+                  className="w-11 h-6 bg-gray-200 peer-focus:outline-none
+          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
+              ></div>
+            </label>
+          </div>
         </div>
-        <Tabs class="mt-1" :title="title">
-          <Tab title="UZ">
+
+        <ModalTabs class="mt-1" :title="title">
+          <ModalTab title="UZ">
 
 
             <label>{{ $t('photo') + ' ' + $t("UZ") }}</label>
             <FileInput
+                :empty="emptyData"
                 class="mb-3"
                 v-model="sectionStories.background_uz"
                 @remove="sectionStories.background_uz = null"
                 :typeModal="propData.editData && propData.editData.story_section_id"
-                name="stories-detail-template-uz"
+                name="stories-template-uz"
             />
             <p
                 v-if="!sectionStories.background_uz && validated"
@@ -237,16 +253,17 @@ const saveEdit = async () => {
               />
 
             </form>
-          </Tab>
-          <Tab title="KR">
+          </ModalTab>
+          <ModalTab title="KR">
 
             <label>{{ $t('photo') + ' ' + $t("KR") }}</label>
             <FileInput
                 class="mb-3"
+                :empty="emptyData"
                 v-model="sectionStories.background_kr"
                 @remove="sectionStories.background_kr = null"
                 :typeModal="propData.editData && propData.editData.story_section_id"
-                name="stories-detail-template-kr"
+                name="stories-template-kr"
             />
             <p
                 v-if="!sectionStories.background_kr && validated"
@@ -266,17 +283,18 @@ const saveEdit = async () => {
 
             </form>
 
-          </Tab>
+          </ModalTab>
 
-          <Tab title="RU">
+          <ModalTab title="RU">
 
             <label>{{ $t('photo') + ' ' + $t("RU") }}</label>
             <FileInput
+                :empty="emptyData"
                 class="mb-3"
                 v-model="sectionStories.background_ru"
                 @remove="sectionStories.background_ru = null"
                 :typeModal="propData.editData && propData.editData.story_section_id"
-                name="stories-detail-template-ru"
+                name="stories-template-ru"
             />
             <p
                 v-if="!sectionStories.background_ru && validated"
@@ -298,8 +316,8 @@ const saveEdit = async () => {
             </form>
 
 
-          </Tab>
-        </Tabs>
+          </ModalTab>
+        </ModalTabs>
         <div class="flex gap-4" v-if="sectionStories.is_button">
 
           <div

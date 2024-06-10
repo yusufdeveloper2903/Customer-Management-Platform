@@ -13,7 +13,6 @@ import {useI18n} from "vue-i18n";
 import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
 import {EditDataProduct} from '../interfaces/index'
 
-
 //DECLARED VARIABLES
 const {t} = useI18n()
 const isLoading = ref<boolean>(false);

@@ -31,11 +31,11 @@ const openEditModal = () => {
 </script>
 
 <template>
-  <div class="border-b">
+  <div class="border-b ">
     <button @click="isOpen = !isOpen" class="p-4 w-full text-left flex justify-between font-semibold text-[#17183B]">
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 dark:text-white">
         <button
-            class="bg-transparent hover:bg-[#17183B] text-[#17183B] font-semibold hover:text-white h-[20px] w-[20px] border border-[#17183B] hover:border-transparent rounded"
+            class=" bg-transparent hover:bg-[#17183B] text-[#17183B] font-semibold hover:text-white h-[20px] w-[20px] border border-[#17183B] hover:border-transparent rounded"
             v-if="isOpen">
           <span uk-icon="chevron-up" style="transform: scale(.7);"></span>
         </button>

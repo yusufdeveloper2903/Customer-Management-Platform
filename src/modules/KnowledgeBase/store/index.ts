@@ -11,6 +11,7 @@ import {
     Products,
     Link,
     Phones,
+    OnBoarding
 
 } from "../interfaces";
 
@@ -18,14 +19,19 @@ import {
 export default defineStore("knowledgeBase", {
     state: () => {
         return {
+            tabs: 'UZ',
             knowledge: '',
             smsTemplateList: {
                 count: 0,
                 results: [] as SmsTemplate[],
             } as Results<SmsTemplate>,
             newTemplate: {
+                results: [] as OnBoarding[],
+            } as Results<OnBoarding>,
+            onBoarding: {
                 results: [] as NewsTemplate[],
             } as Results<NewsTemplate>,
+
             locationList: {
                 results: [] as LocationPlace[],
             } as Results<LocationPlace>,
@@ -62,7 +68,7 @@ export default defineStore("knowledgeBase", {
 
             phonesList: {
                 results: [] as Phones[]
-            } as Results<Phones>
+            } as Results<Phones>,
 
         };
     },
@@ -78,6 +84,10 @@ export default defineStore("knowledgeBase", {
         async getNewsTemplate(params: Params) {
             const {data} = await $axios.get(`/knowledge_base/news_template/`, {params});
             this.newTemplate = data;
+        },
+        async getOnboarding(params: Params) {
+            const {data} = await $axios.get(`/knowledge_base/onboarding/`, {params});
+            this.onBoarding = data;
         },
         async getAllFormsList(params: any) {
             const {data} = await $axios.get("/knowledge_base/location/", {params});
@@ -124,7 +134,10 @@ export default defineStore("knowledgeBase", {
         createNewsTemplate(data: any) {
             return $axios.post(`/knowledge_base/news_template/`, data);
         },
-        AddForms(data:any) {
+        createOnboarding(data: any) {
+            return $axios.post(`/knowledge_base/onboarding/`, data);
+        },
+        AddForms(data: any) {
             return $axios.post("/knowledge_base/location/", data);
         },
         createRegions(data: object) {
@@ -133,54 +146,57 @@ export default defineStore("knowledgeBase", {
         createVersion(data: object) {
             return $axios.post(`/versions/create_version/`, data);
         },
-        createProducts(data:any) {
+        createProducts(data: any) {
             return $axios.post(`/products/products/`, data);
         },
-        create_drag_and_drop(data:any) {
+        create_drag_and_drop(data: any) {
             return $axios.post(`/knowledge_base/social_media_links/drag_and_drop/`, data);
         },
 
-        createSocialMediaLinks(data:any) {
+        createSocialMediaLinks(data: any) {
             return $axios.post(`/knowledge_base/social_media_links/`, data)
         },
 
-        createPhones(data:any) {
+        createPhones(data: any) {
             return $axios.post(`/knowledge_base/phones/`, data);
         },
-        create_phones_drag_and_drop(data:any) {
+        create_phones_drag_and_drop(data: any) {
             return $axios.post(`/knowledge_base/phones/drag_and_drop/`, data);
         },
 
 
         //PATCH REQUEST
-        updateSmsTemplate(data:any) {
+        updateSmsTemplate(data: any) {
             return $axios.patch(`/knowledge_base/sms_template/${data.id}/`, data);
         },
-        updateNewsTemplate(data:any) {
+        updateNewsTemplate(data: any) {
             return $axios.patch(`/knowledge_base/news_template/${data.get("id")}/`, data);
         },
-        updateOneForm(data:any) {
+        updateOnboarding(data: any) {
+            return $axios.patch(`/knowledge_base/onboarding/${data.get("id")}/`, data);
+        },
+        updateOneForm(data: any) {
             return $axios.patch(`/knowledge_base/location/${data.get('id')}/`, data);
         },
         updateRegions(data: any) {
             return $axios.patch(`knowledge_base/region/${data.id}/`, data)
         },
-        updateVersion(data:any) {
+        updateVersion(data: any) {
             return $axios.patch(`/versions/version/${data.id}/`, data);
         },
-        updateProducts(data:any) {
+        updateProducts(data: any) {
             return $axios.patch(
                 `/products/products/${data.id || data.get("id")}/`,
                 data
             );
         },
-        updatePages(data:any) {
+        updatePages(data: any) {
             return $axios.patch(`/knowledge_base/pages/${data.id}/`, data);
         },
-        updateSocialMediaLinks(data:any) {
+        updateSocialMediaLinks(data: any) {
             return $axios.patch(`/knowledge_base/social_media_links/${data.id}/`, data);
         },
-        updatePhones(data:any) {
+        updatePhones(data: any) {
             return $axios.patch(`/knowledge_base/phones/${data.id}/`, data);
         },
 
@@ -197,6 +213,9 @@ export default defineStore("knowledgeBase", {
         },
         deleteNewsTemplate(id: number | null) {
             return $axios.delete(`/knowledge_base/news_template/${id}/`);
+        },
+        deleteOnboarding(id: number | null) {
+            return $axios.delete(`/knowledge_base/onboarding/${id}/`);
         },
         deleteLokation(id: number | null | undefined) {
             return $axios.delete(`/knowledge_base/location/${id}/`);

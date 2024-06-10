@@ -778,9 +778,7 @@ vue3-easy-data-table__body[data-v-19cc4b1b] {
     z-index: 1
 }
 
-.vue3-easy-data-table__main[data-v-19cc4b1b] {
-    min-height: var(--8bb50160)
-}
+
 
 .vue3-easy-data-table__main.fixed-height[data-v-19cc4b1b] {
     height: var(--53360ea0)

@@ -6,6 +6,7 @@ import {defineStore} from "pinia";
 export const useSidebarStore = defineStore("counter", {
     state: () => {
         return {
+            tabs: 'UZ',
             isSidebarOpen: JSON.parse(
                 localStorage.getItem("isSidebarOpen") || "false"
             ),

@@ -55,6 +55,10 @@
     "question": "Вопрос",
     "audio": "Аудио"
   },
+  "Draft": "Черновик",
+  "codeCountSmall": "Числа не могут быть меньше 13",
+  "codeCountBigger": "Чисел не может быть больше 13",
+  "Onboarding": "Введение",
   "multipleAnswers": "Несколько ответов",
   "Poll Questions Edit": "Редактировать опрос",
   "Error from server!": "Ошибка с сервера!",
@@ -269,7 +273,10 @@
   "RU": "Ру",
   "KR": "Ўз",
   "url": "URL",
+  "creating_a_backup": "Создание резервной копии",
+  "are_you_sure_you_want_to_back_up_the_media_files": "Вы уверены, что хотите создать резервную копию медиафайлов?",
   "URL": "URL",
+  "deletion_of_backup": "Удаление резервной копии",
   "planned for(publish date)": "Запланированная дата",
   "go_to_page": "Перейти на страницу",
   "forward": "Вперед",
@@ -393,5 +400,4 @@
   "Transactions": "Транзакции",
   "Notification Detail": "Подробности уведомления",
   "noDiscount": "Нет скидки"
-  
 }

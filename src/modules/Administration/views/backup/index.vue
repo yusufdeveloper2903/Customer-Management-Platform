@@ -71,11 +71,13 @@ function download(url: string) {
 const createBackup = async () => {
   isLoading.value = true
   try {
-    await administrationStorage.CREATE_BACKUP()
-    await UIkit.modal("#backup-add-modal").hide();
-    refresh()
-    toast.success(t('created_successfully'));
-    isLoading.value = false
+    let success = await administrationStorage.CREATE_BACKUP()
+    if (success.data && success.data.status === 201) {
+      UIkit.modal("#backup-add-modal").hide();
+      refresh()
+      toast.success(t('created_successfully'));
+      isLoading.value = false
+    }
   } catch (error) {
     isError.value = true
     toast.error(t('error'));
@@ -320,43 +322,7 @@ watch(
         </div>
       </div>
     </div>
-    <div
-        id="backup-delete-modal"
-        class="uk-flex-top"
-        uk-modal
-    >
-      <div class="uk-modal-dialog uk-margin-auto-vertical overflow-hidden rounded-md dark:bg-darkLayoutStorm">
-        <button
-            class="uk-modal-close-default"
-            type="button"
-            uk-close
-        />
-        <div class="uk-modal-header dark:bg-darkLayoutMain">
-          <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b] dark:text-white">
-            {{ $t('deletion_of_backup') }}
-          </h2>
-        </div>
-        <div class="uk-modal-body dark:text-gray-300">
-          {{ $t('are_you_sure_you_want_to_back_up_the_database') }}
-        </div>
-        <div class="uk-modal-footer uk-text-right bg-white px-5 py-3 dark:bg-darkLayoutMain">
-          <button
-              uk-toggle="target: #backup-delete-modal"
-              class="mr-4 rounded-md bg-danger px-6 py-2 text-white duration-100 hover:opacity-90"
-          >
-            {{ $t('no') }}
-          </button>
-          <button
-              class="rounded-md bg-primary px-6 py-2 text-white duration-100 hover:opacity-90"
-              :disabled="isLoading"
-          >
-            {{ $t('yes') }}
-            <img src="@/assets/image/loading.svg" alt="loading.svg" class="inline w-4 h-4 text-white animate-spin"
-                 v-if="isLoading">
-          </button>
-        </div>
-      </div>
-    </div>
+
 
     <DeleteModal @delete-action="deleteAction" id="backup-delete-modal"/>
   </div>

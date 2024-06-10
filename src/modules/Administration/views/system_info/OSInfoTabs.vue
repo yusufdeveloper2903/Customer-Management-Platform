@@ -64,10 +64,10 @@ onMounted(async () => {
                    :title="`Disk ${index + 1}`">
           <div class="flex flex-col justify-between mb-5">
             <div class="w-full flex justify-between p-1 border-b" v-for="i in item" :key="i">
-                            <span>
+                            <span v-if="i.total_size">
                                 {{ i.total_size.title || '' }}
                             </span>
-              <b>
+              <b v-if="i.total_size">
                 {{ i.total_size.value }}
               </b>
             </div>

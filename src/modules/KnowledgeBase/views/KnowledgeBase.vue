@@ -6,6 +6,7 @@ import Tabs from "@/components/Tab/Tabs.vue";
 import Tab from "@/components/Tab/Tab.vue";
 import SMSTemplate from "../components/SMSTemplate.vue";
 import NewsTemplate from "../components/NewsTemplate.vue";
+import Onboarding from "../components/Onboarding.vue";
 import NearbyPlaces from "../components/NearbyPlaces/NearbyPlaces.vue";
 import VersionControl from "../components/VersionControl.vue"
 import Products from "../components/Products.vue"
@@ -66,7 +67,9 @@ const selectedTitle = (val: any) => {
       <Tab title="Terms_and_conditions">
         <TermsAndConditions :knowledge="knowledge" :params="params"/>
       </Tab>
-
+      <Tab title="Onboarding">
+        <Onboarding :knowledge="knowledge" :params="params"/>
+      </Tab>
       <Tab title="contacts">
         <Contacts :knowledge="knowledge" :params="params"/>
       </Tab>

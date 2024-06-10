@@ -27,9 +27,9 @@
 </template>
 
 <script>
-import {provide, ref} from "vue";
+import {provide, ref, computed} from "vue";
 import {useI18n} from "vue-i18n";
-import knowledgeBase from "@/modules/KnowledgeBase/store/index";
+import {useSidebarStore} from '@/stores/layoutConfig'
 
 export default {
   props: {
@@ -41,10 +41,6 @@ export default {
       type: Boolean,
       required: false,
     },
-    unique: {
-      type: String,
-      required: false
-    },
     pill: {
       type: Boolean,
       required: false,
@@ -55,30 +51,20 @@ export default {
   },
   setup(props, {slots, emit}) {
     const {t} = useI18n();
-    const store = knowledgeBase();
+    const general = useSidebarStore();
     const tabTitles = ref(slots.default().map((tab) => tab.props && tab.props.title));
-    const selectedTitle = ref(tabTitles.value[0]);
-    const storeData = localStorage.getItem('knowledgeBase')
-    const storeData2 = localStorage.getItem('sms')
-    const storeData3 = localStorage.getItem('administration')
-    const storedModule = localStorage.getItem('sidebar')
-    if (storeData && storedModule === 'knowledgeBase' && props.unique === 'unique') {
-      selectedTitle.value = storeData
-    }
-    if (storeData2 && storedModule === 'sms-template' && props.unique === 'unique') {
-      selectedTitle.value = storeData2
-    }
-    if (storeData3 && storedModule === 'Logging' && props.unique === 'unique') {
-      selectedTitle.value = storeData3
-    }
+    const selectedTitle = computed(() => {
+      return general.tabs ? general.tabs : tabTitles.value[0]
+    });
     provide("selectedTitle", selectedTitle);
+
     function onTitleSelected(title) {
-      selectedTitle.value = title;
+      general.tabs = title;
       emit("selectedTitle", selectedTitle.value);
     }
 
     return {
-      store,
+      general,
       t,
       selectedTitle,
       onTitleSelected,

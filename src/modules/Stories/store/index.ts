@@ -42,7 +42,7 @@ export default defineStore("stories", {
             this.storiesDetailsId = data
         },
         async getStoriesSectionButtonType() {
-            const {data} = await $axios.get('/knowledge_base/story_content_type')
+            const {data} = await $axios.get('/knowledge_base/story_content_type/')
             this.storySectionButtonType = data
         },
         async getConentButtontype(model: any) {

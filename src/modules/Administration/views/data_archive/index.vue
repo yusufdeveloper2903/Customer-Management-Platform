@@ -73,10 +73,13 @@ function download(url: string) {
 const createBackup = async () => {
   isLoading.value = true
   try {
-    await administrationStorage.CREATE_BACKUP_MEDIA()
+    await administrationStorage.CREATE_BACKUP_MEDIA().then((res) => {
+      if (res) {
+        refresh()
+        toast.success(t('created_successfully'));
+      }
+    })
     await UIkit.modal("#backup-add-modal").hide();
-    refresh()
-    toast.success(t('created_successfully'));
     isLoading.value = false
   } catch (error) {
     toast.error(t('error'));

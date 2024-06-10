@@ -91,10 +91,8 @@ const deleteAction = async () => {
     await UIkit.modal("#version-delete-modal").hide();
     toast.success(t('deleted_successfully'));
     if (store.versionControlList.count > 1 && ((store.versionControlList.count - 1) % params.page_size == 0)) {
-      if (params.page > 1) {
-        params.page = params.page - 1
-        await refresh()
-      }
+      params.page = params.page - 1
+      await refresh()
     } else {
       await refresh()
     }
