@@ -117,7 +117,7 @@ const onShowFile = (item: any) => {
         <form class="md:flex items-center gap-5 md:w-7/12">
           <div>
             <label for="search" class="dark:text-gray-300">
-              {{ $t("Search") }}
+              {{ t("Search") }}
             </label>
             <input
                 id="search"
@@ -129,7 +129,7 @@ const onShowFile = (item: any) => {
 
           <div class="md:w-1/3 md:m-0 mt-2">
             <label for="role" class="dark:text-gray-300">
-              {{ $t("Role") }}
+              {{ t("Role") }}
             </label>
             <v-select
                 :options="store.users_roles.results"
@@ -138,7 +138,7 @@ const onShowFile = (item: any) => {
                 v-model="filterUsers.role"
                 @update:model-value="filterByRole"
             >
-              <template #no-options> {{ $t("no_matching_options") }}</template>
+              <template #no-options> {{ t("no_matching_options") }}</template>
             </v-select>
 
           </div>
@@ -149,7 +149,7 @@ const onShowFile = (item: any) => {
                 router.push({ name: 'add staff'})
               "
         >
-          {{ $t("Add") }}
+          {{ t("Add") }}
         </button>
       </div>
 
@@ -161,10 +161,10 @@ const onShowFile = (item: any) => {
           :items="store.staffsList.results"
       >
         <template #empty-message>
-          <div class="dark:text-white">{{ $t("no_available_data") }}</div>
+          <div class="dark:text-white">{{ t("no_available_data") }}</div>
         </template>
         <template #header="header">
-          {{ $t(header.text) }}
+          {{ t(header.text) }}
         </template>
 
         <template #item-photo="items">
@@ -242,8 +242,8 @@ const onShowFile = (item: any) => {
           :current="filterUsers.page"
           :total="store.staffsList.count"
           :per-page='filterUsers.page_size'
-          :text-before-input="$t('go_to_page')"
-          :text-after-input="$t('forward')"
+          :text-before-input="t('go_to_page')"
+          :text-after-input="t('forward')"
           @page-changed="changePagionation"
           @per-page-changed="onPageSizeChanged"
 

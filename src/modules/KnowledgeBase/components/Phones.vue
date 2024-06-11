@@ -56,6 +56,7 @@ const dragStart = (item: any) => {
 const dragOver = (e: any) => {
   e.preventDefault();
 };
+
 const dragDrop = async (item: Phones) => {
   event?.preventDefault();
   await store.create_phones_drag_and_drop({id1: currentRow.value?.id, id2: item.id})
@@ -114,10 +115,10 @@ const refresh = async () => {
 <template>
   <div>
     <div class="flex justify-between items-end mb-7">
-      <h1 class="font-semibold text-lg text-success">{{ $t('phone_numbers') }}</h1>
+      <h1 class="font-semibold text-lg text-success">{{ t('phone_numbers') }}</h1>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full "
-              uk-toggle="target: #phones" @click="editPhone = {}">
-        {{ $t("Add") }}
+              uk-toggle="target: #phones" @click="editPhone = <EditPhone>{}">
+        {{ t("Add") }}
       </button>
     </div>
 
@@ -128,7 +129,7 @@ const refresh = async () => {
             v-for="field in phoneNumberFields"
             class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider secondTable"
         >
-          {{ $t(field.text) }}
+          {{ t(field.text) }}
 
         </th>
       </tr>
@@ -169,7 +170,7 @@ const refresh = async () => {
       </tr>
       </tbody>
     </table>
-    <div class="empty_table" v-if="!store.phonesList.results.length">{{ $t('no_available_data') }}</div>
+    <div class="empty_table" v-if="!store.phonesList.results.length">{{ t('no_available_data') }}</div>
 
 
     <TwPagination
@@ -177,8 +178,8 @@ const refresh = async () => {
         :current="params.page"
         :total="store.phonesList.count"
         :per-page="params.page_size"
-        :text-before-input="$t('go_to_page')"
-        :text-after-input="$t('forward')"
+        :text-before-input="t('go_to_page')"
+        :text-after-input="t('forward')"
         @page-changed="changePagination"
         @per-page-changed="onPageSizeChanged"
     />

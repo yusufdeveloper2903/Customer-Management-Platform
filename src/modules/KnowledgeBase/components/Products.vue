@@ -14,7 +14,7 @@ import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
 import {EditDataProduct} from '../interfaces/index'
 
 //DECLARED VARIABLES
-const {t} = useI18n()
+const {t, locale} = useI18n()
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
 const store = knowledgeBase()
@@ -145,15 +145,15 @@ const onShowFile = (item: any) => {
   <div class="card">
     <div class="flex justify-between items-end mb-7">
 
-      <label for="search">
-        {{ $t('Search') }}
-        <input type="text" class="form-input"
+      <label for="search" class="w-1/4">
+        {{ t('Search') }}
+        <input type="text" class="form-input" :placeholder="t('Search')"
                v-model="params.search"/>
       </label>
 
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
               uk-toggle="target: #create_products" @click="editData = {}">
-        {{ $t("Add") }}
+        {{ t("Add") }}
       </button>
     </div>
 
@@ -161,18 +161,18 @@ const onShowFile = (item: any) => {
                    :items="store.productsList.results">
 
       <template #empty-message>
-        <div>{{ $t('no_available_data') }}</div>
+        <div>{{ t('no_available_data') }}</div>
       </template>
 
       <template #header="header">
-        {{ $t(header.text) }}
+        {{ t(header.text) }}
       </template>
       <template #item-price="data">
         {{ (`${data.price}`).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' Som' }}
       </template>
 
       <template #item-title="item">
-        {{ item['title_' + $i18n.locale] }}
+        {{ item['title_' + locale] }}
       </template>
 
 
@@ -197,11 +197,11 @@ const onShowFile = (item: any) => {
       </template>
 
       <template #item-description="item">
-        {{ item['description_' + $i18n.locale] }}
+        {{ item['description_' + locale] }}
       </template>
       <template #header-actions="item">
         <div class="flex justify-end">
-          {{ $t(item.text) }}
+          {{ t(item.text) }}
         </div>
       </template>
       <template #item-actions="item">
@@ -222,7 +222,7 @@ const onShowFile = (item: any) => {
     <TwPagination :restart="toRefresh" :total="store.productsList.count" class="mt-10 tw-pagination"
                   :current="params.page"
                   :per-page="params.page_size"
-                  :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
+                  :text-before-input="t('go_to_page')" :text-after-input="t('forward')"
                   @page-changed="changePagionation" @per-page-changed="onPageSizeChanged"/>
 
     <CreateProducts :editData="editData" @saveProducts="saveProducts"/>

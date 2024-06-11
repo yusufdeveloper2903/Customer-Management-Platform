@@ -130,10 +130,10 @@ const refresh = async () => {
 <template>
   <div class="card">
     <div class="flex justify-between items-end mb-7">
-      <h1 class="font-semibold text-lg text-success">{{ $t('social_links') }}</h1>
+      <h1 class="font-semibold text-lg text-success">{{ t('social_links') }}</h1>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full "
-              uk-toggle="target: #links" @click="editLink = {}">
-        {{ $t("Add") }}
+              uk-toggle="target: #links" @click="editLink = <EditLink>{}">
+        {{ t("Add") }}
       </button>
     </div>
 
@@ -141,8 +141,8 @@ const refresh = async () => {
       <thead>
       <tr>
         <th v-for="field in linksFields"
-            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider firstTable">
-          {{ $t(field.text) }}
+            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider">
+          {{ t(field.text) }}
         </th>
       </tr>
       </thead>
@@ -167,15 +167,15 @@ const refresh = async () => {
       </tr>
       </tbody>
     </table>
-    <div class="empty_table" v-if="!store.linksList.results.length">{{ $t('no_available_data') }}</div>
+    <div class="empty_table" v-if="!store.linksList.results.length">{{ t('no_available_data') }}</div>
 
     <TwPagination
         class="mt-10 tw-pagination"
         :current="params.page"
         :total="store.linksList.count"
         :per-page="params.page_size"
-        :text-before-input="$t('go_to_page')"
-        :text-after-input="$t('forward')"
+        :text-before-input="t('go_to_page')"
+        :text-after-input="t('forward')"
         @page-changed="changePagionation"
         @per-page-changed="onPageSizeChanged"
     />

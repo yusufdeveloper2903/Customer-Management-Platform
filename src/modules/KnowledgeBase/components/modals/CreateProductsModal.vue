@@ -211,9 +211,9 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 :key="error.$uid"
                 class="text-danger text-sm"
             >
-              {{ $t(error.$message) }}
+              {{ t(error.$message) }}
             </p>
-            <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('UZ') }}
+            <label for="number" class="block mt-4">{{ t('description') + ' ' + t('UZ') }}
               <textarea
                   id="number"
                   type="text"
@@ -236,9 +236,9 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 :key="error.$uid"
                 class="text-danger text-sm"
             >
-              {{ $t(error.$message) }}
+              {{ t(error.$message) }}
             </p>
-            <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('KR') }}
+            <label for="number" class="block mt-4">{{ t('description') + ' ' + t('KR') }}
               <textarea
                   id="number"
                   type="text"
@@ -261,15 +261,15 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 :key="error.$uid"
                 class="text-danger text-sm"
             >
-              {{ $t(error.$message) }}
+              {{ t(error.$message) }}
             </p>
-            <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('RU') }}
+            <label for="number" class="block mt-4">{{ t('description') + ' ' + t('RU') }}
               <textarea
                   id="number"
                   type="text"
                   class="form-input"
                   v-model="productsData.description_ru"
-              />
+              ></textarea>
 
             </label>
 
@@ -277,7 +277,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
         </ModalTabs>
         <form>
           <div class="flex gap-4">
-            <label class="w-full mt-4">{{ $t('Number (multi-digit-code)') }}
+            <label class="w-full mt-4">{{ t('Number (multi-digit-code)') }}
               <input
                   id="number"
                   type="number"
@@ -290,7 +290,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   :key="error.$uid"
                   class="text-danger text-sm"
               >
-                {{ $t(error.$message) }}
+                {{ t(error.$message) }}
               </p>
             </label>
 
@@ -298,7 +298,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
 
           <div class="flex gap-4">
 
-            <label class="mt-4  w-full">{{ $t('Quantity') }}
+            <label class="mt-4  w-full">{{ t('Quantity') }}
               <input
                   id="quantity"
                   type="number"
@@ -308,7 +308,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
               />
 
             </label>
-            <label class="w-full mt-4">{{ $t('Measurement_type') }}
+            <label class="w-full mt-4">{{ t('Measurement_type') }}
               <input
                   id="number"
                   type="text"
@@ -321,10 +321,10 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   :key="error.$uid"
                   class="text-danger text-sm"
               >
-                {{ $t(error.$message) }}
+                {{ t(error.$message) }}
               </p>
             </label>
-            <label class="mt-4 w-full ">{{ $t('price') }}
+            <label class="mt-4 w-full ">{{ t('price') }}
               <input
                   id="price"
                   type="number"
@@ -337,12 +337,12 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   :key="error.$uid"
                   class="text-danger text-sm"
               >
-                {{ $t(error.$message) }}
+                {{ t(error.$message) }}
               </p>
             </label>
           </div>
         </form>
-        <label class="mt-4 block" for="photo">{{ $t('photo') }}
+        <label class="mt-4 block" for="photo">{{ t('photo') }}
           <input @change="getFile" id="fileInput" type="file"
                  class="form-file-input p-1"
                  accept="image/png,image/jpeg"
@@ -375,7 +375,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           class=" uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
       >
         <button uk-toggle="target: #create_products" class="btn-secondary">
-          {{ $t("Cancel") }}
+          {{ t("Cancel") }}
         </button>
 
         <button :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'" @click="updateDeal"
@@ -386,7 +386,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
               class="inline w-4 h-4 text-white animate-spin mr-2"
               v-if="isSubmitted"
           />
-          <span>{{ propData.editData.id ? $t("Change") : $t('Add') }}</span>
+          <span>{{ propData.editData.id ? t("Change") : t('Add') }}</span>
 
         </button>
       </div>

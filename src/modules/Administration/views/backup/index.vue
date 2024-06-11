@@ -187,7 +187,7 @@ watch(
                 <label
                     for="search"
                     class="text-sm dark:text-white"
-                >{{ $t('Search') }}:</label>
+                >{{ t('Search') }}:</label>
                 <input
                     v-model="params.search"
                     id="search"
@@ -209,7 +209,7 @@ watch(
             </div>
             <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full "
                     uk-toggle="target: #backup-add-modal">
-              {{ $t('create_a_backup') }}
+              {{ t('create_a_backup') }}
             </button>
           </div>
           <EasyDataTable
@@ -222,10 +222,10 @@ watch(
           >
 
             <template #empty-message>
-              <div>{{ $t('no_available_data') }}</div>
+              <div>{{ t('no_available_data') }}</div>
             </template>
             <template #header="header">
-              {{ $t(header.text) }}
+              {{ t(header.text) }}
             </template>
             <template #item-author="items">
               <div class="flex justify-left" style="overflow-wrap: anywhere;">
@@ -272,8 +272,8 @@ watch(
               :current="params.page"
               :total="administrationStorage.back_up_list.count"
               :per-page="params.limit"
-              :text-before-input="$t('go_to_page')"
-              :text-after-input="$t('forward')"
+              :text-before-input="t('go_to_page')"
+              :text-after-input="t('forward')"
               @page-changed="onInput"
               @page-to="onInputTo"
               @per-page-changed="onPageSizeChanged"
@@ -297,25 +297,25 @@ watch(
         />
         <div class="uk-modal-header dark:bg-darkLayoutMain">
           <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b] dark:text-white">
-            {{ $t('create_a_backup') }}
+            {{ t('create_a_backup') }}
           </h2>
         </div>
         <div class="uk-modal-body dark:text-gray-300">
-          {{ $t('are_you_sure_you_want_to_back_up_the_database') }}
+          {{ t('are_you_sure_you_want_to_back_up_the_database') }}
         </div>
         <div class="uk-modal-footer uk-text-right bg-white px-5 py-3 dark:bg-darkLayoutMain">
           <button
               uk-toggle="target: #backup-add-modal"
               class="mr-4 rounded-md bg-danger px-6 py-2 text-white duration-100 hover:opacity-90"
           >
-            {{ $t('no') }}
+            {{ t('no') }}
           </button>
           <button
               class="rounded-md bg-primary px-6 py-2 text-white duration-100 hover:opacity-90"
               @click="createBackup"
               :disabled="isLoading"
           >
-            {{ $t('yes') }}
+            {{ t('yes') }}
             <img src="@/assets/image/loading.svg" alt="loading.svg" class="inline w-4 h-4 text-white animate-spin"
                  v-if="isLoading">
           </button>

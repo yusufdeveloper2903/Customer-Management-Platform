@@ -55,31 +55,26 @@ export const categoryitems = [
     },
 ];
 
-
-export const introItems = [
+export const introFields = [
     {
-        id: 1,
-        photo: "https://picsum.photos/300",
-        name: "Парфюм",
-        description:
-            "Publish up your selfies to make yourself more beautiful with this app",
-        step_id: 1,
+        text: "ID",
+        value: "id",
     },
     {
-        id: 2,
-        photo: "https://picsum.photos/300",
-        name: "Для взрослых",
-        description:
-            "Publish up your selfies to make yourself more beautiful with this app",
-        step_id: 2,
+        text: "photo",
+        value: "photo",
     },
     {
-        id: 3,
-        photo: "",
-        name: "Аксессуары",
-        description:
-            "Publish up your selfies to make yourself more beautiful with this app",
-        step_id: 3,
+        text: "Заголовок",
+        value: "name",
+    },
+    {
+        text: "Описания",
+        value: "description",
+    },
+    {
+        text: "actions",
+        value: "actions",
     },
 ];
 
@@ -309,17 +304,51 @@ export const headerPlaces = [
         text: "phones",
         value: "phones"
     },
-    {
-        text: "region",
-        value: "region"
-    },
-    {
-        text: "address",
-        value: "address"
-    },
-    {
-        text: "actions",
-        value: "actions"
-    },
+    { text: "id", value: "id" },
+    { text: "title", value: "title" },
+    { text: "phones", value: "phones" },
+    { text: "region", value: "region" },
+    { text: "address", value: "address" },
+    { text: "actions", value: "actions" },
 ]
+
+export const recipesFields = [
+    { text: "ID",  value: "id" },
+    { text: "name", value: "title" },
+    { text: "rating", value: "rating" },
+    { text: "calorie", value: "calorie" },
+    { text: "preparation_time", value: "preparation_time" },
+    { text: "category", value: "category" },
+    { text: "Status", value: "is_active" },
+    { text: "actions", value: "actions" },
+]
+
+export const recipedetailFields = [
+    { text: "ID",  value: "id" },
+    { text: "photo", value: "photo" },
+    { text: "name", value: "title" },
+    { text: "category", value: "category" },
+    { text: "rating", value: "rating" },
+    { text: "views", value: "views" },
+    { text: "link", value: "link" },
+    { text: "Status", value: "is_active" },
+    { text: "actions", value: "actions" },
+]
+
+export const recipeCategoryFields = [
+    { text: "ID", value: "id" },
+    { text: "name", value: "name" },
+    { text: "actions", value: "actions" },
+]
+
+export const splashFields = [
+    { text: "ID", value: "id" },
+    { text: "title", value: "title" },
+    { text: "image", value: "image" },
+    { text: "version", value: "version" },
+    { text: "color", value: "color" },
+    { text: "is_active", value: "is_active" },
+    { text: "actions", value: "actions" },
+]
+
 

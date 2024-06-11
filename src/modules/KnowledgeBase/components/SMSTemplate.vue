@@ -180,7 +180,7 @@ const saveSmsTemplate = () => {
     <TwPagination :total="store.smsTemplateList.count" class="mt-10 tw-pagination"
                   :restart="toRefresh"
                   :current="params.page" :per-page="params.page_size"
-                  :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
+                  :text-before-input="t('go_to_page')" :text-after-input="t('forward')"
                   @page-changed="changePagination" @per-page-changed="onPageSizeChanged"/>
   </div>
 

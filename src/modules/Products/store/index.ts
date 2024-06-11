@@ -23,7 +23,7 @@ export default defineStore("productStore", {
     },
     actions: {
         //GET REQUEST
-        async getProductList(params: any) {
+        async getProductList(params?: any) {
             const {data} = await $axios.get("products/categories/", {params});
             this.productListCategory = data;
         },

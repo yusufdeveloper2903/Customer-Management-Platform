@@ -166,7 +166,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
           <ModalTab title="UZ">
             <form>
               <label for="nameUz"
-              >{{ $t('name') + ' ' + $t('UZ') }}
+              >{{ t('name') + ' ' + t('UZ') }}
                 <input
                     id="nameUz"
                     type="text"
@@ -179,12 +179,12 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
-                  {{ $t(error.$message) }}
+                  {{ t(error.$message) }}
                 </p>
               </label>
 
               <label class="mt-4 block" for="descriptionUz"
-              >{{ $t('description') + ' ' + $t('UZ') }}
+              >{{ t('description') + ' ' + t('UZ') }}
                 <input
                     id="descriptionUz"
                     type="text"
@@ -200,7 +200,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
-                  {{ $t(error.$message) }}
+                  {{ t(error.$message) }}
                 </p>
               </label>
             </form>
@@ -208,7 +208,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
           <ModalTab title="KR">
             <form>
               <label for="nameUz"
-              >{{ $t('name') + ' ' + $t('KR') }}
+              >{{ t('name') + ' ' + t('KR') }}
                 <input
                     id="nameUz"
                     type="text"
@@ -221,12 +221,12 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
-                  {{ $t(error.$message) }}
+                  {{ t(error.$message) }}
                 </p>
               </label>
 
               <label class="mt-4 block" for="descriptionUz"
-              >{{ $t('description') + ' ' + $t('KR') }}
+              >{{ t('description') + ' ' + t('KR') }}
                 <input
                     id="descriptionUz"
                     type="text"
@@ -242,7 +242,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
-                  {{ $t(error.$message) }}
+                  {{ t(error.$message) }}
                 </p>
               </label>
             </form>
@@ -251,7 +251,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
           <ModalTab title="RU">
             <form>
               <label for="nameRu"
-              >{{ $t('name') + ' ' + $t('RU') }}
+              >{{ t('name') + ' ' + t('RU') }}
                 <input
                     id="nameRu"
                     type="text"
@@ -265,12 +265,12 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
-                  {{ $t(error.$message) }}
+                  {{ t(error.$message) }}
                 </p>
               </label>
 
               <label class="mt-4 block" for="descriptionRu"
-              >{{ $t('description') + ' ' + $t('RU') }}
+              >{{ t('description') + ' ' + t('RU') }}
                 <input
                     id="descriptionRu"
                     type="text"
@@ -286,14 +286,14 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
                     :key="error.$uid"
                     class="text-danger text-sm"
                 >
-                  {{ $t(error.$message) }}
+                  {{ t(error.$message) }}
                 </p>
               </label>
             </form>
           </ModalTab>
         </ModalTabs>
         <label for="nameUz"
-        >{{ $t('Link') }}
+        >{{ t('Link') }}
           <input
               id="nameUz"
               type="text"
@@ -303,7 +303,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
         </label>
 
         <label
-        >{{ $t('photo') }}
+        >{{ t('photo') }}
           <FileInput
               :empty="emptyData"
               v-model="newsTemplateData.file"
@@ -333,7 +333,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
               v-if="isSubmitted"
           />
           <span>{{
-              propData.editData.id ? $t("Edit") : $t("Add")
+              propData.editData.id ? t("Edit") : t("Add")
             }}</span>
         </button>
       </div>

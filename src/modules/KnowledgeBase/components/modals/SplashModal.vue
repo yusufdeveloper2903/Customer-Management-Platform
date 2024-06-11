@@ -1,0 +1,272 @@
+<script lang="ts" setup>
+
+
+//IMPORTED FILES
+import {Ref, ref, computed} from "vue";
+import UIkit from "uikit";
+import {useI18n} from "vue-i18n";
+import {toast} from "vue3-toastify";
+import {helpers, required} from "@vuelidate/validators";
+import useVuelidate, {Validation} from "@vuelidate/core";
+import knowledgeBase from "../../store/index";
+import {Splash} from "../../interfaces";
+import FileInput from "@/components/FileInput/FileInput.vue";
+import {objectToFormData} from "@/mixins/formmatter";
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
+
+
+
+
+
+//DECLARED VARIABLES
+const {t} = useI18n();
+const isSubmitted = ref<boolean>(false);
+const store = knowledgeBase();
+const emit = defineEmits(["refresh"]);
+const propData = defineProps<{ editData: Splash }>();
+let splashData = ref<Splash>({
+  id: null,
+  title_ru: '',
+  title_uz: '',
+  title_kr: '',
+  color: "",
+  image: null,
+  version: "",
+  is_active: false,
+
+});
+
+
+//FUNCTIONS
+function openModal() {
+  if (propData.editData.id) {
+    splashData.value.title_ru = propData.editData.title_ru
+    splashData.value.title_uz = propData.editData.title_uz
+    splashData.value.title_kr = propData.editData.title_kr
+    splashData.value.image = propData.editData.image
+    splashData.value.id = propData.editData.id
+  }
+}
+
+const hideModal = () => {
+  validate.value.$reset()
+  splashData.value.title_ru = ''
+  splashData.value.title_uz = ''
+  splashData.value.title_kr = ''
+  splashData.value.image = null
+  splashData.value.id = null
+
+}
+const updateDeal = async () => {
+  const success = await validate.value.$validate();
+  if (!success) return;
+
+  if (propData.editData.id) {
+    try {
+      const fd = objectToFormData(['image'], splashData.value);
+      await store.updateSplash(fd)
+      await UIkit.modal("#splash").hide();
+      toast.success(t("updated_successfully"));
+      isSubmitted.value = false;
+      emit("refresh");
+    } catch (error: any) {
+      isSubmitted.value = false;
+      toast.error(t("error"));
+    }
+  } else {
+    try {
+      const fd = objectToFormData(['image'], splashData.value);
+      await store.createSplash(fd)
+      await UIkit.modal("#splash").hide();
+      toast.success(t("created_successfully"));
+      emit("refresh");
+      isSubmitted.value = false;
+    } catch (error: any) {
+      isSubmitted.value = false;
+      toast.error(t('error'));
+    }
+  }
+};
+
+//COMPUTED
+const rules = computed(() => {
+  return {
+    title_ru: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    title_kr: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    title_uz: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+  };
+});
+
+const validate: Ref<Validation> = useVuelidate(rules, splashData);
+
+</script>
+
+<template>
+  <div
+      id="splash"
+      class="uk-flex-top"
+      uk-modal
+      @shown="openModal"
+      @hidden="hideModal"
+  >
+    <div
+        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
+    >
+      <button class="uk-modal-close-default" type="button" uk-close/>
+      <div class="uk-modal-header">
+        <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
+          {{ propData.editData.id ? t("Edit") : t("Add") }}
+        </h2>
+      </div>
+
+      <div class="uk-modal-body py-4">
+        <ModalTabs class="mb-4">
+          <ModalTab title="UZ">
+            <form>
+              <label for="nameUz"
+              >{{ t('name') + ' ' + t('UZ') }}
+                <input
+                    id="nameUz"
+                    type="text"
+                    class="form-input"
+                    v-model="splashData.title_uz"
+                    :class="validate.title_uz.$errors.length ? 'required-input' : ''"
+                />
+                <p
+                    v-for="error in validate.title_uz.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ t(error.$message) }}
+                </p>
+              </label>
+
+            </form>
+          </ModalTab>
+          <ModalTab title="KR">
+            <form>
+              <label for="nameUz"
+              >{{ t('name') + ' ' + t('KR') }}
+                <input
+                    id="nameUz"
+                    type="text"
+                    class="form-input"
+                    v-model="splashData.title_kr"
+                    :class="validate.title_kr.$errors.length ? 'required-input' : ''"
+                />
+                <p
+                    v-for="error in validate.title_kr.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ t(error.$message) }}
+                </p>
+              </label>
+            </form>
+          </ModalTab>
+
+          <ModalTab title="RU">
+            <form>
+              <label for="nameRu"
+              >{{ t('name') + ' ' + t('RU') }}
+                <input
+                    id="nameRu"
+                    type="text"
+                    class="form-input"
+                    v-model="splashData.title_ru"
+                    :class="validate.title_ru.$errors.length ? 'required-input' : ''
+                  "
+                />
+                <p
+                    v-for="error in validate.title_ru.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ t(error.$message) }}
+                </p>
+              </label>
+
+            </form>
+          </ModalTab>
+        </ModalTabs>
+
+        <label for="version"
+              >{{ t('version') }}
+                <input
+                    id="version"
+                    type="text"
+                    class="form-input"
+                    v-model="splashData.version"
+                />
+
+              </label>
+
+              <label for="color" class="my-4 block"
+              >{{ t('color') }}
+                <input
+                    id="color"
+                    type="text"
+                    class="form-input"
+                    v-model="splashData.color"
+                />
+              </label>
+
+            
+        <label
+        >{{ t('photo') }}
+          <FileInput
+              v-model="splashData.image"
+              @remove="splashData.image = null"
+              :typeModal="propData.editData.id"
+              name="news-template"
+          />
+        </label>
+
+        <div class="flex items-center mt-5">
+        <p class="mr-2">{{ t("Status") }}:</p>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+                type="checkbox"
+                v-model="splashData.is_active"
+                class="sr-only peer"
+            />
+            <div
+                className="w-11 h-6 bg-gray-200 peer-focus:outline-none
+          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
+            ></div>
+          </label>
+        </div>
+      </div>
+
+      <div
+          class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
+      >
+        <button uk-toggle="target: #splash" class="btn-secondary">
+          {{ t("Отмена") }}
+        </button>
+
+        <button
+            :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'"
+            @click="updateDeal"
+        >
+          <img
+              src="@/assets/image/loading.svg"
+              alt="loading.svg"
+              class="inline w-4 h-4 text-white animate-spin mr-2"
+              v-if="isSubmitted"
+          />
+          <span>{{
+              propData.editData.id ? t("Edit") : t("Add")
+            }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>

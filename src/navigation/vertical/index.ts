@@ -64,6 +64,13 @@ export default [
         permissions: ["admin"],
     },
 
+    {
+        name: "Recipes",
+        icon: "File",
+        path: "/recipes",
+        permissions: ["admin"],
+    },
+
 
     {
         name: "Administration",

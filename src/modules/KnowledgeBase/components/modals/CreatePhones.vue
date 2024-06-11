@@ -99,26 +99,26 @@ const validate: Ref<Validation> = useVuelidate(rules, editData);
 
         <form>
 
-          <label for="phone">{{ $t('phone_number') }}</label>
-          <input id="phone" type="tel" class="form-input" v-maska
-                 data-maska="+998 ### ## ## ##" :class="validate.number.$errors.length ? 'required-input' : ''"
+          <label for="phone">{{ t('phone_number') }}</label>
+          <input id="phone" type="tel" class="form-input" :placeholder="t('phone_number')" v-maska
+                 data-maska="+998 ## ### ## ##" :class="validate.number.$errors.length ? 'required-input' : ''"
                  v-model="editData.number"/>
           <p v-for="error in validate.number.$errors" :key="error.$uid" class="text-danger text-sm">
-            {{ $t(error.$message) }}
+            {{ t(error.$message) }}
           </p>
         </form>
       </div>
 
       <div class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white">
         <button uk-toggle="target: #phones" class="btn-secondary">
-          {{ $t("Cancel") }}
+          {{ t("Cancel") }}
         </button>
 
         <button :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'" @click="updateDeal"
                 :disabled="isSubmitted">
           <img src="@/assets/image/loading.svg" alt="loading.svg"
                class="inline w-4 h-4 text-white animate-spin mr-2" v-if="isSubmitted"/>
-          <span>{{ propData.editData.id ? $t("Change") : $t('Add') }}</span>
+          <span>{{ propData.editData.id ? t("Change") : t('Add') }}</span>
         </button>
       </div>
     </div>

@@ -11,7 +11,9 @@ import {
     Products,
     Link,
     Phones,
-    OnBoarding
+    RetseptCategory,
+    OnBoarding,
+    Splash
 
 } from "../interfaces";
 
@@ -70,6 +72,13 @@ export default defineStore("knowledgeBase", {
                 results: [] as Phones[]
             } as Results<Phones>,
 
+            retseptCategoryList: {
+                results: [] as RetseptCategory[]
+            } as Results<RetseptCategory>,
+
+            splashList: {
+                results: [] as Splash[]
+            } as Results<Splash>
         };
     },
     actions: {
@@ -126,6 +135,15 @@ export default defineStore("knowledgeBase", {
             this.phonesList = data
         },
 
+        async getRetseptCategory(params?: Params) {
+            const {data} = await $axios.get('/knowledge_base/retsept_category/', {params})
+            this.retseptCategoryList = data
+        },
+
+        async getSplash(params?: Params) {
+            const {data} = await $axios.get('/knowledge_base/splash/', {params})
+            this.splashList = data
+        },
 
         //CREATE REQUEST
         createSmsTemplate(data: any) {
@@ -164,6 +182,18 @@ export default defineStore("knowledgeBase", {
             return $axios.post(`/knowledge_base/phones/drag_and_drop/`, data);
         },
 
+        createRecipeCategory(data: any) {
+            return $axios.post(`/knowledge_base/retsept_category/`, data);
+        },
+        
+        createPages(data: any) {
+            return $axios.post(`/knowledge_base/pages/`, data);
+        },
+
+        createSplash(data: any) {
+            return $axios.post(`/knowledge_base/splash/`, data);
+        },
+
 
         //PATCH REQUEST
         updateSmsTemplate(data: any) {
@@ -200,6 +230,14 @@ export default defineStore("knowledgeBase", {
             return $axios.patch(`/knowledge_base/phones/${data.id}/`, data);
         },
 
+        updateRecipeCategory(data: any) {
+            return $axios.patch(`/knowledge_base/retsept_category/${data.id}/`, data);
+        },
+
+        updateSplash(data: any) {
+            return $axios.patch(`/knowledge_base/splash/${data.get("id")}/`, data);
+        },
+
 
         //DELETE REQUEST
         deleteSmsTemplate(id: number | null) {
@@ -231,6 +269,14 @@ export default defineStore("knowledgeBase", {
         },
         deletePhones(id: number | null) {
             return $axios.delete(`/knowledge_base/phones/${id}/`);
+        },
+
+        deleteRecipeCategory(food_category_id: number | null) {
+            return $axios.delete(`/knowledge_base/retsept_category/${food_category_id}/`);
+        },
+
+        deleteSplash(id: number | null) {
+            return $axios.delete(`/knowledge_base/splash/${id}/`);
         },
 
 

@@ -276,3 +276,24 @@ export interface editSms {
     description_uz: '',
     description_kr: '',
 }
+
+
+export interface RetseptCategory {
+    id: number | null;
+    name: string;
+    name_uz: string;
+    name_ru: string;
+    name_kr: string;
+}
+
+export interface Splash {
+    id: null | number,
+    title_ru: string,
+    title_uz: string,
+    title_kr: string,
+    color: string,
+    image: null | string,
+    version: string,
+    is_active: boolean,
+}
+
