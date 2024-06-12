@@ -113,6 +113,10 @@ body {
     padding: 12px;
 }
 
+table tbody {
+    font-size: 13.72px
+}
+
 /* ======================== STYLES OF ACCORDION ======================== */
 
 /* ======================== STYLES OF PRISMJS ======================== */

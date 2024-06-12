@@ -168,7 +168,7 @@ const onShowFile = (item: any) => {
         {{ t(header.text) }}
       </template>
       <template #item-price="data">
-        {{ (`${data.price}`).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' Som' }}
+        {{ (`${data.price}`).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' So`m' }}
       </template>
 
       <template #item-title="item">

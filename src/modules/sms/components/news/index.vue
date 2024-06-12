@@ -195,7 +195,7 @@ watch(() => props.sms, async function (val) {
           <label for="from" class="dark:text-gray-300">
             {{ $t("startDate") }}
           </label>
-          <VueDatePicker :enableTimePicker="false" auto-apply v-model="params.start_time" model-type="yyyy-MM-dd"
+          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply v-model="params.start_time" model-type="yyyy-MM-dd"
           ></VueDatePicker>
         </div>
 

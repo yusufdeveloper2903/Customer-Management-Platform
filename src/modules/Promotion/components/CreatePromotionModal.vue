@@ -385,7 +385,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           <label for="from" class="dark:text-gray-300">
             {{ $t("date_from") + ' - ' + $t("date_to") }}
           </label>
-          <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
+          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
         </div>
         <p class=" mt-4 ">{{ $t("Published") }}</p>
 

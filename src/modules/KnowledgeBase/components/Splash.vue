@@ -12,7 +12,6 @@ import {Splash} from "../interfaces/index";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
 import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
-import UIkit from "uikit";
 
 
 //DECLARED VARIABLES
@@ -21,7 +20,7 @@ const store = knowledgeBase();
 const isLoading = ref(false);
 const itemToDelete = ref<number | null>(null);
 const dataToEdit = ref<Splash>({
-    id: null,
+  id: null,
   title_ru: '',
   title_uz: '',
   title_kr: '',

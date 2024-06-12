@@ -12,7 +12,6 @@ import {Onboarding} from "../interfaces/index";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
 import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
-import UIkit from "uikit";
 
 
 //DECLARED VARIABLES

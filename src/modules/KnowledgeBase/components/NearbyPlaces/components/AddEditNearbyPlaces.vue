@@ -415,7 +415,7 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
               <div class="w-full mt-4">
                 <label class="relative"> {{ $t('Open hour') }}</label>
                 <VueDatePicker
-
+                    format="dd-MM-yyyy"
                     auto-apply
                     v-model="openTime"
                     time-picker
@@ -424,6 +424,7 @@ const validate: Ref<Validation> = useVuelidate(rules, location);
               <div class="w-full mt-4">
                 <label class="relative"> {{ $t('Close hour') }} </label>
                 <VueDatePicker
+                    format="dd-MM-yyyy"
                     auto-apply
                     v-model="closeTime"
                     time-picker

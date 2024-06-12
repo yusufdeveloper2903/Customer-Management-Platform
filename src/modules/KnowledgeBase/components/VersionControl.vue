@@ -146,14 +146,14 @@ const onPageSizeChanged = (e) => {
           <label for="from" class="dark:text-gray-300">
             {{ t("from") }}
           </label>
-          <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
+          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
         </div>
 
         <div class="md:w-1/2 md:m-0 mt-2">
           <label for="to" class="dark:text-gray-300">
             {{ t("to") }}
           </label>
-          <VueDatePicker :enableTimePicker="false" auto-apply v-model="params.end_date"></VueDatePicker>
+          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply v-model="params.end_date"></VueDatePicker>
         </div>
       </form>
       <button

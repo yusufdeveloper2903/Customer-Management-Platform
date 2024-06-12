@@ -377,7 +377,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           <label for="from" class="dark:text-gray-300">
             {{ $t("date_from") + ' - ' + $t("date_to") }}
           </label>
-          <VueDatePicker :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
+          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
           <p
               v-for="error in validate.start_date.$errors"
               :key="error.$uid"

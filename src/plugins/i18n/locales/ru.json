@@ -59,6 +59,7 @@
   "codeCountSmall": "Числа не могут быть меньше 13",
   "codeCountBigger": "Чисел не может быть больше 13",
   "Onboarding": "Введение",
+  "Discount percentage": "Процент скидки",
   "multipleAnswers": "Несколько ответов",
   "Poll Questions Edit": "Редактировать опрос",
   "Error from server!": "Ошибка с сервера!",
