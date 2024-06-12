@@ -155,7 +155,7 @@ const dragDrop = async (item: Link) => {
         <td class="px-6 whitespace-no-wrap text-left ">{{ item.id }}</td>
         <td class="px-6 whitespace-no-wrap text-left">{{ item.product['title_' + $i18n.locale] }}</td>
         <td class="px-6 whitespace-no-wrap text-left">
-          {{ (`${item.price}`).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' Som' }}
+          {{ (`${item.price}`).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' So`m' }}
         </td>
         <td class="px-6 whitespace-no-wrap text-left">
           <label

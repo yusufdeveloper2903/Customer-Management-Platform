@@ -20,6 +20,7 @@ const store = knowledgeBase()
 const smsSendingList = ref<object[]>([]);
 const isLoading = ref(false);
 const smsId = ref<number | null>(null)
+const format = ref('MM-DD-YYYY')
 const smsFilter = reactive({
   page_size: 10,
   page: 1,
@@ -153,7 +154,7 @@ const deleteSms = async () => {
           <label for="from" class="dark:text-gray-300">
             {{ $t("startDate") }}
           </label>
-          <VueDatePicker auto-apply model-type="yyyy-MM-dd" :enable-time-picker="false"
+          <VueDatePicker format="dd-MM-yyyy" auto-apply model-type="yyyy-MM-dd" :enable-time-picker="false"
                          v-model="smsFilter.start_time"></VueDatePicker>
         </div>
 

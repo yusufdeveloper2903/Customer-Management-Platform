@@ -13,6 +13,7 @@ import Products from "../components/Products.vue"
 import PrivacyPolicy from "../components/PrivacyPolicy.vue";
 import TermsAndConditions from "../components/TermsAndConditions.vue"
 import Contacts from "../components/Links.vue";
+import Regions from '../components/Regions.vue'
 import Category from "../components/Categories.vue"
 import Splash from "../components/Splash.vue";
 import {ref} from 'vue'
@@ -62,7 +63,7 @@ const selectedTitle = (val: any) => {
         <PrivacyPolicy :knowledge="knowledge" :params="params"/>
       </Tab>
       <Tab title="region">
-        <CreateRegions :knowledge="knowledge" :params="params"/>
+        <Regions :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="Terms_and_conditions">
@@ -76,11 +77,11 @@ const selectedTitle = (val: any) => {
       </Tab>
 
       <Tab title="splash">
-        <Splash :knowledge="knowledge"/>
+        <Splash :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="recipe category">
-        <Category :knowledge="knowledge"/>
+        <Category :knowledge="knowledge" :params="params"/>
       </Tab>
 
     </Tabs>

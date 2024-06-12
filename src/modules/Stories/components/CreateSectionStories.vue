@@ -37,7 +37,6 @@ let sectionStories = ref<EditData>({
   button_type: null,
   button_url: '',
   is_button: false,
-  is_active: true,
   object_id: null,
   story: null,
   content_type: null,
@@ -45,6 +44,7 @@ let sectionStories = ref<EditData>({
   background_uz: '',
   background_kr: '',
   background_ru: '',
+  status: ''
 });
 const title = ref('')
 
@@ -61,7 +61,6 @@ function openModal() {
     sectionStories.value.object_id = propData.editData.object_id
     sectionStories.value.duration = propData.editData.duration
     sectionStories.value.is_button = propData.editData.is_button
-    sectionStories.value.is_active = propData.editData.is_active
     sectionStories.value.story = propData.editData.story
     sectionStories.value.story_section_id = propData.editData.story_section_id
     sectionStories.value.content_type = propData.editData.content_type
@@ -82,6 +81,7 @@ function openModal() {
 const hideModal = () => {
   emptyData.value = false
   general.tabs = 'UZ'
+  validated.value = false
   sectionStories.value.button_name = ''
   sectionStories.value.button_name_uz = ''
   sectionStories.value.button_name_kr = ''
@@ -90,7 +90,6 @@ const hideModal = () => {
   sectionStories.value.button_url = ''
   sectionStories.value.duration = ''
   sectionStories.value.is_button = false
-  sectionStories.value.is_active = true
   sectionStories.value.object_id = null
   sectionStories.value.story = null
   sectionStories.value.content_type = null
@@ -202,9 +201,15 @@ const saveEdit = async () => {
             <input
                 type="number"
                 class="form-input mb-3"
-
                 v-model="sectionStories.duration"
+                :class="!sectionStories.duration && validated ? 'required-input' : ''"
             />
+            <p
+                v-if="!sectionStories.duration && validated"
+                class="text-danger text-sm"
+            >
+              {{ $t('validation.this_field_is_required') }}
+            </p>
           </label>
 
           <div class="mt-4 " style="margin-left:130px">

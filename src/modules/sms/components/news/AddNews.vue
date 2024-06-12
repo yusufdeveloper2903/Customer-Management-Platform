@@ -216,7 +216,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
       <div class="uk-margin">
         <label for="form-stacked-text">{{ t('start_date') }} </label>
         <div class="uk-form-controls">
-          <VueDatePicker :enableTimePicker="false" auto-apply :locale="'ru'" model-type="yyyy-MM-dd hh:mm:ss"
+          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :locale="'ru'" model-type="yyyy-MM-dd hh:mm:ss"
                          :class="validate.start_time.$errors.length ? 'required-input' : ''"
                          v-model="newsData.start_time"
           />

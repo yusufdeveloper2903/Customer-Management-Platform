@@ -206,7 +206,7 @@ const updateDeal = async () => {
           </label>
 
           <label for="preparation_time" class="mt-4 block">{{ t('preparation_time') }}
-            <VueDatePicker v-model="recipes.preparation_time" :placeholder="t('preparation_time')" model-type="hh:mm:ss" time-picker  enable-seconds></VueDatePicker>
+            <VueDatePicker format="dd-MM-yyyy" v-model="recipes.preparation_time" :placeholder="t('preparation_time')" model-type="hh:mm:ss" time-picker  enable-seconds></VueDatePicker>
           </label>
 
           <label for="category" class="mt-4 block">{{ t('category') }}
