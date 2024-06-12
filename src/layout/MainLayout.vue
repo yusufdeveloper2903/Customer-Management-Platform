@@ -256,6 +256,13 @@ function breadCrumbStart(newPath) {
         {title: 'recipe detail', active: true},
       ];
       break;
+
+      case "add-recipe":
+      BreadcrumbList.value = [
+      {title: 'Recipes', active: false},
+        {title: 'add recipe', active: true},
+      ];
+      break;
     default:
       break;
   }

@@ -1,302 +1,167 @@
 <script setup lang="ts">
 
-
 //IMPORTED FILES
-import {Ref, computed, ref, onMounted} from "vue";
-import staff from "../store/index";
+import {onMounted, ref} from "vue"
+import users from "../store/index"
+import {useRoute} from "vue-router";
+import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
-import useVuelidate, {Validation} from "@vuelidate/core";
-import {helpers, minLength, required} from "@vuelidate/validators";
-import {useRoute, useRouter} from "vue-router";
-import {toast} from "vue3-toastify";
-import {objectToFormData} from "@/mixins/formmatter";
+// import TerminateSessionModal from "../components/TerminateSessionModal.vue"
+// import ConfirmUntieCardModal from "../components/ConfirmUntieCardModal.vue"
+
+
 
 //DECLARED VARIABLES
-const store = staff()
-const {locale, t} = useI18n();
-const imageUrl = ref<string>("")
-const isPasswordShown = ref<boolean>(false)
-const router = useRouter();
-const route = useRoute();
-let userData = ref({
-  id: null,
-  full_name: "",
-  phone: "",
-  username: "",
-  password: "",
-  role: null,
-  is_active: true,
-  photo: null
-})
+const store = users()
+const {t} = useI18n()
+const route = useRoute()
+const userItem = ref<object>({});
+const userId = ref<null | number>(null)
 
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
-  await store.getUsersRolesList()
-  if (route.params.id) {
-    store.getStaffById(Number(route.params.id)).then(() => {
-      userData.value = store.staff;
-      userData.value.password = store.staff.show_password
-      if (store.staff.photo) {
-        imageUrl.value = store.staff.photo;
-        userData.value.photo = null;
-      }
-    });
-  }
-});
+  let id = +route.params.id
+  await store.getUserById(id)
+  userItem.value = store.user
 
+})
 
-// FUNCTIONS
-const handleFileUpload = (event: any) => {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-  reader.onload = (event: any) => {
-    imageUrl.value = event.target.result;
-    userData.value.photo = file;
-  };
-  reader.readAsDataURL(file);
+// FUNCTION
+const showTerminateModal = (item) => {
+  UIkit.modal("#terminate-session-modal").show();
+  userId.value = item.id
 };
 
-const deleteImage = () => {
-  imageUrl.value = "";
-  userData.value.photo = null;
+const showUntieCardModal = (item) => {
+  UIkit.modal("#untie-card-confirm-modal").show();
+  userId.value = item.id
 };
-
-function removeSpaces(str) {
-  return str.replace(/[\s+]/g, "");
-}
-
-const saveUser = async () => {
-  const success = await validate.value.$validate();
-  if (!success) return;
-
-  if (userData.value.phone) {
-    userData.value.phone = removeSpaces(userData.value.phone);
-  }
-
-  if (typeof userData.value.password === "string" && !userData.value.password) {
-    userData.value.password = "";
-  }
-
-
-  const formData = objectToFormData(userData.value);
-  if (route.params.id) {
-    try {
-      await store.updateStaff(formData)
-      await router.push("/staff");
-      toast.success(t("updated_successfully"));
-    } catch (error: any) {
-      if (error) {
-        toast.error(t('error'))
-      }
-    }
-
-  } else {
-    try {
-      await store.createStaff(formData)
-      await router.push("/staff");
-      toast.success(t("created_successfully"));
-    } catch (error: any) {
-
-      if (error.response.data.message == '{\'username\': [ErrorDetail(string=\'Пользователь с таким именем уже существует.\', code=\'unique\')]}') {
-        if (error) {
-          toast.error(t('User with that username already exists!'))
-        }
-      } else {
-        if (error) {
-          toast.error(t('error'))
-        }
-      }
-
-    }
-  }
-};
-
-
-//COMPUTED
-const rules = computed(() => {
-  return {
-    phone: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
-      minLength: helpers.withMessage(
-          "Номер телефона необходимо вводить в формате: '998 [XX] [XXX XX XX]",
-          minLength(17)
-      ),
-    },
-
-    role: {
-      required: helpers.withMessage(
-          "validation.this_field_is_required",
-          required
-      ),
-    },
-    password: {
-      required: helpers.withMessage("validation.this_field_is_required", required),
-    }
-  };
-
-});
-
-const validate: Ref<Validation> = useVuelidate(rules, userData);
-
-
 </script>
 
-
 <template>
-  <div>
-    <div class="md:flex gap-5 dark:text-white">
-      <div class="md:w-3/12  card sm:w-full">
-        <div
-            class="mb-5 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
-          <span v-if="!imageUrl" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
-          <img
-              v-else
-              class="w-full h-full object-cover"
-              :src="imageUrl"
-              alt=""
-          />
+  <div class="md:flex sm:block items-start gap-5 dark:text-white h-fit">
+    <div class="md:w-3/12 sm:w-full">
+      <div class="card">
+        <h2 class="text-success mb-3"><b>{{ t('Общее') }}</b></h2>
+        <div class="flex justify-between">
+          <div>Ф.И.О.</div>
+          <div><small><b>{{ userItem.full_name }}</b></small></div>
         </div>
-        <div class="flex gap-3 mb-0.5">
-          <div class="w-full" :class="imageUrl && 'w-10/12'">
-            <input
-                id="upload"
-                class="form-file-input"
-                type="file"
-                @change="handleFileUpload"
-            />
-          </div>
-          <button
-              v-if="imageUrl"
-              class="btn-outline-danger btn-action float-right w-2/12 mt-1"
-              @click="deleteImage"
-          >
-            <Icon icon="Trash Bin Trash" color="#ea5455" size="20"/>
-          </button>
+
+        <div class="flex justify-between my-2">
+          <div>Номер телефона</div>
+          <div v-if="userItem.phone"><small><b>+{{ userItem.phone }}</b></small></div>
+        </div>
+
+        <div class="flex justify-between">
+          <div>Создано</div>
+          <div><small><b>{{ userItem.created_date }}</b></small></div>
         </div>
       </div>
 
 
-      <div class="md:w-6/12 sm:w-full card">
-        <form>
-          <div class=" md:flex items-start gap-8">
-            <label for="loginDetail" class="w-6/12 text-xs">
-              {{ t("Login") }}:
-              <input
-                  autocomplete="off"
-                  id="loginDetail"
-                  v-model="userData.username"
-                  type="text"
-                  :placeholder="t('Login')"
-                  class="form-input md:mb-0 mb-4"
-              />
-            </label>
+      <div class="card mt-4">
+        <h2 class="text-success mb-3"><b>Активные сессии</b></h2>
+        <ul class="uk-list uk-list-divider" v-if="store.user && store.user.sessions && store.user.sessions.length">
+          <li v-for="(item, index) in store.user.sessions" :key="index"
+              class="dark:bg-secondary card-bg p-3 rounded-md">
 
-            <label for="passwordDetail" class="w-6/12 text-xs relative">
-              {{ t("Password") }}:
-              <input
-                  autocomplete="off"
-                  id="passwordDetail"
-                  :type="isPasswordShown ? 'text' : 'password'"
-                  placeholder="*********"
-                  class="form-input"
-                  v-model="userData.password"
-              />
-              <button
-                  @click="isPasswordShown = !isPasswordShown"
-                  type="button"
-                  class="absolute top-8 right-3"
-              >
-                <Icon
-                    :icon="isPasswordShown ? 'Eye Closed' : 'Eye'"
-                    color="#9ca3af"
-                    size="16"
-                />
-              </button>
-            </label>
-          </div>
+            <div class="flex justify-between">
+              <div>Устройство</div>
+              <div><small><b>{{ item.device_model }}</b></small></div>
+            </div>
 
+            <div class="flex justify-between mt-2">
+              <div>Версия приложения</div>
+              <div><small><b>{{ item.device_type }}</b></small></div>
+            </div>
 
-          <label class="mt-5 mb-1 block text-xs"> {{ $t("Role") }}:
-            <v-select
-                v-model="userData.role"
-                :clearable="false"
-                :options="[]"
-                :getOptionLabel="
-                (role) => (role.name && role.name[locale]) || role.name
-              "
-                :reduce="(v) => v.id"
-                :placeholder="t('Role')"
-                :class="validate.role.$errors.length ? 'required-input' : ''"
-            >
-              <template #no-options> {{ t("no_matching_options") }}</template>
-            </v-select>
-            <p
-                v-for="error in validate.role.$errors"
-                :key="error.$uid"
-                class="text-danger text-sm"
-            >
-              {{ t(error.$message) }}
-            </p>
-          </label>
+            <div class="flex justify-between mt-2">
+              <div>IP-адресс</div>
+              <div><small><b>{{ item.ip_address }}</b></small></div>
+            </div>
 
-          <p class="text-xs mt-5 mb-1">{{ $t("Status") }}:</p>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-                type="checkbox"
-                v-model="userData.is_active"
-                class="sr-only peer"
-            />
-            <div
-                className="w-11 h-6 bg-gray-200 peer-focus:outline-none
-          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-            ></div>
-          </label>
-        </form>
-      </div>
+            <div class="flex justify-between my-2">
+              <div>Дата создания</div>
+              <div><small><b>{{ item.created_date }}</b></small></div>
+            </div>
 
-      <div class="md:w-3/12 card sm:w-full">
+            <div class="flex justify-between">
+              <div>Посещение</div>
+              <div><small><b>{{ item.last_visit }}</b></small></div>
+            </div>
 
-        <label for="login" class="block text-xs">
-          {{ t("Full Name") }}:
-        </label>
-        <input
-            id="login"
-            type="text"
-            :placeholder="t('Full Name')"
-            class="form-input"
-            v-model="userData.full_name"
-        />
+            <button class="mt-2 w-full rounded-md bg-danger text-white" @click="showTerminateModal(item)">
+              <small>Завершить</small>
 
-        <label for="phoneNumber" class="mt-4 block text-xs">
-          {{ t("phone_number") }}:
-        </label>
-        <input
-            :placeholder="t('phone_number')"
-            v-model="userData.phone"
-            v-maska
-            data-maska="+998 ## ### ## ##"
-            class="form-input"
-            :class="validate.phone.$errors.length ? 'required-input' : ''"
-        />
-        <p
-            v-for="error in validate.phone.$errors"
-            :key="error.$uid"
-            class="text-danger text-sm"
-        >
-          {{ t(error.$message) }}
-        </p>
+            </button>
 
-
+          </li>
+        </ul>
+        <h2 v-else class="text-center">{{ $t('no_available_data') }}</h2>
       </div>
     </div>
-    <div class="mt-5 flex justify-end gap-4">
-      <button class="btn-secondary" @click="$router.push('/staff')">
-        {{ t("Cancel") }}
-      </button>
-      <button class="btn-success" @click="saveUser">
-        {{ route.params.id ? t("Change") : t("Add") }}
-      </button>
+
+
+    <div class="md:w-6/12 sm:w-full card">
+      <EasyDataTable
+          theme-color="#7367f0"
+          hide-footer
+          :headers="fieldsUserDetail"
+          :items="[]"
+      >
+        <template #empty-message>
+          <div class="dark:text-white">{{ $t("no_available_data") }}</div>
+        </template>
+        <template #header="header">
+          {{ $t(header.text) }}
+        </template>
+        <template #item-created="item">
+          {{ item.created_date }}
+        </template>
+
+        <template #item-device="item">
+          {{ item.device_model }}
+        </template>
+      </EasyDataTable>
+    </div>
+
+
+    <div class="md:w-3/12 sm:w-full card">
+      <h2 class="text-success mb-3"><b>Карты</b></h2>
+      <ul class="uk-list uk-list-divider">
+        <li class="card-bg p-3 rounded-md dark:bg-secondary">
+          <div class="flex justify-between ">
+            <div>Имя</div>
+            <div><small><b>Uzbekistan Bank</b></small></div>
+          </div>
+
+          <div class="flex justify-between my-2">
+            <div>Номер</div>
+            <div><small><b>8600 **** **** 2434</b></small></div>
+          </div>
+
+          <div class="flex justify-between">
+            <div>Добавлено</div>
+            <div><small><b>12:00 / 25.12.2023</b></small></div>
+          </div>
+
+          <button class="mt-2 w-full rounded-md bg-danger text-white" @click="showUntieCardModal">
+            <small>Отвязать</small>
+          </button>
+
+        </li>
+      </ul>
     </div>
   </div>
+
+  <TerminateSessionModal :userId="userId"/>
+  <ConfirmUntieCardModal/>
 </template>
+
+<style lang="scss">
+.card-bg {
+  background-color: #F2F2F2;
+}
+</style>

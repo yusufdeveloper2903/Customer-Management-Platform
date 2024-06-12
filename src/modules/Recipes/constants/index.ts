@@ -14,9 +14,10 @@ export const recipedetailFields = [
     { text: "photo", value: "photo" },
     { text: "name", value: "title" },
     { text: "category", value: "category" },
+    { text: "calories", value: "calories" },
+    { text: "cooking_time", value: "cooking_time" },
     { text: "rating", value: "rating" },
     { text: "views", value: "views" },
-    { text: "link", value: "link" },
     { text: "Status", value: "is_active" },
     { text: "actions", value: "actions" },
 ]
