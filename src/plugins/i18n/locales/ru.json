@@ -406,5 +406,12 @@
   "views": "Просмотры",
   "Transactions": "Транзакции",
   "Notification Detail": "Подробности уведомления",
-  "noDiscount": "Нет скидки"
+  "noDiscount": "Нет скидки",
+  "splash": "Сплеш",
+  "recipe category": "Категория рецепта",
+  "color": "Цвет",
+  "add_splash": "Добавить заставку",
+  "edit_splash": "Редактировать заставку",
+  "add_recipe_category": "Добавить категорию рецептов",
+  "edit_recipe_category": "Изменить категорию рецептов"
 }
