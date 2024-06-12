@@ -6,10 +6,10 @@ import { useI18n } from "vue-i18n";
 import { toast } from "vue3-toastify";
 import { helpers, required } from "@vuelidate/validators";
 import useVuelidate, { Validation } from "@vuelidate/core";
-import Tabs from "@/components/Tab/Tabs.vue";
-import Tab from "@/components/Tab/Tab.vue";
-import recipeStore from "../store/index"
-import { Retsept } from "../interfaces/index"
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
+import recipeStore from "../../store/index"
+// import { Retsept } from "../../interfaces/index"
 import knowledgeBase from '@/modules/KnowledgeBase/store/index';
 
 
@@ -31,8 +31,8 @@ interface RecipesData {
 const { t } = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = recipeStore()
-const emits = defineEmits(["saveRecipes"]);
-const propData = defineProps<{ editData: Retsept }>();
+// const emits = defineEmits(["saveRecipes"]);
+// const propData = defineProps<{ editData: Retsept }>();
 const knowledgeStore = knowledgeBase()
 let recipes = ref<RecipesData>({
   id: null,
@@ -70,25 +70,25 @@ const validate: Ref<Validation> = useVuelidate(rules, recipes);
 // Functions
 async function openModal() {
   await knowledgeStore.getRetseptCategory()
-  if (propData.editData.id) {
-    recipes.value.id = propData.editData.id
-    recipes.value.title_ru = propData.editData.title_ru
-    recipes.value.title_uz = propData.editData.title_uz
-    recipes.value.title_kr = propData.editData.title_kr
-    recipes.value.calorie = propData.editData.calorie
-    recipes.value.preparation_time = propData.editData.preparation_time
-    recipes.value.is_active = propData.editData.is_active
-    recipes.value.category = propData.editData.category
-  } else {
-    recipes.value.id = null
-    recipes.value.title_ru = ""
-    recipes.value.title_uz = ""
-    recipes.value.title_kr = ""
-    recipes.value.calorie = 0
-    recipes.value.preparation_time = ""
-    recipes.value.is_active = false
-    recipes.value.category = null
-  }
+  // if (propData.editData.id) {
+  //   recipes.value.id = propData.editData.id
+  //   recipes.value.title_ru = propData.editData.title_ru
+  //   recipes.value.title_uz = propData.editData.title_uz
+  //   recipes.value.title_kr = propData.editData.title_kr
+  //   recipes.value.calorie = propData.editData.calorie
+  //   recipes.value.preparation_time = propData.editData.preparation_time
+  //   recipes.value.is_active = propData.editData.is_active
+  //   recipes.value.category = propData.editData.category
+  // } else {
+  //   recipes.value.id = null
+  //   recipes.value.title_ru = ""
+  //   recipes.value.title_uz = ""
+  //   recipes.value.title_kr = ""
+  //   recipes.value.calorie = 0
+  //   recipes.value.preparation_time = ""
+  //   recipes.value.is_active = false
+  //   recipes.value.category = null
+  // }
 }
 
 function clearData() {
@@ -113,33 +113,33 @@ const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
 
-  if (propData.editData.id) {
-    try {
-      await store.updateRetsept(recipes.value).then(() => {
-        emits("saveRecipes");
-        setTimeout(() => {
-          toast.success(t("updated_successfully"));
-        }, 200);
-        UIkit.modal("#create_recipes").hide();
-      });
+  // if (propData.editData.id) {
+  //   try {
+  //     await store.updateRetsept(recipes.value).then(() => {
+  //       // emits("saveRecipes");
+  //       setTimeout(() => {
+  //         toast.success(t("updated_successfully"));
+  //       }, 200);
+  //       UIkit.modal("#edit_recipes").hide();
+  //     });
 
-      isSubmitted.value = false;
+  //     isSubmitted.value = false;
 
-    } catch (error: any) {
-      isSubmitted.value = false;
-      toast.error(
-        error.response.message || error.response.data.msg || error.response.data.error || t('error')
-      );
-    }
+  //   } catch (error: any) {
+  //     isSubmitted.value = false;
+  //     toast.error(
+  //       error.response.message || error.response.data.msg || error.response.data.error || t('error')
+  //     );
+  //   }
 
-  } else {
+  // } else {
     try {
       await store.create_retsept(recipes.value).then(() => {
-        emits("saveRecipes");
+        // emits("saveRecipes");
         setTimeout(() => {
           toast.success(t("created_successfully"));
         }, 200);
-        UIkit.modal("#create_recipes").hide();
+        UIkit.modal("#edit_recipes").hide();
       });
 
       isSubmitted.value = false;
@@ -152,22 +152,23 @@ const updateDeal = async () => {
         );
       }
     }
-  }
+  // }
 };
 </script>
 
 <template>
-  <div id="create_recipes" class="uk-flex-top" uk-modal @shown="openModal" @hidden="clearData">
+  <div id="edit_recipes" class="uk-flex-top" uk-modal @shown="openModal" @hidden="clearData">
     <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden">
       <button class="uk-modal-close-default" @click="clearData" type="button" uk-close />
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? t("Change") : t('Add') }}
+          <!-- {{ propData.editData.id ? t("Change") : t('Add') }} -->
+          {{ t("Change") }}
         </h2>
       </div>
       <div class="uk-modal-body py-4">
-        <Tabs>
-          <Tab title="O'z">
+        <ModalTabs>
+          <ModalTab title="UZ">
             <form>
               <label for="nameUz">{{ t('name') }} O'z
                 <input id="nameUz" type="text" class="form-input" :placeholder="t('name')" v-model="recipes.title_uz"
@@ -177,9 +178,9 @@ const updateDeal = async () => {
                 </p>
               </label>
             </form>
-          </Tab>
+          </ModalTab>
 
-          <Tab title="Ру">
+          <ModalTab title="KR">
             <form>
               <label for="nameRu">{{ t('name') }} Ру
                 <input id="nameRu" type="text" class="form-input" :placeholder="t('name')" v-model="recipes.title_ru" :class="validate.title_ru.$errors.length ? 'required-input' : ''"/>
@@ -188,8 +189,9 @@ const updateDeal = async () => {
                 </p>
               </label>
             </form>
-          </Tab>
-          <Tab title="Ўз">
+          </ModalTab>
+
+          <ModalTab title="RU">
             <form>
               <label for="nameRu">{{ t('name') }} Ўз
                 <input id="nameRu" type="text" class="form-input" :placeholder="t('name')" v-model="recipes.title_kr" :class="validate.title_kr.$errors.length ? 'required-input' : ''"/>
@@ -198,16 +200,9 @@ const updateDeal = async () => {
                 </p>
               </label>
             </form>
-          </Tab>
-        </Tabs>
+          </ModalTab>
+        </ModalTabs>
         <form>
-          <label for="calorie" class="mt-4 block">{{ t('calorie') }}
-            <input id="calorie" type="number" class="form-input" :placeholder="t('calorie')" v-model="recipes.calorie" />
-          </label>
-
-          <label for="preparation_time" class="mt-4 block">{{ t('preparation_time') }}
-            <VueDatePicker format="dd-MM-yyyy" v-model="recipes.preparation_time" :placeholder="t('preparation_time')" model-type="hh:mm:ss" time-picker  enable-seconds></VueDatePicker>
-          </label>
 
           <label for="category" class="mt-4 block">{{ t('category') }}
             <VSelect v-model="recipes.category"
@@ -215,6 +210,17 @@ const updateDeal = async () => {
               :getOptionLabel="(name: any) => name.name" :reduce="(item: any) => item.id"
               :placeholder="t('select_category')" />
           </label>
+
+          <div class="flex mt-4 gap-4">
+            <label for="calorie" class="block w-full">{{ t('calorie') }}
+              <input id="calorie" type="text" class="form-input" :placeholder="t('calorie')" v-model="recipes.calorie" />
+            </label>
+  
+            <label for="preparation_time" class="block w-full">{{ t('preparation_time') }}
+              <VueDatePicker format="dd-MM-yyyy" v-model="recipes.preparation_time" :placeholder="t('preparation_time')" model-type="hh:mm:ss" time-picker  enable-seconds></VueDatePicker>
+            </label>
+          </div>
+
 
           <p class="mt-4">{{ t('Status') }}</p>
           <label class="relative inline-flex items-center cursor-pointer">
@@ -227,14 +233,16 @@ const updateDeal = async () => {
       </div>
 
       <div class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white">
-        <button uk-toggle="target: #create_recipes" class="btn-secondary" @click="clearData">
+        <button uk-toggle="target: #edit_recipes" class="btn-secondary" @click="clearData">
           {{ t("Cancel") }}
         </button>
 
-        <button :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal" :disabled="isSubmitted">
+        <!-- :class="propData.editData.id ? 'btn-warning' : 'btn-success'" -->
+        <button class="btn-warning" @click="updateDeal" :disabled="isSubmitted">
           <img src="@/assets/image/loading.svg" alt="loading.svg" class="inline w-4 h-4 text-white animate-spin mr-2"
             v-if="isSubmitted" />
-          <span>{{ propData.editData.id ? t("Change") : t('Add') }}</span>
+          <!-- <span>{{ propData.editData.id ? t("Change") : t('Add') }}</span> -->
+          <span>{{ t("Change")  }}</span>
         </button>
       </div>
     </div>

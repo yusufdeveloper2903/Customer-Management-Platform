@@ -381,6 +381,18 @@
   "add_splash": "Splash qo'shish",
   "edit_splash": "Splashni tahrirlash",
   "add_recipe_category": "Retsept toifasini qo'shish",
-  "edit_recipe_category": "Retsept toifasini tahrirlash"
+  "edit_recipe_category": "Retsept toifasini tahrirlash",
+  "add_recipe": "Retsept qo'shish",
+  "calorie_content": "Kaloriya tarkibi",
+  "cooking_time": "Pishirish vaqti",
+  "mediacontent": "Media kontenti",
+  "Content format and size: jpg / mp4 / 1920x1080": "Kontent formati va hajmi: jpg / mp4 / 1920x1080",
+  "Ingredients": "Ingredientlar",
+  "type_quantity": "Miqdor turi",
+  "select_product": "Mahsulotni tanlang",
+  "select_type": "Turini tanlang",
+  "add_product": "Mahsulot qo'shish",
+  "Preparation": "Tayyorgarlik",
+  "General": "General"
 
 }

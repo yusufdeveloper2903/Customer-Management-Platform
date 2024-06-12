@@ -15,7 +15,7 @@ import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
 
 
 //DECLARED VARIABLES
-const {t} = useI18n()
+const {t, locale} = useI18n()
 const store = knowledgeBase();
 const isLoading = ref(false);
 const itemToDelete = ref<number | null>(null);
@@ -75,6 +75,7 @@ watch(() => props.knowledge, async function (val) {
   }
 
 })
+
 watchDebounced(() => params.search, async function () {
   params.page = 1
   localStorage.setItem('page', '1')
@@ -86,16 +87,17 @@ watchDebounced(() => params.search, async function () {
 const refresh = async () => {
   await store.getOnboarding(params);
 };
+
 const openModal = () => {
-  UIkit.modal("#onboarding_template").show()
-  dataToEdit.value = {};
+  UIKit.modal("#onboarding_template").show()
+  dataToEdit.value = <Onboarding>{};
 }
 
 
 const onShowFile = (item: any) => {
   image.value = item;
   nextTick(() => {
-    UIkit.modal("#onboarding-file-modal-image").show();
+    UIKit.modal("#onboarding-file-modal-image").show();
   });
 };
 const deleteAction = async () => {
@@ -135,7 +137,7 @@ const handleDeleteModal = (id: number) => {
   <div class="card">
     <div class="flex justify-between items-end mb-7">
       <label for="search">
-        {{ $t('Search') }}
+        {{ t('Search') }}
         <input
             v-model="params.search"
             type="text"
@@ -144,7 +146,7 @@ const handleDeleteModal = (id: number) => {
       </label>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
               @click="openModal(false )">
-        {{ $t("Add") }}
+        {{ t("Add") }}
       </button>
     </div>
     <EasyDataTable
@@ -155,16 +157,16 @@ const handleDeleteModal = (id: number) => {
         :items="store.onBoarding.results"
     >
       <template #empty-message>
-        <div>{{ $t('no_available_data') }}</div>
+        <div>{{ t('no_available_data') }}</div>
       </template>
       <template #header="header">
-        {{ $t(header.text) }}
+        {{ t(header.text) }}
       </template>
       <template #item-title="item">
-        {{ item['title_' + $i18n.locale] }}
+        {{ item['title_' + locale] }}
       </template>
       <template #item-description="item">
-        {{ item['description_' + $i18n.locale] }}
+        {{ item['description_' + locale] }}
       </template>
 
       <template #item-image="{ image }">
@@ -186,7 +188,7 @@ const handleDeleteModal = (id: number) => {
       </template>
       <template #header-actions="item">
         <div class="flex justify-end">
-          {{ $t(item.text) }}
+          {{ t(item.text) }}
         </div>
       </template>
       <template #item-actions="data">
@@ -211,8 +213,8 @@ const handleDeleteModal = (id: number) => {
         :current="params.page"
         :restart="toRefresh"
         :per-page="params.page_size"
-        :text-before-input="$t('go_to_page')"
-        :text-after-input="$t('forward')"
+        :text-before-input="t('go_to_page')"
+        :text-after-input="t('forward')"
         @page-changed="changePagination"
         @per-page-changed="onPageSizeChanged"
     />

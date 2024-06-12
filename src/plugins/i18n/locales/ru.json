@@ -414,5 +414,17 @@
   "add_splash": "Добавить заставку",
   "edit_splash": "Редактировать заставку",
   "add_recipe_category": "Добавить категорию рецептов",
-  "edit_recipe_category": "Изменить категорию рецептов"
+  "edit_recipe_category": "Изменить категорию рецептов",
+  "add_recipe": "Добавить рецепт",
+  "calorie_content": "Калорийность",
+  "cooking_time": "Время приготовления",
+  "mediacontent": "Медиаконтент",
+  "Content format and size: jpg / mp4 / 1920x1080": "Формат и размер контента: jpg / mp4 / 1920x1080",
+  "Ingredients": "Ингредиенты",
+  "type_quantity": "Тип количества",
+  "select_product": "Выберите продукт",
+  "select_type": "Выберите тип",
+  "add_product": "Добавление продукта",
+  "Preparation": "Приготовление",
+  "General": "Общее"
 }

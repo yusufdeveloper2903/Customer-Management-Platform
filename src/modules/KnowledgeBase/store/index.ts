@@ -112,7 +112,7 @@ export default defineStore("knowledgeBase", {
             const {data} = await $axios.get('/versions/version_list/', {params})
             this.versionControlList = data
         },
-        async getProducts(params) {
+        async getProducts(params?) {
             const {data} = await $axios.get('/products/products/', {params})
             this.productsList = data
         },

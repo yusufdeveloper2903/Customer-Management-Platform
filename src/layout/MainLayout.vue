@@ -260,7 +260,7 @@ function breadCrumbStart(newPath) {
       case "add-recipe":
       BreadcrumbList.value = [
       {title: 'Recipes', active: false},
-        {title: 'add recipe', active: true},
+        {title: 'add_recipe', active: true},
       ];
       break;
     default:
