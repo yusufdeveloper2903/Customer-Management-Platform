@@ -122,7 +122,7 @@ const validate: Ref<Validation> = useVuelidate(rules, splashData);
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          {{ propData.editData.id ? t("Edit") : t("Add") }}
+          {{ propData.editData.id ? t("edit_splash") : t("add_splash") }}
         </h2>
       </div>
 
@@ -198,7 +198,7 @@ const validate: Ref<Validation> = useVuelidate(rules, splashData);
         </ModalTabs>
 
         <label for="version"
-              >{{ t('version') }}
+              >{{ t('version_number') }}
                 <input
                     id="version"
                     type="text"

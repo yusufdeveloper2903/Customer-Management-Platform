@@ -345,9 +345,9 @@ export const splashFields = [
     { text: "ID", value: "id" },
     { text: "title", value: "title" },
     { text: "image", value: "image" },
-    { text: "version", value: "version" },
+    { text: "version_number", value: "version" },
     { text: "color", value: "color" },
-    { text: "is_active", value: "is_active" },
+    { text: "Status", value: "is_active" },
     { text: "actions", value: "actions" },
 ]
 
