@@ -84,8 +84,15 @@ watchDebounced(() => params.search, async function () {
 
 //FUNCTIONS
 const refresh = async () => {
-  await store.getOnboarding(params);
+  isLoading.value = true;
+  try {
+    await store.getOnboarding(params);
+  } catch (error: any) {
+    toast.error(t("error"));
+  }
+  isLoading.value = false;
 };
+
 const openModal = () => {
   UIkit.modal("#onboarding_template").show()
   dataToEdit.value = {};

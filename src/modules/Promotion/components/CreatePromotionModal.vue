@@ -34,9 +34,9 @@ let productsData = ref({
   title_uz: '',
   title_kr: '',
   description: '',
-  description_ru: "",
-  description_uz: "",
-  description_kr: "",
+  description_ru: " ",
+  description_uz: " ",
+  description_kr: " ",
   status: '',
   background_photo: '',
   detail_photo: '',
@@ -265,15 +265,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   style="height: 15vh; overflow-y: auto;"
                   v-model:content="productsData.description_uz"
               />
-              <Editor
-                  v-else
-                  :placeholder="$t('enter_information')"
-                  content-type="html"
-                  toolbar="full"
-                  class="scrollbar rounded border"
-                  style="height: 15vh; overflow-y: auto;"
-                  v-model:content="productsData.description_uz">
-              </Editor>
+
               <p
                   v-for="error in validate.description_uz.$errors"
                   :key="error.$uid"
@@ -312,15 +304,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   style="height: 15vh; overflow-y: auto;"
                   v-model:content="productsData.description_kr"
               />
-              <Editor
-                  v-else
-                  :placeholder="$t('enter_information')"
-                  content-type="html"
-                  toolbar="full"
-                  class="scrollbar rounded border"
-                  style="height: 15vh; overflow-y: auto;"
-                  v-model:content="productsData.description_kr">
-              </Editor>
+
               <p
                   v-for="error in validate.description_kr.$errors"
                   :key="error.$uid"
@@ -359,15 +343,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   style="height: 15vh; overflow-y: auto;"
                   v-model:content="productsData.description_ru"
               />
-              <Editor
-                  v-else
-                  :placeholder="$t('enter_information')"
-                  content-type="html"
-                  toolbar="full"
-                  class="scrollbar rounded border"
-                  style="height: 15vh; overflow-y: auto;"
-                  v-model:content="productsData.description_ru">
-              </Editor>
+
               <p
                   v-for="error in validate.description_ru.$errors"
                   :key="error.$uid"
