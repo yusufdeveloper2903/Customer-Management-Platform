@@ -217,7 +217,7 @@ const deleteAction = async () => {
 </template>
 
 <style>
-.vue3-easy-data-table__loading-mask[data-v-19cc4b1b] {
+.vue3-easy-data-table__loading-mask {
   background-color: rgba(0, 0, 0, 0.1);
 }
 </style>

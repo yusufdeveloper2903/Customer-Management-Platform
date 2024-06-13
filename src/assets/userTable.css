@@ -36,11 +36,11 @@
   border-spacing: 0 1rem !important;
 }
 
-#user-table.vue3-easy-data-table[data-v-19cc4b1b] {
+#user-table.vue3-easy-data-table {
   border: none !important;
 }
 
-#user-table .vue3-easy-data-table__header th[data-v-19cc4b1b] {
+#user-table .vue3-easy-data-table__header th {
   border: none !important;
 }
 
@@ -68,36 +68,36 @@
 }
 
 
-#user-table .vue3-easy-data-table__body tr[data-v-19cc4b1b] {
+#user-table .vue3-easy-data-table__body tr {
   height: 80px;
   background: #fff;
   color: #212121;
   font-size: .857rem
 }
 
-.dark #user-table .vue3-easy-data-table__body tr[data-v-19cc4b1b] {
+.dark #user-table .vue3-easy-data-table__body tr {
   background: #171D32;
   color: #ffffff !important;
 }
 
-.dark #user-table .vue3-easy-data-table__body tr[data-v-19cc4b1b]:hover {
+.dark #user-table .vue3-easy-data-table__body tr:hover {
   color: #fff !important;
 }
 
-#user-table .vue3-easy-data-table__body td[data-v-19cc4b1b] {
+#user-table .vue3-easy-data-table__body td {
   padding: 0 20px;
   border: none;
   border-bottom: 0;
   position: relative
 }
 
-.dark #user-table .vue3-easy-data-table__body td[data-v-19cc4b1b] {
+.dark #user-table .vue3-easy-data-table__body td {
   background-color: #171D32;
   color: #fff;
   border-color: #4b5563;
 }
 
-#user-table .vue3-easy-data-table__footer[data-v-19cc4b1b] {
+#user-table .vue3-easy-data-table__footer {
   background-color: #ffffff;
   color: #212121;
   border-top: 0;
@@ -113,7 +113,7 @@
   height: 70px;
 }
 
-.dark #user-table .vue3-easy-data-table__footer[data-v-19cc4b1b] {
+.dark #user-table .vue3-easy-data-table__footer {
   background: #171D32;
   color: #fff;
 }

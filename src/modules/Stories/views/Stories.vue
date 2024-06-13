@@ -23,13 +23,35 @@ const itemToDelete = ref<number | null>(null);
 const params = reactive({
   page: 1,
   page_size: 10,
-  search: ''
+  search: '',
+  status: ''
 })
 let toRefresh = ref(false)
 const image = ref<string>("");
 const imageCard = ref();
-
-
+const listStatus = ref([
+  {
+    title: 'Active',
+    value: 'ACTIVE'
+  },
+  {
+    title: 'Draft',
+    value: 'DRAFT'
+  },
+  {
+    title: 'Finished',
+    value: 'FINISHED'
+  }
+])
+const changeColor = (val: string) => {
+  if (val == 'ACTIVE') {
+    return t('bg-success')
+  } else if (val == 'DRAFT') {
+    return t('bg-warning')
+  } else {
+    return t('bg-secondary')
+  }
+}
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
   let page = localStorage.getItem('page')
@@ -53,6 +75,15 @@ watchDebounced(() => params.search, function () {
   refresh()
 }, {deep: true, debounce: 500, maxWait: 5000})
 
+watchDebounced(
+    () => params.status,
+    async () => {
+      params.page = 1;
+      localStorage.setItem('page', '1')
+
+      await refresh()
+    }, {deep: true, debounce: 500, maxWait: 5000}
+);
 
 //FUNCTIONS
 const refresh = async () => {
@@ -120,14 +151,30 @@ const changeName = (val) => {
 <template>
   <div class="card">
     <div class="flex justify-between items-end mb-7  ">
-      <label for="search">
-        {{ $t('Search') }}
-        <input
-            v-model="params.search"
-            type="text"
-            class="form-input"
-        />
-      </label>
+      <div class="flex justify-center gap-3 w-1/3">
+        <div class="w-1/3  mt-[0.10rem]">
+          <label for="search">
+            {{ $t('Search') }}
+          </label>
+
+          <input type="text" class="form-input" v-model="params.search"/>
+        </div>
+
+        <div class="w-2/3">
+          <label class="dark:text-gray-300 ">
+            {{ $t("Status") }}
+          </label>
+          <v-select
+              :options="listStatus"
+              v-model="params.status"
+              :getOptionLabel="(name:any) => t(name.title)"
+              :reduce="(item:any) => item.value"
+          >
+            <template #no-options> {{ $t("no_matching_options") }}</template>
+          </v-select>
+        </div>
+      </div>
+
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
               @click="router.push('/stories-detail')">
         {{ $t("Add") }}
@@ -151,17 +198,22 @@ const changeName = (val) => {
         {{ item['subtitle_' + $i18n.locale] }}
       </template>
       <template #item-status="item">
-        {{ changeName(item.status)}}
+     <span
+         :class="changeColor(item.status)" class="rounded  px-4 p-1 pt-1 inline  text-white"
+     >
+  {{ changeName(item.status) }}
+</span>
       </template>
 
       <template #item-avatar="item">
         <div class="py-3 flex justify-left gap-3">
           <img
               v-if="item.avatar"
-              class="w-[45px] h-[45px] rounded object-cover"
+              class="w-[45px] h-[45px] rounded"
               :src="item.avatar"
               alt="Rounded avatar"
               @click="onShowFile(item.avatar)"
+              style="aspect-ratio: 1/1 "
           />
           <div
               v-else

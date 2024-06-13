@@ -1,7 +1,7 @@
 <script setup lang="ts">
 //IMPORTED FILES
 import {headerProductCard} from "../constants";
-import {onMounted, reactive, ref,} from "vue";
+import {nextTick, onMounted, reactive, ref,} from "vue";
 import CreateProductsDetail from "../components/CreateProductDetailModal.vue";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
@@ -10,6 +10,7 @@ import {useI18n} from 'vue-i18n'
 import productStore from '../store/index'
 import {useRoute} from "vue-router";
 import {Link} from "@/modules/KnowledgeBase/interfaces";
+import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
 
 
 //DECLARED VARIABLES
@@ -19,10 +20,13 @@ const {t} = useI18n()
 const productStorage = productStore()
 const isLoading = ref(false);
 const itemId = ref<number | null | undefined>(null);
+const image = ref<string>("");
+const imageCard = ref();
 const params = reactive({
   page: 1,
   search: '',
-  page_size: 10
+  page_size: 10,
+  status: ''
 })
 const editData = ref({
   id: null,
@@ -36,8 +40,29 @@ const editData = ref({
   title_uz: '',
   title_kr: '',
 })
-
-
+const listStatus = ref([
+  {
+    title: 'Active',
+    value: 'ACTIVE'
+  },
+  {
+    title: 'Draft',
+    value: 'DRAFT'
+  },
+  {
+    title: 'Finished',
+    value: 'FINISHED'
+  }
+])
+const changeColor = (val: string) => {
+  if (val == 'ACTIVE') {
+    return t('bg-success')
+  } else if (val == 'DRAFT') {
+    return t('bg-warning')
+  } else {
+    return t('bg-secondary')
+  }
+}
 //MOUNTED
 onMounted(async () => {
   let page = localStorage.getItem('page')
@@ -55,6 +80,15 @@ onMounted(async () => {
 
 
 //FUNCTIONS
+const changeName = (val) => {
+  if (val === 'ACTIVE') {
+    return t('Active')
+  } else if (val === 'DRAFT') {
+    return t('Draft')
+  } else {
+    return t('Finished')
+  }
+}
 const changePagination = (e: number) => {
   params.page = e;
   refresh();
@@ -80,7 +114,12 @@ const refresh = async () => {
   }
   isLoading.value = false;
 };
-
+const onShowFile = (item: any) => {
+  image.value = item;
+  nextTick(() => {
+    UIkit.modal("#file-show-product-image").show();
+  });
+};
 const deleteAction = async () => {
   isLoading.value = true
   try {
@@ -100,6 +139,15 @@ const deleteAction = async () => {
 };
 watchDebounced(
     () => params.search,
+    async () => {
+      params.page = 1;
+      localStorage.setItem('page', '1')
+
+      await refresh()
+    }, {deep: true, debounce: 500, maxWait: 5000}
+);
+watchDebounced(
+    () => params.status,
     async () => {
       params.page = 1;
       localStorage.setItem('page', '1')
@@ -128,10 +176,31 @@ const dragDrop = async (item: Link) => {
 <template>
   <div class="card">
     <div class="flex justify-between items-end mb-7">
-      <label for="search">
-        {{ $t('Search') }}
-        <input type="text" class="form-input" v-model="params.search"/>
-      </label>
+      <div class="flex justify-center gap-3 w-1/3">
+        <div class="w-1/3  mt-[0.10rem]">
+          <label for="search">
+            {{ $t('Search') }}
+          </label>
+
+          <input type="text" class="form-input" v-model="params.search"/>
+        </div>
+
+        <div class="w-2/3">
+          <label class="dark:text-gray-300 ">
+            {{ $t("Status") }}
+          </label>
+
+          <v-select
+              :options="listStatus"
+              v-model="params.status"
+              :getOptionLabel="(name:any) => t(name.title)"
+              :reduce="(item:any) => item.value"
+          >
+            <template #no-options> {{ $t("no_matching_options") }}</template>
+          </v-select>
+        </div>
+
+      </div>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
               uk-toggle="target: #create_and_edit_product_detail" @click="editData={}">
         {{ $t("Add") }}
@@ -153,24 +222,35 @@ const dragDrop = async (item: Link) => {
           class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
           :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
         <td class="px-6 whitespace-no-wrap text-left ">{{ item.id }}</td>
+        <td class="px-6 whitespace-no-wrap text-left ">
+          <div class="py-3 flex justify-left gap-3">
+            <img
+                v-if="item.product && item.product.image"
+                class="w-[45px] h-[45px] rounded"
+                :src="item.product.image"
+                alt="Rounded avatar"
+                @click="onShowFile(item.product.image)"
+                style="aspect-ratio: 1/1 "
+            />
+            <div
+                v-else
+                class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded"
+            >
+              <Icon icon="User" color="#356c2d"/>
+            </div>
+
+          </div>
+        </td>
         <td class="px-6 whitespace-no-wrap text-left">{{ item.product['title_' + $i18n.locale] }}</td>
         <td class="px-6 whitespace-no-wrap text-left">
           {{ (`${item.price}`).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' So`m' }}
         </td>
         <td class="px-6 whitespace-no-wrap text-left">
-          <label
-              className="relative inline-flex items-center cursor-pointer">
-            <input
-                type="checkbox"
-                v-model="item.is_active"
-                class="sr-only peer"
-                disabled
-            />
-            <div
-                className="w-11 h-6 bg-gray-200 peer-focus:outline-none
-          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-            ></div>
-          </label>
+       <span
+           :class="changeColor(item.status)" class="rounded  px-4 p-1 pt-1 inline  text-white"
+       >
+  {{ changeName(item.status) }}
+      </span>
         </td>
         <td class="px-6 whitespace-no-wrap text-left">{{ item.category }}</td>
 
@@ -212,6 +292,7 @@ const dragDrop = async (item: Link) => {
                   :text-before-input="$t('go_to_page')" :text-after-input="$t('forward')"
                   @page-changed="changePagination" @per-page-changed="onPageSizeChanged"/>
     <CreateProductsDetail :editData="editData" @saveProducts="saveProducts"/>
-
+    <ShowFileModal :image="image" ref="imageCard" id="file-show-product-image"/>
   </div>
 </template>
+

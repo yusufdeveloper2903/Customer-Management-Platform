@@ -178,10 +178,11 @@ const handleDeleteModal = (id: number) => {
         <div class="py-3 flex justify-left gap-3">
           <img
               v-if="file"
-              class="w-[45px] h-[45px] rounded object-cover"
+              class="w-[45px] h-[45px] rounded "
               :src="file"
               alt="Rounded avatar"
               @click="onShowFile(file)"
+              style="aspect-ratio: 1/1 "
           />
           <div
               v-else

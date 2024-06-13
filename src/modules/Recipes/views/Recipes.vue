@@ -122,8 +122,8 @@ const onPageSizeChanged = (e: number) => {
 
             <template #item-photo="items">
                 <div class="py-3 flex justify-left gap-3">
-                    <img v-if="items && items.photo" class="w-[45px] h-[45px] rounded object-cover" :src="items.photo"
-                        alt="Photo" />
+                    <img v-if="items && items.photo" class="w-[45px] h-[45px] rounded" :src="items.photo"
+                        alt="Photo"  style="aspect-ratio: 1/1 " />
                     <div v-else
                         class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded">
                         <Icon icon="Camera" color="#356c2d" />

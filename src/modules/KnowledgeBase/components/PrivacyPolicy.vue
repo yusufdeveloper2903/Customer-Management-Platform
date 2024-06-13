@@ -7,7 +7,6 @@ import {onMounted, ref, watch} from "vue";
 import knowledgeBase from ".././store/index"
 import {toast} from "vue3-toastify";
 import {useI18n} from "vue-i18n";
-import {aW} from "@fullcalendar/core/internal-common";
 
 //DECLARED VARIABLES
 const store = knowledgeBase()

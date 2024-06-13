@@ -45,7 +45,7 @@ const tableData = reactive([
       </template>
       <template #item-product="items">
         <div class="p-2 flex items-center">
-          <img :src="items.product.img" class="w-[100px] rounded" />
+          <img :src="items.product.img" class="w-[100px] rounded" style="aspect-ratio: 1/1 "  />
           <div class="ml-3">
             <p>{{ items.product.title }}</p>
             <span>{{ formatCurrency(items.product.price) }}</span>
@@ -59,7 +59,7 @@ const tableData = reactive([
       </template>
       <template #item-seller="items">
         <div class="p-2 flex items-center">
-          <img :src="items.seller.img" class="w-[50px] rounded-full" />
+          <img :src="items.seller.img" class="w-[50px] rounded-full" style="aspect-ratio: 1/1 " />
           <div class="ml-3">
             <p>{{ items.seller.name }}</p>
           </div>
@@ -67,7 +67,7 @@ const tableData = reactive([
       </template>
       <template #item-user="items">
         <div class="p-2 flex items-center">
-          <img :src="items.user.img" class="w-[50px] rounded-full" />
+          <img :src="items.user.img" class="w-[50px] rounded-full" style="aspect-ratio: 1/1 " />
           <div class="ml-3">
             <p>{{ items.user.name }}</p>
           </div>

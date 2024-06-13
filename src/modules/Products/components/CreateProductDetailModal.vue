@@ -11,7 +11,6 @@ import UIkit from "uikit";
 import {useRoute} from "vue-router";
 import {EditDataSecond} from '../Interfaces/index'
 
-
 //DECLARED VARIABLES
 const route = useRoute();
 const propData = defineProps<{
@@ -24,12 +23,26 @@ const isSubmitted = ref<boolean>(false);
 let productsCategory = ref({
   product: '',
   id: '',
-  is_active: false,
+  status: 'DRAFT',
   category: '',
-  has_discount: '',
-  discount_percentage: '',
+  has_discount: false,
+  discount_percentage: 0,
   price: ''
 })
+const listStatus = ref([
+  {
+    title: 'Active',
+    value: 'ACTIVE'
+  },
+  {
+    title: 'Draft',
+    value: 'DRAFT'
+  },
+  {
+    title: 'Finished',
+    value: 'FINISHED'
+  }
+])
 let discountList = reactive([
   {
     title: 'Discount available',
@@ -45,7 +58,7 @@ let discountList = reactive([
 //WATCHERS
 watch(() => productsCategory.value.has_discount, function (val) {
   if (!val) {
-    productsCategory.value.discount_percentage = ''
+    productsCategory.value.discount_percentage = 0
   }
 })
 
@@ -55,6 +68,7 @@ const saveData = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
   isSubmitted.value = true
+  productsCategory.value.product = productsCategory.value.product?.id
   if (propData.editData.id) {
     try {
       await productStorage.updateProductCard(productsCategory.value)
@@ -84,8 +98,8 @@ const saveData = async () => {
 
 function openModal() {
   if (propData.editData.id) {
-    productsCategory.value.is_active = propData.editData.is_active
-    productsCategory.value.product = propData.editData.product?.id
+    productsCategory.value.status = propData.editData.status
+    productsCategory.value.product = propData.editData.product
     productsCategory.value.category = propData.editData.category
     productsCategory.value.price = propData.editData.price
     productsCategory.value.has_discount = propData.editData.has_discount
@@ -99,10 +113,10 @@ function openModal() {
 
 const onHide = () => {
   productsCategory.value.id = ''
-  productsCategory.value.is_active = false
+  productsCategory.value.status = 'DRAFT'
   productsCategory.value.product = ''
-  productsCategory.value.has_discount = ''
-  productsCategory.value.discount_percentage = ''
+  productsCategory.value.has_discount = false
+  productsCategory.value.discount_percentage = 0
   productsCategory.value.price = ''
   productsCategory.value.category = ''
   validate.value.$reset()
@@ -135,10 +149,11 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
         <label>
           <p class=" mt-5 mb-1">{{ $t("products") }}:</p>
           <v-select
+
               :options="productStorage.productFromKnowledgeBase.results"
               v-model="productsCategory.product"
               :getOptionLabel="(name) => name['title_'+$i18n.locale]"
-              :reduce="(name) => name.id"
+              :reduce="(name) => name"
           >
             <template #no-options> {{ $t("no_matching_options") }}</template>
           </v-select>
@@ -150,58 +165,79 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
             {{ $t(error.$message) }}
           </p>
         </label>
-        <div v-if="propData.editData.id">
-          <p class=" mt-5 mb-1">{{ $t("category") }}:</p>
-          <v-select
-              :options="productStorage.productListCategory.results"
-              v-model="productsCategory.category"
-              :getOptionLabel="(name) => name['title_'+$i18n.locale]"
-              :reduce="(name) => name.id"
-          >
-            <template #no-options> {{ $t("no_matching_options") }}</template>
-          </v-select>
-        </div>
-
-        <p class=" mt-5 mb-1">{{ $t("Discount") }}:</p>
-        <v-select
-            :options="discountList"
-            v-model="productsCategory.has_discount"
-            :getOptionLabel="(name) => t(`${name.title}`)"
-            :reduce="(name) => name.value"
-        >
-          <template #no-options> {{ $t("no_matching_options") }}</template>
-        </v-select>
-        <div
-            v-if="productsCategory.has_discount"
-
-        >
-          <p class=" mt-5 mb-1">{{ $t("Discount percentage") }}:</p>
-          <input
-              type="text"
-              class="form-input"
-              v-model="productsCategory.discount_percentage"
+        <div v-if="productsCategory.product && productsCategory.product.image">
+          <img
+              class="w-[200px] mt-3"
+              :src="productsCategory.product.image"
+              alt="image"
+              style="aspect-ratio: 1/1 "
           />
+
         </div>
+        <div class="mt-5 flex justify-center gap-3">
+          <div class="w-1/2">
+            <p>{{ $t("Discount") }}:</p>
+            <v-select
+                :options="discountList"
+                v-model="productsCategory.has_discount"
+                :getOptionLabel="(name) => t(`${name.title}`)"
+                :reduce="(name) => name.value"
+            >
+              <template #no-options> {{ $t("no_matching_options") }}</template>
+            </v-select>
+          </div>
+          <div class="w-1/2">
+            <p>{{ $t("Status") }}</p>
+            <v-select
+                :options="listStatus"
+                v-model="productsCategory.status"
+                :getOptionLabel="(name:any) => t(name.title)"
+                :reduce="(item:any) => item.value"
+            >
+              <template #no-options> {{ $t("no_matching_options") }}</template>
+            </v-select>
+          </div>
+        </div>
+        <div class="flex gap-3">
 
-        <p class=" mt-5 mb-1">{{ $t("price") }}:</p>
-        <input
-            type="text"
-            class="form-input"
-            v-model="productsCategory.price"
-        />
+          <div v-if="propData.editData.id" class="w-1/2">
+            <p style="margin-top:17px" class=" mt-4">{{ $t("category") }}:</p>
+            <v-select
+                class="style-chooser-product"
+                :options="productStorage.productListCategory.results"
+                v-model="productsCategory.category"
+                :getOptionLabel="(name) => name['title_'+$i18n.locale]"
+                :reduce="(name) => name.id"
+            >
+              <template #no-options> {{ $t("no_matching_options") }}</template>
+            </v-select>
+          </div>
 
-        <p class=" mt-5 mb-1">{{ $t("Status") }}:</p>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-              type="checkbox"
-              v-model="productsCategory.is_active"
-              class="sr-only peer"
-          />
+
           <div
-              className="w-11 h-6 bg-gray-200 peer-focus:outline-none
-          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-          ></div>
-        </label>
+              v-if="productsCategory.has_discount"
+              class="w-1/2"
+
+          >
+            <p class=" mt-5 mb-1">{{ $t("Discount percentage") }}:</p>
+            <input
+                type="number"
+                class="form-input"
+                v-model="productsCategory.discount_percentage"
+            />
+          </div>
+          <div class="w-1/2">
+
+            <p class=" mt-5 mb-1">{{ $t("price") }}:</p>
+            <input
+                type="number"
+                class="form-input"
+                v-model="productsCategory.price"
+            />
+
+          </div>
+        </div>
+
       </div>
 
       <div
@@ -225,3 +261,21 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
     </div>
   </div>
 </template>
+
+<style lang="scss">
+.style-chooser-product .vs__dropdown-menu {
+  position: fixed;
+  z-index: 9999; /* Set a high z-index value */
+  left: 30px;
+  top: 248px;
+  width: 29%;
+  height: 40%;
+  overflow: auto;
+  background-color: white;
+
+}
+
+.dark .style-chooser-product .vs__dropdown-menu {
+  background-color: rgb(40 48 70 / var(--tw-bg-opacity));
+}
+</style>

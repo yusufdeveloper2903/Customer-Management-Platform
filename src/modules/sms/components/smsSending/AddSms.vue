@@ -187,7 +187,7 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
       <div class="uk-margin">
         <label for="form-stacked-text">{{ $t('start_date') }} </label>
         <div class="uk-form-controls">
-          <VueDatePicker  format="dd-MM-yyyy":enableTimePicker="false" auto-apply :locale="'ru'" model-type="yyyy-MM-dd hh:mm:ss"
+          <VueDatePicker  format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :locale="'ru'" model-type="yyyy-MM-dd hh:mm:ss"
                          v-model="smsSendingData.start_time"
                          :class="validate.start_time.$errors.length ? 'required-input' : ''"/>
           <p

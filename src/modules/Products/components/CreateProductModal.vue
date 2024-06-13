@@ -2,7 +2,7 @@
 
 //IMPORTED FILES
 import productStore from '../store/index'
-import {Ref, ref, computed} from "vue";
+import {Ref, ref, computed, reactive} from "vue";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import ModalTabs from "@/components/Tab/ModalTabs.vue";
@@ -28,9 +28,22 @@ let productsCategory = ref({
   title_kr: '',
   title: '',
   id: '',
-  is_active: false
+  status: 'DRAFT'
 })
-
+const Status = reactive([
+  {
+    title: 'Active',
+    value: 'ACTIVE'
+  },
+  {
+    title: 'Draft',
+    value: 'DRAFT'
+  },
+  {
+    title: 'Finished',
+    value: 'FINISHED'
+  }
+])
 
 //FUNCTIONS
 const saveData = async () => {
@@ -77,15 +90,8 @@ function openModal() {
     productsCategory.value.title_uz = propData.editData.title_uz
     productsCategory.value.title_ru = propData.editData.title_ru
     productsCategory.value.title_kr = propData.editData.title_kr
-    productsCategory.value.is_active = propData.editData.is_active
+    productsCategory.value.status = propData.editData.status
     productsCategory.value.id = String(propData.editData.id)
-  } else {
-    productsCategory.value.title_uz = ""
-    productsCategory.value.title_ru = ""
-    productsCategory.value.title_kr = ""
-    productsCategory.value.id = ''
-    productsCategory.value.is_active = false
-
   }
 }
 
@@ -96,7 +102,7 @@ const onHide = () => {
   productsCategory.value.title_ru = ""
   productsCategory.value.title_kr = ""
   productsCategory.value.id = ''
-  productsCategory.value.is_active = false
+  productsCategory.value.status = 'DRAFT'
   validate.value.$reset()
 
 }
@@ -197,18 +203,18 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
             </form>
           </ModalTab>
         </ModalTabs>
-        <p class=" mt-5 mb-1">{{ $t("Status") }}:</p>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-              type="checkbox"
-              v-model="productsCategory.is_active"
-              class="sr-only peer"
-          />
-          <div
-              className="w-11 h-6 bg-gray-200 peer-focus:outline-none
-          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-          ></div>
-        </label>
+        <p class=" mt-4 ">{{ $t("Status") }}</p>
+        <v-select
+            class="category_product_select"
+            :options="Status"
+            :getOptionLabel="(role:any) => $t(`${role.title}`)"
+            :reduce="(role:any) => role.value"
+            v-model="productsCategory.status"
+        >
+          <template #no-options> {{ $t("no_matching_options") }}</template>
+        </v-select>
+
+
       </div>
 
       <div
@@ -232,3 +238,20 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
     </div>
   </div>
 </template>
+<style  lang="scss">
+.category_product_select .vs__dropdown-menu {
+  position: fixed;
+  z-index: 9999; /* Set a high z-index value */
+  left: 30px;
+  top: 85px;
+  width: 90%;
+  height: 40%;
+  overflow: auto;
+  background-color: white;
+
+}
+
+.dark .category_product_select .vs__dropdown-menu {
+  background-color: rgb(40 48 70 / var(--tw-bg-opacity));
+}
+</style>

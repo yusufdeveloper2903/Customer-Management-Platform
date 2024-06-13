@@ -50,11 +50,12 @@
     "question": "Savol",
     "audio": "Audio"
   },
+  "logout": "Chiqish",
   "multipleAnswers": "Bir nechta javoblar",
   "are_you_really_going_to_delete_this_user": "Ishonchingiz komilmi?",
   "deleted_successfully": "Muvaffaqiyatli oʻchirildi",
   "Button Name": "Tugma nomi",
-  "Button Url": "Tugma URL manzili",
+  "Button Url": "Tugma manzili",
   "Promotions": "Aksiyalar",
   "PROMOTION": "Aksiyalar",
   "success": "Muvaffaqiyatli",

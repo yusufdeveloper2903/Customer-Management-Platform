@@ -13,6 +13,7 @@ import ModalTab from "@/components/Tab/ModalTab.vue";
 import {EditDataProductModal} from '../../interfaces/index'
 import {objectToFormData} from "@/mixins/formmatter";
 import {useSidebarStore} from '@/stores/layoutConfig'
+import FileInput from "@/components/FileInput/FileInput.vue";
 
 
 //DECLARED VARIABLES
@@ -342,11 +343,13 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
             </label>
           </div>
         </form>
-        <label class="mt-4 block" for="photo">{{ t('photo') }}
-          <input @change="getFile" id="fileInput" type="file"
-                 class="form-file-input p-1"
-                 accept="image/png,image/jpeg"
-                 :class="validate.image.$errors.length  ? 'required-input' : ''"/>
+        <div class="mt-4">
+          <label> {{ $t('photo') }}</label>
+          <FileInput
+              v-model="productsData.image"
+              @remove="productsData.image = null"
+              :typeModal="propData.editData.id"
+              name="stories-modal-input"/>
           <p
               v-for="error in validate.image.$errors"
               :key="error.$uid"
@@ -354,18 +357,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
           >
             {{ $t(error.$message) }}
           </p>
-        </label>
-        <div v-if="propData.editData.image || imageDiv">
-          <img v-if="propData.editData.image && !imageDiv"
-               class="w-[100%] h-[200px] rounded object-contain mt-3"
-               :src="propData.editData.image"
-               alt="Rounded avatar"
-          />
-          <img v-else
-               class="w-[100%] h-[200px] rounded object-contain mt-3"
-               :src="imageDiv"
-               alt="Rounded avatar"
-          />
 
         </div>
 

@@ -21,7 +21,7 @@ const propData = defineProps<{ editData: EditData | null }>();
 let sectionStories = ref<EditData>({
   id: null,
   name: '',
-  status: '',
+  status: 'DRAFT',
 });
 const listStatus = ref([
   {
@@ -29,8 +29,8 @@ const listStatus = ref([
     value: 'ACTIVE'
   },
   {
-    title: 'Waiting',
-    value: 'WAITING'
+    title: 'Draft',
+    value: 'DRAFT'
   },
   {
     title: 'Finished',
@@ -52,7 +52,7 @@ const hideModal = () => {
   validate.value.$reset()
   sectionStories.value.id = ''
   sectionStories.value.name = ''
-  sectionStories.value.status = ''
+  sectionStories.value.status = 'DRAFT'
 
 }
 
@@ -90,6 +90,9 @@ const rules = computed(() => {
     name: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
+    status: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    }
 
 
   };
@@ -111,20 +114,7 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
         </h2>
       </div>
       <div class="uk-modal-body py-4">
-
-        <p>{{ $t("Status") }}</p>
-        <v-select
-            :options="listStatus"
-            v-model="sectionStories.status"
-            :getOptionLabel="(name:any) => t(name.title)"
-            :reduce="(item:any) => item.value"
-            :menu-props="{ top: true, offsetY: true }"
-        >
-          <template #no-options> {{ $t("no_matching_options") }}</template>
-        </v-select>
-
-
-        <div class="mt-5">
+        <div>
           <label>{{ $t('name') }}</label>
           <input
               type="text"
@@ -140,6 +130,24 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
             {{ $t(error.$message) }}
           </p>
         </div>
+        <p class="mt-5">{{ $t("Status") }}</p>
+        <v-select
+            class="poll_select_chooser"
+            :options="listStatus"
+            v-model="sectionStories.status"
+            :getOptionLabel="(name:any) => t(name.title)"
+            :reduce="(item:any) => item.value"
+            :class="validate.status.$errors.length ? 'required-input' : ''"
+        >
+          <template #no-options> {{ $t("no_matching_options") }}</template>
+        </v-select>
+        <p
+            v-for="error in validate.status.$errors"
+            :key="error.$uid"
+            class="text-danger text-sm"
+        >
+          {{ $t(error.$message) }}
+        </p>
 
 
       </div>
@@ -160,3 +168,22 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
     </div>
   </div>
 </template>
+
+<style  lang="scss" >
+
+.poll_select_chooser .vs__dropdown-menu {
+  position: fixed;
+  z-index: 9999; /* Set a high z-index value */
+  left: 30px;
+  top:53px;
+  width: 90%;
+  height: 40%;
+  overflow: auto;
+  background-color: white;
+
+}
+
+.dark .poll_select_chooser .vs__dropdown-menu {
+  background-color: rgb(40 48 70 / var(--tw-bg-opacity));
+}
+</style>

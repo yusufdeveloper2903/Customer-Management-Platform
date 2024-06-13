@@ -1,7 +1,7 @@
 export default [
     {
         name: "dashboard",
-        icon: "Home Smile",
+        icon: "Devices",
         path: "/dashboard",
         permissions: ["admin"],
     },
@@ -14,31 +14,31 @@ export default [
     },
     {
         name: "Stories",
-        icon: "File",
+        icon: "Clipboard List",
         path: "/stories",
         permissions: ["admin"],
     },
     {
         name: "Polls",
-        icon: "File",
+        icon: "Checklist",
         path: "/polls",
         permissions: ["admin"],
     },
     {
         name: "Transactions",
         path: "/transactions",
-        icon: "File",
+        icon: "Sort Vertical",
         permissions: ["admin"],
     },
     {
         name: "Notifications",
-        icon: "Chat Line",
+        icon: "Bell",
         path: "/sms-template",
         permissions: ["admin"],
     },
     {
         name: "productsCategory",
-        icon: 'File',
+        icon: 'Widget 4',
         path: '/products',
         permissions: ['admin']
     },
@@ -46,20 +46,20 @@ export default [
     {
         name: "Promotions",
         path: "/promotion",
-        icon: "File",
+        icon: "Sale",
         permissions: ["admin"],
     },
 
 
     {
         name: "nav.directory",
-        icon: "Book Bookmark",
+        icon: "Folder",
         path: "/knowledgeBase",
         permissions: ["admin"],
     },
     {
         name: "nav.staffs",
-        icon: "Box",
+        icon: "User hands",
         path: "/staff",
         permissions: ["admin"],
     },
@@ -74,31 +74,31 @@ export default [
 
     {
         name: "Administration",
-        icon: "Settings",
+        icon: "Shield check",
         permissions: ["admin"],
         child: [
             {
                 name: "backups",
                 path: "/reference/backup",
-                icon: "File",
+                icon: "Notes",
                 permissions: ["admin"],
             },
             {
                 name: "journaling",
                 path: "/reference/logging",
-                icon: "File",
+                icon: "Book Bookmark Minimalistic",
                 permissions: ["admin"],
             },
             {
                 name: "backup&archiving",
                 path: "/reference/data-archive",
-                icon: "File",
+                icon: "Server path",
                 permissions: ["admin"],
             },
             {
                 name: "info_about_system",
                 path: "/reference/system-info",
-                icon: "File",
+                icon: "CPU",
                 permissions: ["admin"],
             },
         ],
