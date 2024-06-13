@@ -472,9 +472,9 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             <button
                 type="button"
                 class="tooltip btn-success btn-action"
-                :disabled="item.button_type === 'NULL'"
+                :disabled="!item.is_button"
             >
-              <span class="tooltiptext" v-if="item.button_type !== 'NULL'">{{ TooltipMaker(item) }}</span>
+              <span class="tooltiptext" v-if="item.is_button">{{ TooltipMaker(item) }}</span>
               <Icon
                   icon="Link"
                   color="#FFF"
@@ -546,8 +546,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
                   style="aspect-ratio: 1/1"
               />
               <button class="btn-success button_preview"
-                      v-if="buttonType.button_type !== 'NULL' && buttonType['button_name_' + $i18n.locale] ">
-
+                      v-if="buttonType.is_button">
                 {{ buttonType['button_name_' + $i18n.locale] }}
               </button>
             </div>
@@ -562,8 +561,9 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           </button>
 
           <button @click="saveData('detail')"
-                  class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full">
-            {{ $t('Add') }}
+                  :class="$route.params.id ? 'bg-warning':'bg-success'"
+                  class="rounded-md px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full">
+            {{ $route.params.id ? $t('Edit') : $t('Add') }}
           </button>
         </div>
       </div>

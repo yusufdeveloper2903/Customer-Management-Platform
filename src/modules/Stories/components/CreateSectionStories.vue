@@ -34,7 +34,7 @@ let sectionStories = ref<EditData>({
   button_name_uz: '',
   button_name_kr: '',
   button_name_ru: '',
-  button_type: null,
+  button_type: '',
   button_url: '',
   is_button: false,
   object_id: null,
@@ -86,7 +86,12 @@ const hideModal = () => {
   sectionStories.value.button_name_uz = ''
   sectionStories.value.button_name_kr = ''
   sectionStories.value.button_name_ru = ''
-  sectionStories.value.button_type = null
+  sectionStories.value.button_type = {
+    "content_type_id": 30,
+    "url": "/knowledge_base/content_type_model_data/poll/",
+    "value": "POLL",
+    "title": {"uz": "So`rov", "kr": "Сўров", "ru": "Голосование"}
+  }
   sectionStories.value.button_url = ''
   sectionStories.value.duration = ''
   sectionStories.value.is_button = false
@@ -99,7 +104,10 @@ const hideModal = () => {
   sectionStories.value.background_ru = ''
   sectionStories.value.story_section_id = null
 }
+
+store.getConentButtontype('/knowledge_base/content_type_model_data/poll/')
 watch(() => sectionStories.value.button_type, function (val: any) {
+  console.log(val, 'val')
   if (val?.url) {
     store.getConentButtontype(val.url)
     sectionStories.value.content_type = val.content_type_id
@@ -123,55 +131,91 @@ watch(() => sectionStories.value.is_button, function (val: boolean) {
 })
 
 const saveEdit = async () => {
-  if (!sectionStories.value.background_uz) {
-    general.tabs = 'UZ'
-  } else if (!sectionStories.value.background_kr) {
-    general.tabs = 'KR'
-  } else if (!sectionStories.value.background_ru) {
-    general.tabs = 'RU'
-  }
-  validated.value = true
-  if (!route.params.id) return;
-  sectionStories.value.button_type = sectionStories.value.button_type?.value
-  sectionStories.value.background = sectionStories.value.background_uz
-  sectionStories.value.button_name = sectionStories.value.button_name_uz
-  sectionStories.value.story = String(route.params.id)
-  if (!sectionStories.value.is_button) {
-    sectionStories.value.object_id = null
-    sectionStories.value.button_name = ''
-    sectionStories.value.button_name_uz = ''
-    sectionStories.value.button_name_kr = ''
-    sectionStories.value.button_name_ru = ''
-    sectionStories.value.button_url = ''
-  }
-  if (sectionStories.value.background_uz && sectionStories.value.background_kr && sectionStories.value.background_ru) {
-    if (propData.editData && propData.editData.story_section_id) {
-      try {
-        const fd = objectToFormData(['background', 'background_uz', 'background_kr', 'background_ru'], sectionStories.value);
-        await store.updateSectionStories(fd)
-        await UIkit.modal("#stories_section_modal").hide();
-        toast.success(t("updated_successfully"));
-        isSubmitted.value = false;
-        emit("refresh");
-      } catch (error: any) {
-        isSubmitted.value = false;
-        toast.error(t("error"));
+      if (!sectionStories.value.background_uz || !sectionStories.value.button_name_uz) {
+        general.tabs = 'UZ'
+      } else if (!sectionStories.value.background_kr || !sectionStories.value.button_name_kr) {
+        general.tabs = 'KR'
+      } else if (!sectionStories.value.background_ru || !sectionStories.value.button_name_ru) {
+        general.tabs = 'RU'
       }
-    } else {
-      try {
-        const fd = objectToFormData(['background', 'background_uz', 'background_kr', 'background_ru'], sectionStories.value);
-        await store.createSectionStories(fd)
-        await UIkit.modal("#stories_section_modal").hide();
-        toast.success(t("created_successfully"));
-        emit("refresh");
-        isSubmitted.value = false;
-      } catch (error: any) {
-        isSubmitted.value = false;
-        toast.error(t('error'));
+      validated.value = true
+      if (!route.params.id) return;
+      sectionStories.value.background = sectionStories.value.background_uz
+      sectionStories.value.button_name = sectionStories.value.button_name_uz
+      sectionStories.value.story = String(route.params.id)
+      if (!sectionStories.value.is_button) {
+        sectionStories.value.object_id = null
+        sectionStories.value.button_name = ''
+        sectionStories.value.button_name_uz = ''
+        sectionStories.value.button_name_kr = ''
+        sectionStories.value.button_name_ru = ''
+        sectionStories.value.button_url = ''
+        sectionStories.value.button_type = ''
+      }
+      if (sectionStories.value.background_uz && sectionStories.value.background_kr && sectionStories.value.background_ru && sectionStories.value.is_button && sectionStories.value.button_name_uz && sectionStories.value.button_name_kr && sectionStories.value.button_name_ru && sectionStories.value.button_type && (sectionStories.value.object_id || sectionStories.value.button_url)) {
+        if (sectionStories.value.is_button) {
+          sectionStories.value.button_type = sectionStories.value.button_type?.value
+        }
+        if (propData.editData && propData.editData.story_section_id) {
+          try {
+            const fd = objectToFormData(['background', 'background_uz', 'background_kr', 'background_ru'], sectionStories.value);
+            await store.updateSectionStories(fd)
+            await UIkit.modal("#stories_section_modal").hide();
+            toast.success(t("updated_successfully"));
+            isSubmitted.value = false;
+            emit("refresh");
+          } catch (error: any) {
+            isSubmitted.value = false;
+            toast.error(t("error"));
+          }
+        } else {
+          try {
+            const fd = objectToFormData(['background', 'background_uz', 'background_kr', 'background_ru'], sectionStories.value);
+            await store.createSectionStories(fd)
+            await UIkit.modal("#stories_section_modal").hide();
+            toast.success(t("created_successfully"));
+            emit("refresh");
+            isSubmitted.value = false;
+          } catch (error: any) {
+            isSubmitted.value = false;
+            toast.error(t('error'));
+          }
+        }
+      }
+      if (sectionStories.value.background_uz && sectionStories.value.background_kr && sectionStories.value.background_ru && !sectionStories.value.is_button) {
+        if (sectionStories.value.is_button) {
+          sectionStories.value.button_type = sectionStories.value.button_type?.value
+        }
+        if (propData.editData && propData.editData.story_section_id) {
+          try {
+            const fd = objectToFormData(['background', 'background_uz', 'background_kr', 'background_ru'], sectionStories.value);
+            await store.updateSectionStories(fd)
+            await UIkit.modal("#stories_section_modal").hide();
+            toast.success(t("updated_successfully"));
+            isSubmitted.value = false;
+            emit("refresh");
+          } catch (error: any) {
+            isSubmitted.value = false;
+            toast.error(t("error"));
+          }
+        } else {
+          try {
+            const fd = objectToFormData(['background', 'background_uz', 'background_kr', 'background_ru'], sectionStories.value);
+            await store.createSectionStories(fd)
+            await UIkit.modal("#stories_section_modal").hide();
+            toast.success(t("created_successfully"));
+            emit("refresh");
+            isSubmitted.value = false;
+          } catch (error: any) {
+            isSubmitted.value = false;
+            toast.error(t('error'));
+          }
+
+
+        }
       }
     }
-  }
-};
+;
 
 
 </script>
@@ -196,8 +240,8 @@ const saveEdit = async () => {
 
       <div class="uk-modal-body py-4">
         <div class="flex ">
-          <label for="from" class="dark:text-gray-300 md:w-1/3">
-            {{ $t("Duration") }}
+          <label for="from" class="dark:text-gray-300 md:w-2/4">
+            {{ $t("Duration") + ' ' + `(${$t('sec')})` }}
             <input
                 type="number"
                 class="form-input mb-3"
@@ -212,7 +256,7 @@ const saveEdit = async () => {
             </p>
           </label>
 
-          <div class="mt-4 " style="margin-left:130px">
+          <div class="mt-2" style="margin-left:130px">
             <p class="mb-1">{{ $t("Add Button") }}</p>
 
             <label className="relative inline-flex items-center cursor-pointer">
@@ -256,7 +300,12 @@ const saveEdit = async () => {
                   class="form-input "
                   v-model="sectionStories.button_name_uz"
               />
-
+              <p
+                  v-if="!sectionStories.button_name_uz && validated && sectionStories.is_button"
+                  class="text-danger text-sm"
+              >
+                {{ $t('validation.this_field_is_required') }}
+              </p>
             </form>
           </ModalTab>
           <ModalTab title="KR">
@@ -285,7 +334,12 @@ const saveEdit = async () => {
                   class="form-input "
                   v-model="sectionStories.button_name_kr"
               />
-
+              <p
+                  v-if="!sectionStories.button_name_kr && validated && sectionStories.is_button"
+                  class="text-danger text-sm"
+              >
+                {{ $t('validation.this_field_is_required') }}
+              </p>
             </form>
 
           </ModalTab>
@@ -317,13 +371,18 @@ const saveEdit = async () => {
                   v-model="sectionStories.button_name_ru"
 
               />
-
+              <p
+                  v-if="!sectionStories.button_name_ru && validated && sectionStories.is_button"
+                  class="text-danger text-sm"
+              >
+                {{ $t('validation.this_field_is_required') }}
+              </p>
             </form>
 
 
           </ModalTab>
         </ModalTabs>
-        <div  v-if="sectionStories.is_button">
+        <div v-if="sectionStories.is_button">
 
           <div
 
@@ -340,8 +399,14 @@ const saveEdit = async () => {
             >
               <template #no-options> {{ $t("no_matching_options") }}</template>
             </v-select>
+            <p
+                v-if="!sectionStories.button_type && validated && sectionStories.is_button"
+                class="text-danger text-sm"
+            >
+              {{ $t('validation.this_field_is_required') }}
+            </p>
           </div>
-          <div v-if="sectionStories.button_type?.value == 'URL'" >
+          <div v-if="sectionStories.button_type?.value == 'URL'">
             <p class="mt-3"> {{ $t('URL') }}</p>
             <input
                 type="text"
@@ -349,6 +414,12 @@ const saveEdit = async () => {
                 class="form-input  "
                 v-model="sectionStories.button_url"
             />
+            <p
+                v-if="!sectionStories.button_url && validated && sectionStories.is_button && sectionStories.button_type?.value == 'URL' "
+                class="text-danger text-sm"
+            >
+              {{ $t('validation.this_field_is_required') }}
+            </p>
           </div>
           <div v-else-if="sectionStories.button_type?.value !== 'URL' && sectionStories.button_type?.value"
                class="select-chooser "
@@ -363,17 +434,14 @@ const saveEdit = async () => {
             >
               <template #no-options> {{ $t("no_matching_options") }}</template>
             </v-select>
-
-          </div>
-          <div v-else
-               class="select-chooser  mt-9"
-          >
-            <v-select
-                disabled="true"
+            <p
+                v-if="!sectionStories.object_id && validated && sectionStories.is_button  && sectionStories.button_type?.value !== 'URL' && sectionStories.button_type?.value "
+                class="text-danger text-sm"
             >
-            </v-select>
-
+              {{ $t('validation.this_field_is_required') }}
+            </p>
           </div>
+
         </div>
 
 
@@ -397,7 +465,7 @@ const saveEdit = async () => {
               v-if="isSubmitted"
           />
           <span>{{
-              propData.editData && propData.editData.story_section_id ? $t("Edit") : $t("Add ")
+              propData.editData && propData.editData.story_section_id ? $t("Edit") : $t("Add")
             }}</span>
         </button>
       </div>
@@ -406,7 +474,7 @@ const saveEdit = async () => {
 
 </template>
 
-<style  lang="scss">
+<style lang="scss">
 
 .style-chooser-create .vs__dropdown-menu {
   position: fixed;
@@ -423,6 +491,7 @@ const saveEdit = async () => {
 .dark .style-chooser-create .vs__dropdown-menu {
   background-color: rgb(40 48 70 / var(--tw-bg-opacity));
 }
+
 .dark .select-chooser .vs__dropdown-menu {
   background-color: rgb(40 48 70 / var(--tw-bg-opacity));
 }

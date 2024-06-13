@@ -121,12 +121,12 @@ export default defineStore("knowledgeBase", {
             this.productsList = data
         },
         async getPages(params) {
-            const {data} = await $axios.get('/knowledge_base/pages/get_current_page', {params})
+            const {data} = await $axios.get('/knowledge_base/pages/get_current_page/', {params})
             this.pagesList = data
             this.pagesList.text = data.text
         },
         async getPagesPolicy(params) {
-            const {data} = await $axios.get('/knowledge_base/pages/get_current_page', {params})
+            const {data} = await $axios.get('/knowledge_base/pages/get_current_page/', {params})
             this.pagesListPolicy = data
             this.pagesListPolicy.text = data.text
         },
@@ -262,7 +262,7 @@ export default defineStore("knowledgeBase", {
             return $axios.delete(`/knowledge_base/sms_template/${id}/`);
         },
         detelePoll(id: number | null) {
-            return $axios.delete(`knowledge_base/poll/${id}`)
+            return $axios.delete(`knowledge_base/poll/${id}/`)
         },
         deleteRegion(id: number | null) {
             return $axios.delete(`/knowledge_base/region/${id}/`);
