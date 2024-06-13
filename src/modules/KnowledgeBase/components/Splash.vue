@@ -70,8 +70,10 @@ watchDebounced(() => params.search, async function () {
 const refresh = async () => {
   await store.getSplash(params);
 };
+
+
 const openModal = () => {
-  UIkit.modal("#splash").show()
+  UIKit.modal("#splash").show()
   dataToEdit.value = <Splash>{};
 }
 
@@ -79,7 +81,7 @@ const openModal = () => {
 const onShowFile = (item: any) => {
   image.value = item;
   nextTick(() => {
-    UIkit.modal("#file-modal-image").show();
+    UIKit.modal("#file-modal-image").show();
   });
 };
 const deleteAction = async () => {

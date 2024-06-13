@@ -14,9 +14,23 @@ export const recipedetailFields = [
     { text: "photo", value: "photo" },
     { text: "name", value: "title" },
     { text: "category", value: "category" },
+    { text: "calorie", value: "calories" },
+    { text: "cooking_time", value: "cooking_time" },
     { text: "rating", value: "rating" },
     { text: "views", value: "views" },
-    { text: "link", value: "link" },
     { text: "Status", value: "is_active" },
+    { text: "actions", value: "actions" },
+]
+
+export const ingredients = [
+    { text: "ID", value: "id" },
+    { text: "product", value: "product"},
+    { text: "Quantity", value: "quantity"},
+    { text: "actions", value: "actions" },
+]
+
+export const preparation = [
+    { text: "ID", value: "id" },
+    { text: "description", value: "description"},
     { text: "actions", value: "actions" },
 ]

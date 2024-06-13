@@ -39,7 +39,7 @@ const editData = ref<RetseptCategory>({
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
   let knowledgeBase = localStorage.getItem('knowledgeBase')
-  if (knowledgeBase == 'categories') {
+  if (knowledgeBase == 'recipe category') {
     await refresh(params)
   }
 })
@@ -49,7 +49,7 @@ onMounted(async () => {
 //WATCHERS
 watch(() => props.knowledge, async function (val) {
   toRefresh.value = !toRefresh.value
-  if (val == 'categories') {
+  if (val == 'recipe category') {
     await refresh(params)
   }
 })
@@ -82,7 +82,7 @@ const deleteCategory = async () => {
     await store.deleteRecipeCategory(itemId.value)
     await UIkit.modal("#category-delete").hide();
     toast.success(t('deleted_successfully'));
-    if (store.phonesList.count > 1 && ((store.retseptCategoryList.count - 1) % params.page_size == 0)) {
+    if (store.retseptCategoryList.count > 1 && ((store.retseptCategoryList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh(params)
     } else {
