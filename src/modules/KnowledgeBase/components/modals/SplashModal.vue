@@ -14,7 +14,7 @@ import FileInput from "@/components/FileInput/FileInput.vue";
 import {objectToFormData} from "@/mixins/formmatter";
 import ModalTabs from "@/components/Tab/ModalTabs.vue";
 import ModalTab from "@/components/Tab/ModalTab.vue";
-
+import {useSidebarStore} from '@/stores/layoutConfig'
 
 
 
@@ -22,6 +22,7 @@ import ModalTab from "@/components/Tab/ModalTab.vue";
 //DECLARED VARIABLES
 const {t} = useI18n();
 const isSubmitted = ref<boolean>(false);
+const general = useSidebarStore()
 const store = knowledgeBase();
 const emit = defineEmits(["refresh"]);
 const propData = defineProps<{ editData: Splash }>();
@@ -50,15 +51,24 @@ function openModal() {
 }
 
 const hideModal = () => {
-  validate.value.$reset()
   splashData.value.title_ru = ''
   splashData.value.title_uz = ''
   splashData.value.title_kr = ''
   splashData.value.image = null
   splashData.value.id = null
+  validate.value.$reset()
 
 }
 const updateDeal = async () => {
+  if (!splashData.value.title_uz) {
+    general.tabs = 'UZ'
+  } else if (!splashData.value.title_kr) {
+    general.tabs = 'KR'
+  } else if (!splashData.value.title_ru) {
+    general.tabs = 'RU'
+  }
+
+
   const success = await validate.value.$validate();
   if (!success) return;
 
@@ -212,9 +222,9 @@ const validate: Ref<Validation> = useVuelidate(rules, splashData);
               >{{ t('color') }}
                 <input
                     id="color"
-                    type="text"
-                    class="form-input"
-                    v-model="splashData.color"
+                    type="color"
+                    class="p-1 h-11 w-full block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700"
+                    v-model="splashData.color"                 
                 />
               </label>
 
