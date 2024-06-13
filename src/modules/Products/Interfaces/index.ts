@@ -3,19 +3,19 @@ export interface EditDataFirst {
     title_ru: string,
     title_uz: string,
     title_kr: string,
-    is_active: boolean
+    status: string
 
 }
 
 export interface EditDataSecond {
     id: number | null,
-    is_active: boolean,
+    status: string,
     category: string,
     product: string,
-    has_discount: string,
+    has_discount: boolean,
     title_ru: string,
     title_uz: string,
     title_kr: string,
-    discount_percentage: string,
+    discount_percentage: number,
     price: string
 }

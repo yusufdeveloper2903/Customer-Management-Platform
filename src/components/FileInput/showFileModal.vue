@@ -17,7 +17,7 @@ const props = defineProps<Props>();
       <button class="uk-modal-close-default" type="button" uk-close></button>
       <div class="uk-modal-body">
 
-        <img :src="props.image" alt="" class="w-full"/>
+        <img :src="props.image" alt="showFile" class="w-full"/>
       </div>
 
     </div>

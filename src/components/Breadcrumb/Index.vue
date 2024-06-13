@@ -20,7 +20,7 @@ const onBefore = (item: ListInterface) => {
 </script>
 <template>
   <div>
-    <nav class="mb-5 mt-1 flex card">
+    <nav class="mb-5 mt-1 flex ml-1 ">
       <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <Icon
             icon="Home"

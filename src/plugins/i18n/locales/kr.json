@@ -50,11 +50,12 @@
     "question": "Савол",
     "audio": "Аудио"
   },
+  "logout": "Чиқиш",
   "multipleAnswers": "Бир нечта жавоблар",
   "are_you_really_going_to_delete_this_user": "Ишончингиз комилми?",
   "deleted_successfully": "Муваффақиятли ўчирилди",
   "Button Name": "Тугма номи",
-  "Button Url": "Тугма УРЛ манзили",
+  "Button Url": "Тугма манзили",
   "Promotions": "Акциялар",
   "PROMOTION": "Акциялар",
   "success": "Муваффақиятли",

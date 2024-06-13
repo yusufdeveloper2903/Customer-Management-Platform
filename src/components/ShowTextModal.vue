@@ -19,7 +19,12 @@ const props = defineProps<PropsShowImage>();
     >
       <button class="uk-modal-close-default" type="button" uk-close></button>
       <div class="uk-modal-body" style="word-wrap: break-word;">
-        {{ props.url }}
+        <span v-if="props.url && props.url.button_url">
+        {{ props.url.button_url }}
+        </span>
+        <span v-if="props.url && props.url.button_type">
+        {{ props.url.button_type }}
+        </span>
       </div>
 
     </div>

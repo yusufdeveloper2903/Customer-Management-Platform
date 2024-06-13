@@ -15,12 +15,13 @@ import useVuelidate, {Validation} from "@vuelidate/core";
 import FileInput from "@/components/FileInput/FileInput.vue";
 import {watchDebounced} from "@vueuse/core";
 import {newsHeader} from '../../constants/index'
-import Tabs from "@/components/Tab/Tabs.vue";
-import Tab from "@/components/Tab/Tab.vue";
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
 import {objectToFormData} from "@/mixins/formmatter";
-
+import {useSidebarStore} from '@/stores/layoutConfig'
 
 //DECLARED VARIABLES
+const general = useSidebarStore()
 const newTemplate = newsTemplate()
 const {t, locale} = useI18n()
 const store = knowledgeBase()
@@ -44,7 +45,6 @@ const newsData = ref<any>({
   file: "",
   start_time: "",
   status: '',
-  url: "",
   receivers: [],
   template: null,
   enable_push_notify: false
@@ -73,6 +73,7 @@ watch(() => newsData.value.template, (val: any) => {
     newsData.value.title_uz = val?.title_uz
     newsData.value.title_ru = val?.title_ru
     newsData.value.title_kr = val?.title_kr
+    newsData.value.status = val?.status
     newsData.value.description_uz = val?.description_uz
     newsData.value.description_ru = val?.description_ru
     newsData.value.description_kr = val?.description_kr
@@ -81,6 +82,7 @@ watch(() => newsData.value.template, (val: any) => {
     newsData.value.title_uz = ''
     newsData.value.title_ru = ''
     newsData.value.title_kr = ''
+    newsData.value.status = ''
     newsData.value.description_uz = ''
     newsData.value.description_ru = ''
     newsData.value.description_kr = ''
@@ -107,7 +109,6 @@ onMounted(async () => {
     newsData.value.title_uz = store.newsListDetail.title_uz
     newsData.value.title_kr = store.newsListDetail.title_kr
     newsData.value.file = store.newsListDetail.file
-    newsData.value.url = store.newsListDetail.url
     newsData.value.status = store.newsListDetail.status
     newsData.value.description = store.newsListDetail.description
     newsData.value.description_ru = store.newsListDetail.description_ru
@@ -155,13 +156,26 @@ async function selectAllData() {
 }
 
 const saveData = async () => {
+  if (!newsData.value.title_uz) {
+    general.tabs = 'UZ'
+  } else if (!newsData.value.title_kr) {
+    general.tabs = 'KR'
+  } else if (!newsData.value.title_ru) {
+    general.tabs = 'RU'
+  }
   const success = await validate.value.$validate();
   if (!success) return;
   newsData.value.title = newsData.value.title_uz
   newsData.value.description = newsData.value.description_uz
-  newsData.value.template = newsData.value.template?.id
   newsData.value.id = route.params.id
-  newsData.value.status = newsData.value.status?.id
+
+  if (newsData.value.template && newsData.value.template.id) {
+    newsData.value.template = newsData.value.template.id
+  }
+  if (newsData.value.status && newsData.value.status.id) {
+    newsData.value.status = newsData.value.status.id
+  }
+
   const fd = objectToFormData(['file'], newsData.value)
 
   if (route.params.id) {
@@ -216,7 +230,8 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
       <div class="uk-margin">
         <label for="form-stacked-text">{{ t('start_date') }} </label>
         <div class="uk-form-controls">
-          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :locale="'ru'" model-type="yyyy-MM-dd hh:mm:ss"
+          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :locale="'ru'"
+                         model-type="yyyy-MM-dd hh:mm:ss"
                          :class="validate.start_time.$errors.length ? 'required-input' : ''"
                          v-model="newsData.start_time"
           />
@@ -248,8 +263,8 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           />
         </label>
       </div>
-      <Tabs>
-        <Tab title="UZ">
+      <ModalTabs>
+        <ModalTab title="UZ">
           <div class="uk-margin">
             <label for="form-stacked-text">{{ t('name') + ' ' + t('UZ') }}</label>
             <div class="uk-form-controls">
@@ -274,8 +289,8 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
             </div>
           </div>
 
-        </Tab>
-        <Tab title="KR">
+        </ModalTab>
+        <ModalTab title="KR">
 
           <div class="uk-margin">
             <label for="form-stacked-text">{{ t('name') + ' ' + t('KR') }}</label>
@@ -301,8 +316,8 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
               class="form-input" rows="5"/>
             </div>
           </div>
-        </Tab>
-        <Tab title="RU">
+        </ModalTab>
+        <ModalTab title="RU">
 
           <div class="uk-margin">
             <label for="form-stacked-text">{{ t('name') + ' ' + t('RU') }}</label>
@@ -328,8 +343,8 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
               class="form-input" rows="5"/>
             </div>
           </div>
-        </Tab>
-      </Tabs>
+        </ModalTab>
+      </ModalTabs>
 
 
       <div class="uk-margin">
@@ -344,12 +359,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
         </label>
       </div>
 
-      <div class="uk-margin">
-        <label for="form-stacked-text">{{ t('Url') }}</label>
-        <div class="uk-form-controls">
-          <input type="url" class="form-input p-1" v-model="newsData.url"/>
-        </div>
-      </div>
       <p class=" mt-5 mb-1">{{ t("push_notification") }}:</p>
       <label className="relative inline-flex items-center cursor-pointer">
         <input

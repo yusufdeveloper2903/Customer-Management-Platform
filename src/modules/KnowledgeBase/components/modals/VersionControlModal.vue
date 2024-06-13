@@ -19,10 +19,19 @@ const emits = defineEmits(["saveVersionControl"]);
 let versionControlData = ref({
   number: "",
   description: "",
-  is_active: false,
+  is_active: true,
 })
 const propData = defineProps<{ editData: EditVersion }>();
-
+let statusList = ref([
+  {
+    title: 'Active',
+    value: true
+  },
+  {
+    title: 'Inactive',
+    value: false
+  }
+])
 
 //FUNCTIONS
 function openModal() {
@@ -61,6 +70,7 @@ const updateDeal = async () => {
 const hideData = () => {
   versionControlData.value.number = ''
   versionControlData.value.description = ''
+  versionControlData.value.is_active = true
   validate.value.$reset()
 }
 
@@ -117,18 +127,19 @@ const validate: Ref<Validation> = useVuelidate(rules, versionControlData);
                 :class="validate.number.$errors.length ? 'required-input' : ''"
             />
           </div>
-          <p class=" mt-5 mb-1">{{ $t("Status") }}:</p>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-                type="checkbox"
+          <div class="mt-3">
+            <p>{{ $t("Status") }}</p>
+            <v-select
+                class="version_control_select"
+                :options="statusList"
                 v-model="versionControlData.is_active"
-                class="sr-only peer"
-            />
-            <div
-                className="w-11 h-6 bg-gray-200 peer-focus:outline-none
-          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-            ></div>
-          </label>
+                :getOptionLabel="(name:any) => t(name.title)"
+                :reduce="(item:any) => item.value"
+            >
+              <template #no-options> {{ $t("no_matching_options") }}</template>
+            </v-select>
+          </div>
+
         </form>
       </div>
 
@@ -146,3 +157,21 @@ const validate: Ref<Validation> = useVuelidate(rules, versionControlData);
     </div>
   </div>
 </template>
+<style  lang="scss">
+
+.version_control_select .vs__dropdown-menu {
+  position: fixed;
+  z-index: 9999; /* Set a high z-index value */
+  left: 30px;
+  top: 177px;
+  width: 90%;
+  height: 23%;
+  overflow: auto;
+  background-color: white;
+
+}
+
+.dark .version_control_select .vs__dropdown-menu {
+  background-color: rgb(40 48 70 / var(--tw-bg-opacity));
+}
+</style>

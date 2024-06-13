@@ -20,7 +20,7 @@ const database = ['PostgreSQL', 'MySQL', 'MongoDB', 'MariaDB']
   <Tabs class="card">
     <Tab title="company">
       <div class="flex justify-between gap-x-6 border rounded-xl p-4 border-[#17183B]">
-        <img :src="Logo" class="w-[150px] h-[150px]"/>
+        <img :src="Logo" class="w-[150px] h-[150px]" style="aspect-ratio: 1/1 "/>
         <div class="w-full">
           <div class="border-b flex pb-2 flex justify-between items-center">
             {{ $t('company') }}
@@ -61,7 +61,7 @@ const database = ['PostgreSQL', 'MySQL', 'MongoDB', 'MariaDB']
     </Tab>
     <Tab title="tech">
       <div class="flex justify-between gap-x-6 border rounded-xl p-4 border-[#17183B]">
-        <img :src="Logo" class="w-[150px] h-[150px]"/>
+        <img :src="Logo" class="w-[150px] h-[150px]" style="aspect-ratio: 1/1 "/>
         <div class="w-full">
           <div class="border-b flex pb-2 flex justify-between items-center">
             {{ $t('systems') }}
@@ -123,7 +123,7 @@ const database = ['PostgreSQL', 'MySQL', 'MongoDB', 'MariaDB']
     </Tab>
     <Tab title="products">
       <div class="flex justify-between gap-x-6 border rounded-xl p-4 border-[#17183B]">
-        <img :src="Logo" class="w-[150px] h-[150px]"/>
+        <img :src="Logo" class="w-[150px] h-[150px]" style="aspect-ratio: 1/1 "/>
         <div class="w-full">
           <div class="border-b flex pb-2 flex justify-between items-center">
             {{ $t('users_amount') }}

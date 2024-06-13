@@ -25,7 +25,8 @@ const itemId = ref<number | null | undefined>(null);
 const params = reactive({
   page: 1,
   search: '',
-  page_size: 10
+  page_size: 10,
+  status: null
 })
 const currentRow = ref<Link | null>(null);
 const editData = ref({
@@ -35,7 +36,29 @@ const editData = ref({
   title_kr: '',
   is_active: false
 })
-
+const listStatus = ref([
+  {
+    title: 'Active',
+    value: 'ACTIVE'
+  },
+  {
+    title: 'Draft',
+    value: 'DRAFT'
+  },
+  {
+    title: 'Finished',
+    value: 'FINISHED'
+  }
+])
+const changeColor = (val: string) => {
+  if (val == 'ACTIVE') {
+    return t('bg-success')
+  } else if (val == 'DRAFT') {
+    return t('bg-warning')
+  } else {
+    return t('bg-secondary')
+  }
+}
 //WATCHERS
 watchDebounced(
     () => params.search,
@@ -46,8 +69,14 @@ watchDebounced(
       await refresh(params)
     }, {deep: true, debounce: 500, maxWait: 5000}
 );
-
-
+watchDebounced(
+    () => params.status,
+    async () => {
+      params.page = 1;
+      localStorage.setItem('page', '1')
+      await refresh(params)
+    }, {deep: true, debounce: 500, maxWait: 5000}
+);
 
 //MOUNTED
 onMounted(async () => {
@@ -118,7 +147,15 @@ const dragStart = (item: any) => {
 const dragOver = (e: any) => {
   e.preventDefault();
 };
-
+const changeName = (val: any) => {
+  if (val === 'ACTIVE') {
+    return t('Active')
+  } else if (val === 'DRAFT') {
+    return t('Draft')
+  } else {
+    return t('Finished')
+  }
+}
 const dragDrop = async (item: Link) => {
   event?.preventDefault();
   await productStorage.DRAG_DROP_PRODUCTS({id1: currentRow.value?.id, id2: item.id})
@@ -130,10 +167,30 @@ const dragDrop = async (item: Link) => {
 <template>
   <div class="card">
     <div class="flex justify-between items-end mb-7">
-      <label for="search" >
-        {{ $t('Search') }}
-        <input type="text" class="form-input"  v-model="params.search"/>
-      </label>
+      <div class="flex justify-center gap-3 w-1/3">
+        <div class="w-1/3  mt-[0.10rem]">
+          <label for="search">
+            {{ $t('Search') }}
+          </label>
+
+          <input type="text" class="form-input" v-model="params.search"/>
+        </div>
+
+        <div class="w-2/3">
+          <label class="dark:text-gray-300 ">
+            {{ $t("Status") }}
+          </label>
+          <v-select
+              :options="listStatus"
+              v-model="params.status"
+              :getOptionLabel="(name:any) => t(name.title)"
+              :reduce="(item:any) => item.value"
+          >
+            <template #no-options> {{ $t("no_matching_options") }}</template>
+          </v-select>
+        </div>
+      </div>
+
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
               uk-toggle="target: #create_and_edit_category" @click="editData={}">
         {{ $t("Add") }}
@@ -159,20 +216,11 @@ const dragDrop = async (item: Link) => {
         <td class="px-6 whitespace-no-wrap text-left">{{ item['title_' + $i18n.locale] }}</td>
         <td class="px-6 whitespace-no-wrap text-left">{{ item.active_products_count }}</td>
         <td class="px-6 whitespace-no-wrap text-left">{{ item.inactive_products_count }}</td>
-        <td class="px-6 whitespace-no-wrap text-left">
-          <label
-              className="relative inline-flex items-left cursor-pointer">
-            <input
-                type="checkbox"
-                v-model="item.is_active"
-                class="sr-only peer"
-                disabled
-            />
-            <div
-                className="w-11 h-6 bg-gray-200 peer-focus:outline-none
-          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-            ></div>
-          </label>
+        <td class="px-6 whitespace-no-wrap text-left"> <span
+            :class="changeColor(item.status)" class="rounded  px-4 p-1 pt-1 inline  text-white"
+        >
+       {{ changeName(item.status) }}
+       </span>
         </td>
         <td class="px-6 whitespace-no-wrap text-left">{{ formatDate(item.created_at) }}</td>
         <td class="px-6 whitespace-no-wrap text-left">{{ formatDate(item.updated_at) }}</td>
@@ -199,7 +247,10 @@ const dragDrop = async (item: Link) => {
       </tbody>
 
     </table>
-    <div class="empty_table" v-if="!productStorage.productListCategory.results.length">{{ $t('no_available_data') }}</div>
+    <div class="empty_table" v-if="!productStorage.productListCategory.results.length">{{
+        $t('no_available_data')
+      }}
+    </div>
 
 
     <DeleteModal @delete-action="deleteAction" :id="'product-main-delete-modal'"/>

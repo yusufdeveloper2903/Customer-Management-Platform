@@ -85,7 +85,13 @@ watchDebounced(() => params.search, async function () {
 
 //FUNCTIONS
 const refresh = async () => {
-  await store.getOnboarding(params);
+  isLoading.value = true;
+  try {
+    await store.getOnboarding(params);
+  } catch (error: any) {
+    toast.error(t("error"));
+  }
+  isLoading.value = false;
 };
 
 const openModal = () => {
@@ -173,10 +179,11 @@ const handleDeleteModal = (id: number) => {
         <div class="py-3 flex justify-left gap-3">
           <img
               v-if="image"
-              class="w-[45px] h-[45px] rounded object-cover"
+              class="w-[45px] h-[45px] rounded"
               :src="image"
               alt="Rounded avatar"
               @click="onShowFile(image)"
+              style="aspect-ratio: 1/1 "
           />
           <div
               v-else

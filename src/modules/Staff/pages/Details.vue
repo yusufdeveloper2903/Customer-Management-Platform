@@ -146,9 +146,9 @@ const validate: Ref<Validation> = useVuelidate(rules, userData);
           <span v-if="!imageUrl" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
           <img
               v-else
-              class="w-full h-full object-cover"
               :src="imageUrl"
-              alt=""
+              alt="Staff"
+              style="aspect-ratio: 1/1 "
           />
         </div>
         <div class="flex gap-3 mb-0.5">

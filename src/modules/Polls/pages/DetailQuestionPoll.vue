@@ -36,6 +36,14 @@ let pollAdd = ref<any>({
       context_ru: '',
       option_id: 0,
       index: 0
+    },
+    {
+      context: '',
+      context_uz: '',
+      context_kr: '',
+      context_ru: '',
+      option_id: 0,
+      index: 0
     }
   ]
 

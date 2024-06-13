@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 
 //IMPORTED FILES
-import {Ref, ref, computed, watch, nextTick, reactive} from "vue";
+import {Ref, ref, computed, watch, reactive} from "vue";
 import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
@@ -10,7 +10,7 @@ import useVuelidate, {Validation} from "@vuelidate/core";
 import prmotionBase from "../store/index";
 import ModalTabs from "@/components/Tab/ModalTabs.vue";
 import ModalTab from "@/components/Tab/ModalTab.vue";
-import FileInput from '@/components/FileInput/FileInput.vue'
+import FileInput from '@/components/FileInput/FileInputPromotion.vue'
 import {EditData} from '../Interface/index'
 import {objectToFormData} from "@/mixins/formmatter";
 import {useSidebarStore} from '@/stores/layoutConfig'
@@ -34,10 +34,10 @@ let productsData = ref({
   title_uz: '',
   title_kr: '',
   description: '',
-  description_ru: "",
-  description_uz: "",
-  description_kr: "",
-  status: '',
+  description_ru: " ",
+  description_uz: " ",
+  description_kr: " ",
+  status: 'DRAFT',
   background_photo: '',
   detail_photo: '',
   start_date: '',
@@ -142,6 +142,8 @@ const onHide = () => {
   document.getElementsByClassName('ql-editor')[0].innerHTML = ''
 
   validate.value.$reset()
+  general.imageDetail = ""
+  general.imageBackground = ""
   dateConfig.value = {}
   imageDiv.value = ''
   imageDivBackground.value = ""
@@ -150,15 +152,15 @@ const onHide = () => {
   productsData.value.title_uz = ''
   productsData.value.title_ru = ''
   productsData.value.title_kr = ''
-  productsData.value.status = ''
+  productsData.value.status = 'DRAFT'
 
   productsData.value.start_date = ""
   productsData.value.end_date = ""
   productsData.value.background_photo = ""
   productsData.value.description = ''
-  productsData.value.description_uz = ""
-  productsData.value.description_ru = ""
-  productsData.value.description_kr = ""
+  productsData.value.description_uz = " "
+  productsData.value.description_ru = " "
+  productsData.value.description_kr = " "
   const firstTab = document.querySelectorAll('.first_tab');
   const secondTab = document.querySelectorAll('.second_tab');
   const thirdTab = document.querySelectorAll('.third_tab');
@@ -228,6 +230,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
   <div id="create_edit_promotion" class="uk-flex-top" uk-modal @shown="openModal" @hidden="onHide">
     <div
         class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
+        style="width:800px"
     >
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
@@ -236,185 +239,191 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
         </h2>
       </div>
 
-      <div class="uk-modal-body py-4">
-        <ModalTabs>
-          <ModalTab title="UZ">
-            <div class="first_tab">
-              <label>{{ $t('name') + ' ' + $t('UZ') }}</label>
-              <input
-                  type="text"
-                  class="form-input "
-                  v-model="productsData.title_uz"
-                  :class="validate.title_uz.$errors.length ? 'required-input' : ''"
-              />
-              <p
-                  v-for="error in validate.title_uz.$errors"
-                  :key="error.$uid"
-                  class="text-danger text-sm"
-              >
-                {{ $t(error.$message) }}
-              </p>
-              <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('UZ') }} </label>
-              <Editor
-                  v-if="productsData.description_uz"
-                  :placeholder="$t('enter_information')"
-                  content-type="html"
-                  id="editorFirst"
-                  toolbar="full"
-                  class="scrollbar rounded border"
-                  style="height: 15vh; overflow-y: auto;"
-                  v-model:content="productsData.description_uz"
-              />
-              <Editor
-                  v-else
-                  :placeholder="$t('enter_information')"
-                  content-type="html"
-                  toolbar="full"
-                  class="scrollbar rounded border"
-                  style="height: 15vh; overflow-y: auto;"
-                  v-model:content="productsData.description_uz">
-              </Editor>
-              <p
-                  v-for="error in validate.description_uz.$errors"
-                  :key="error.$uid"
-                  class="text-danger text-sm"
-              >
-                {{ $t(error.$message) }}
-              </p>
+      <div class="uk-modal-body py-4 flex gap-5">
+        <div class="w-1/2">
+          <ModalTabs>
+            <ModalTab title="UZ">
+              <div class="first_tab">
+                <label>{{ $t('name') + ' ' + $t('UZ') }}</label>
+                <input
+                    type="text"
+                    class="form-input "
+                    v-model="productsData.title_uz"
+                    :class="validate.title_uz.$errors.length ? 'required-input' : ''"
+                />
+                <p
+                    v-for="error in validate.title_uz.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ $t(error.$message) }}
+                </p>
+                <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('UZ') }} </label>
+                <Editor
+                    v-if="productsData.description_uz"
+                    :placeholder="$t('enter_information')"
+                    content-type="html"
+                    id="editorFirst"
+                    toolbar="full"
+                    class="scrollbar rounded border"
+                    style="height: 15vh; overflow-y: auto;"
+                    v-model:content="productsData.description_uz"
+                />
 
-            </div>
+                <p
+                    v-for="error in validate.description_uz.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ $t(error.$message) }}
+                </p>
+
+              </div>
 
 
-          </ModalTab>
-          <ModalTab title="KR">
-            <div class="second_tab">
-              <label>{{ $t('name') + ' ' + $t('KR') }}</label>
-              <input
-                  type="text"
-                  class="form-input "
-                  v-model="productsData.title_kr"
-                  :class="validate.title_kr.$errors.length ? 'required-input' : ''"
-              />
-              <p
-                  v-for="error in validate.title_kr.$errors"
-                  :key="error.$uid"
-                  class="text-danger text-sm"
-              >
-                {{ $t(error.$message) }}
-              </p>
-              <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('KR') }} </label>
-              <Editor
-                  v-if="productsData.description_kr"
-                  :placeholder="$t('enter_information')"
-                  content-type="html"
-                  toolbar="full"
-                  class="scrollbar rounded border"
-                  style="height: 15vh; overflow-y: auto;"
-                  v-model:content="productsData.description_kr"
-              />
-              <Editor
-                  v-else
-                  :placeholder="$t('enter_information')"
-                  content-type="html"
-                  toolbar="full"
-                  class="scrollbar rounded border"
-                  style="height: 15vh; overflow-y: auto;"
-                  v-model:content="productsData.description_kr">
-              </Editor>
-              <p
-                  v-for="error in validate.description_kr.$errors"
-                  :key="error.$uid"
-                  class="text-danger text-sm"
-              >
-                {{ $t(error.$message) }}
-              </p>
+            </ModalTab>
+            <ModalTab title="KR">
+              <div class="second_tab">
+                <label>{{ $t('name') + ' ' + $t('KR') }}</label>
+                <input
+                    type="text"
+                    class="form-input "
+                    v-model="productsData.title_kr"
+                    :class="validate.title_kr.$errors.length ? 'required-input' : ''"
+                />
+                <p
+                    v-for="error in validate.title_kr.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ $t(error.$message) }}
+                </p>
+                <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('KR') }} </label>
+                <Editor
+                    v-if="productsData.description_kr"
+                    :placeholder="$t('enter_information')"
+                    content-type="html"
+                    toolbar="full"
+                    class="scrollbar rounded border"
+                    style="height: 15vh; overflow-y: auto;"
+                    v-model:content="productsData.description_kr"
+                />
 
-            </div>
+                <p
+                    v-for="error in validate.description_kr.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ $t(error.$message) }}
+                </p>
+
+              </div>
 
 
-          </ModalTab>
-          <ModalTab title="RU">
-            <div class="third_tab">
-              <label>{{ $t('name') + ' ' + $t('RU') }}</label>
-              <input
-                  type="text"
-                  class="form-input "
-                  v-model="productsData.title_ru"
-                  :class="validate.title_ru.$errors.length ? 'required-input' : ''"
-              />
-              <p
-                  v-for="error in validate.title_ru.$errors"
-                  :key="error.$uid"
-                  class="text-danger text-sm"
-              >
-                {{ $t(error.$message) }}
-              </p>
-              <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('RU') }}</label>
-              <Editor
-                  v-if="productsData.description_ru"
-                  :placeholder="$t('enter_information')"
-                  content-type="html"
-                  toolbar="full"
-                  class="scrollbar rounded border"
-                  style="height: 15vh; overflow-y: auto;"
-                  v-model:content="productsData.description_ru"
-              />
-              <Editor
-                  v-else
-                  :placeholder="$t('enter_information')"
-                  content-type="html"
-                  toolbar="full"
-                  class="scrollbar rounded border"
-                  style="height: 15vh; overflow-y: auto;"
-                  v-model:content="productsData.description_ru">
-              </Editor>
-              <p
-                  v-for="error in validate.description_ru.$errors"
-                  :key="error.$uid"
-                  class="text-danger text-sm"
-              >
-                {{ $t(error.$message) }}
-              </p>
+            </ModalTab>
+            <ModalTab title="RU">
+              <div class="third_tab">
+                <label>{{ $t('name') + ' ' + $t('RU') }}</label>
+                <input
+                    type="text"
+                    class="form-input "
+                    v-model="productsData.title_ru"
+                    :class="validate.title_ru.$errors.length ? 'required-input' : ''"
+                />
+                <p
+                    v-for="error in validate.title_ru.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ $t(error.$message) }}
+                </p>
+                <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('RU') }}</label>
+                <Editor
+                    v-if="productsData.description_ru"
+                    :placeholder="$t('enter_information')"
+                    content-type="html"
+                    toolbar="full"
+                    class="scrollbar rounded border"
+                    style="height: 15vh; overflow-y: auto;"
+                    v-model:content="productsData.description_ru"
+                />
 
-            </div>
+                <p
+                    v-for="error in validate.description_ru.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ $t(error.$message) }}
+                </p>
+
+              </div>
 
 
-          </ModalTab>
-        </ModalTabs>
-        <div class="mt-2">
-          <label for="from" class="dark:text-gray-300">
-            {{ $t("date_from") + ' - ' + $t("date_to") }}
-          </label>
-          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
+            </ModalTab>
+          </ModalTabs>
+          <div class="mt-2">
+            <label for="from" class="dark:text-gray-300">
+              {{ $t("date_from") + ' - ' + $t("date_to") }}
+            </label>
+            <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :range="{ partialRange: false }"
+                           v-model="dateConfig"/>
+          </div>
+          <p class=" mt-4 ">{{ $t("Published") }}</p>
+          <v-select
+              :options="Status"
+              :getOptionLabel="(role:any) => $t(`${role.title}`)"
+              :reduce="(role:any) => role.value"
+              v-model="productsData.status"
+          >
+            <template #no-options> {{ $t("no_matching_options") }}</template>
+          </v-select>
+
+
         </div>
-        <p class=" mt-4 ">{{ $t("Published") }}</p>
-
-
-        <v-select
-            :options="Status"
-            :getOptionLabel="(role:any) => $t(`${role.title}`)"
-            :reduce="(role:any) => role.value"
-            v-model="productsData.status"
-        >
-          <template #no-options> {{ $t("no_matching_options") }}</template>
-        </v-select>
-
-        <div>
-
-          <label class="mt-4 block" for="photo">{{ $t('Detail photo') }}
+        <div class="w-1/2">
+          <div class="mt-[58px]">
+            <label>{{ $t('Detail photo') }}</label>
             <FileInput
                 v-model="productsData.detail_photo"
                 @remove="productsData.detail_photo = null"
                 :typeModal="propData.editData.id"
                 name="promotion-modal"
             />
+            <div v-if="general.imageDetail"
+                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
+              <img
+
+                  :src="general.imageDetail"
+                  alt="image"
+                  style="aspect-ratio: 1/1 "
+              />
+
+            </div>
+            <div v-else-if="productsData.detail_photo"
+                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
+              <img
+
+                  :src="productsData.detail_photo"
+                  alt="image"
+                  style="aspect-ratio: 1/1 "
+              />
+
+            </div>
 
 
-          </label>
+            <div v-else
+                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
+              <div
+                  class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
+                <span class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
 
-        </div>
-        <div>
-          <label class="mt-4 block" for="photo">{{ $t('Background photo') }}
+              </div>
+            </div>
+
+          </div>
+
+          <div>
+            <label class="mt-2 block">{{ $t('Background photo') }}</label>
             <FileInput
                 v-model="productsData.background_photo"
                 @remove="productsData.background_photo = null"
@@ -422,11 +431,38 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 name="second-promotion"
             />
 
+            <div v-if="general.imageBackground"
+                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
+              <img
 
-          </label>
+                  :src="general.imageBackground"
+                  alt="image"
+                  style="aspect-ratio: 1/1 "
+              />
 
+            </div>
+            <div v-else-if="productsData.background_photo"
+                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
+              <img
+
+                  :src="productsData.background_photo"
+                  alt="image"
+                  style="aspect-ratio: 1/1 "
+              />
+
+            </div>
+
+
+            <div v-else
+                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
+              <div
+                  class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
+                <span class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
+
+              </div>
+            </div>
+          </div>
         </div>
-
       </div>
 
       <div

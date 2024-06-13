@@ -171,10 +171,11 @@ const onShowFile = (item: any) => {
           <div class="py-3 flex justify-left gap-3">
             <img
                 v-if="items && items.photo"
-                class="w-[45px] h-[45px] rounded object-cover"
+                class="w-[45px] h-[45px] rounded"
                 :src="items.photo"
                 alt="Rounded avatar"
                 @click="onShowFile(items.photo)"
+                style="aspect-ratio: 1/1 "
             />
             <div
                 v-else

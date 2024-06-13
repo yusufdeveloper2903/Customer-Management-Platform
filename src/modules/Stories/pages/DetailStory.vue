@@ -47,7 +47,7 @@ let storiesVariable = ref<any>({
   start_date: '',
   end_date: '',
   avatar: '',
-  status: '',
+  status: 'DRAFT',
 });
 const createdData = ref<string | null>('')
 const editData = ref<EditData | null>({
@@ -203,6 +203,13 @@ const getDetail = async () => {
   }
 
 };
+const TooltipMaker = (val) => {
+  if (val.button_type === 'URL') {
+    return val.button_url
+  } else {
+    return val.button_type
+  }
+}
 const addSection = async () => {
   if (!storiesVariable.value.subtitle_uz) {
     general.tabs = 'UZ'
@@ -301,7 +308,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
     <div class="flex gap-2 items-start">
 
       <div class="card w-1/4">
-        <h3 class="text-balance mb-3">{{ $t('Main') }}</h3>
+        <h3 class="text-success dark:text-success mb-3">{{ $t('Main') }}</h3>
         <ModalTabs class="mb-4">
           <ModalTab title="UZ">
             <form>
@@ -377,7 +384,8 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           <label for="from" class="dark:text-gray-300">
             {{ $t("date_from") + ' - ' + $t("date_to") }}
           </label>
-          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
+          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :range="{ partialRange: false }"
+                         v-model="dateConfig"/>
           <p
               v-for="error in validate.start_date.$errors"
               :key="error.$uid"
@@ -417,7 +425,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 
       </div>
       <div class="card w-2/4">
-        <h3 class="text-balance mb-3">{{ $t('addPhoto') }}</h3>
+        <h3 class="text-success dark:text-success mb-3">{{ $t('addPhoto') }}</h3>
         <div class="flex justify-between items-end mb-7">
           <label/>
           <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
@@ -456,14 +464,17 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             </label>
           </template>
           <template #item-button_url="item">
+
+            <!--            @click="onShowFileLink(item)"-->
+
             <button
                 type="button"
-                class=" btn-success btn-action"
-                @click="onShowFileLink(item.button_url)"
-                :disabled="!item.button_url"
+                class="tooltip btn-success btn-action"
+                :disabled="item.button_type === 'NULL'"
             >
+              <span class="tooltiptext" v-if="item.button_type !== 'NULL'">{{ TooltipMaker(item) }}</span>
               <Icon
-                  icon="Eye"
+                  icon="Link"
                   color="#FFF"
                   size="16"
               />
@@ -474,9 +485,10 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             <div class="py-3 flex justify-left gap-3">
               <div v-if="item['background_'+ locale]">
                 <img
-                    class="w-[45px] h-[45px] rounded object-cover"
+                    class="w-[45px] h-[45px] rounded "
                     :src="item['background_'+ locale].full_size"
                     alt="Rounded avatar"
+                    style="aspect-ratio: 1/1"
 
                 />
               </div>
@@ -514,18 +526,27 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
       </div>
 
       <div class=" w-1/4 ">
-        <div class="card">
-          <h3 class="text-balance mb-3">{{ $t('previewPhoto') }}</h3>
+        <div class="card"
+             style="position:relative"
+
+        >
+          <h3 class="text-success dark:text-success mb-3">{{ $t('previewPhoto') }}</h3>
 
           <div
               class="mb-5 flex h-[450px] w-[240px] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
             <span v-if="!imageUrl" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
-            <img
-                v-else
-                class="h-full h-[450px] w-[240px]"
-                :src="imageUrl"
-                alt=""
-            />
+            <div v-else>
+              <img
+                  class="h-[450px] w-[240px]"
+                  :src="imageUrl"
+                  alt="preview photo"
+                  style="aspect-ratio: 1/1"
+              />
+              <button class="btn-success button_preview">
+                {{ $t("Кнопка") }}
+              </button>
+            </div>
+
           </div>
         </div>
         <div
@@ -549,4 +570,50 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 
 </template>
 
+<style scoped>
+.button_preview {
+  position: absolute;
+  bottom: 70px;
+  left: 142px;
+  width: 170px
+}
 
+.tooltip {
+  position: relative;
+  display: inline-block;
+  z-index: 99 !important;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 520px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -205px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+</style>

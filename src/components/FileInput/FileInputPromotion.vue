@@ -2,10 +2,8 @@
 
 //IMPORTED FILES
 import {nextTick, ref, watch} from "vue";
-import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
-import UIkit from "uikit";
 import {ReturnValue, FileInput} from '@/interface'
-
+import {useSidebarStore} from '@/stores/layoutConfig'
 
 //Interfaces Type
 interface Emits {
@@ -15,6 +13,8 @@ interface Emits {
 
   (event: "show", value: ReturnValue | string): void;
 }
+
+const general = useSidebarStore()
 
 interface Props {
   modelValue: string | string[] | null;
@@ -45,14 +45,6 @@ const data = ref<FileInput | ''>()
 const emit = defineEmits<Emits>();
 const inputValue = ref<any>();
 const input = ref<boolean>(true);
-const image = ref<string>('');
-const onShowFile = (item: string) => {
-  image.value = item;
-  nextTick(() => {
-    UIkit.modal(`#${props.name}`).show();
-    emit("show", item);
-  });
-};
 
 
 //WATCHERS
@@ -67,6 +59,7 @@ watch(
           inputValue.value = props.modelValue;
         });
       } else {
+
         inputValue.value = props.modelValue;
       }
     }
@@ -94,23 +87,7 @@ const clearData = () => {
   emit('remove', inputValue.value)
   (document.getElementById(`${props.name}`) as HTMLInputElement).value = ''
 }
-const textFileInput = (val: any, second: any) => {
-  if (second === 'inputValue') {
-    const lastDotIndex = val.lastIndexOf(".");
-    const extension = lastDotIndex !== -1 ? val.slice(lastDotIndex) : "";
-    return val.length < 20
-        ? val.split("/").at(-1)
-        : val.split("/").at(-1)?.slice(0, 20) + extension;
-  }
-  if (second === 'changePhoto') {
-    const lastDotIndex = inputValue.value.name.lastIndexOf(".");
-    const extension = lastDotIndex !== -1 ? inputValue.value.name.slice(lastDotIndex) : "";
-    const truncatedStr = inputValue.value.name.slice(0, 20 - extension.length);
 
-    return truncatedStr + extension;
-  }
-
-}
 const getFile = (event: any) => {
   let input = event.target;
   if (input.files && input.files[0]) {
@@ -118,6 +95,14 @@ const getFile = (event: any) => {
     let reader = new FileReader();
     reader.onload = (e) => {
       changePhoto.value = e?.target?.result;
+      if(props.name === 'promotion-modal'){
+        general.imageDetail = e?.target?.result;
+      }
+      if(props.name === 'second-promotion'){
+        general.imageBackground = e?.target?.result;
+      }
+
+
     }
     reader.readAsDataURL(input.files[0]);
   }
@@ -146,73 +131,10 @@ const getFile = (event: any) => {
     >
       <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
     </button>
+
   </div>
 
-  <template v-if="typeof inputValue === 'string'">
-    <div v-if="props.typeModal" class="flex justify-between items-center mt-3 " @click.prevent>
-      <div class="flex items-center">
-        <img
-            :src="inputValue"
-            class="rounded-lg w-[90px] h-[90px] "
-            style="aspect-ratio: 1/1 "
-            alt="image"
-        />
-        <div class="ml-3">
-          <div class="rounded text-success   ">{{ textFileInput(inputValue, 'inputValue') }}</div>
-        </div>
 
-
-      </div>
-
-      <div class="flex justify-end gap-3 ml-3 mt-2">
-        <Icon
-            v-if="props.eye"
-            icon="Eye"
-            @click.prevent="onShowFile(inputValue)"
-            class="cursor-pointer"
-            color="#909498"
-        />
-        <Icon
-            v-if="props.minus"
-            icon="Minus Circle"
-            @click="emit('remove', inputValue)"
-            class="cursor-pointer"
-            color="#ea5455"
-        />
-      </div>
-    </div>
-  </template>
-  <template v-else-if="changePhoto">
-    <div
-        class="flex justify-between items-center mt-3 mx-5"
-
-    >
-      <div class="flex items-center">
-        <img
-            :src="changePhoto"
-            class="rounded-lg w-[90px] h-[90px] "
-            style="aspect-ratio: 1/1 "
-            alt="image"
-        />
-        <div class="ml-3">
-          <div class="rounded text-success mt-2  ">{{ textFileInput(changePhoto, 'changePhoto') }}</div>
-        </div>
-
-
-      </div>
-
-      <div class="flex justify-end gap-3 ml-3">
-        <Icon
-            v-if="props.eye"
-            icon="Eye"
-            @click.prevent="onShowFile(changePhoto)"
-            class="cursor-pointer"
-            color="#909498"
-        />
-      </div>
-    </div>
-  </template>
-  <ShowFileModal :id="props.name" :image="image"/>
 </template>
 <style lang="scss" scoped>
 .file_data {
@@ -230,10 +152,6 @@ const getFile = (event: any) => {
 .fileEmpty {
   color: transparent !important;
 }
-
-//.fileUpload {
-//  color: black !important;
-//}
 
 
 input[type=file]::before {

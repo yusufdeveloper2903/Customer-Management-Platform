@@ -248,7 +248,7 @@ const saveEdit = async () => {
             >
               {{ $t('validation.this_field_is_required') }}
             </p>
-            <form v-if="sectionStories.is_button">
+            <form v-if="sectionStories.is_button" class="mt-3">
               <label for="nameUz">{{ $t('name') + ' ' + $t('UZ') }} </label>
               <input
                   id="nameUz"
@@ -276,7 +276,7 @@ const saveEdit = async () => {
             >
               {{ $t('validation.this_field_is_required') }}
             </p>
-            <form v-if="sectionStories.is_button">
+            <form v-if="sectionStories.is_button" class="mt-3">
               <label for="nameUz">{{ $t('name') + ' ' + $t('KR') }} </label>
 
               <input
@@ -307,7 +307,7 @@ const saveEdit = async () => {
             >
               {{ $t('validation.this_field_is_required') }}
             </p>
-            <form v-if="sectionStories.is_button">
+            <form v-if="sectionStories.is_button" class="mt-3">
               <label for="nameRu">{{ $t('name') + ' ' + $t('RU') }}</label>
 
               <input
@@ -323,10 +323,9 @@ const saveEdit = async () => {
 
           </ModalTab>
         </ModalTabs>
-        <div class="flex gap-4" v-if="sectionStories.is_button">
+        <div  v-if="sectionStories.is_button">
 
           <div
-              class="select w-2/4"
 
           >
             <p class=" mt-3 ">{{ $t("Button Type") }}</p>
@@ -342,7 +341,7 @@ const saveEdit = async () => {
               <template #no-options> {{ $t("no_matching_options") }}</template>
             </v-select>
           </div>
-          <div v-if="sectionStories.button_type?.value == 'URL'" class=" w-2/4">
+          <div v-if="sectionStories.button_type?.value == 'URL'" >
             <p class="mt-3"> {{ $t('URL') }}</p>
             <input
                 type="text"
@@ -352,7 +351,7 @@ const saveEdit = async () => {
             />
           </div>
           <div v-else-if="sectionStories.button_type?.value !== 'URL' && sectionStories.button_type?.value"
-               class="select-chooser w-2/4"
+               class="select-chooser "
           >
             <p class="mt-3">{{ $t(`${sectionStories.button_type?.value}`) }}</p>
             <v-select
@@ -367,7 +366,7 @@ const saveEdit = async () => {
 
           </div>
           <div v-else
-               class="select-chooser w-2/4 mt-9"
+               class="select-chooser  mt-9"
           >
             <v-select
                 disabled="true"
@@ -407,26 +406,33 @@ const saveEdit = async () => {
 
 </template>
 
-<style lang="scss">
+<style   lang="scss">
 
 .style-chooser .vs__dropdown-menu {
   position: fixed;
   z-index: 9999; /* Set a high z-index value */
   left: 30px;
-  top: 220px;
-  width: 44%;
+  top: 150px;
+  width: 90%;
   height: 40%;
   overflow: auto;
   background-color: white;
 
 }
 
+.dark .style-chooser .vs__dropdown-menu {
+  background-color: rgb(40 48 70 / var(--tw-bg-opacity));
+}
+.dark .select-chooser .vs__dropdown-menu {
+  background-color: rgb(40 48 70 / var(--tw-bg-opacity));
+}
+
 .select-chooser .vs__dropdown-menu {
   position: fixed;
   z-index: 9999;
-  left: 305px;
-  top: 220px;
-  width: 44%;
+  left: 30px;
+  top: 235px;
+  width: 90%;
   height: 40%;
   overflow: auto;
   background-color: white;

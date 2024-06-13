@@ -17,7 +17,7 @@ export const headerProduct = [
     },
     {
         text: "Status",
-        value: "is_active"
+        value: "status"
     },
     {
         text: "date_and_time",
@@ -38,6 +38,10 @@ export const headerProductCard = [
         value: "id",
     },
     {
+        text: "photo",
+        value: "image",
+    },
+    {
         text: "product",
         value: "product",
     },
@@ -47,7 +51,7 @@ export const headerProductCard = [
     },
     {
         text: 'Status',
-        value: 'is_active'
+        value: 'status'
     },
     {
         text: 'category',

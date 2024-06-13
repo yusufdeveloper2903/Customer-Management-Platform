@@ -18,8 +18,8 @@ const props = defineProps<PropsShowImage>();
         class="uk-modal-dialog uk-margin-auto-vertical rounded-md overflow-hidden"
     >
       <button class="uk-modal-close-default" type="button" uk-close></button>
-      <div class="uk-modal-body h-[800px] ">
-        <img :src="props.image" alt="" class="w-full h-full"/>
+      <div class="uk-modal-body flex justify-center">
+        <img :src="props.image" alt="image" style="aspect-ratio: 1/1"/>
       </div>
 
     </div>
