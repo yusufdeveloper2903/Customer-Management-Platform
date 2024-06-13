@@ -249,7 +249,7 @@ const saveEdit = async () => {
               {{ $t('validation.this_field_is_required') }}
             </p>
             <form v-if="sectionStories.is_button" class="mt-3">
-              <label for="nameUz">{{ $t('name') + ' ' + $t('UZ') }} </label>
+              <label for="nameUz">{{ $t('nameButton') + ' ' + $t('UZ') }} </label>
               <input
                   id="nameUz"
                   type="text"
@@ -277,7 +277,7 @@ const saveEdit = async () => {
               {{ $t('validation.this_field_is_required') }}
             </p>
             <form v-if="sectionStories.is_button" class="mt-3">
-              <label for="nameUz">{{ $t('name') + ' ' + $t('KR') }} </label>
+              <label for="nameUz">{{ $t('nameButton') + ' ' + $t('KR') }} </label>
 
               <input
                   id="nameUz"
@@ -308,7 +308,7 @@ const saveEdit = async () => {
               {{ $t('validation.this_field_is_required') }}
             </p>
             <form v-if="sectionStories.is_button" class="mt-3">
-              <label for="nameRu">{{ $t('name') + ' ' + $t('RU') }}</label>
+              <label for="nameRu">{{ $t('nameButton') + ' ' + $t('RU') }}</label>
 
               <input
                   id="nameRu"
@@ -330,7 +330,7 @@ const saveEdit = async () => {
           >
             <p class=" mt-3 ">{{ $t("Button Type") }}</p>
             <v-select
-                class="style-chooser"
+                class="style-chooser-create"
                 :options="store.storySectionButtonType.data"
                 v-model="sectionStories.button_type"
                 :getOptionLabel="(name:any) => name.title && name.title[$i18n.locale]"
@@ -406,13 +406,13 @@ const saveEdit = async () => {
 
 </template>
 
-<style   lang="scss">
+<style  lang="scss">
 
-.style-chooser .vs__dropdown-menu {
+.style-chooser-create .vs__dropdown-menu {
   position: fixed;
   z-index: 9999; /* Set a high z-index value */
   left: 30px;
-  top: 150px;
+  top: 210px;
   width: 90%;
   height: 40%;
   overflow: auto;
@@ -420,7 +420,7 @@ const saveEdit = async () => {
 
 }
 
-.dark .style-chooser .vs__dropdown-menu {
+.dark .style-chooser-create .vs__dropdown-menu {
   background-color: rgb(40 48 70 / var(--tw-bg-opacity));
 }
 .dark .select-chooser .vs__dropdown-menu {
@@ -431,7 +431,7 @@ const saveEdit = async () => {
   position: fixed;
   z-index: 9999;
   left: 30px;
-  top: 235px;
+  top: 295px;
   width: 90%;
   height: 40%;
   overflow: auto;

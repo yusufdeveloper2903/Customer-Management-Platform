@@ -36,7 +36,6 @@ import DeleteModal from "@/components/DeleteModal.vue";
 import LazySelect from "./components/LazySelect.vue";
 import VueApexCharts from "vue3-apexcharts";
 import Icon from "@/components/Icons/Icon.vue";
-import VueCarousel from 'vue-carousel';
 
 
 //DECLARED VARIABLES
@@ -68,7 +67,6 @@ app.use(abilitiesPlugin, ability, {
 app.use(i18n);
 UIkit.use(icons);
 app.use(Paginate);
-app.component('VueCarousel', VueCarousel)
 app.component('Editor', QuillEditor)
 app.component("Apexchart", VueApexCharts);
 app.component('DeleteModal', DeleteModal)
