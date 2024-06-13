@@ -297,3 +297,7 @@ export interface Splash {
     is_active: boolean,
 }
 
+export interface QuantityType {
+    id: number | null;
+    title: string
+}

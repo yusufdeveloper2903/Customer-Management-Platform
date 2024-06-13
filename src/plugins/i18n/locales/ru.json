@@ -426,5 +426,7 @@
   "select_type": "Выберите тип",
   "add_product": "Добавление продукта",
   "Preparation": "Приготовление",
-  "General": "Общее"
+  "General": "Общее",
+  "Add quantity type": "Добавить тип количества",
+  "Edit quantity type": "Изменить тип количества"
 }

@@ -16,6 +16,7 @@ import Contacts from "../components/Links.vue";
 import Regions from '../components/Regions.vue'
 import Category from "../components/Categories.vue"
 import Splash from "../components/Splash.vue";
+import QuantityType from "../components/QuantityType.vue"
 import {ref} from 'vue'
 
 
@@ -82,6 +83,10 @@ const selectedTitle = (val: any) => {
 
       <Tab title="recipe category">
         <Category :knowledge="knowledge" :params="params"/>
+      </Tab>
+
+      <Tab title="type_quantity">
+        <QuantityType :knowledge="knowledge" :params="params"/>
       </Tab>
 
     </Tabs>

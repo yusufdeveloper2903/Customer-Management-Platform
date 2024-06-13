@@ -13,7 +13,8 @@ import {
     Phones,
     RetseptCategory,
     OnBoarding,
-    Splash
+    Splash,
+    QuantityType
 
 } from "../interfaces";
 
@@ -78,7 +79,10 @@ export default defineStore("knowledgeBase", {
 
             splashList: {
                 results: [] as Splash[]
-            } as Results<Splash>
+            } as Results<Splash>,
+
+            quantityTypeList: [] as QuantityType[]
+            
         };
     },
     actions: {
@@ -145,6 +149,11 @@ export default defineStore("knowledgeBase", {
             this.splashList = data
         },
 
+        async getQuantityType(params?: Params) {
+            const {data} = await $axios.get('/products/product_type/', {params})
+            this.quantityTypeList = data
+        },
+
         //CREATE REQUEST
         createSmsTemplate(data: any) {
             return $axios.post("/knowledge_base/sms_template/", data);
@@ -194,6 +203,11 @@ export default defineStore("knowledgeBase", {
             return $axios.post(`/knowledge_base/splash/`, data);
         },
 
+        createQuantityType(data: any) {
+            return $axios.post(`/products/product_type/`, data);
+        },
+
+
 
         //PATCH REQUEST
         updateSmsTemplate(data: any) {
@@ -238,6 +252,10 @@ export default defineStore("knowledgeBase", {
             return $axios.patch(`/knowledge_base/splash/${data.get("id")}/`, data);
         },
 
+        updateQuantityType(data: any) {
+            return $axios.patch(`/products/product_type/${data.id}/`, data);
+        },
+
 
         //DELETE REQUEST
         deleteSmsTemplate(id: number | null) {
@@ -277,6 +295,10 @@ export default defineStore("knowledgeBase", {
 
         deleteSplash(id: number | null) {
             return $axios.delete(`/knowledge_base/splash/${id}/`);
+        },
+
+        deleteQuantityType(id: number | null) {
+            return $axios.delete(`/products/product_type/${id}/`);
         },
 
 

@@ -9,7 +9,7 @@ import UIkit from "uikit";
 import { useI18n } from "vue-i18n";
 import { watchDebounced } from "@vueuse/core";
 import { useRouter } from "vue-router";
-
+import knowledgeBase from '@/modules/KnowledgeBase/store/index';
 
 //Declared variables
 const { t } = useI18n()
@@ -17,11 +17,12 @@ const store = recipes()
 const isLoading = ref(false);
 const userId = ref<number | null>(null);
 const router = useRouter()
-
+const knowledgeStore = knowledgeBase()
 const params = reactive({
     page_size: 10,
     search: "",
-    page: 1
+    page: 1,
+    category: ""
 });
 
 
@@ -70,6 +71,7 @@ const refresh = async (filter: any) => {
     isLoading.value = true;
     try {
         await store.getRetsept(filter);
+
     } catch (error: any) {
         toast.error(
             error.response || "Error"
@@ -77,6 +79,7 @@ const refresh = async (filter: any) => {
     }
 
     isLoading.value = false;
+    knowledgeStore.getRetseptCategory()
 };
 refresh(params)
 
@@ -97,11 +100,21 @@ const onPageSizeChanged = (e: number) => {
 
 <template>
     <div class="card">
-        <div class="flex justify-between items-end mb-10">
-            <label for="search" class="w-1/4">
+        <div class="md:flex justify-between items-end mb-10">
+            <form class="md:flex items-center gap-5 md:w-7/12">
+            <label for="search" class="w-1/3">
                 {{ t('Search') }}
                 <input type="text" class="form-input" placeholder="Search" v-model="params.search" />
             </label>
+
+            <label for="category" class="w-1/3">{{ t('category') }}
+            <VSelect v-model="params.category"
+              :options="knowledgeStore.retseptCategoryList && knowledgeStore.retseptCategoryList.results"
+              :getOptionLabel="(name: any) => name.title" :reduce="(item: any) => item.id"
+              :placeholder="t('select_category')" />
+          </label>
+        </form>
+
             <button class="btn-primary" @click="
                 router.push({ name: 'add-recipe'})
               ">

@@ -393,6 +393,8 @@
   "select_type": "Turini tanlang",
   "add_product": "Mahsulot qo'shish",
   "Preparation": "Tayyorgarlik",
-  "General": "General"
+  "General": "General",
+  "Add quantity type": "Miqdor turini qo'shish",
+  "Edit quantity type": "Miqdor turini tahrirlash"
 
 }
