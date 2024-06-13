@@ -53,8 +53,19 @@ const params = reactive({
   page_size: 10,
   page: 1,
   search: null,
+  gender: ''
 });
+const listStatus = ref([
+  {
+    title: 'Male',
+    value: 'MALE'
+  },
+  {
+    title: 'Female',
+    value: 'FEMALE'
+  },
 
+])
 
 //WATCHERS
 watchDebounced(() => params.search, async function () {
@@ -89,7 +100,11 @@ watch(() => newsData.value.template, (val: any) => {
     newsData.value.description = ''
   }
 })
-
+watchDebounced(() => params.gender, async function () {
+  params.page = 1
+  localStorage.setItem('page', '1')
+  await refresh()
+}, {deep: true, debounce: 500, maxWait: 5000,})
 //MOUNTED
 onMounted(async () => {
   await refresh()
@@ -377,11 +392,22 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
         <h1 class="font-semibold text-lg mb-4">{{ t('Receivers') }}</h1>
 
         <div class="flex items-center gap-4 mb-6">
-          <div class=" w-1/4">
+          <div>
             <label for="form-stacked-text">{{ t('Search') }}</label>
             <div class="uk-form-controls">
               <input type="search" class="form-input" v-model="params.search"/>
             </div>
+          </div>
+          <div class="w-1/4">
+            <p>{{ $t("gender") }}</p>
+            <v-select
+                :options="listStatus"
+                v-model="params.gender"
+                :getOptionLabel="(name:any) => t(name.title)"
+                :reduce="(item:any) => item.value"
+            >
+              <template #no-options> {{ $t("no_matching_options") }}</template>
+            </v-select>
           </div>
         </div>
         <EasyDataTable theme-color="#7367f0" :loading="loading" :headers="newsHeader"
@@ -399,6 +425,12 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <template #item-fio="item">
             {{ item.full_name }}
           </template>
+          <template #item-gender="item">
+            {{ item.gender }}
+          </template>
+          <!--          <template #item-device_os_types="item">-->
+          <!--            {{ item.device_os_types }}-->
+          <!--          </template>-->
         </EasyDataTable>
       </div>
       <TwPagination class="mt-10 tw-pagination"

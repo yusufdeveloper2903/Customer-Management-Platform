@@ -2,7 +2,7 @@
 
 
 //IMPORTED FILES
-import {Ref, ref, computed, reactive, nextTick, onMounted, watch} from "vue";
+import {Ref, ref, computed, reactive, onMounted, watch} from "vue";
 import {helpers, required} from "@vuelidate/validators";
 import {useVuelidate, Validation} from "@vuelidate/core";
 import ModalTabs from "@/components/Tab/ModalTabs.vue";
@@ -16,7 +16,7 @@ import {useI18n} from 'vue-i18n';
 import UIKit from "uikit";
 import ShowTextModal from "@/components/ShowTextModal.vue";
 import {useSidebarStore} from '@/stores/layoutConfig'
-
+// import DetailStorySwipper from "@/modules/Stories/pages/DetailStorySwipper.vue";
 import StoriesDetail from '../store'
 import DetailsModal from '../components/CreateSectionStories.vue';
 import {watchDebounced} from "@vueuse/core";
@@ -532,7 +532,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 
       <div class=" w-1/4 ">
         <div class="card">
-
+<!--          <DetailStorySwipper></DetailStorySwipper>-->
           <h3 class="text-success dark:text-success mb-3">{{ $t('previewPhoto') }}</h3>
 
           <div style="position:relative"

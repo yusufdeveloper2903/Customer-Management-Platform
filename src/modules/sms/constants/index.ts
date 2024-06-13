@@ -38,6 +38,14 @@ export const addFields = [
         value: "full_name"
     },
     {
+        text: "gender",
+        value: "gender",
+    },
+    {
+        text: "device_os_types",
+        value: "device_os_types",
+    },
+    {
         text: "phone_number",
         value: "phone"
     },
@@ -51,6 +59,14 @@ export const newsHeader = [
     {
         text: "Full Name",
         value: "fio"
+    },
+    {
+        text: "gender",
+        value: "gender",
+    },
+    {
+        text: "device_os_types",
+        value: "device_os_types",
     },
     {
         text: "phone_number",
@@ -70,6 +86,7 @@ export const newsFields = [
         text: "name",
         value: "title",
     },
+
 
     {
         text: "Status",

@@ -49,7 +49,6 @@
     "v-viewer": "^3.0.10",
     "vue": "^3.4.27",
     "vue-cal": "^4.8.0",
-    "vue-carousel": "^0.18.0",
     "vue-cleave-component": "^3.0.2",
     "vue-cli-plugin-i18n": "^2.3.1",
     "vue-color-kit": "^1.0.5",
