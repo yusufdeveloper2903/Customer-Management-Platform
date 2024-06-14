@@ -132,7 +132,8 @@ const getFile = (event: any) => {
         title=""
         v-if="input "
         :id="props.id"
-        class="form-file-input "
+        style="margin-bottom:0 !important;"
+        class="form-file-input"
         :class="input && data ? `fileUpload ${props.class}` :'fileEmpty'"
         @input="onInputFile"
         v-on="emit"
@@ -141,11 +142,15 @@ const getFile = (event: any) => {
         :multiple="multiple"
         accept="image/png,image/jpeg"
 
+
     />
     <button v-if="data" @click.prevent="clearData" class="ml-3 btn-danger btn-action button_cancel"
     >
       <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
     </button>
+    <span style="font-size:14px;color:#999999" class="ml-1">
+      {{ $t('format_photo') }}: (png / jpg / 1080x1920)
+    </span>
   </div>
 
   <template v-if="typeof inputValue === 'string'">

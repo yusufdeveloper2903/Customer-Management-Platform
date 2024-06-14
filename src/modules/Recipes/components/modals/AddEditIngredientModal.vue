@@ -190,11 +190,8 @@ const updateDeal = async () => {
           {{ t("Cancel") }}
         </button>
 
-        <!-- :class="propData.editData.id ? 'btn-warning' : 'btn-success'" -->
         <button class="btn-success" @click="updateDeal" :disabled="isSubmitted">
-          <img src="@/assets/image/loading.svg" alt="loading.svg" class="inline w-4 h-4 text-white animate-spin mr-2"
-            v-if="isSubmitted" />
-          <!-- <span>{{ propData.editData.id ? t("Change") : t('Add') }}</span> -->
+
           <span>{{ t("Add")  }}</span>
         </button>
       </div>

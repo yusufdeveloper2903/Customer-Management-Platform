@@ -50,6 +50,13 @@
     "question": "Савол",
     "audio": "Аудио"
   },
+  "sec": "секунд",
+  "gender": "Жинс",
+  "Male": "Эркак",
+  "Female": "Аёл",
+  "device_os_types": "Қурилма турлари",
+  "format_photo": "Расмнинг формати ва ҳажми",
+  "nameButton": "Тугма номи",
   "logout": "Чиқиш",
   "multipleAnswers": "Бир нечта жавоблар",
   "are_you_really_going_to_delete_this_user": "Ишончингиз комилми?",

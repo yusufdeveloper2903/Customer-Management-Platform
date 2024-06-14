@@ -66,7 +66,7 @@ export default [
 
     {
         name: "Recipes",
-        icon: "File",
+        icon: "Chef Hat Minimalistic",
         path: "/recipes",
         permissions: ["admin"],
     },

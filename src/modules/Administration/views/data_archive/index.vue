@@ -73,15 +73,17 @@ function download(url: string) {
 const createBackup = async () => {
   isLoading.value = true
   try {
-    await administrationStorage.CREATE_BACKUP_MEDIA().then((res) => {
-      if (res) {
-        refresh()
-        toast.success(t('created_successfully'));
-      }
-    })
-    await UIkit.modal("#backup-add-modal").hide();
-    isLoading.value = false
-  } catch (error) {
+    let success = await administrationStorage.CREATE_BACKUP_MEDIA()
+    if (success.response.status !== 400) {
+      await refresh()
+      isLoading.value = false
+      toast.success(t('created_successfully'));
+    } else {
+      UIkit.modal("#backup-add-modal").hide();
+      throw new TypeError("oops");
+    }
+
+  } catch {
     toast.error(t('error'));
     isError.value = true
   }
@@ -300,8 +302,7 @@ const onPageSizeChanged = (event: number) => {
               @click="createBackup()"
           >
             {{ $t('yes') }}
-            <img src="@/assets/image/loading.svg" alt="loading.svg" class="inline w-4 h-4 text-white animate-spin"
-                 v-if="isLoading">
+
           </button>
         </div>
       </div>

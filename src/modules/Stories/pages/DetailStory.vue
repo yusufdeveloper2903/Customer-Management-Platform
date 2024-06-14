@@ -2,7 +2,7 @@
 
 
 //IMPORTED FILES
-import {Ref, ref, computed, reactive, nextTick, onMounted, watch} from "vue";
+import {Ref, ref, computed, reactive, onMounted, watch} from "vue";
 import {helpers, required} from "@vuelidate/validators";
 import {useVuelidate, Validation} from "@vuelidate/core";
 import ModalTabs from "@/components/Tab/ModalTabs.vue";
@@ -16,8 +16,7 @@ import {useI18n} from 'vue-i18n';
 import UIKit from "uikit";
 import ShowTextModal from "@/components/ShowTextModal.vue";
 import {useSidebarStore} from '@/stores/layoutConfig'
-
-
+// import DetailStorySwipper from "@/modules/Stories/pages/DetailStorySwipper.vue";
 import StoriesDetail from '../store'
 import DetailsModal from '../components/CreateSectionStories.vue';
 import {watchDebounced} from "@vueuse/core";
@@ -26,6 +25,7 @@ import {objectToFormData} from "@/mixins/formmatter";
 
 
 //DECLARED VARIABLES
+
 const general = useSidebarStore()
 const store = StoriesDetail()
 const itemToDelete = ref<number | null>(null);
@@ -50,6 +50,7 @@ let storiesVariable = ref<any>({
   status: 'DRAFT',
 });
 const createdData = ref<string | null>('')
+const buttonType = ref({})
 const editData = ref<EditData | null>({
   story_section_id: null,
   duration: null,
@@ -160,12 +161,12 @@ const handleDeleteModal = (id: number) => {
 };
 
 
-const onShowFileLink = (item: any) => {
-  url.value = item;
-  nextTick(() => {
-    UIKit.modal("#stories-detail-url-image").show();
-  });
-};
+// const onShowFileLink = (item: any) => {
+//   url.value = item;
+//   nextTick(() => {
+//     UIKit.modal("#stories-detail-url-image").show();
+//   });
+// };
 
 const getButtonType = async () => {
   isLoading.value = true;
@@ -203,11 +204,11 @@ const getDetail = async () => {
   }
 
 };
-const TooltipMaker = (val) => {
+const TooltipMaker = (val: any) => {
   if (val.button_type === 'URL') {
     return val.button_url
   } else {
-    return val.button_type
+    return val.button_type + '/' + val.poll_name
   }
 }
 const addSection = async () => {
@@ -248,6 +249,7 @@ const deleteAction = async () => {
 };
 
 const showRow = (val: any) => {
+  buttonType.value = val
   imageUrl.value = val['background_' + locale.value].full_size
 }
 
@@ -470,15 +472,18 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             <button
                 type="button"
                 class="tooltip btn-success btn-action"
-                :disabled="item.button_type === 'NULL'"
+                :disabled="!item.is_button"
             >
-              <span class="tooltiptext" v-if="item.button_type !== 'NULL'">{{ TooltipMaker(item) }}</span>
+              <span class="tooltiptext" v-if="item.is_button">{{ TooltipMaker(item) }}</span>
               <Icon
                   icon="Link"
                   color="#FFF"
                   size="16"
               />
             </button>
+          </template>
+          <template #item-button_name="item">
+            {{ item['button_name_' + $i18n.locale] }}
           </template>
           <template #item-background="item">
 
@@ -526,14 +531,12 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
       </div>
 
       <div class=" w-1/4 ">
-        <div class="card"
-             style="position:relative"
-
-        >
+        <div class="card">
+<!--          <DetailStorySwipper></DetailStorySwipper>-->
           <h3 class="text-success dark:text-success mb-3">{{ $t('previewPhoto') }}</h3>
 
-          <div
-              class="mb-5 flex h-[450px] w-[240px] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
+          <div style="position:relative"
+               class="mb-5 flex h-[450px] w-[240px] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
             <span v-if="!imageUrl" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
             <div v-else>
               <img
@@ -542,8 +545,9 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
                   alt="preview photo"
                   style="aspect-ratio: 1/1"
               />
-              <button class="btn-success button_preview">
-                {{ $t("Кнопка") }}
+              <button class="btn-success button_preview"
+                      v-if="buttonType.is_button">
+                {{ buttonType['button_name_' + $i18n.locale] }}
               </button>
             </div>
 
@@ -557,8 +561,9 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
           </button>
 
           <button @click="saveData('detail')"
-                  class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full">
-            {{ $t('Add') }}
+                  :class="$route.params.id ? 'bg-warning':'bg-success'"
+                  class="rounded-md px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full">
+            {{ $route.params.id ? $t('Edit') : $t('Add') }}
           </button>
         </div>
       </div>
@@ -573,8 +578,8 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 <style scoped>
 .button_preview {
   position: absolute;
-  bottom: 70px;
-  left: 142px;
+  bottom: 20px;
+  left: 38px;
   width: 170px
 }
 
@@ -586,31 +591,21 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 }
 
 .tooltip .tooltiptext {
+
   visibility: hidden;
-  width: 520px;
   background-color: #555;
   color: #fff;
   text-align: center;
   border-radius: 6px;
-  padding: 5px 0;
+  padding: 5px 10px;
   position: absolute;
   z-index: 1;
   bottom: 125%;
-  margin-left: -60px;
   opacity: 0;
   transition: opacity 0.3s;
+
 }
 
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -205px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
 
 .tooltip:hover .tooltiptext {
   visibility: visible;

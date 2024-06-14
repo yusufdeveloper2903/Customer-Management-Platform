@@ -51,6 +51,9 @@
     "audio": "Audio"
   },
   "logout": "Chiqish",
+  "nameButton": "Tugma nomi",
+  "sec": "сония",
+  "format_photo": "Rasmning formati va hajmi",
   "multipleAnswers": "Bir nechta javoblar",
   "are_you_really_going_to_delete_this_user": "Ishonchingiz komilmi?",
   "deleted_successfully": "Muvaffaqiyatli oʻchirildi",
@@ -58,7 +61,11 @@
   "Button Url": "Tugma manzili",
   "Promotions": "Aksiyalar",
   "PROMOTION": "Aksiyalar",
+  "gender": "Jins",
+  "device_os_types": "Qurilma turlari",
   "success": "Muvaffaqiyatli",
+  "Male": "Erkak",
+  "Female": "Ayol",
   "error": "Xatolik",
   "Search": "Qidirish",
   "Add": "Qo'shish",
@@ -397,5 +404,4 @@
   "General": "General",
   "Add quantity type": "Miqdor turini qo'shish",
   "Edit quantity type": "Miqdor turini tahrirlash"
-
 }

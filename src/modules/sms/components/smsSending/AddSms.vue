@@ -32,6 +32,8 @@ const params = reactive({
   page_size: 10,
   page: 1,
   search: null,
+  gender: ''
+
 });
 const smsSendingData = ref<any>({
   start_time: "",
@@ -41,7 +43,17 @@ const smsSendingData = ref<any>({
   title: '',
   id: null
 })
+const listStatus = ref([
+  {
+    title: 'Male',
+    value: 'MALE'
+  },
+  {
+    title: 'Female',
+    value: 'FEMALE'
+  },
 
+])
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
@@ -146,7 +158,11 @@ watchDebounced(() => params.search, async function () {
   await refresh()
 }, {deep: true, debounce: 500, maxWait: 5000,})
 
-
+watchDebounced(() => params.gender, async function () {
+  params.page = 1
+  localStorage.setItem('page', '1')
+  await refresh()
+}, {deep: true, debounce: 500, maxWait: 5000,})
 watch(() => store.receiversList.results, function () {
   itemSelected.value = store.receiversList.results
   select.value = true
@@ -187,7 +203,8 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
       <div class="uk-margin">
         <label for="form-stacked-text">{{ $t('start_date') }} </label>
         <div class="uk-form-controls">
-          <VueDatePicker  format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :locale="'ru'" model-type="yyyy-MM-dd hh:mm:ss"
+          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :locale="'ru'"
+                         model-type="yyyy-MM-dd hh:mm:ss"
                          v-model="smsSendingData.start_time"
                          :class="validate.start_time.$errors.length ? 'required-input' : ''"/>
           <p
@@ -250,6 +267,17 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
                 v-model="params.search"
             />
           </div>
+          <div class="w-1/4">
+            <p>{{ $t("gender") }}</p>
+            <v-select
+                :options="listStatus"
+                v-model="params.gender"
+                :getOptionLabel="(name:any) => t(name.title)"
+                :reduce="(item:any) => item.value"
+            >
+              <template #no-options> {{ $t("no_matching_options") }}</template>
+            </v-select>
+          </div>
         </div>
         <EasyDataTable theme-color="#7367f0" :loading="loading" :headers="addFields"
                        v-model:items-selected="itemSelected"
@@ -262,6 +290,12 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
           <template #empty-message>
             <div>{{ $t('no_available_data') }}</div>
           </template>
+          <template #item-gender="item">
+            {{ item.gender }}
+          </template>
+          <!--          <template #item-device_os_types="item">-->
+          <!--            {{ item.device_os_types }}-->
+          <!--          </template>-->
           <template #header="header">
             {{ $t(header.text) }}
           </template>

@@ -71,7 +71,7 @@ export default defineStore('administrationStorage', {
         async FETCH_ONE_PRE_PAYMENTS(payload: any) {
             return await axios({
                 method: "GET",
-                url: `/knowledge_base/pre_payments/${payload.id}`,
+                url: `/knowledge_base/pre_payments/${payload.id}/`,
                 params: payload.params,
             })
                 .then(async (e) => {
@@ -201,7 +201,7 @@ export default defineStore('administrationStorage', {
         async ADD_PRE_PAYMENTS(payload: any) {
             return await axios({
                 method: "POST",
-                url: `/knowledge_base/pre_payments`,
+                url: `/knowledge_base/pre_payments/`,
                 data: payload.data,
             })
                 .then(async (e) => {
@@ -214,7 +214,7 @@ export default defineStore('administrationStorage', {
         async ADD_PERIODS(payload: any) {
             return await axios({
                 method: "POST",
-                url: `/knowledge_base/periods`,
+                url: `/knowledge_base/periods/`,
                 data: payload.data,
             })
                 .then(async (e) => {
@@ -273,7 +273,7 @@ export default defineStore('administrationStorage', {
         async UPDATE_PUT_PRE_PAYMENTS(payload: any) {
             return await axios({
                 method: "PUT",
-                url: `/knowledge_base/pre_payments/${payload}`,
+                url: `/knowledge_base/pre_payments/${payload}/`,
                 params: payload,
             })
                 .then(async (e) => {
@@ -287,7 +287,7 @@ export default defineStore('administrationStorage', {
         async UPDATE_PATCH_PRE_PAYMENTS(payload: any) {
             return await axios({
                 method: "PATCH",
-                url: `/knowledge_base/pre_payments/${payload.id}`,
+                url: `/knowledge_base/pre_payments/${payload.id}/`,
                 data: payload.data,
             })
                 .then(async (e) => {
@@ -301,7 +301,7 @@ export default defineStore('administrationStorage', {
         async DELETE_PRE_PAYMENTS(payload: DeleteId) {
             return await axios({
                 method: "DELETE",
-                url: `/knowledge_base/pre_payments/${payload.id}`,
+                url: `/knowledge_base/pre_payments/${payload.id}/`,
             })
                 .then(async (e) => {
                     return e.data;
@@ -315,7 +315,7 @@ export default defineStore('administrationStorage', {
         async UPDATE_PUT_PERIODS(payload: any) {
             return await axios({
                 method: "PUT",
-                url: `/knowledge_base/periods/${payload}`,
+                url: `/knowledge_base/periods/${payload}/`,
                 params: payload,
             })
                 .then(async (e) => {
@@ -329,7 +329,7 @@ export default defineStore('administrationStorage', {
         async UPDATE_PATCH_PERIODS(payload: any) {
             return await axios({
                 method: "PATCH",
-                url: `/knowledge_base/periods/${payload.id}`,
+                url: `/knowledge_base/periods/${payload.id}/`,
                 data: payload.data,
             })
                 .then(async (e) => {
@@ -346,7 +346,7 @@ export default defineStore('administrationStorage', {
         async DELETE_PERIODS(payload: DeleteId) {
             return await axios({
                 method: "DELETE",
-                url: `/knowledge_base/periods/${payload.id}`,
+                url: `/knowledge_base/periods/${payload.id}/`,
             })
                 .then(async (e) => {
                     return e.data;

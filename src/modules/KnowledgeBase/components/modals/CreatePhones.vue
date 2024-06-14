@@ -116,8 +116,7 @@ const validate: Ref<Validation> = useVuelidate(rules, editData);
 
         <button :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'" @click="updateDeal"
                 :disabled="isSubmitted">
-          <img src="@/assets/image/loading.svg" alt="loading.svg"
-               class="inline w-4 h-4 text-white animate-spin mr-2" v-if="isSubmitted"/>
+
           <span>{{ propData.editData.id ? t("Change") : t('Add') }}</span>
         </button>
       </div>

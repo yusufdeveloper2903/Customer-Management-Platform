@@ -72,13 +72,13 @@ const createBackup = async () => {
   isLoading.value = true
   try {
     let success = await administrationStorage.CREATE_BACKUP()
-    if (success.data && success.data.status === 201) {
-      UIkit.modal("#backup-add-modal").hide();
+    if (success) {
       refresh()
       toast.success(t('created_successfully'));
       isLoading.value = false
     }
   } catch (error) {
+    UIkit.modal("#backup-add-modal").hide();
     isError.value = true
     toast.error(t('error'));
 
@@ -316,8 +316,7 @@ watch(
               :disabled="isLoading"
           >
             {{ t('yes') }}
-            <img src="@/assets/image/loading.svg" alt="loading.svg" class="inline w-4 h-4 text-white animate-spin"
-                 v-if="isLoading">
+
           </button>
         </div>
       </div>
