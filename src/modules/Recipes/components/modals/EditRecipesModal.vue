@@ -9,7 +9,7 @@ import useVuelidate, { Validation } from "@vuelidate/core";
 import ModalTabs from "@/components/Tab/ModalTabs.vue";
 import ModalTab from "@/components/Tab/ModalTab.vue";
 import recipeStore from "../../store/index"
-// import { Retsept } from "../../interfaces/index"
+import { Retsept } from "../../interfaces/index"
 import knowledgeBase from '@/modules/KnowledgeBase/store/index';
 
 
@@ -31,8 +31,8 @@ interface RecipesData {
 const { t } = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = recipeStore()
-// const emits = defineEmits(["saveRecipes"]);
-// const propData = defineProps<{ editData: Retsept }>();
+const emits = defineEmits(["saveData"]);
+const propData = defineProps<{ editData: Retsept }>();
 const knowledgeStore = knowledgeBase()
 let recipes = ref<RecipesData>({
   id: null,
@@ -70,25 +70,25 @@ const validate: Ref<Validation> = useVuelidate(rules, recipes);
 // Functions
 async function openModal() {
   await knowledgeStore.getRetseptCategory()
-  // if (propData.editData.id) {
-  //   recipes.value.id = propData.editData.id
-  //   recipes.value.title_ru = propData.editData.title_ru
-  //   recipes.value.title_uz = propData.editData.title_uz
-  //   recipes.value.title_kr = propData.editData.title_kr
-  //   recipes.value.calorie = propData.editData.calorie
-  //   recipes.value.preparation_time = propData.editData.preparation_time
-  //   recipes.value.is_active = propData.editData.is_active
-  //   recipes.value.category = propData.editData.category
-  // } else {
-  //   recipes.value.id = null
-  //   recipes.value.title_ru = ""
-  //   recipes.value.title_uz = ""
-  //   recipes.value.title_kr = ""
-  //   recipes.value.calorie = 0
-  //   recipes.value.preparation_time = ""
-  //   recipes.value.is_active = false
-  //   recipes.value.category = null
-  // }
+  if (propData.editData.id) {
+    recipes.value.id = propData.editData.id
+    recipes.value.title_ru = propData.editData.title_ru
+    recipes.value.title_uz = propData.editData.title_uz
+    recipes.value.title_kr = propData.editData.title_kr
+    recipes.value.calorie = propData.editData.calorie
+    recipes.value.preparation_time = propData.editData.preparation_time
+    recipes.value.is_active = propData.editData.is_active
+    recipes.value.category = propData.editData.category
+  } else {
+    recipes.value.id = null
+    recipes.value.title_ru = ""
+    recipes.value.title_uz = ""
+    recipes.value.title_kr = ""
+    recipes.value.calorie = 0
+    recipes.value.preparation_time = ""
+    recipes.value.is_active = false
+    recipes.value.category = null
+  }
 }
 
 function clearData() {
@@ -135,7 +135,8 @@ const updateDeal = async () => {
   // } else {
     try {
       await store.create_retsept(recipes.value).then(() => {
-        // emits("saveRecipes");
+        propData.editData.id = recipes.value.id
+        emits("saveData");
         setTimeout(() => {
           toast.success(t("created_successfully"));
         }, 200);
@@ -239,8 +240,8 @@ const updateDeal = async () => {
 
         <!-- :class="propData.editData.id ? 'btn-warning' : 'btn-success'" -->
         <button class="btn-warning" @click="updateDeal" :disabled="isSubmitted">
-<!--          <img src="@/assets/image/loading.svg" alt="loading.svg" class="inline w-4 h-4 text-white animate-spin mr-2"-->
-<!--            v-if="isSubmitted" />-->
+         <img src="@/assets/image/loading.svg" alt="loading.svg" class="inline w-4 h-4 text-white animate-spin mr-2"
+           v-if="isSubmitted" />
           <!-- <span>{{ propData.editData.id ? t("Change") : t('Add') }}</span> -->
           <span>{{ t("Change")  }}</span>
         </button>

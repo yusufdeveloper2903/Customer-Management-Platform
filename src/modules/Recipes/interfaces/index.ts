@@ -43,6 +43,9 @@ export interface RecipeDetailEdit {
     calorie: number;
     preparation_time: string;
     is_active: boolean;
+    title_kr: string,
+  title_uz: string,
+  title_ru: string,
 }
 
 

@@ -34,6 +34,11 @@ export default defineStore("recipes", {
             this.retseptDetailList = data
         },
 
+        async getIngredientById(recipe_id: number) {
+            const {data} = await $axios.get(`/knowledge_base/retsept/${recipe_id}/`)
+            this.retseptDetailList = data
+        },
+
 
         //CREATE REQUEST
         create_retsept(data: object) {
