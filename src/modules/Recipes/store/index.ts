@@ -15,7 +15,9 @@ export default defineStore("recipes", {
                 results: [] as Retsept[]
             } as Results<Retsept>,
 
-            retseptDetailList: {} as RecipeDetail,
+            retseptDetailList: {
+                data: {} as RecipeDetail
+            } ,
         };
     },
     actions: {
@@ -27,8 +29,8 @@ export default defineStore("recipes", {
             this.retseptList = data
         },
 
-        async getRetseptDetail(id: number) {
-            const {data} = await $axios.get(`/knowledge_base/retsept/${id}/`)
+        async getRetseptDetail(recipes_id: number) {
+            const {data} = await $axios.get(`/knowledge_base/retsept/${recipes_id}/`)
             this.retseptDetailList = data
         },
 

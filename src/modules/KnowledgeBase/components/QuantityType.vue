@@ -62,16 +62,6 @@ watchDebounced(
 
 
 // Functions
-// const changePagination = (e: number) => {
-//   params.page = e;
-//   refresh(params);
-// };
-
-// const onPageSizeChanged = (e) => {
-//   params.page_size = e
-//   params.page = 1
-//   refresh(params)
-// }
 
 const deleteType = async () => {
   isLoading.value = true
@@ -79,11 +69,6 @@ const deleteType = async () => {
     await store.deleteQuantityType(itemId.value)
     await UIkit.modal("#quantity-type-delete").hide();
     toast.success(t('deleted_successfully'));
-    // if (store.quantityTypeList.count > 1 && ((store.quantityTypeList.count - 1) % params.page_size == 0)) {
-    //   params.page = params.page - 1
-    //   await refresh(params)
-    // } else {
-      // }
         await refresh(params)
     isLoading.value = false
   } catch (error: any) {
@@ -116,10 +101,6 @@ onMounted(() => {
 <template>
   <div class="card">
     <div class="flex justify-end items-end mb-7">
-      <!-- <label for="search" class="w-1/4">
-        {{ t('Search') }}
-        <input type="text" class="form-input" :placeholder="t('Search')" v-model="params.search" />
-      </label> -->
 
       <button class="btn-primary" uk-toggle="target: #type_modal" @click="editData = <QuantityType>{}">
         {{ t("Add") }}
@@ -154,12 +135,7 @@ onMounted(() => {
     </EasyDataTable>
 
 
-    <!-- <TwPagination class="mt-10 tw-pagination" :current="params.page" :total="1"
-      :per-page="params.page_size" :text-before-input="t('go_to_page')" :text-after-input="t('forward')"
-      @page-changed="changePagination" @per-page-changed="onPageSizeChanged" /> -->
-
     <QuantityTypeModal :edit-data="editData" @savetype="savetype"/>
-
     <DeleteModal @delete-action="deleteType" id="quantity-type-delete" />
   </div>
 </template>

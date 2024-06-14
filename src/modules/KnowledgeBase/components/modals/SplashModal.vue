@@ -46,7 +46,10 @@ function openModal() {
     splashData.value.title_uz = propData.editData.title_uz
     splashData.value.title_kr = propData.editData.title_kr
     splashData.value.image = propData.editData.image
+    splashData.value.color = propData.editData.color
+    splashData.value.version = propData.editData.version
     splashData.value.id = propData.editData.id
+    splashData.value.is_active = propData.editData.is_active
   }
 }
 
@@ -54,8 +57,11 @@ const hideModal = () => {
   splashData.value.title_ru = ''
   splashData.value.title_uz = ''
   splashData.value.title_kr = ''
+  splashData.value.color = ''
+  splashData.value.version = ''
   splashData.value.image = null
   splashData.value.id = null
+  splashData.value.is_active = false
   validate.value.$reset()
 
 }

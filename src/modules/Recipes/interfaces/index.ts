@@ -25,16 +25,24 @@ export interface Retsept {
 }
 
 export interface RecipeDetail {
-    status_code: number;
-    message: string;
-    data: {
-        id: number;
-        title: string;
-        category: number;
-        rating: string;
-        calorie: number;
-        preparation_time: string;
-        is_active: boolean;
-        media_files: string | null;
-    }
+    id: number | null;
+    title: string;
+    category: number | null;
+    rating: string;
+    calorie: number;
+    preparation_time: string;
+    is_active: boolean;
+    media_files: string | null;
 }
+
+export interface RecipeDetailEdit {
+    id: number | null;
+    title: string;
+    category: number | null;
+    rating: string;
+    calorie: number;
+    preparation_time: string;
+    is_active: boolean;
+}
+
+
