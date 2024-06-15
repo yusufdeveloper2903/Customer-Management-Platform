@@ -6,16 +6,17 @@ import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
 import useVuelidate, {Validation} from "@vuelidate/core";
-import Tabs from "@/components/Tab/Tabs.vue";
-import Tab from "@/components/Tab/Tab.vue";
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
 import { helpers, required } from "@vuelidate/validators";
 import { RetseptCategory } from "@/modules/KnowledgeBase/interfaces/index"
 import KnowledgeBase from "@/modules/KnowledgeBase/store/index";
-
+import {useSidebarStore} from '@/stores/layoutConfig'
 
 
 //DECLARED VARIABLES
 const {t} = useI18n();
+const general = useSidebarStore()
 const isSubmitted = ref<boolean>(false);
 const propData = defineProps<{ editData: RetseptCategory }>();
 const emits = defineEmits(["saveCategory"]);
@@ -77,6 +78,16 @@ function getTitle() {
 }
 
 const updateDeal = async () => {
+  if (!categoryData.value.name_uz) {
+    general.tabs = 'UZ'
+  } else if (!categoryData.value.name_kr) {
+    general.tabs = 'KR'
+  } else if (!categoryData.value.name_ru) {
+    general.tabs = 'RU'
+  }
+
+
+
   const success = await validate.value.$validate();
   if (!success) return;
 
@@ -138,8 +149,8 @@ const updateDeal = async () => {
       </div>
 
       <div class="uk-modal-body py-4">
-        <Tabs>
-          <Tab title="O'z">
+        <ModalTabs>
+          <ModalTab title="UZ">
             <form>
               <label for="nameUz">{{ t('name') }} O'z
                 <input id="nameUz" type="text" class="form-input" :placeholder="t('name')" v-model="categoryData.name_uz"
@@ -149,19 +160,9 @@ const updateDeal = async () => {
                 </p>
               </label>
             </form>
-          </Tab>
+          </ModalTab>
 
-          <Tab title="Ру">
-            <form>
-              <label for="nameRu">{{ t('name') }} Ру
-                <input id="nameRu" type="text" class="form-input" :placeholder="t('name')" v-model="categoryData.name_ru" :class="validate.name_ru.$errors.length ? 'required-input' : ''"/>
-                <p v-for="error in validate.name_ru.$errors" :key="error.$uid" class="text-danger text-sm">
-                  {{ t(error.$message) }}
-                </p>
-              </label>
-            </form>
-          </Tab>
-          <Tab title="Ўз">
+          <ModalTab title="KR">
             <form>
               <label for="nameRu">{{ t('name') }} Ўз
                 <input id="nameRu" type="text" class="form-input" :placeholder="t('name')" v-model="categoryData.name_kr" :class="validate.name_kr.$errors.length ? 'required-input' : ''"/>
@@ -170,8 +171,20 @@ const updateDeal = async () => {
                 </p>
               </label>
             </form>
-          </Tab>
-        </Tabs>
+          </ModalTab>
+          
+          <ModalTab title="RU">
+            <form>
+              <label for="nameRu">{{ t('name') }} Ру
+                <input id="nameRu" type="text" class="form-input" :placeholder="t('name')" v-model="categoryData.name_ru" :class="validate.name_ru.$errors.length ? 'required-input' : ''"/>
+                <p v-for="error in validate.name_ru.$errors" :key="error.$uid" class="text-danger text-sm">
+                  {{ t(error.$message) }}
+                </p>
+              </label>
+            </form>
+          </ModalTab>
+
+        </ModalTabs>
       </div>
 
       <div

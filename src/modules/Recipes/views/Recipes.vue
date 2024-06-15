@@ -110,7 +110,7 @@ const onPageSizeChanged = (e: number) => {
             <label for="category" class="w-1/3">{{ t('category') }}
             <VSelect v-model="params.category"
               :options="knowledgeStore.retseptCategoryList && knowledgeStore.retseptCategoryList.results"
-              :getOptionLabel="(name: any) => name.title" :reduce="(item: any) => item.id"
+              :getOptionLabel="(name: any) => name.name" :reduce="(item: any) => item.id"
               :placeholder="t('select_category')" />
           </label>
         </form>
