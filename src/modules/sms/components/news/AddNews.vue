@@ -118,6 +118,9 @@ onMounted(async () => {
       page: params.page,
       page_size: params.page_size
     })
+
+    newsData.value.start_time = store.newsListDetail.start_time;
+
     newsData.value.start_time = store.newsListDetail.start_time;
     newsData.value.title = store.newsListDetail.title
     newsData.value.title_ru = store.newsListDetail.title_ru

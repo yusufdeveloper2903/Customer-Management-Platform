@@ -16,7 +16,7 @@ import {useI18n} from 'vue-i18n';
 import UIKit from "uikit";
 import ShowTextModal from "@/components/ShowTextModal.vue";
 import {useSidebarStore} from '@/stores/layoutConfig'
-// import DetailStorySwipper from "@/modules/Stories/pages/DetailStorySwipper.vue";
+import DetailStorySwipper from "@/modules/Stories/pages/DetailStorySwipper.vue";
 import StoriesDetail from '../store'
 import DetailsModal from '../components/CreateSectionStories.vue';
 import {watchDebounced} from "@vueuse/core";
@@ -532,26 +532,27 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 
       <div class=" w-1/4 ">
         <div class="card">
-<!--          <DetailStorySwipper></DetailStorySwipper>-->
           <h3 class="text-success dark:text-success mb-3">{{ $t('previewPhoto') }}</h3>
 
-          <div style="position:relative"
-               class="mb-5 flex h-[450px] w-[240px] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
-            <span v-if="!imageUrl" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
-            <div v-else>
-              <img
-                  class="h-[450px] w-[240px]"
-                  :src="imageUrl"
-                  alt="preview photo"
-                  style="aspect-ratio: 1/1"
-              />
-              <button class="btn-success button_preview"
-                      v-if="buttonType.is_button">
-                {{ buttonType['button_name_' + $i18n.locale] }}
-              </button>
-            </div>
+          <DetailStorySwipper :data="store.storiesDetailsList.results"></DetailStorySwipper>
 
-          </div>
+<!--          <div style="position:relative"-->
+<!--               class="mb-5 flex h-[450px] w-[240px] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">-->
+<!--            <span v-if="!imageUrl" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>-->
+<!--            <div v-else>-->
+<!--              <img-->
+<!--                  class="h-[450px] w-[240px]"-->
+<!--                  :src="imageUrl"-->
+<!--                  alt="preview photo"-->
+<!--                  style="aspect-ratio: 1/1"-->
+<!--              />-->
+<!--              <button class="btn-success button_preview"-->
+<!--                      v-if="buttonType.is_button">-->
+<!--                {{ buttonType['button_name_' + $i18n.locale] }}-->
+<!--              </button>-->
+<!--            </div>-->
+
+<!--          </div>-->
         </div>
         <div
             class="mt-4 flex gap-4 justify-end"

@@ -6200,7 +6200,7 @@ pretty-format@^29.5.0:
     ansi-styles "^5.0.0"
     react-is "^18.0.0"
 
-primevue@^3.48.1:
+primevue@^3.52.0:
   version "3.52.0"
   resolved "https://registry.npmjs.org/primevue/-/primevue-3.52.0.tgz"
   integrity sha512-HLOVP5YI0ArFKUhIyfZsWmTNMaBYNCBWC/3DYvdd/Po4LY5/WXf7yIYvArE2q/3OuwSXJXvjlR8UNQeJYRSQog==
@@ -7315,6 +7315,11 @@ sweetalert2@11.4.4:
   resolved "https://registry.npmjs.org/sweetalert2/-/sweetalert2-11.4.4.tgz"
   integrity sha512-9yYWQuRT1v9JNI/paPTSYV+68MHwe9C+HQ/I2jtfaFzoJgYRftWXOs4JqmDSjT7m2m4r8ebMMn8LcxD1Wq9B/w==
 
+swiper@^11.1.4:
+  version "11.1.4"
+  resolved "https://registry.npmjs.org/swiper/-/swiper-11.1.4.tgz"
+  integrity sha512-1n7kbYJB2dFEpUHRFszq7gys/ofIBrMNibwTiMvPHwneKND/t9kImnHt6CfGPScMHgI+dWMbGTycCKGMoOO1KA==
+
 synckit@^0.6.0:
   version "0.6.2"
   resolved "https://registry.npmjs.org/synckit/-/synckit-0.6.2.tgz"
@@ -7936,6 +7941,11 @@ vue-select@^4.0.0-beta.3:
   resolved "https://registry.npmjs.org/vue-select/-/vue-select-4.0.0-beta.6.tgz"
   integrity sha512-K+zrNBSpwMPhAxYLTCl56gaMrWZGgayoWCLqe5rWwkB8aUbAUh7u6sXjIR7v4ckp2WKC7zEEUY27g6h1MRsIHw==
 
+vue-simple-progress@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.npmjs.org/vue-simple-progress/-/vue-simple-progress-1.1.1.tgz"
+  integrity sha512-ltLWYBA5eVQHWyt1NwZeGeK0VQC69JVh1oqUdro0po7r8Hc8SEMEyEfuwyCO4s27h5I3jbD99BKKkyPSQZgoZA==
+
 vue-style-loader@^4.1.0, vue-style-loader@^4.1.3:
   version "4.1.3"
   resolved "https://registry.npmjs.org/vue-style-loader/-/vue-style-loader-4.1.3.tgz"
@@ -8005,7 +8015,7 @@ vue3-blocks-tree@^0.6.1:
   resolved "https://registry.npmjs.org/vue3-blocks-tree/-/vue3-blocks-tree-0.6.2.tgz"
   integrity sha512-faALVuyyq31K8/qa46a2fFk3M6OVXbssBc0JdLJLl+H0zgK5nnJGwFoFZ8R9MnSSH9QhqpKyP4Khf41puOQY3w==
 
-vue3-carousel@^0.1.46:
+vue3-carousel@^0.1.48:
   version "0.1.48"
   resolved "https://registry.npmjs.org/vue3-carousel/-/vue3-carousel-0.1.48.tgz"
   integrity sha512-B0rAsQr2D6VO1oi2+QXItWsRZUyXG0kF0fQHFC0oA6MQK7dKFMAhKMsy9HJkRJ7tXB/lBl/EfHhOqw16TncZ3Q==
@@ -8044,6 +8054,11 @@ vue3-particles@^2.3.1:
     tsparticles-engine "^2.12.0"
     vue "^3.3.4"
 
+vue3-progress@^0.0.1-beta4:
+  version "0.0.1-beta4"
+  resolved "https://registry.npmjs.org/vue3-progress/-/vue3-progress-0.0.1-beta4.tgz"
+  integrity sha512-AiRlyzRvX0FPFkG8fcrFJ6fPQWt/3PdGy062fbWZB3qjAcU3MHzJPU5BZ5HfrmMHHnhk0u46du/k+KflmDdN9Q==
+
 vue3-qr-reader@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/vue3-qr-reader/-/vue3-qr-reader-1.0.0.tgz"
@@ -8078,6 +8093,11 @@ vuejs-paginate-next@^1.0.2:
   dependencies:
     "@vue/test-utils" "^2.0.0-rc.17"
     vue "^3.2.25"
+
+vuejs-progress-bar@^1.2.8:
+  version "1.2.8"
+  resolved "https://registry.npmjs.org/vuejs-progress-bar/-/vuejs-progress-bar-1.2.8.tgz"
+  integrity sha512-FSXg42UlV0X6EMI0Tk6JFf9U55cWjlLVFQVoZef+o0oiAX7dvYKqVJSrsO5tR09FiN3KbVJGASbpuUoK/iNw9w==
 
 vueperslides@^3.4.2:
   version "3.5.1"
