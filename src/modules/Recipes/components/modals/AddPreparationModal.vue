@@ -171,8 +171,15 @@ const updateDeal = async () => {
           <ModalTab title="UZ">
             <form>
               <label for="nameUz">{{ t('description') }} O'z
-                <textarea id="nameUz" type="text" class="form-input" :placeholder="t('description')" v-model="recipes.title_uz"
-                  :class="validate.title_uz.$errors.length ? 'required-input' : ''" @input="getTitle" />
+                <Editor
+              :placeholder="$t('enter_information')"
+              content-type="html"
+              toolbar="full"
+              class="scrollbar rounded border"
+              style="height: 45vh; overflow-y: auto;"
+              @input="getTitle"
+          >
+          </Editor>
                 <p v-for="error in validate.title_uz.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
@@ -183,12 +190,14 @@ const updateDeal = async () => {
           <ModalTab title="KR">
             <form>
               <label for="nameRu">{{ t('description') }} Ру
-                <textarea
-                id="descriptionUz"
-                type="text"
-                class="form-input"
-                :placeholder="t('description')" 
-            />
+                <Editor
+              :placeholder="$t('enter_information')"
+              content-type="html"
+              toolbar="full"
+              class="scrollbar rounded border"
+              style="height: 45vh; overflow-y: auto;"
+          >
+          </Editor>
                 <p v-for="error in validate.title_ru.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
@@ -199,12 +208,14 @@ const updateDeal = async () => {
           <ModalTab title="RU">
             <form>
               <label for="nameRu">{{ t('description') }} Ўз
-                <textarea
-                id="descriptionUz"
-                type="text"
-                class="form-input"
-                :placeholder="t('description')" 
-            />
+                <Editor
+              :placeholder="$t('enter_information')"
+              content-type="html"
+              toolbar="full"
+              class="scrollbar rounded border"
+              style="height: 45vh; overflow-y: auto;"
+          >
+          </Editor>
                 <p v-for="error in validate.title_kr.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>

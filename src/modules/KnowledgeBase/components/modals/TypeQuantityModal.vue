@@ -9,25 +9,37 @@ import useVuelidate, {Validation} from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
 import { QuantityType } from "@/modules/KnowledgeBase/interfaces/index"
 import KnowledgeBase from "@/modules/KnowledgeBase/store/index";
-
-
+import ModalTabs from "@/components/Tab/ModalTabs.vue";
+import ModalTab from "@/components/Tab/ModalTab.vue";
+import {useSidebarStore} from '@/stores/layoutConfig'
 
 //DECLARED VARIABLES
 const {t} = useI18n();
 const isSubmitted = ref<boolean>(false);
+const general = useSidebarStore()
 const propData = defineProps<{ editData: QuantityType }>();
 const emits = defineEmits(["savetype"]);
 const store = KnowledgeBase()
 const productData = ref<QuantityType>({
 id: null,
-title: ""
+title: "",
+title_uz: "",
+title_ru: "",
+title_kr: "",
+unique_name: ""
 })
 
 
 // validations
 const rules = computed(() => {
   return {
-    title: {
+    title_uz: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    title_ru: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    title_kr: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
   };
@@ -40,23 +52,40 @@ const validate: Ref<Validation> = useVuelidate(rules, productData);
 async function openModal() {
   if (propData.editData.id) {
     productData.value.id = propData.editData.id
-    productData.value.title = propData.editData.title
+    productData.value.title_uz = propData.editData.title_uz
+    productData.value.title_ru = propData.editData.title_ru
+    productData.value.title_kr = propData.editData.title_kr
 
 
   } else {
     productData.value.id = null
-    productData.value.title = ""
+    productData.value.title_uz = ""
+    productData.value.title_ru = ""
+    productData.value.title_kr = ""
 
   }
 }
 
 function hideModal() {
   productData.value.id = null
-  productData.value.title = ""
+  productData.value.title_uz = ""
+    productData.value.title_ru = ""
+    productData.value.title_kr = ""
   validate.value.$reset()
 }
 
 const updateDeal = async () => {
+  if (!productData.value.title_uz) {
+    general.tabs = 'UZ'
+  } else if (!productData.value.title_kr) {
+    general.tabs = 'KR'
+  } else if (!productData.value.title_ru) {
+    general.tabs = 'RU'
+  }
+
+  productData.value.title = productData.value.title_uz
+  productData.value.unique_name = productData.value.title_uz
+
   const success = await validate.value.$validate();
   if (!success) return;
 
@@ -118,14 +147,74 @@ const updateDeal = async () => {
       </div>
 
       <div class="uk-modal-body py-4">
+        <ModalTabs class="mb-4">
+          <ModalTab title="UZ">
             <form>
-              <label for="nameRu">{{ t('name') }} 
-                <input id="nameRu" type="text" class="form-input" :placeholder="t('name')" v-model="productData.title" :class="validate.title.$errors.length ? 'required-input' : ''"/>
-                <p v-for="error in validate.title.$errors" :key="error.$uid" class="text-danger text-sm">
+              <label for="nameUz"
+              >{{ t('name') + ' ' + t('UZ') }}
+                <input
+                    id="nameUz"
+                    type="text"
+                    class="form-input"
+                    v-model="productData.title_uz"
+                    :class="validate.title_uz.$errors.length ? 'required-input' : ''"
+                />
+                <p
+                    v-for="error in validate.title_uz.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
                   {{ t(error.$message) }}
                 </p>
               </label>
             </form>
+          </ModalTab>
+          <ModalTab title="KR">
+            <form>
+              <label for="nameUz"
+              >{{ t('name') + ' ' + t('KR') }}
+                <input
+                    id="nameUz"
+                    type="text"
+                    class="form-input"
+                    v-model="productData.title_kr"
+                    :class="validate.title_kr.$errors.length ? 'required-input' : ''"
+                />
+                <p
+                    v-for="error in validate.title_kr.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ t(error.$message) }}
+                </p>
+              </label>
+
+            </form>
+          </ModalTab>
+
+          <ModalTab title="RU">
+            <form>
+              <label for="nameRu"
+              >{{ t('name') + ' ' + t('RU') }}
+                <input
+                    id="nameRu"
+                    type="text"
+                    class="form-input"
+                    v-model="productData.title_ru"
+                    :class="validate.title_ru.$errors.length ? 'required-input' : ''
+                  "
+                />
+                <p
+                    v-for="error in validate.title_ru.$errors"
+                    :key="error.$uid"
+                    class="text-danger text-sm"
+                >
+                  {{ t(error.$message) }}
+                </p>
+              </label>
+            </form>
+          </ModalTab>
+        </ModalTabs>
 
       </div>
 

@@ -4,7 +4,8 @@ import {
     Results,
     Params,
     Retsept,
-    RecipeDetail
+    RecipeDetail,
+    Ingredient
 } from "../interfaces";
 
 
@@ -17,7 +18,10 @@ export default defineStore("recipes", {
 
             retseptDetailList: {
                 data: {} as RecipeDetail
-            } ,
+            },
+            ingredients: {
+                results: [] as Ingredient[]
+            } as Results<Ingredient>
         };
     },
     actions: {
@@ -34,9 +38,9 @@ export default defineStore("recipes", {
             this.retseptDetailList = data
         },
 
-        async getIngredientById(recipe_id: number) {
-            const {data} = await $axios.get(`/knowledge_base/retsept/${recipe_id}/`)
-            this.retseptDetailList = data
+        async getIngredientById(params: Params, recipe_id: number | string | string[]) {
+            const {data} = await $axios.get(`/knowledge_base/ingredient/${recipe_id}/`, {params})
+            this.ingredients = data
         },
 
 
@@ -45,16 +49,28 @@ export default defineStore("recipes", {
             return $axios.post(`/knowledge_base/retsept/`, data);
         },
 
+        createIngredient(data: object) {
+            return $axios.post(`/knowledge_base/ingredient/`, data);
+        },
+
 
         //PATCH REQUEST
         updateRetsept(data: any) {
             return $axios.patch(`/knowledge_base/retsept/${data.id}/`, data);
         },
 
+        updateIngredient(data: any) {
+            return $axios.patch(`/knowledge_base/ingredients/${data.id}/`, data);
+        },
+
 
         //DELETE REQUEST
         deleteRetsept(recipes_id: number | null) {
             return $axios.delete(`/knowledge_base/retsept/${recipes_id}/`);
+        },
+
+        deleteIngredient(ingredient_id: number | null) {
+            return $axios.delete(`/knowledge_base/ingredients/${ingredient_id}/`);
         },
 
 

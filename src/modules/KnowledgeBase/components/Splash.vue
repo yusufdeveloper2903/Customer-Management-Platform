@@ -149,6 +149,12 @@ const handleDeleteModal = (id: number) => {
         {{ t(header.text) }}
       </template>
 
+      <template #header-actions="item">
+        <div class="flex justify-end">
+          {{ t(item.text) }}
+        </div>
+      </template>
+
       <template #item-title="item">
         {{ item['title_' + locale] }}
       </template>
@@ -186,7 +192,7 @@ const handleDeleteModal = (id: number) => {
       </template>
 
       <template #item-actions="data">
-        <div class="flex my-4 justify-left">
+        <div class="flex my-4 justify-end">
           <button uk-toggle="target: #splash" class="btn-warning btn-action" @click="dataToEdit = data">
             <Icon icon="Pen New Square" color="#fff" size="16"/>
           </button>

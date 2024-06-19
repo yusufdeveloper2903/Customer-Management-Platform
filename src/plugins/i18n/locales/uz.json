@@ -403,5 +403,7 @@
   "Preparation": "Tayyorgarlik",
   "General": "General",
   "Add quantity type": "Miqdor turini qo'shish",
-  "Edit quantity type": "Miqdor turini tahrirlash"
+  "Edit quantity type": "Miqdor turini tahrirlash",
+  "add_ingredient": "Ingredient qo'shish",
+  "edit_ingredient": "Ingredientni tahrirlash"
 }

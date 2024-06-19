@@ -23,7 +23,6 @@ const {t} = useI18n()
           @remove="splashData.image = null"
           :typeModal="propData.editData.id" -->
         </label>
-        <small>{{ t('Content format and size: jpg / mp4 / 1920x1080') }}</small>
 
         <draggable class="dragArea list-group w-full" >
         <div class="mt-4 flex justify-between items-center">

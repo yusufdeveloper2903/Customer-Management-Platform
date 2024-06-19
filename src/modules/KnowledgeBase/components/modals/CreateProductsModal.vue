@@ -69,6 +69,7 @@ const updateDeal = async () => {
   } else if (!productsData.value.title_ru && !productsData.value.description_ru) {
     general.tabs = 'RU'
   }
+  
   const success = await validate.value.$validate();
   if (!success) return;
   const fd = objectToFormData(['image'], productsData.value);

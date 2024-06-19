@@ -121,9 +121,14 @@ onMounted(() => {
      {{ item.title }}
       </template>
 
+      <template #header-actions="item">
+        <div class="flex justify-end">
+          {{ t(item.text) }}
+        </div>
+      </template>
 
       <template #item-actions="item">
-        <div class="flex justify-left my-4">
+        <div class="flex justify-end my-4">
           <button class="btn-warning btn-action" uk-toggle="target: #type_modal" @click="editData = item">
             <Icon icon="Pen New Square" color="#fff" size="16" />
           </button>

@@ -299,5 +299,9 @@ export interface Splash {
 
 export interface QuantityType {
     id: number | null;
-    title: string
+    title: string,
+    title_ru: string,
+    title_uz: string,
+    title_kr: string,
+    unique_name: string
 }

@@ -48,4 +48,12 @@ export interface RecipeDetailEdit {
   title_ru: string,
 }
 
+export interface Ingredient {
+    id: number | null;
+    product: number | null
+    unit_of_measure: number | null;
+    food: number | null,
+    discount: number | null
+}
+
 
