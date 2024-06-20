@@ -406,5 +406,7 @@
   "Edit quantity type": "Miqdor turini tahrirlash",
   "add_ingredient": "Ingredient qo'shish",
   "edit_ingredient": "Ingredientni tahrirlash",
-  "edit_recipe": "Retseptni tahrirlash"
+  "edit_recipe": "Retseptni tahrirlash",
+  "add_cooking_step": "Pishirish bosqichini qo'shish",
+  "edit_cooking_step": "Pishirish bosqichini tahrirlash"
 }

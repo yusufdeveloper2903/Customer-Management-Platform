@@ -87,10 +87,10 @@ const deleteAction = async () => {
         if ((store.ingredients.count - 1) % params.page_size == 0) {
             if (params.page > 1) {
                 params.page = params.page - 1
-                await refresh(params)
+                // await refresh(params)
             } else {
                 params.page = 1
-                await refresh(params)
+                // await refresh(params)
             }
 
         }

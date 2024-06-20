@@ -10,6 +10,7 @@ import UIkit from "uikit";
 import RecipeStorage from '@/modules/Recipes/store/index';
 import { useRoute } from "vue-router";
 import { toast } from "vue3-toastify";
+import { Preparation } from "../interfaces/index"
 
 // Declared variables
 const { t } = useI18n()
@@ -17,14 +18,22 @@ const store = RecipeStorage()
 const route = useRoute()
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null)
-const currentRow = ref<Link | null>(null);
+const currentRow = ref<Preparation | null>(null);
 let accordItem = ref<boolean>(false)
 const params = reactive({
   page_size: 10,
   page: 1,
   search: ""
 });
-
+const editData = ref<Preparation>({
+  id: null,
+  index: null,
+  description: "",
+  description_uz: "",
+  description_ru: "",
+  description_kr: "",
+  food: null
+})
 
 // Mounted
 onMounted(async () => {
@@ -75,9 +84,9 @@ const dragOver = (e: any) => {
   e.preventDefault();
 };
 
-const dragDrop = async (item: Link) => {
+const dragDrop = async (item: Preparation) => {
   event?.preventDefault();
-  await store.create_drag_and_drop({id1: currentRow.value?.id, id2: item.id})
+  await store.create_drag_and_drop({ id1: currentRow.value?.id, id2: item.id })
   await refresh(params);
   toast.success(t("updated_successfully"));
 };
@@ -89,17 +98,17 @@ const saveData = (() => {
 const deleteAction = async () => {
   isLoading.value = true
   try {
-    await store.deleteIngredient(itemId.value);
-    UIkit.modal("#ingredient-delete").hide();
+    await store.deletePreparation(itemId.value);
+    UIkit.modal("#preparation-delete").hide();
     refresh(params)
     toast.success(t('deleted_successfully'));
-    if ((store.ingredients.count - 1) % params.page_size == 0) {
+    if ((store.preparationList.count - 1) % params.page_size == 0) {
       if (params.page > 1) {
         params.page = params.page - 1
-        await refresh(params)
+        // await refresh(params)
       } else {
         params.page = 1
-        await refresh(params)
+        // await refresh(params)
       }
 
     }
@@ -113,8 +122,8 @@ const deleteAction = async () => {
 }
 
 
-const handleDeleteModal = (id: number) => {
-  UIkit.modal("#ingredient-delete").show();
+const handleDeleteModal = (id: number | null) => {
+  UIkit.modal("#preparation-delete").show();
   itemId.value = id;
 };
 </script>
@@ -238,11 +247,10 @@ const handleDeleteModal = (id: number) => {
         </td>
         <td class="px-6 whitespace-no-wrap">
           <div class="flex py-2 justify-end">
-            <button class="btn-warning btn-action" uk-toggle="target: #links" @click="editLink = item">
+            <button class="btn-warning btn-action" uk-toggle="target: #links" @click="editData = item">
               <Icon icon="Pen New Square" color="#fff" size="16" />
             </button>
-            <button @click="itemId = item.id" class="ml-3 btn-danger btn-action"
-              uk-toggle="target: #conctacs-main-delete-modal">
+            <button @click="handleDeleteModal(item.id)" class="ml-3 btn-danger btn-action">
               <Icon icon="Trash Bin Trash" color="#fff" size="16" />
             </button>
           </div>
@@ -250,14 +258,21 @@ const handleDeleteModal = (id: number) => {
       </tr>
     </tbody>
   </table>
-  <div class="empty_table">{{ t('no_available_data') }}</div>
-
-
-
-
+  <div class="empty_table" v-if="!store.preparationList?.results.length">{{ t('no_available_data') }}</div>
 
   <TwPagination :total="store.preparationList.count" class="mt-10 tw-pagination" :current="params.page"
     :per-page="params.page_size" :text-before-input="t('go_to_page')" :text-after-input="t('forward')"
-  @per-page-changed="onPageSizeChanged" @page-changed="changePagionation" />
+    @per-page-changed="onPageSizeChanged" @page-changed="changePagionation" />
 
-<AddPreparationModal /></template>
+
+
+  <DeleteModal @delete-action="deleteAction" :id="'preparation-delete'" />
+  <AddPreparationModal @saveData="saveData" :editData="editData"/>
+</template>
+
+<style lang="scss" scoped>
+.firstTable:nth-child(3) {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>

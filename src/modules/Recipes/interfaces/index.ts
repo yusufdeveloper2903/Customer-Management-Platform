@@ -58,12 +58,12 @@ export interface Ingredient {
 
 export interface Preparation {
     id: number | null;
-    index: number;
+    index: number | null;
     description: string;
     description_uz: string;
     description_ru: string;
     description_kr: string;
-    food: number
+    food: number | null
 }
 
 
