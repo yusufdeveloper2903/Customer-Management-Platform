@@ -5,7 +5,8 @@ import {
     Params,
     Retsept,
     RecipeDetail,
-    Ingredient
+    Ingredient,
+    Preparation
 } from "../interfaces";
 
 
@@ -21,7 +22,11 @@ export default defineStore("recipes", {
             },
             ingredients: {
                 results: [] as Ingredient[]
-            } as Results<Ingredient>
+            } as Results<Ingredient>,
+
+            preparationList: {
+                results: [] as Preparation[]
+            } as Results<Preparation>
         };
     },
     actions: {
@@ -43,6 +48,11 @@ export default defineStore("recipes", {
             this.ingredients = data
         },
 
+        async getPreparationById(params: Params, food_id: number | string | string[]) {
+            const {data} = await $axios.get(`/knowledge_base/preparation/${food_id}/`, {params})
+            this.preparationList = data
+        },
+
 
         //CREATE REQUEST
         create_retsept(data: object) {
@@ -53,14 +63,22 @@ export default defineStore("recipes", {
             return $axios.post(`/knowledge_base/ingredient/`, data);
         },
 
+        createPreparation(data: object) {
+            return $axios.post(`/knowledge_base/preparation/`, data);
+        },
+
 
         //PATCH REQUEST
         updateRetsept(data: any) {
             return $axios.patch(`/knowledge_base/retsept/${data.id}/`, data);
         },
 
-        updateIngredient(data: any) {
-            return $axios.patch(`/knowledge_base/ingredients/${data.id}/`, data);
+        updateIngredient(ingredient_id, data: any) {
+            return $axios.patch(`/knowledge_base/ingredients/${ingredient_id}/`, data);
+        },
+
+        updatePreparation(data: any) {
+            return $axios.patch(`/knowledge_base/preparations/${data.id}/`, data);
         },
 
 
@@ -71,6 +89,10 @@ export default defineStore("recipes", {
 
         deleteIngredient(ingredient_id: number | null) {
             return $axios.delete(`/knowledge_base/ingredients/${ingredient_id}/`);
+        },
+
+        deletePreparation(preparation_id: number | null) {
+            return $axios.delete(`/knowledge_base/preparations/${preparation_id}/`);
         },
 
 

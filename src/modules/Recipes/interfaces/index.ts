@@ -50,10 +50,20 @@ export interface RecipeDetailEdit {
 
 export interface Ingredient {
     id: number | null;
-    product: number | null
-    unit_of_measure: number | null;
+    product: number | null 
+    unit_of_measure: number | null
     food: number | null,
     discount: number | null
+}
+
+export interface Preparation {
+    id: number | null;
+    index: number;
+    description: string;
+    description_uz: string;
+    description_ru: string;
+    description_kr: string;
+    food: number
 }
 
 

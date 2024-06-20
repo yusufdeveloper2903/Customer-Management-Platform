@@ -3,7 +3,7 @@
 import { useI18n } from "vue-i18n";
 import EditRecipesModal from "./modals/EditRecipesModal.vue";
 import {useRoute} from "vue-router";
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import RecipeStorage from "@/modules/Recipes/store/index"
 import { RecipeDetailEdit } from "../interfaces/index"
 import {toast} from "vue3-toastify";
@@ -49,38 +49,12 @@ const refresh = async () => {
     }
 
     isLoading.value = false;
-    // knowledgeStore.getRetseptCategory()
 };
 refresh()
 
-  // onMounted(async() => {
-  //   if (route.params.id) {  
-  //    await store.getRetseptDetail(Number(route.params.id))
-  //     // recipeData.value.id = store.retseptDetailList.data?.id
-  //     // recipeData.value.title = store.retseptDetailList.data?.title
-  //     // recipeData.value.category = store.retseptDetailList.data?.category
-  //     // recipeData.value.calorie = store.retseptDetailList.data?.calorie
-  //     // recipeData.value.preparation_time = store.retseptDetailList.data?.preparation_time
-  //     // recipeData.value.rating = store.retseptDetailList.data?.rating
-  //     // recipeData.value.is_active = store.retseptDetailList.data?.is_active
-  //     recipeData.value = store.retseptDetailList.data
-  //   } else {
-  //     console.log(recipeData.value.id);
-      
-  //     recipeData.value.id = null
-  //     recipeData.value.title = ""
-  //     recipeData.value.category = null
-  //     recipeData.value.calorie = 0
-  //     recipeData.value.preparation_time = ""
-  //     recipeData.value.rating = ""
-  //     recipeData.value.is_active = false
-  //   }
-  // })
 
   const saveData = (() => {
-
     refresh()
-
   })
 </script>
 

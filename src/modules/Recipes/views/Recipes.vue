@@ -53,6 +53,7 @@ const deleteAction = async () => {
     try {
         await store.deleteRetsept(userId.value);
         UIkit.modal("#recipes-delete-modal").hide();
+        refresh(params)
         toast.success(t('deleted_successfully'));
         if ((store.retseptList.count - 1) % params.page_size == 0) {
             if (params.page > 1) {

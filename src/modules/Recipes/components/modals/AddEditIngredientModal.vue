@@ -57,8 +57,8 @@ async function openModal() {
 
   if (propData.editData.id) {
     recipes.value.id = propData.editData.id
-    recipes.value.product = propData.editData.product
-    recipes.value.unit_of_measure = propData.editData.unit_of_measure
+    recipes.value.product = propData.editData.product.id
+    recipes.value.unit_of_measure = propData.editData.unit_of_measure.id
     recipes.value.discount = propData.editData.discount
     recipes.value.food = propData.editData.food
   } else {
@@ -89,7 +89,7 @@ const updateDeal = async () => {
 
   if (propData.editData.id) {
     try {
-      await store.updateIngredient(recipes.value).then(() => {
+      await store.updateIngredient(recipes.value.id, recipes.value).then(() => {
         emits("saveData");
         setTimeout(() => {
           toast.success(t("updated_successfully"));

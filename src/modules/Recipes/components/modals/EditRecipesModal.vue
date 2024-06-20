@@ -62,6 +62,9 @@ const rules = computed(() => {
     title_kr: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
+    category: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
   };
 
 });
@@ -174,7 +177,7 @@ const updateDeal = async () => {
 
 <template>
   <div id="edit_recipes" class="uk-flex-top" uk-modal @shown="openModal" @hidden="clearData">
-    <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden">
+    <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg ">
       <button class="uk-modal-close-default" @click="clearData" type="button" uk-close />
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
@@ -223,7 +226,11 @@ const updateDeal = async () => {
             <VSelect v-model="recipes.category"
               :options="knowledgeStore.retseptCategoryList && knowledgeStore.retseptCategoryList.results"
               :getOptionLabel="(name: any) => name.name" :reduce="(item: any) => item.id"
-              :placeholder="t('select_category')" />
+              :placeholder="t('select_category')" 
+              :class="validate.category.$errors.length ? 'required-input' : ''"/>
+              <p v-for="error in validate.category.$errors" :key="error.$uid" class="text-danger text-sm">
+                  {{ t(error.$message) }}
+                </p>
           </label>
 
           <div class="flex mt-4 gap-4">
@@ -235,14 +242,6 @@ const updateDeal = async () => {
               <VueDatePicker format="dd-MM-yyyy" v-model="recipes.preparation_time" :placeholder="t('preparation_time')" model-type="hh:mm:ss" time-picker  enable-seconds></VueDatePicker>
             </label>
           </div>
-
-
-          <!-- <p class="mt-4">{{ t('Status') }}</p>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" class="sr-only peer" v-model="recipes.is_active" />
-            <div
-              class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary" />
-          </label> -->
 
         </form>
       </div>

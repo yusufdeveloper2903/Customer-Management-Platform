@@ -438,5 +438,6 @@
   "Add quantity type": "Добавить тип количества",
   "Edit quantity type": "Изменить тип количества",
   "add_ingredient": "Добавить ингредиент",
-  "edit_ingredient": "Изменить ингредиент"
+  "edit_ingredient": "Изменить ингредиент",
+  "edit_recipe": "Редактировать рецепт"
 }
