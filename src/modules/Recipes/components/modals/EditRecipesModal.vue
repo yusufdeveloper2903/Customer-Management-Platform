@@ -11,6 +11,8 @@ import ModalTab from "@/components/Tab/ModalTab.vue";
 import recipeStore from "../../store/index"
 import { Retsept } from "../../interfaces/index"
 import knowledgeBase from '@/modules/KnowledgeBase/store/index';
+import {useSidebarStore} from '@/stores/layoutConfig'
+
 
 
 // declared type
@@ -29,6 +31,7 @@ interface RecipesData {
 
 // Declared variables
 const { t } = useI18n();
+const general = useSidebarStore()
 const isSubmitted = ref<boolean>(false);
 const store = recipeStore()
 const emits = defineEmits(["saveData"]);
@@ -57,6 +60,9 @@ const rules = computed(() => {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
     title_kr: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    category: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
   };
@@ -110,29 +116,41 @@ function getTitle() {
 }
 
 const updateDeal = async () => {
+  if (!recipes.value.title_uz) {
+    general.tabs = 'UZ'
+  } else if (!recipes.value.title_kr) {
+    general.tabs = 'KR'
+  } else if (!recipes.value.title_ru) {
+    general.tabs = 'RU'
+  }
+
+
+
   const success = await validate.value.$validate();
   if (!success) return;
 
-  // if (propData.editData.id) {
-  //   try {
-  //     await store.updateRetsept(recipes.value).then(() => {
-  //       // emits("saveRecipes");
-  //       setTimeout(() => {
-  //         toast.success(t("updated_successfully"));
-  //       }, 200);
-  //       UIkit.modal("#edit_recipes").hide();
-  //     });
+  if (propData.editData.id) {
+    try {
+      recipes.value.title = recipes.value.title_uz
+      
+      await store.updateRetsept(recipes.value).then(() => {
+        emits("saveData");
+        setTimeout(() => {
+          toast.success(t("updated_successfully"));
+        }, 200);
+        UIkit.modal("#edit_recipes").hide();
+      });
 
-  //     isSubmitted.value = false;
+      isSubmitted.value = false;
 
-  //   } catch (error: any) {
-  //     isSubmitted.value = false;
-  //     toast.error(
-  //       error.response.message || error.response.data.msg || error.response.data.error || t('error')
-  //     );
-  //   }
+    } catch (error: any) {
+      isSubmitted.value = false;
+      toast.error(
+        error.response.message || error.response.data.msg || error.response.data.error || t('error')
+      );
+    }
 
-  // } else {
+  } else {
     try {
       await store.create_retsept(recipes.value).then(() => {
         propData.editData.id = recipes.value.id
@@ -153,18 +171,17 @@ const updateDeal = async () => {
         );
       }
     }
-  // }
+  }
 };
 </script>
 
 <template>
   <div id="edit_recipes" class="uk-flex-top" uk-modal @shown="openModal" @hidden="clearData">
-    <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden">
+    <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg ">
       <button class="uk-modal-close-default" @click="clearData" type="button" uk-close />
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
-          <!-- {{ propData.editData.id ? t("Change") : t('Add') }} -->
-          {{ t("Change") }}
+          {{ propData.editData.id ? t("edit_recipe") : t('add_recipe') }}
         </h2>
       </div>
       <div class="uk-modal-body py-4">
@@ -183,9 +200,9 @@ const updateDeal = async () => {
 
           <ModalTab title="KR">
             <form>
-              <label for="nameRu">{{ t('name') }} Ру
-                <input id="nameRu" type="text" class="form-input" :placeholder="t('name')" v-model="recipes.title_ru" :class="validate.title_ru.$errors.length ? 'required-input' : ''"/>
-                <p v-for="error in validate.title_ru.$errors" :key="error.$uid" class="text-danger text-sm">
+              <label for="nameRu">{{ t('name') }} Ўз
+                <input id="nameRu" type="text" class="form-input" :placeholder="t('name')" v-model="recipes.title_kr" :class="validate.title_kr.$errors.length ? 'required-input' : ''"/>
+                <p v-for="error in validate.title_kr.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
               </label>
@@ -194,9 +211,9 @@ const updateDeal = async () => {
 
           <ModalTab title="RU">
             <form>
-              <label for="nameRu">{{ t('name') }} Ўз
-                <input id="nameRu" type="text" class="form-input" :placeholder="t('name')" v-model="recipes.title_kr" :class="validate.title_kr.$errors.length ? 'required-input' : ''"/>
-                <p v-for="error in validate.title_kr.$errors" :key="error.$uid" class="text-danger text-sm">
+              <label for="nameRu">{{ t('name') }} Ру
+                <input id="nameRu" type="text" class="form-input" :placeholder="t('name')" v-model="recipes.title_ru" :class="validate.title_ru.$errors.length ? 'required-input' : ''"/>
+                <p v-for="error in validate.title_ru.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
               </label>
@@ -209,7 +226,11 @@ const updateDeal = async () => {
             <VSelect v-model="recipes.category"
               :options="knowledgeStore.retseptCategoryList && knowledgeStore.retseptCategoryList.results"
               :getOptionLabel="(name: any) => name.name" :reduce="(item: any) => item.id"
-              :placeholder="t('select_category')" />
+              :placeholder="t('select_category')" 
+              :class="validate.category.$errors.length ? 'required-input' : ''"/>
+              <p v-for="error in validate.category.$errors" :key="error.$uid" class="text-danger text-sm">
+                  {{ t(error.$message) }}
+                </p>
           </label>
 
           <div class="flex mt-4 gap-4">
@@ -222,14 +243,6 @@ const updateDeal = async () => {
             </label>
           </div>
 
-
-          <p class="mt-4">{{ t('Status') }}</p>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" class="sr-only peer" v-model="recipes.is_active" />
-            <div
-              class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary" />
-          </label>
-
         </form>
       </div>
 
@@ -238,12 +251,10 @@ const updateDeal = async () => {
           {{ t("Cancel") }}
         </button>
 
-        <!-- :class="propData.editData.id ? 'btn-warning' : 'btn-success'" -->
-        <button class="btn-warning" @click="updateDeal" :disabled="isSubmitted">
+        <button :class="propData.editData.id ? 'btn-warning' : 'btn-success'"  @click="updateDeal" :disabled="isSubmitted">
          <img src="@/assets/image/loading.svg" alt="loading.svg" class="inline w-4 h-4 text-white animate-spin mr-2"
            v-if="isSubmitted" />
-          <!-- <span>{{ propData.editData.id ? t("Change") : t('Add') }}</span> -->
-          <span>{{ t("Change")  }}</span>
+          <span>{{ propData.editData.id ? t("Change") : t('Add') }}</span>
         </button>
       </div>
     </div>

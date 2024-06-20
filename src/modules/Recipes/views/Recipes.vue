@@ -3,13 +3,17 @@
 //Imported files
 import { recipedetailFields } from "../constants";
 import recipes from "../store/index"
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { toast } from "vue3-toastify";
 import UIkit from "uikit";
 import { useI18n } from "vue-i18n";
 import { watchDebounced } from "@vueuse/core";
 import { useRouter } from "vue-router";
 import knowledgeBase from '@/modules/KnowledgeBase/store/index';
+import EditRecipesModal from "../components/modals/EditRecipesModal.vue";
+import { RecipeDetailEdit } from "../interfaces/index"
+import DoubleRight from "@/modules/Users/img/double-right-chevron-svgrepo-com.svg"
+
 
 //Declared variables
 const { t } = useI18n()
@@ -25,8 +29,23 @@ const params = reactive({
     category: ""
 });
 
+const recipeData = ref<RecipeDetailEdit>({
+  id: null,
+  title: "",
+  title_kr: "",
+  title_uz: "",
+  title_ru: "",
+  category: null,
+  calorie: 0,
+  preparation_time: "",
+  rating: "",
+  is_active: false
+})
 
-
+// Mounted
+onMounted(async() => {
+   await refresh(params)
+})
 
 // Functions
 const deleteAction = async () => {
@@ -34,6 +53,7 @@ const deleteAction = async () => {
     try {
         await store.deleteRetsept(userId.value);
         UIkit.modal("#recipes-delete-modal").hide();
+        refresh(params)
         toast.success(t('deleted_successfully'));
         if ((store.retseptList.count - 1) % params.page_size == 0) {
             if (params.page > 1) {
@@ -81,7 +101,7 @@ const refresh = async (filter: any) => {
     isLoading.value = false;
     knowledgeStore.getRetseptCategory()
 };
-refresh(params)
+
 
 
 const changePagionation = (e: number) => {
@@ -95,6 +115,11 @@ const onPageSizeChanged = (e: number) => {
     params.page = 1
     refresh(params)
 }
+
+const saveData = (() => { 
+    refresh(params)
+
+  })
 
 </script>
 
@@ -115,9 +140,7 @@ const onPageSizeChanged = (e: number) => {
           </label>
         </form>
 
-            <button class="btn-primary" @click="
-                router.push({ name: 'add-recipe'})
-              ">
+            <button class="btn-primary" uk-toggle="target: #edit_recipes" @click="recipeData = <RecipeDetailEdit>{}">
                 {{ t("Add") }}
             </button>
         </div>
@@ -155,11 +178,14 @@ const onPageSizeChanged = (e: number) => {
 
             <template #item-actions="item">
                 <div class="py-3 flex justify-left items-center gap-3">
-                    <button class="btn-warning btn-action" @click="
-                        router.push({ name: 'recipe-detail', params: { id: item.id } })
-                        ">
+                    <button @click="router.push({ name: 'recipe-detail', params: { id: item.id } })" class="btn-success btn-action my-1">
+                        <img :src="DoubleRight" alt="Icon">
+                    </button>
+
+                    <button class="btn-warning btn-action" uk-toggle="target: #edit_recipes" @click="recipeData = item">
                         <Icon icon="Pen New Square" color="#fff" size="16" />
                     </button>
+
                     <button class="btn-danger btn-action" @click="handleDeleteModal(item.id)">
                         <Icon icon="Trash Bin Trash" color="#fff" size="16" />
                     </button>
@@ -168,10 +194,11 @@ const onPageSizeChanged = (e: number) => {
 
         </EasyDataTable>
 
-        <TwPagination :total="2" class="mt-10 tw-pagination" :current="params.page" :per-page="params.page_size"
+        <TwPagination :total="knowledgeStore.retseptCategoryList.count" class="mt-10 tw-pagination" :current="params.page" :per-page="params.page_size"
             :text-before-input="t('go_to_page')" :text-after-input="t('forward')" @page-changed="changePagionation"
             @per-page-changed="onPageSizeChanged" />
     </div>
 
     <DeleteModal @delete-action="deleteAction" :id="'recipes-delete-modal'" />
+    <EditRecipesModal  :edit-data="recipeData" @saveData="saveData"/>
 </template>
