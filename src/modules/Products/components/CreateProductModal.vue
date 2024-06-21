@@ -130,7 +130,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
 <template>
   <div id="create_and_edit_category" class="uk-flex-top" uk-modal @shown="openModal" @hidden="onHide">
     <div
-        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
+        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg "
     >
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
@@ -205,7 +205,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
         </ModalTabs>
         <p class=" mt-4 ">{{ $t("Status") }}</p>
         <v-select
-            class="category_product_select"
+
             :options="Status"
             :getOptionLabel="(role:any) => $t(`${role.title}`)"
             :reduce="(role:any) => role.value"
@@ -238,20 +238,3 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
     </div>
   </div>
 </template>
-<style  lang="scss">
-.category_product_select .vs__dropdown-menu {
-  position: fixed;
-  z-index: 9999; /* Set a high z-index value */
-  left: 30px;
-  top: 85px;
-  width: 90%;
-  height: 40%;
-  overflow: auto;
-  background-color: white;
-
-}
-
-.dark .category_product_select .vs__dropdown-menu {
-  background-color: rgb(40 48 70 / var(--tw-bg-opacity));
-}
-</style>

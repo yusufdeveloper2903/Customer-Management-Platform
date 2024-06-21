@@ -35,6 +35,7 @@ const validationForm = async () => {
     setAccessToken(data.access);
     setRefreshToken(data.refresh);
     let userAbilities = [{subject: "all", action: "manage"}];
+    localStorage.setItem('user_data', JSON.stringify(data.user_data))
     localStorage.setItem("userAbilities", JSON.stringify(userAbilities));
     localStorage.setItem("knowledgeBase", 'sms_template');
     localStorage.setItem("sms", 'sms sending');

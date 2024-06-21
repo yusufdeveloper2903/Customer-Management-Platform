@@ -22,7 +22,8 @@ const isLoading = ref(false);
 const params = reactive({
   page_size: 10,
   search: null,
-  page: 1
+  page: 1,
+  status: null
 });
 const editData = ref<EditData>({
   id: null,
@@ -39,10 +40,23 @@ const editData = ref<EditData>({
   start_date: '',
   end_date: '',
   description: '',
-  is_published: false,
+  status: '',
   modified_date: ''
 })
-
+const listStatus = ref([
+  {
+    title: 'Active',
+    value: 'ACTIVE'
+  },
+  {
+    title: 'Draft',
+    value: 'DRAFT'
+  },
+  {
+    title: 'Finished',
+    value: 'FINISHED'
+  }
+])
 
 //WATCHERS
 watchDebounced(
@@ -53,7 +67,14 @@ watchDebounced(
       await refresh(params)
     }, {deep: true, debounce: 500, maxWait: 5000}
 );
-
+watchDebounced(
+    () => params.status,
+    async () => {
+      params.page = 1;
+      localStorage.setItem('page', '1')
+      await refresh(params)
+    }, {deep: true, debounce: 500, maxWait: 5000}
+);
 
 //MOUNTED
 onMounted(async () => {
@@ -80,6 +101,25 @@ const refresh = async (val: any) => {
   isLoading.value = false;
 };
 
+const changeColor = (val: string) => {
+  if (val == 'ACTIVE') {
+    return t('bg-success')
+  } else if (val == 'WAITING') {
+    return t('bg-warning')
+  } else {
+    return t('bg-secondary')
+  }
+}
+
+const changeStatus = (val: string) => {
+  if (val == 'ACTIVE') {
+    return t('Active')
+  } else if (val == 'WAITING') {
+    return t('Waiting')
+  } else {
+    return t('Finished')
+  }
+}
 
 function saveProducts() {
   refresh(params)
@@ -128,10 +168,26 @@ const onGetData = async (val: any) => {
 <template>
   <div class="card">
     <div class="flex justify-between items-end mb-7">
-      <label for="search">
-        {{ $t('Search') }}
-        <input type="text" class="form-input" v-model="params.search"/>
-      </label>
+      <div class="flex justify-center gap-3 w-1/3">
+        <label for="search">
+          {{ $t('Search') }}
+          <input type="text" class="form-input" v-model="params.search"/>
+        </label>
+        <div class="w-2/3">
+          <label class="dark:text-gray-300 ">
+            {{ $t("Status") }}
+          </label>
+          <v-select
+              :options="listStatus"
+              v-model="params.status"
+              :getOptionLabel="(name:any) => t(name.title)"
+              :reduce="(item:any) => item.value"
+          >
+            <template #no-options> {{ $t("no_matching_options") }}</template>
+          </v-select>
+        </div>
+      </div>
+
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
               uk-toggle="target: #create_edit_promotion" @click="editData={}">
         {{ $t("Add") }}
@@ -170,20 +226,13 @@ const onGetData = async (val: any) => {
           ></div>
         </label>
       </template>
-      <template #item-is_active="item">
-        <label
-            className="relative inline-flex items-left cursor-pointer">
-          <input
-              type="checkbox"
-              v-model="item.is_active"
-              class="sr-only peer"
-              disabled
-          />
-          <div
-              className="w-11 h-6 bg-gray-200 peer-focus:outline-none
-          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
-          ></div>
-        </label>
+
+      <template #item-status="items">
+          <span
+              :class="changeColor(items.status)" class="rounded  px-4 p-1 pt-1 inline  text-white"
+          >
+            {{ changeStatus(items.status) }}
+          </span>
       </template>
       <template #header-actions="item">
         <div class="flex justify-end">

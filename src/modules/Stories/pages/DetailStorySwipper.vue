@@ -8,16 +8,16 @@
     <slide v-for="slide in data" :key="slide">
       <div style="position:relative"
            class="mb-5 flex h-[450px] w-[240px] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
-        <span v-if="!slide['background_'+ $i18n.locale]" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
-        <div v-else>
-          <img
-              class="h-[450px] w-[240px]"
-              :src="slide['background_'+ $i18n.locale].full_size"
-              alt="preview photo"
-              style="aspect-ratio: 1/1"
-          />
-        </div>
-
+        <img
+            class="h-[450px] w-[240px]"
+            :src="slide['background_'+ $i18n.locale].full_size"
+            alt="preview photo"
+            style="aspect-ratio: 1/1"
+        />
+        <button class="btn-success button_preview"
+                v-if="slide.is_button">
+          {{ slide['button_name_' + $i18n.locale] }}
+        </button>
       </div>
     </slide>
 
@@ -115,11 +115,17 @@ export default {
 }
 
 .carousel__pagination-button {
-  background: lightgreen !important
-}
-
-.carousel__pagination-button--active {
   background: green !important
 }
 
+.carousel__pagination-button--active {
+  background: lightgreen !important
+}
+
+.button_preview {
+  position: absolute;
+  bottom: 20px;
+  left: 38px;
+  width: 170px
+}
 </style>

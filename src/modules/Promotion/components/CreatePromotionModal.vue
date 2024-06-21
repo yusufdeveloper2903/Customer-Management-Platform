@@ -61,11 +61,11 @@ const Status = reactive([
 
 //FUNCTIONS
 const updateDeal = async () => {
-  if (!productsData.value.title_uz && !productsData.value.description_uz) {
+  if (!productsData.value.title_uz || !productsData.value.description_uz) {
     general.tabs = 'UZ'
-  } else if (!productsData.value.title_kr && !productsData.value.description_kr) {
+  } else if (!productsData.value.title_kr || !productsData.value.description_kr) {
     general.tabs = 'KR'
-  } else if (!productsData.value.title_ru && !productsData.value.description_ru) {
+  } else if (!productsData.value.title_ru || !productsData.value.description_ru) {
     general.tabs = 'RU'
   }
   const success = await validate.value.$validate();

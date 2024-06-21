@@ -1,11 +1,14 @@
 //IMPORTED FILES
 import {defineStore} from "pinia";
+import $axios from "@/plugins/axios";
 
 
 //EXPORTED FILES
 export const useSidebarStore = defineStore("counter", {
     state: () => {
         return {
+
+            userData: {},
             imageDetail: '',
             imageBackground: '',
             tabs: 'UZ',
@@ -19,6 +22,10 @@ export const useSidebarStore = defineStore("counter", {
     },
 
     actions: {
+        async getUserData(id: any) {
+            const {data} = await $axios.get(`/users/users/${id}/`, )
+            this.userData = data
+        },
         toggleSidebar() {
             this.isSidebarOpen = !this.isSidebarOpen;
             localStorage.setItem("isSidebarOpen", this.isSidebarOpen);

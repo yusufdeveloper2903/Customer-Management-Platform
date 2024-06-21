@@ -43,7 +43,7 @@ export const newsPromotionTable = [
     },
     {
         text: "Published",
-        value: "is_published",
+        value: "status",
     },
 
     {

@@ -53,7 +53,7 @@ export default [
 
     {
         name: "nav.directory",
-        icon: "Folder",
+        icon: "Folder With Files",
         path: "/knowledgeBase",
         permissions: ["admin"],
     },

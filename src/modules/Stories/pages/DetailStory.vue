@@ -534,25 +534,18 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
         <div class="card">
           <h3 class="text-success dark:text-success mb-3">{{ $t('previewPhoto') }}</h3>
 
-          <DetailStorySwipper :data="store.storiesDetailsList.results"></DetailStorySwipper>
 
-<!--          <div style="position:relative"-->
-<!--               class="mb-5 flex h-[450px] w-[240px] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">-->
-<!--            <span v-if="!imageUrl" class="font-medium dark:text-white">{{ $t("no_photo") }}</span>-->
-<!--            <div v-else>-->
-<!--              <img-->
-<!--                  class="h-[450px] w-[240px]"-->
-<!--                  :src="imageUrl"-->
-<!--                  alt="preview photo"-->
-<!--                  style="aspect-ratio: 1/1"-->
-<!--              />-->
-<!--              <button class="btn-success button_preview"-->
-<!--                      v-if="buttonType.is_button">-->
-<!--                {{ buttonType['button_name_' + $i18n.locale] }}-->
-<!--              </button>-->
-<!--            </div>-->
+          <div v-if="store.storiesDetailsList && store.storiesDetailsList.results.length">
+            <DetailStorySwipper :data="store.storiesDetailsList.results"></DetailStorySwipper>
+          </div>
+          <div v-else>
+            <div style="position:relative"
+                 class=" font-medium dark:text-whitemb-5 flex h-[450px] w-[240px] mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
+              {{ $t("no_photo") }}
+            </div>
+          </div>
 
-<!--          </div>-->
+
         </div>
         <div
             class="mt-4 flex gap-4 justify-end"
@@ -577,12 +570,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
 </template>
 
 <style scoped>
-.button_preview {
-  position: absolute;
-  bottom: 20px;
-  left: 38px;
-  width: 170px
-}
+
 
 .tooltip {
   position: relative;
