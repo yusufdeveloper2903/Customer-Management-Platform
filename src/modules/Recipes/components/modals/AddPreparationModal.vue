@@ -9,7 +9,7 @@ import useVuelidate, { Validation } from "@vuelidate/core";
 import ModalTabs from "@/components/Tab/ModalTabs.vue";
 import ModalTab from "@/components/Tab/ModalTab.vue";
 import recipeStore from "../../store/index"
-import { Preparation } from "../../interfaces/index"
+import { EditPreparation } from "../../interfaces/index"
 import {useSidebarStore} from '@/stores/layoutConfig'
 import { useRoute } from "vue-router";
 
@@ -19,11 +19,10 @@ const isSubmitted = ref<boolean>(false);
 const route = useRoute()
 const store = recipeStore()
 const emits = defineEmits(["saveData"]);
-const propData = defineProps<{ editData: Preparation }>();
+const propData = defineProps<{ editData: EditPreparation }>();
 const general = useSidebarStore()
-const preparationData = ref<Preparation>({
+const preparationData = ref<EditPreparation>({
   id: null,
-  index: null,
   description: "",
   description_uz: "",
   description_ru: "",
@@ -105,7 +104,7 @@ const updateDeal = async () => {
         setTimeout(() => {
           toast.success(t("updated_successfully"));
         }, 200);
-        UIkit.modal("#edit_recipes").hide();
+        UIkit.modal("#preparation_modal").hide();
       });
 
       isSubmitted.value = false;

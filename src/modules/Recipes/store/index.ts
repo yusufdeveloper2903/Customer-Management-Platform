@@ -53,6 +53,11 @@ export default defineStore("recipes", {
             this.preparationList = data
         },
 
+        async getRecipeMediaById(params, recipes_id: number | string | string[]) {
+            const {data} = await $axios.get(`/knowledge_base/retsept_media/${recipes_id}/`, {params})
+            this.preparationList = data
+        },
+
 
         //CREATE REQUEST
         create_retsept(data: object) {
@@ -66,6 +71,11 @@ export default defineStore("recipes", {
         createPreparation(data: object) {
             return $axios.post(`/knowledge_base/preparation/`, data);
         },
+
+        createPreparationDrag_and_drop ( data: any ) {
+            return $axios.post(`/knowledge_base/preparation_drag_and_drop/${data.id}/`, data);
+        },
+
 
 
         //PATCH REQUEST
