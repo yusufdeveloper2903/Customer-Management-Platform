@@ -66,4 +66,13 @@ export interface Preparation {
     food: number | null
 }
 
+export interface EditPreparation {
+    id: number | null;
+    description: string;
+    description_uz: string;
+    description_ru: string;
+    description_kr: string;
+    food: number | null
+}
+
 
