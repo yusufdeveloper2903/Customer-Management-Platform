@@ -395,12 +395,12 @@
   "cooking_time": "Pishirish vaqti",
   "mediacontent": "Media kontenti",
   "Content format and size: jpg / mp4 / 1920x1080": "Kontent formati va hajmi: jpg / mp4 / 1920x1080",
-  "Ingredients": "Ingredientlar",
+  "Ingredients": "Masalliqlar",
   "type_quantity": "Miqdor turi",
   "select_product": "Mahsulotni tanlang",
   "select_type": "Turini tanlang",
   "add_product": "Mahsulot qo'shish",
-  "Preparation": "Tayyorgarlik",
+  "Preparation": "Pishirilish bosqichi",
   "General": "General",
   "Add quantity type": "Miqdor turini qo'shish",
   "Edit quantity type": "Miqdor turini tahrirlash",
@@ -408,5 +408,6 @@
   "edit_ingredient": "Ingredientni tahrirlash",
   "edit_recipe": "Retseptni tahrirlash",
   "add_cooking_step": "Pishirish bosqichini qo'shish",
-  "edit_cooking_step": "Pishirish bosqichini tahrirlash"
+  "edit_cooking_step": "Pishirish bosqichini tahrirlash",
+  "recipe detail": "Retsept tafsilotlari"
 }
