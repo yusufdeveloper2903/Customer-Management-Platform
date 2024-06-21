@@ -175,7 +175,9 @@ const onShowFile = (item: any) => {
         {{ item['title_' + locale] }}
       </template>
 
-
+      <template #item-quantity="item">
+        {{ item.quantity + ' ' + item.measurement_type['title_' + $i18n.locale] }}
+      </template>
       <template #item-image="item">
         <div class="py-3 flex justify-left items-center gap-3">
           <img v-if="item.image"

@@ -59,11 +59,11 @@ const params = reactive({
 const listStatusOs = ref([
   {
     title: 'Android',
-    value: 'ANDROID'
+    value: 'android'
   },
   {
-    title: 'Ios',
-    value: 'IOS'
+    title: 'iOS',
+    value: 'iOS'
   },
 
 ])
@@ -456,9 +456,17 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <template #item-fio="item">
             {{ item.full_name }}
           </template>
-          <template #item-gender="item">
-            {{ item.gender }}
+          <template #item-device_os_types="item">
+            <div v-for="(i,index) in item.device_os_types" :key="index" class="ml-12">
+              {{ i }}
+            </div>
           </template>
+          <template #item-gender>
+               <span class="text-center ml-3">
+                 -
+               </span>
+          </template>
+
 
         </EasyDataTable>
       </div>
