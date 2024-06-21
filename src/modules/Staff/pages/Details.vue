@@ -10,7 +10,7 @@ import {helpers, minLength, required} from "@vuelidate/validators";
 import {useRoute, useRouter} from "vue-router";
 import {toast} from "vue3-toastify";
 import {objectToFormData} from "@/mixins/formmatter";
-
+import {useSidebarStore} from "@/stores/layoutConfig";
 //DECLARED VARIABLES
 const store = staff()
 const {t} = useI18n();
@@ -18,6 +18,7 @@ const imageUrl = ref<string>("")
 const isPasswordShown = ref<boolean>(false)
 const router = useRouter();
 const route = useRoute();
+const userProfile = useSidebarStore();
 let userData = ref({
   id: null,
   full_name: "",
@@ -66,6 +67,8 @@ function removeSpaces(str) {
   return str.replace(/[\s+]/g, "");
 }
 
+let user_data = JSON.parse(localStorage.getItem('user_data'))
+
 const saveUser = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
@@ -78,12 +81,17 @@ const saveUser = async () => {
     userData.value.password = "";
   }
 
-
   const formData = objectToFormData(['photo'], userData.value);
+
   if (route.params.id) {
     try {
-      await store.updateStaff(formData)
+      let data = await store.updateStaff(formData)
+      if (data.data.id === user_data.id) {
+        localStorage.setItem('user_data', JSON.stringify(data.data))
+        userProfile.userData = data.data
+      }
       await router.push("/staff");
+
       toast.success(t("updated_successfully"));
     } catch (error: any) {
       toast.error(t('error'))

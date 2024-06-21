@@ -12,6 +12,7 @@ export interface params {
     page: number;
     page_size: number;
     search: string | null;
+
 }
 
 

@@ -105,7 +105,7 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
 <template>
   <div id="polls-modal" class="uk-flex-top" uk-modal @shown="openModal" @hidden="hideModal">
     <div
-        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
+        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg "
     >
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
@@ -132,7 +132,6 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
         </div>
         <p class="mt-5">{{ $t("Status") }}</p>
         <v-select
-            class="poll_select_chooser"
             :options="listStatus"
             v-model="sectionStories.status"
             :getOptionLabel="(name:any) => t(name.title)"
@@ -169,21 +168,3 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
   </div>
 </template>
 
-<style  lang="scss" >
-
-.poll_select_chooser .vs__dropdown-menu {
-  position: fixed;
-  z-index: 9999; /* Set a high z-index value */
-  left: 30px;
-  top:53px;
-  width: 90%;
-  height: 40%;
-  overflow: auto;
-  background-color: white;
-
-}
-
-.dark .poll_select_chooser .vs__dropdown-menu {
-  background-color: rgb(40 48 70 / var(--tw-bg-opacity));
-}
-</style>

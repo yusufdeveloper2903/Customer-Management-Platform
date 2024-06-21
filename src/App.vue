@@ -52,8 +52,6 @@ watch(
 @import "../node_modules/uikit/src/less/uikit.less";
 
 
-
-
 .vue3-easy-data-table__header {
   tr {
     th:last-child {
@@ -86,6 +84,10 @@ watch(
 .uk-open > .uk-accordion-title.show-code::before,
 .uk-accordion-title.show-code::before {
   background-image: url(./assets/icons/Code.svg);
+}
+
+.uk-modal-dialog .uk-margin-auto-vertical {
+  overflow: auto
 }
 
 .uk-open > .uk-accordion-title.show-code:hover,

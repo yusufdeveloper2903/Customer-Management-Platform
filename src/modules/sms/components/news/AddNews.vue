@@ -53,16 +53,28 @@ const params = reactive({
   page_size: 10,
   page: 1,
   search: null,
-  gender: ''
+  gender: '',
+  os_type: '',
 });
+const listStatusOs = ref([
+  {
+    title: 'Android',
+    value: 'ANDROID'
+  },
+  {
+    title: 'Ios',
+    value: 'IOS'
+  },
+
+])
 const listStatus = ref([
   {
     title: 'Male',
-    value: 'MALE'
+    value: 'M'
   },
   {
     title: 'Female',
-    value: 'FEMALE'
+    value: 'F'
   },
 
 ])
@@ -105,6 +117,11 @@ watchDebounced(() => params.gender, async function () {
   localStorage.setItem('page', '1')
   await refresh()
 }, {deep: true, debounce: 500, maxWait: 5000,})
+watchDebounced(() => params.os_type, async function () {
+  params.page = 1
+  localStorage.setItem('page', '1')
+  await refresh()
+}, {deep: true, debounce: 500, maxWait: 5000,})
 //MOUNTED
 onMounted(async () => {
   await refresh()
@@ -118,6 +135,9 @@ onMounted(async () => {
       page: params.page,
       page_size: params.page_size
     })
+
+    newsData.value.start_time = store.newsListDetail.start_time;
+
     newsData.value.start_time = store.newsListDetail.start_time;
     newsData.value.title = store.newsListDetail.title
     newsData.value.title_ru = store.newsListDetail.title_ru
@@ -163,7 +183,7 @@ const changePageSize = (event: number) => {
 async function selectAllData() {
   select.value = !select.value
   if (select.value) {
-    await clientsStorage.getUsersSelected(params)
+    await clientsStorage.getUsersSelected({page_size: 1000})
     newsData.value.receivers = clientsStorage.usersListSelected.results
   } else {
     newsData.value.receivers = []
@@ -409,6 +429,17 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
               <template #no-options> {{ $t("no_matching_options") }}</template>
             </v-select>
           </div>
+          <div class="w-1/4">
+            <p>{{ $t("device_os_types") }}</p>
+            <v-select
+                :options="listStatusOs"
+                v-model="params.os_type"
+                :getOptionLabel="(name:any) => t(name.title)"
+                :reduce="(item:any) => item.value"
+            >
+              <template #no-options> {{ $t("no_matching_options") }}</template>
+            </v-select>
+          </div>
         </div>
         <EasyDataTable theme-color="#7367f0" :loading="loading" :headers="newsHeader"
                        v-model:items-selected="newsData.receivers"
@@ -428,13 +459,11 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <template #item-gender="item">
             {{ item.gender }}
           </template>
-          <!--          <template #item-device_os_types="item">-->
-          <!--            {{ item.device_os_types }}-->
-          <!--          </template>-->
+
         </EasyDataTable>
       </div>
       <TwPagination class="mt-10 tw-pagination"
-                    :total="store.receiversList && store.receiversList.count"
+                    :total="clientsStorage.usersList && clientsStorage.usersList.count"
                     :current="params.page" :per-page="params.page_size" :text-before-input="t('go_to_page')"
                     :text-after-input="t('forward')" @page-changed="changePagination"
                     @per-page-changed="changePageSize"/>

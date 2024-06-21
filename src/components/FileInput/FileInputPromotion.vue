@@ -82,6 +82,12 @@ const onInputFile = (value: any) => {
 };
 
 const clearData = () => {
+  if (props.name === 'promotion-modal') {
+    general.imageDetail = ''
+  }
+  if (props.name === 'second-promotion') {
+    general.imageBackground = ''
+  }
   data.value = ''
   changePhoto.value = ''
   emit('remove', inputValue.value)
@@ -95,10 +101,10 @@ const getFile = (event: any) => {
     let reader = new FileReader();
     reader.onload = (e) => {
       changePhoto.value = e?.target?.result;
-      if(props.name === 'promotion-modal'){
+      if (props.name === 'promotion-modal') {
         general.imageDetail = e?.target?.result;
       }
-      if(props.name === 'second-promotion'){
+      if (props.name === 'second-promotion') {
         general.imageBackground = e?.target?.result;
       }
 

@@ -93,7 +93,7 @@ const validate: Ref<Validation> = useVuelidate(rules, versionControlData);
 
   <div id="version_control" class="uk-flex-top" uk-modal @shown="openModal" @hidden="hideData">
     <div
-        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
+        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg "
     >
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
@@ -130,7 +130,7 @@ const validate: Ref<Validation> = useVuelidate(rules, versionControlData);
           <div class="mt-3">
             <p>{{ $t("Status") }}</p>
             <v-select
-                class="version_control_select"
+
                 :options="statusList"
                 v-model="versionControlData.is_active"
                 :getOptionLabel="(name:any) => t(name.title)"
@@ -157,21 +157,4 @@ const validate: Ref<Validation> = useVuelidate(rules, versionControlData);
     </div>
   </div>
 </template>
-<style  lang="scss">
 
-.version_control_select .vs__dropdown-menu {
-  position: fixed;
-  z-index: 9999; /* Set a high z-index value */
-  left: 30px;
-  top: 177px;
-  width: 90%;
-  height: 23%;
-  overflow: auto;
-  background-color: white;
-
-}
-
-.dark .version_control_select .vs__dropdown-menu {
-  background-color: rgb(40 48 70 / var(--tw-bg-opacity));
-}
-</style>

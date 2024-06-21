@@ -229,7 +229,7 @@ const saveEdit = async () => {
       @hidden="hideModal"
   >
     <div
-        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
+        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg "
     >
       <button class="uk-modal-close-default" type="button" uk-close/>
       <div class="uk-modal-header">
@@ -389,7 +389,6 @@ const saveEdit = async () => {
           >
             <p class=" mt-3 ">{{ $t("Button Type") }}</p>
             <v-select
-                class="style-chooser-create"
                 :options="store.storySectionButtonType.data"
                 v-model="sectionStories.button_type"
                 :getOptionLabel="(name:any) => name.title && name.title[$i18n.locale]"
@@ -422,7 +421,7 @@ const saveEdit = async () => {
             </p>
           </div>
           <div v-else-if="sectionStories.button_type?.value !== 'URL' && sectionStories.button_type?.value"
-               class="select-chooser "
+
           >
             <p class="mt-3">{{ $t(`${sectionStories.button_type?.value}`) }}</p>
             <v-select
@@ -473,39 +472,4 @@ const saveEdit = async () => {
   </div>
 
 </template>
-
-<style lang="scss">
-
-.style-chooser-create .vs__dropdown-menu {
-  position: fixed;
-  z-index: 9999; /* Set a high z-index value */
-  left: 30px;
-  top: 210px;
-  width: 90%;
-  height: 40%;
-  overflow: auto;
-  background-color: white;
-
-}
-
-.dark .style-chooser-create .vs__dropdown-menu {
-  background-color: rgb(40 48 70 / var(--tw-bg-opacity));
-}
-
-.dark .select-chooser .vs__dropdown-menu {
-  background-color: rgb(40 48 70 / var(--tw-bg-opacity));
-}
-
-.select-chooser .vs__dropdown-menu {
-  position: fixed;
-  z-index: 9999;
-  left: 30px;
-  top: 295px;
-  width: 90%;
-  height: 40%;
-  overflow: auto;
-  background-color: white;
-
-}
-</style>
 

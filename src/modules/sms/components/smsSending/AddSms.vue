@@ -32,7 +32,8 @@ const params = reactive({
   page_size: 10,
   page: 1,
   search: null,
-  gender: ''
+  gender: '',
+  os_type: ''
 
 });
 const smsSendingData = ref<any>({
@@ -43,14 +44,25 @@ const smsSendingData = ref<any>({
   title: '',
   id: null
 })
+const listStatusOs = ref([
+  {
+    title: 'Android',
+    value: 'ANDROID'
+  },
+  {
+    title: 'Ios',
+    value: 'IOS'
+  },
+
+])
 const listStatus = ref([
   {
     title: 'Male',
-    value: 'MALE'
+    value: 'M'
   },
   {
     title: 'Female',
-    value: 'FEMALE'
+    value: 'F'
   },
 
 ])
@@ -143,7 +155,8 @@ const changePagination = (e: number) => {
 async function selectAllData() {
   select.value = !select.value
   if (select.value) {
-    await clientsStorage.getUsersSelected(params)
+    await clientsStorage.getUsersSelected({page_size: 1000})
+    console.log(clientsStorage.usersListSelected.results, 'clientsStorage.usersListSelected.results')
     itemSelected.value = clientsStorage.usersListSelected.results
   } else {
     itemSelected.value = []
@@ -159,6 +172,11 @@ watchDebounced(() => params.search, async function () {
 }, {deep: true, debounce: 500, maxWait: 5000,})
 
 watchDebounced(() => params.gender, async function () {
+  params.page = 1
+  localStorage.setItem('page', '1')
+  await refresh()
+}, {deep: true, debounce: 500, maxWait: 5000,})
+watchDebounced(() => params.os_type, async function () {
   params.page = 1
   localStorage.setItem('page', '1')
   await refresh()
@@ -278,6 +296,17 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
               <template #no-options> {{ $t("no_matching_options") }}</template>
             </v-select>
           </div>
+          <div class="w-1/4">
+            <p>{{ $t("device_os_types") }}</p>
+            <v-select
+                :options="listStatusOs"
+                v-model="params.os_type"
+                :getOptionLabel="(name:any) => t(name.title)"
+                :reduce="(item:any) => item.value"
+            >
+              <template #no-options> {{ $t("no_matching_options") }}</template>
+            </v-select>
+          </div>
         </div>
         <EasyDataTable theme-color="#7367f0" :loading="loading" :headers="addFields"
                        v-model:items-selected="itemSelected"
@@ -293,9 +322,6 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
           <template #item-gender="item">
             {{ item.gender }}
           </template>
-          <!--          <template #item-device_os_types="item">-->
-          <!--            {{ item.device_os_types }}-->
-          <!--          </template>-->
           <template #header="header">
             {{ $t(header.text) }}
           </template>

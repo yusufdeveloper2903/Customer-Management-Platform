@@ -4,7 +4,7 @@
         class="avatar-tooltip cursor-pointer w-10 h-10 block relative hover:shadow-lg ml-3.5"
     >
       <div
-          v-if="!userImage"
+          v-if="!sidebar.userData.photo"
           class="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-warning"
       >
         <Icon icon="User" color="#356c2d"/>
@@ -16,7 +16,7 @@
       >
         <img
             class="w-full h-full object-cover"
-            :src="userImage"
+            :src="sidebar.userData.photo"
             alt="Rounded avatar"
         />
       </div>
@@ -60,6 +60,7 @@
         <span
             class="bg-white/10 text-white rounded-full px-4 py-1 font-semibold text-sm"
         >
+          {{ sidebar.userData.username }}
         </span>
       </div>
     </div>
@@ -195,7 +196,10 @@ function check() {
   return false;
 }
 
-
+let user_data = JSON.parse(localStorage.getItem('user_data'))
+if (user_data) {
+  sidebar.userData = JSON.parse(localStorage.getItem('user_data'))
+}
 
 let pagesList = ref([
   {
