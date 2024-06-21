@@ -61,15 +61,22 @@ async function openModal() {
     preparationData.value.description_ru = propData.editData.description_ru
     preparationData.value.description_kr = propData.editData.description_kr
     preparationData.value.food = propData.editData.food
-  } 
+  } else {
+    preparationData.value.id = null
+    preparationData.value.description = " "
+    preparationData.value.description_uz = " "
+    preparationData.value.description_ru = " "
+    preparationData.value.description_kr = " "
+    preparationData.value.food = null
+  }
 }
 
 function clearData() {
   preparationData.value.id = null
-    preparationData.value.description = ""
-    preparationData.value.description_uz = ""
-    preparationData.value.description_ru = ""
-    preparationData.value.description_kr = ""
+    preparationData.value.description = " "
+    preparationData.value.description_uz = " "
+    preparationData.value.description_ru = " "
+    preparationData.value.description_kr = " "
     preparationData.value.food = null
     validate.value.$reset()
 }
@@ -93,7 +100,7 @@ const updateDeal = async () => {
 
   if (propData.editData.id) {
     try {
-      await store.updateRetsept(preparationData.value).then(() => {
+      await store.updatePreparation(preparationData.value).then(() => {
         emits("saveData");
         setTimeout(() => {
           toast.success(t("updated_successfully"));
@@ -112,7 +119,7 @@ const updateDeal = async () => {
 
   } else {
     try {
-      await store.create_retsept(preparationData.value).then(() => {
+      await store.createPreparation(preparationData.value).then(() => {
         emits("saveData");
         setTimeout(() => {
           toast.success(t("created_successfully"));

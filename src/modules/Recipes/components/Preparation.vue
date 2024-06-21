@@ -28,10 +28,10 @@ const params = reactive({
 const editData = ref<Preparation>({
   id: null,
   index: null,
-  description: "",
-  description_uz: "",
-  description_ru: "",
-  description_kr: "",
+  description: " ",
+  description_uz: " ",
+  description_ru: " ",
+  description_kr: " ",
   food: null
 })
 
@@ -134,7 +134,7 @@ const handleDeleteModal = (id: number | null) => {
       {{ t('Search') }}
       <input type="text" class="form-input" :placeholder="t('Search')" />
     </label>
-    <button class="btn-primary" uk-toggle="target: #preparation_modal">
+    <button class="btn-primary" uk-toggle="target: #preparation_modal" @click="editData = <Preparation>{}">
       {{ t("Add") }}
     </button>
   </div>
@@ -247,7 +247,7 @@ const handleDeleteModal = (id: number | null) => {
         </td>
         <td class="px-6 whitespace-no-wrap">
           <div class="flex py-2 justify-end">
-            <button class="btn-warning btn-action" uk-toggle="target: #links" @click="editData = item">
+            <button class="btn-warning btn-action" uk-toggle="target: #preparation_modal" @click="editData = item">
               <Icon icon="Pen New Square" color="#fff" size="16" />
             </button>
             <button @click="handleDeleteModal(item.id)" class="ml-3 btn-danger btn-action">
