@@ -156,6 +156,10 @@ const saveData = (() => {
                 {{ t(header.text) }}
             </template>
 
+            <template #item-cooking_time="item">
+                {{ item.preparation_time }}
+            </template>
+
             <template #item-photo="items">
                 <div class="py-3 flex justify-left gap-3">
                     <img v-if="items && items.photo" class="w-[45px] h-[45px] rounded" :src="items.photo"

@@ -136,8 +136,8 @@ const handleDeleteModal = (id: number | null) => {
                 <summary class="flex justify-between items-center font-medium cursor-pointer list-none"
                   @click="accordItem = !accordItem">
                   <span v-if="accordItem == false">{{
-                    item.description_uz && item.description_uz.length > 40
-                    ? item.description_uz.slice(0, 40) + "..."
+                    item.description_uz && item.description_uz.length > 90
+                    ? item.description_uz.slice(0, 90) + "..."
                     : item.description_uz
                   }}</span>
                   <span v-else>

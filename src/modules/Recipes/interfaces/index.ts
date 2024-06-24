@@ -75,4 +75,12 @@ export interface EditPreparation {
     food: number | null
 }
 
+export interface RecipeMedia {
+    id: number | null;
+    media_file: string | null | undefined,
+    file_type: string,
+    recipes: string,
+    index: number,
+    create_date: string
+}
 

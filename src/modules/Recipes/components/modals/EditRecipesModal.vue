@@ -239,9 +239,25 @@ const updateDeal = async () => {
             </label>
   
             <label for="preparation_time" class="block w-full">{{ t('preparation_time') }}
-              <VueDatePicker format="dd-MM-yyyy" v-model="recipes.preparation_time" :placeholder="t('preparation_time')" model-type="hh:mm:ss" time-picker  enable-seconds></VueDatePicker>
+              <VueDatePicker v-model="recipes.preparation_time" :placeholder="t('preparation_time')" model-type="hh:mm:ss" time-picker enable-seconds></VueDatePicker>
             </label>
           </div>
+
+          
+          <div class="flex items-center mt-5" v-if="propData.editData.id">
+        <p class="mr-2">{{ t("Status") }}:</p>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+                type="checkbox"
+                v-model="recipes.is_active"
+                class="sr-only peer"
+            />
+            <div
+                className="w-11 h-6 bg-gray-200 peer-focus:outline-none
+          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
+            ></div>
+          </label>
+        </div>
 
         </form>
       </div>

@@ -24,6 +24,10 @@ const params = reactive({
 });
 const props = defineProps<{
   knowledge: string
+  params: {
+    page: number,
+    page_size: number
+  }
 }>();
 let toRefresh = ref(false)
 
@@ -38,6 +42,14 @@ const editData = ref<RetseptCategory>({
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.page_size = JSON.parse(page_size)
+  }
   let knowledgeBase = localStorage.getItem('knowledgeBase')
   if (knowledgeBase == 'recipe category') {
     await refresh(params)
@@ -50,6 +62,8 @@ onMounted(async () => {
 watch(() => props.knowledge, async function (val) {
   toRefresh.value = !toRefresh.value
   if (val == 'recipe category') {
+    params.page = props.params.page
+    params.page_size = props.params.page_size
     await refresh(params)
   }
 })
@@ -58,6 +72,7 @@ watchDebounced(
   () => params.search,
   async () => {
     params.page = 1;
+    localStorage.setItem('page', '1')
     await refresh(params)
   }, { deep: true, debounce: 500, maxWait: 5000 }
 );
@@ -111,9 +126,6 @@ const saveCategory = () => {
   refresh(params);
 }
 
-onMounted(() => {
-  refresh(params);
-});
 </script>
 
 <template>
