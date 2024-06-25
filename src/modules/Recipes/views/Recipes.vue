@@ -170,8 +170,8 @@ const saveData = (() => {
             </template>
 
             <template #item-status="item">
-                <span :class="item.status == 'DRAFT' ? 'rounded bg-secondary px-4 p-1 pt-1 inline m-1 text-white': 'CHANGING' ? 'rounded bg-warning px-4 p-1 pt-1 inline m-1 text-white' : 'rounded bg-success px-4 p-1 pt-1 inline m-1 text-white'">
-                    {{ item.status == "DRAFT" ? t('Draft') : "CHANGING" ? t('changing') : t('Published') }}
+                <span :class="item.status == 'DRAFT' ? 'rounded bg-secondary px-4 p-1 pt-1 inline m-1 text-white': item.status == 'CHANGING' ? 'rounded bg-warning px-4 p-1 pt-1 inline m-1 text-white' : 'rounded bg-success px-4 p-1 pt-1 inline m-1 text-white'">
+                    {{ item.status == "DRAFT" ? t('Draft') : item.status == "CHANGING" ? t('changing') : t('Published') }}
                 </span>
             </template>
 
