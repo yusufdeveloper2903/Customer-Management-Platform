@@ -10,20 +10,21 @@ import Preparation from "../components/Preparation.vue";
 import { useI18n } from "vue-i18n";
 import RecipeStorage from '@/modules/Recipes/store/index';
 import { toast } from "vue3-toastify";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+
 
 
 // Declared variables
 const { t } = useI18n()
 const store = RecipeStorage()
 const router = useRouter()
-
+const route = useRoute()
 
 const createDetail = async(value) => {
 
   let status = value
   try {
-      await store.createRecipeChangeStatus(status).then(() => {
+      await store.createRecipeChangeStatus({id: route.params.id, status: status}).then(() => {
         setTimeout(() => {
           toast.success(t("created_successfully"));
         }, 200);
@@ -65,8 +66,8 @@ const createDetail = async(value) => {
       </Tabs>
     </div>
       <div class="flex justify-end mt-5">
-        <button class="btn-secondary" @click="createDetail('RETURN')">{{ t('Cancel') }}</button>
-        <button class="btn-success ml-2" @click="createDetail('ACTIVATE')">{{ t('Save') }}</button>
+        <button class="btn-secondary" @click="createDetail('come_back')">{{ t('Cancel') }}</button>
+        <button class="btn-success ml-2" @click="createDetail('save')">{{ t('Save') }}</button>
       </div>
     </div>
 

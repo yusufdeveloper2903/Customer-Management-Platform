@@ -92,8 +92,8 @@ export default defineStore("recipes", {
             return $axios.post(`/knowledge_base/retsept_media/`, data);
         },
 
-        createRecipeChangeStatus(data: string ) {
-            return $axios.post(`/knowledge_base/recipe_change_status/`, data);
+        createRecipeChangeStatus(data: any ) {
+            return $axios.post(`/knowledge_base/recipe_change_status/${data.id}/`, data);
         },
 
         createRecipeMediaDrag_and_drop ( data: any ) {

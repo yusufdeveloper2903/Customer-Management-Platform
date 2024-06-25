@@ -26,7 +26,7 @@ const openFile = ref<RecipeMedia>({
     recipes: null,
     index: 0,
     create_date: "",
-    is_cover: false
+    draft_is_cover: false
 })
 
 
@@ -60,8 +60,7 @@ const getFile = async(event: any) => {
   fd.append('recipes', route.params.id)
   fd.append('media_file', event.target.files[0])
   fd.append('file_type', event.target.files[0].type.slice(0, 5))
-  console.log(event.target.files);
-  
+
   try {
       await store.createRecipeMedia(fd).then(() => {
         refresh()
@@ -158,7 +157,7 @@ const coverPhoto = async(item: any) => {
             <span class="flex">
 
               <button @click="coverPhoto(item)" v-if="item.file_type == 'image'">
-                <Icon icon="Star Circle" color="#FFC107" size="16" v-if="item.is_cover == true"/> 
+                <Icon icon="Star Circle" color="#FFC107" size="16" v-if="item.draft_is_cover == true"/> 
                 <Icon icon="Star" color="#FFC107" size="16" v-else/> 
               </button>    
 

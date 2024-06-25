@@ -82,6 +82,6 @@ export interface RecipeMedia {
     recipes: number | null,
     index: number,
     create_date: string
-    is_cover: boolean
+    draft_is_cover: boolean
 }
 

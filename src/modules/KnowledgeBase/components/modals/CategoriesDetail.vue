@@ -121,12 +121,12 @@ const updateDeal = async () => {
       isSubmitted.value = false;
 
     } catch (error: any) {
-      isSubmitted.value = false;
       if (error) {
         toast.error(
-          error.response.message || error.response.data.msg || error.response.data.error || t('error')
-        );
-      }
+          error.response.message || error.response.data.message || error.response.data.error || t('error')
+          );
+        }
+        isSubmitted.value = false;
     }
   }
 };
