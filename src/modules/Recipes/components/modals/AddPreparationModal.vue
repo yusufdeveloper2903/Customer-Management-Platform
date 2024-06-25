@@ -23,10 +23,10 @@ const propData = defineProps<{ editData: EditPreparation }>();
 const general = useSidebarStore()
 const preparationData = ref<EditPreparation>({
   id: null,
-  description: "",
-  description_uz: "",
-  description_ru: "",
-  description_kr: "",
+  draft_description: "",
+  draft_description_uz: "",
+  draft_description_ru: "",
+  draft_description_kr: "",
   food: null
 })
 
@@ -34,13 +34,13 @@ const preparationData = ref<EditPreparation>({
 // validations
 const rules = computed(() => {
   return {
-    description_uz: {
+    draft_description_uz: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
-    description_ru: {
+    draft_description_ru: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
-    description_kr: {
+    draft_description_kr: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
   };
@@ -55,38 +55,38 @@ const validate: Ref<Validation> = useVuelidate(rules, preparationData);
 async function openModal() {
   if (propData.editData.id) {
     preparationData.value.id = propData.editData.id
-    preparationData.value.description = propData.editData.description_uz
-    preparationData.value.description_uz = propData.editData.description_uz
-    preparationData.value.description_ru = propData.editData.description_ru
-    preparationData.value.description_kr = propData.editData.description_kr
+    preparationData.value.draft_description = propData.editData.draft_description_uz
+    preparationData.value.draft_description_uz = propData.editData.draft_description_uz
+    preparationData.value.draft_description_ru = propData.editData.draft_description_ru
+    preparationData.value.draft_description_kr = propData.editData.draft_description_kr
     preparationData.value.food = propData.editData.food
   } else {
     preparationData.value.id = null
-    preparationData.value.description = " "
-    preparationData.value.description_uz = " "
-    preparationData.value.description_ru = " "
-    preparationData.value.description_kr = " "
+    preparationData.value.draft_description = " "
+    preparationData.value.draft_description_uz = " "
+    preparationData.value.draft_description_ru = " "
+    preparationData.value.draft_description_kr = " "
     preparationData.value.food = null
   }
 }
 
 function clearData() {
   preparationData.value.id = null
-    preparationData.value.description = " "
-    preparationData.value.description_uz = " "
-    preparationData.value.description_ru = " "
-    preparationData.value.description_kr = " "
+    preparationData.value.draft_description = " "
+    preparationData.value.draft_description_uz = " "
+    preparationData.value.draft_description_ru = " "
+    preparationData.value.draft_description_kr = " "
     preparationData.value.food = null
     validate.value.$reset()
 }
 
 
 const updateDeal = async () => {
-  if (!preparationData.value.description_uz) {
+  if (!preparationData.value.draft_description_uz) {
     general.tabs = 'UZ'
-  } else if (!preparationData.value.description_kr) {
+  } else if (!preparationData.value.draft_description_kr) {
     general.tabs = 'KR'
-  } else if (!preparationData.value.description_ru) {
+  } else if (!preparationData.value.draft_description_ru) {
     general.tabs = 'RU'
   }
 
@@ -94,7 +94,7 @@ const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
 
-  preparationData.value.description = preparationData.value.description_uz
+  preparationData.value.draft_description = preparationData.value.draft_description_uz
   preparationData.value.food = Number(route.params.id)
 
   if (propData.editData.id) {
@@ -160,10 +160,10 @@ const updateDeal = async () => {
               toolbar="full"
               class="scrollbar rounded border"
               style="height: 45vh; overflow-y: auto;"
-              v-model:content="preparationData.description_uz"
+              v-model:content="preparationData.draft_description_uz"
           >
           </Editor>
-                <p v-for="error in validate.description_uz.$errors" :key="error.$uid" class="text-danger text-sm">
+                <p v-for="error in validate.draft_description_uz.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
               </label>
@@ -179,10 +179,10 @@ const updateDeal = async () => {
               toolbar="full"
               class="scrollbar rounded border"
               style="height: 45vh; overflow-y: auto;"
-              v-model:content="preparationData.description_kr"
+              v-model:content="preparationData.draft_description_kr"
           >
           </Editor>
-                <p v-for="error in validate.description_kr.$errors" :key="error.$uid" class="text-danger text-sm">
+                <p v-for="error in validate.draft_description_kr.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
               </label>
@@ -198,10 +198,10 @@ const updateDeal = async () => {
               toolbar="full"
               class="scrollbar rounded border"
               style="height: 45vh; overflow-y: auto;"
-              v-model:content="preparationData.description_ru"
+              v-model:content="preparationData.draft_description_ru"
           >
           </Editor>
-                <p v-for="error in validate.description_ru.$errors" :key="error.$uid" class="text-danger text-sm">
+                <p v-for="error in validate.draft_description_ru.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
               </label>

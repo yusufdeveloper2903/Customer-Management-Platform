@@ -224,16 +224,31 @@ const validate: Ref<Validation> = useVuelidate(rules, splashData);
 
               </label>
 
-              <label for="color" class="my-4 block"
-              >{{ t('color') }}
+              <div class="flex my-4">
+                <span class="w-1/2 mr-2">
+              <label for="color"
+              >{{ t('color') }} (HEX)
                 <input
                     id="color"
-                    type="color"
-                    class="p-1 h-11 w-full block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700"
+                    type="text"
+                    class="w-full form-input"
                     v-model="splashData.color"                 
                 />
               </label>
-
+            </span>
+            <span class="w-1/2">
+              <label for="colorpicker"
+              >{{ t('color') }} Picker
+                <input
+                    id="colorpicker"
+                    type="color"
+                    class="p-1 h-11 w-full block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700"
+                    v-model="splashData.color" 
+                    value="#e66465"          
+                />
+              </label>
+            </span>
+            </div>
             
         <label
         >{{ t('photo') }}
@@ -265,7 +280,7 @@ const validate: Ref<Validation> = useVuelidate(rules, splashData);
           class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
       >
         <button uk-toggle="target: #splash" class="btn-secondary">
-          {{ t("Отмена") }}
+          {{ t("Cancel") }}
         </button>
 
         <button

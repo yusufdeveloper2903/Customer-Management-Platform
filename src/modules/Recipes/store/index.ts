@@ -6,7 +6,8 @@ import {
     Retsept,
     RecipeDetail,
     Ingredient,
-    Preparation
+    Preparation,
+    RecipeMedia
 } from "../interfaces";
 
 
@@ -26,7 +27,13 @@ export default defineStore("recipes", {
 
             preparationList: {
                 results: [] as Preparation[]
-            } as Results<Preparation>
+            } as Results<Preparation>,
+
+            recipeMediaList: {
+                data: [] as RecipeMedia[]
+            },
+
+            coverRecipeMedia: {}
         };
     },
     actions: {
@@ -48,14 +55,19 @@ export default defineStore("recipes", {
             this.ingredients = data
         },
 
-        async getPreparationById(params: Params, food_id: number | string | string[]) {
+        async getPreparationById(params, food_id: number | string | string[]) {
             const {data} = await $axios.get(`/knowledge_base/preparation/${food_id}/`, {params})
             this.preparationList = data
         },
 
-        async getRecipeMediaById(params, recipes_id: number | string | string[]) {
-            const {data} = await $axios.get(`/knowledge_base/retsept_media/${recipes_id}/`, {params})
-            this.preparationList = data
+        async getRecipeMediaById(recipes_id: number | string | string[]) {
+            const {data} = await $axios.get(`/knowledge_base/retsept_media/${recipes_id}/`)
+            this.recipeMediaList = data
+        },
+
+        async getCoverRecipeMedia(recipe_media_id: number | string | string[]) {
+            const {data} = await $axios.get(`/knowledge_base/cover_recipe_media/${recipe_media_id}/`)
+            this.coverRecipeMedia = data
         },
 
 
@@ -76,7 +88,17 @@ export default defineStore("recipes", {
             return $axios.post(`/knowledge_base/preparation_drag_and_drop/${data.id}/`, data);
         },
 
+        createRecipeMedia(data: object ) {
+            return $axios.post(`/knowledge_base/retsept_media/`, data);
+        },
 
+        createRecipeChangeStatus(data: string ) {
+            return $axios.post(`/knowledge_base/recipe_change_status/`, data);
+        },
+
+        createRecipeMediaDrag_and_drop ( data: any ) {
+            return $axios.post(`/knowledge_base/retsept_media_drag_and_drop/${data.id}/`, data);
+        },
 
         //PATCH REQUEST
         updateRetsept(data: any) {
@@ -91,6 +113,10 @@ export default defineStore("recipes", {
             return $axios.patch(`/knowledge_base/preparations/${data.id}/`, data);
         },
 
+        updateRecipeMedia(data: any) {
+            return $axios.patch(`/knowledge_base/retsept_media/${data.id}/`, data);
+        },
+
 
         //DELETE REQUEST
         deleteRetsept(recipes_id: number | null) {
@@ -103,6 +129,10 @@ export default defineStore("recipes", {
 
         deletePreparation(preparation_id: number | null) {
             return $axios.delete(`/knowledge_base/preparations/${preparation_id}/`);
+        },
+
+        deleteRecipeMedia(media_file_id: number | null) {
+            return $axios.delete(`/knowledge_base/retsept_media_delete/${media_file_id}/`);
         },
 
 

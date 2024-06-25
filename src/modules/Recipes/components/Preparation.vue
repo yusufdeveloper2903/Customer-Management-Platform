@@ -27,10 +27,10 @@ const params = reactive({
 });
 const editData = ref<EditPreparation>({
   id: null,
-  description: " ",
-  description_uz: " ",
-  description_ru: " ",
-  description_kr: " ",
+  draft_description: " ",
+  draft_description_uz: " ",
+  draft_description_ru: " ",
+  draft_description_kr: " ",
   food: null
 })
 
@@ -72,7 +72,7 @@ const dragOver = (e: any) => {
 
 const dragDrop = async (item: Preparation) => {
   event?.preventDefault();
-  await store.createPreparationDrag_and_drop(  {new_index: currentRow.value?.index, last_index: item.index, id: item.id})
+  await store.createPreparationDrag_and_drop({new_index: currentRow.value?.index, last_index: item.index, id: item.id})
   await refresh(params);
   toast.success(t("updated_successfully"));
 };
@@ -125,7 +125,7 @@ const handleDeleteModal = (id: number | null) => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="item in store.preparationList?.results" :key="item.id"
+      <tr v-for="item in store.preparationList?.results"
         class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
         :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
         <td class="px-6 whitespace-no-wrap text-left ">{{ item.id }}</td>
@@ -136,12 +136,12 @@ const handleDeleteModal = (id: number | null) => {
                 <summary class="flex justify-between items-center font-medium cursor-pointer list-none"
                   @click="accordItem = !accordItem">
                   <span v-if="accordItem == false">{{
-                    item.description_uz && item.description_uz.length > 40
-                    ? item.description_uz.slice(0, 40) + "..."
-                    : item.description_uz
+                    item.draft_description_uz && item.draft_description_uz.length > 90
+                    ? item.draft_description_uz.slice(0, 90) + "..."
+                    : item.draft_description_uz
                   }}</span>
                   <span v-else>
-                    {{ item.description_uz }}
+                    {{ item.draft_description_uz }}
                   </span>
                   <span class="transition group-open:rotate-180">
                     <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor"

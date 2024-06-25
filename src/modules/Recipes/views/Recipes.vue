@@ -87,6 +87,12 @@ watchDebounced(() => params.search, async function () {
 }, { deep: true, debounce: 500, maxWait: 5000, })
 
 
+watchDebounced(() => params.category, async function () {
+    params.page = 1
+    await refresh(params)
+}, { deep: true, debounce: 500, maxWait: 5000, })
+
+
 const refresh = async (filter: any) => {
     isLoading.value = true;
     try {
@@ -118,7 +124,6 @@ const onPageSizeChanged = (e: number) => {
 
 const saveData = (() => { 
     refresh(params)
-
   })
 
 </script>
@@ -129,7 +134,7 @@ const saveData = (() => {
             <form class="md:flex items-center gap-5 md:w-7/12">
             <label for="search" class="w-1/3">
                 {{ t('Search') }}
-                <input type="text" class="form-input" placeholder="Search" v-model="params.search" />
+                <input type="text" class="form-input" :placeholder="t('Search')" v-model="params.search" />
             </label>
 
             <label for="category" class="w-1/3">{{ t('category') }}
@@ -149,16 +154,20 @@ const saveData = (() => {
             :items="store.retseptList.results">
 
             <template #empty-message>
-                <span class="dark:text-neutral-400">{{ t('empty_text') }}</span>
+                <span class="dark:text-neutral-400">{{ t('no_available_data') }}</span>
             </template>
 
             <template #header="header">
                 {{ t(header.text) }}
             </template>
 
+            <template #item-cooking_time="item">
+                {{ item.preparation_time }}
+            </template>
+
             <template #item-photo="items">
                 <div class="py-3 flex justify-left gap-3">
-                    <img v-if="items && items.photo" class="w-[45px] h-[45px] rounded" :src="items.photo"
+                    <img v-if="items && items.image" class="w-[45px] h-[45px] rounded" :src="items.image"
                         alt="Photo"  style="aspect-ratio: 1/1 " />
                     <div v-else
                         class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded">

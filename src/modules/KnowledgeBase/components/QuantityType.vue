@@ -9,7 +9,7 @@ import { useI18n } from "vue-i18n";
 import KnowledgeBase from "../store/index";
 import UIkit from "uikit";
 import { watchDebounced } from "@vueuse/core";
-import {QuantityType} from "../interfaces/index"
+import { QuantityType } from "../interfaces/index"
 
 
 //DECLARED VARIABLES
@@ -24,20 +24,36 @@ const params = reactive({
 });
 const props = defineProps<{
   knowledge: string
+  params: {
+    page: number,
+    page_size: number
+  }
 }>();
 let toRefresh = ref(false)
 
 const editData = ref<QuantityType>({
-id: null,
-title: ""
+  id: null,
+  title: "",
+  title_ru: "",
+  title_uz: "",
+  title_kr: "",
+  unique_name: ""
 })
 
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
+  let page = localStorage.getItem('page')
+  let page_size = localStorage.getItem('page_size')
+  if (page) {
+    params.page = JSON.parse(page)
+  }
+  if (page_size) {
+    params.page_size = JSON.parse(page_size)
+  }
   let knowledgeBase = localStorage.getItem('knowledgeBase')
   if (knowledgeBase == 'type_quantity') {
-    await refresh(params)
+    await refresh()
   }
 })
 
@@ -47,7 +63,9 @@ onMounted(async () => {
 watch(() => props.knowledge, async function (val) {
   toRefresh.value = !toRefresh.value
   if (val == 'type_quantity') {
-    await refresh(params)
+    params.page = props.params.page
+    params.page_size = props.params.page_size
+    await refresh()
   }
 })
 
@@ -55,7 +73,7 @@ watchDebounced(
   () => params.search,
   async () => {
     params.page = 1;
-    await refresh(params)
+    await refresh()
   }, { deep: true, debounce: 500, maxWait: 5000 }
 );
 
@@ -69,7 +87,7 @@ const deleteType = async () => {
     await store.deleteQuantityType(itemId.value)
     await UIkit.modal("#quantity-type-delete").hide();
     toast.success(t('deleted_successfully'));
-        await refresh(params)
+    await refresh()
     isLoading.value = false
   } catch (error: any) {
     toast.error(t('error'));
@@ -77,10 +95,10 @@ const deleteType = async () => {
 }
 
 
-const refresh = async (filter) => {
+const refresh = async () => {
   isLoading.value = true;
   try {
-    store.getQuantityType(filter);
+    store.getQuantityType(params);
   } catch (error: any) {
     toast.error(t('error'))
   }
@@ -90,12 +108,9 @@ const refresh = async (filter) => {
 
 
 const savetype = () => {
-  refresh(params);
+  refresh();
 }
 
-onMounted(() => {
-  refresh(params);
-});
 </script>
 
 <template>
@@ -118,7 +133,7 @@ onMounted(() => {
       </template>
 
       <template #item-name="item">
-     {{ item.title }}
+        {{ item.title }}
       </template>
 
       <template #header-actions="item">
@@ -140,7 +155,7 @@ onMounted(() => {
     </EasyDataTable>
 
 
-    <QuantityTypeModal :edit-data="editData" @savetype="savetype"/>
+    <QuantityTypeModal :edit-data="editData" @savetype="savetype" />
     <DeleteModal @delete-action="deleteType" id="quantity-type-delete" />
   </div>
 </template>

@@ -73,10 +73,6 @@ function hideModal() {
 }
 
 
-function getTitle() {
-  categoryData.value.name = categoryData.value.name_uz
-}
-
 const updateDeal = async () => {
   if (!categoryData.value.name_uz) {
     general.tabs = 'UZ'
@@ -90,6 +86,8 @@ const updateDeal = async () => {
 
   const success = await validate.value.$validate();
   if (!success) return;
+
+  categoryData.value.name = categoryData.value.name_uz
 
   if (propData.editData.id) {
     try {
@@ -154,7 +152,7 @@ const updateDeal = async () => {
             <form>
               <label for="nameUz">{{ t('name') }} O'z
                 <input id="nameUz" type="text" class="form-input" :placeholder="t('name')" v-model="categoryData.name_uz"
-                  :class="validate.name_uz.$errors.length ? 'required-input' : ''" @input="getTitle" />
+                  :class="validate.name_uz.$errors.length ? 'required-input' : ''" />
                 <p v-for="error in validate.name_uz.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>

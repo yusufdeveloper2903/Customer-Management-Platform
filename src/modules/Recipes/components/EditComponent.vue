@@ -70,8 +70,6 @@ refresh()
 </div>
 
 <div>
-  <img src="@/assets/image/loading.svg" alt="loading.svg" class="inline w-4 h-4 text-white animate-spin mr-2"
-           v-if="isLoading" />
 
 <div class="flex justify-between">
   <div>{{ t('name') }}</div>
@@ -98,7 +96,7 @@ refresh()
 </div>
 
 <div class="flex justify-between my-1">
-  <div>{{ t('cooking_time') }}</div>
+  <div>{{ t('preparation_time') }}</div>
   <div>
     <b v-if="recipeData.preparation_time">{{ recipeData.preparation_time }}</b>
     <b v-else>-</b>
@@ -116,7 +114,7 @@ refresh()
 <div class="flex justify-between mt-1">
   <div>{{ t('Status') }}</div>
   <div>
-    <b :class="recipeData.is_active == true ? 'text-success': 'text-danger'">{{ recipeData.is_active == true ? 'Активный': "Неактивный" }} </b>
+    <b :class="recipeData.is_active == true ? 'text-success': 'text-danger'">{{ recipeData.is_active == true ? t('Active'): t('Inactive') }} </b>
   </div>
 </div>
 </div>

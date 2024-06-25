@@ -25,10 +25,10 @@ const params = reactive({
 
 let recipes = ref<Ingredient>({
   id: null,
-  product: null,
-  unit_of_measure: null,
+  draft_product: null,
+  draft_unit_of_measure: null,
   food: null,
-  discount: null
+  draft_discount: null
 })
 
 // Mounted
@@ -130,11 +130,11 @@ const handleDeleteModal = (id: number) => {
     </template>
 
     <template #item-product="item">
-      {{ item.product.title }}
+      {{ item.draft_product?.title }}
     </template>
 
     <template #item-quantity="item">
-      {{ item.discount }} {{ item.unit_of_measure.title }}
+      {{ item.draft_discount }} {{ item.draft_unit_of_measure?.title }}
     </template>
 
     <template #header-actions="item">

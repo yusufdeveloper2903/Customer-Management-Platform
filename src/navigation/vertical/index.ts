@@ -63,7 +63,6 @@ export default [
         path: "/staff",
         permissions: ["admin"],
     },
-
     {
         name: "Recipes",
         icon: "Chef Hat Minimalistic",
