@@ -23,23 +23,23 @@ const propData = defineProps<{ editData: Ingredient }>();
 const knowledgeStore = knowledgeBase()
 let recipes = ref<Ingredient>({
   id: null,
-  product: null,
-  unit_of_measure: null,
+  draft_product: null,
+  draft_unit_of_measure: null,
   food: null,
-  discount: null
+  draft_discount: null
 })
 
 
 // validations
 const rules = computed(() => {
   return {
-    product: {
+    draft_product: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
-    unit_of_measure: {
+    draft_unit_of_measure: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
-    discount: {
+    draft_discount: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
   };
@@ -57,25 +57,25 @@ async function openModal() {
 
   if (propData.editData.id) {
     recipes.value.id = propData.editData.id
-    recipes.value.product = propData.editData.product.id
-    recipes.value.unit_of_measure = propData.editData.unit_of_measure.id
-    recipes.value.discount = propData.editData.discount
+    recipes.value.draft_product = propData.editData.draft_product.id
+    recipes.value.draft_unit_of_measure = propData.editData.draft_unit_of_measure.id
+    recipes.value.draft_discount = propData.editData.draft_discount
     recipes.value.food = propData.editData.food
   } else {
     recipes.value.id = null
     recipes.value.food = null
-    recipes.value.discount = null
-    recipes.value.product = null
-    recipes.value.unit_of_measure = null
+    recipes.value.draft_discount = null
+    recipes.value.draft_product = null
+    recipes.value.draft_unit_of_measure = null
   }
 }
 
 function clearData() {
   recipes.value.id = null
   recipes.value.food = null
-  recipes.value.discount = null
-  recipes.value.product = null
-  recipes.value.unit_of_measure = null
+  recipes.value.draft_discount = null
+  recipes.value.draft_product = null
+  recipes.value.draft_unit_of_measure = null
   validate.value.$reset()
 }
 
@@ -142,11 +142,11 @@ const updateDeal = async () => {
       <div class="uk-modal-body py-4">
         <form>
           <label for="product" class="mt-4 block">{{ t('product') }}
-            <VSelect v-model="recipes.product"
+            <VSelect v-model="recipes.draft_product"
               :options="knowledgeStore.productsList && knowledgeStore.productsList.results"
               :getOptionLabel="(name: any) => name.title" :reduce="(item: any) => item.id"
-              :placeholder="t('select_product')" :class="validate.product.$errors.length ? 'required-input' : ''" />
-            <p v-for="error in validate.product.$errors" :key="error.$uid" class="text-danger text-sm">
+              :placeholder="t('select_product')" :class="validate.draft_product.$errors.length ? 'required-input' : ''" />
+            <p v-for="error in validate.draft_product.$errors" :key="error.$uid" class="text-danger text-sm">
               {{ t(error.$message) }}
             </p>
           </label>
@@ -154,18 +154,18 @@ const updateDeal = async () => {
 
           <div class="flex my-4">
           <label for="type_quantity" class="mr-4 w-1/2">{{ t('type_quantity') }}
-            <VSelect v-model="recipes.unit_of_measure" :options="knowledgeStore.quantityTypeList"
+            <VSelect v-model="recipes.draft_unit_of_measure" :options="knowledgeStore.quantityTypeList"
               :getOptionLabel="(name: any) => name.title" :reduce="(item: any) => item.id" :placeholder="t('select_type')"
-              :class="validate.unit_of_measure.$errors.length ? 'required-input' : ''" />
-            <p v-for="error in validate.unit_of_measure.$errors" :key="error.$uid" class="text-danger text-sm">
+              :class="validate.draft_unit_of_measure.$errors.length ? 'required-input' : ''" />
+            <p v-for="error in validate.draft_unit_of_measure.$errors" :key="error.$uid" class="text-danger text-sm">
               {{ t(error.$message) }}
             </p>
           </label>
 
           <label for="quantity" class=" w-1/2">{{ t('Quantity') }}
-            <input id="quantity" type="number" class="form-input" :placeholder="t('Quantity')" v-model="recipes.discount"
-              :class="validate.discount.$errors.length ? 'required-input' : ''" />
-            <p v-for="error in validate.discount.$errors" :key="error.$uid" class="text-danger text-sm">
+            <input id="quantity" type="number" class="form-input" :placeholder="t('Quantity')" v-model="recipes.draft_discount"
+              :class="validate.draft_discount.$errors.length ? 'required-input' : ''" />
+            <p v-for="error in validate.draft_discount.$errors" :key="error.$uid" class="text-danger text-sm">
               {{ t(error.$message) }}
             </p>
           </label>

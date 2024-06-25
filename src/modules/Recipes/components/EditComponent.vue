@@ -70,8 +70,6 @@ refresh()
 </div>
 
 <div>
-  <img src="@/assets/image/loading.svg" alt="loading.svg" class="inline w-4 h-4 text-white animate-spin mr-2"
-           v-if="isLoading" />
 
 <div class="flex justify-between">
   <div>{{ t('name') }}</div>

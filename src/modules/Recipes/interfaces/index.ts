@@ -44,34 +44,34 @@ export interface RecipeDetailEdit {
     preparation_time: string;
     is_active: boolean;
     title_kr: string,
-  title_uz: string,
-  title_ru: string,
+    title_uz: string,
+    title_ru: string,
 }
 
 export interface Ingredient {
     id: number | null;
-    product: number | null 
-    unit_of_measure: number | null
+    draft_product: number | null 
+    draft_unit_of_measure: number | null
     food: number | null,
-    discount: number | null
+    draft_discount: number | null
 }
 
 export interface Preparation {
     id: number | null;
     index: number | null;
-    description: string;
-    description_uz: string;
-    description_ru: string;
-    description_kr: string;
+    draft_description: string;
+    draft_description_uz: string;
+    draft_description_ru: string;
+    draft_description_kr: string;
     food: number | null
 }
 
 export interface EditPreparation {
     id: number | null;
-    description: string;
-    description_uz: string;
-    description_ru: string;
-    description_kr: string;
+    draft_description: string;
+    draft_description_uz: string;
+    draft_description_ru: string;
+    draft_description_kr: string;
     food: number | null
 }
 
@@ -82,5 +82,6 @@ export interface RecipeMedia {
     recipes: number | null,
     index: number,
     create_date: string
+    is_cover: boolean
 }
 

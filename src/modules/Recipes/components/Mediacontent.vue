@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 // Imported files
 import { useI18n } from "vue-i18n";
-import { VueDraggableNext as draggable } from "vue-draggable-next";
 import { onMounted, ref } from 'vue';
 import RecipeStorage from '@/modules/Recipes/store/index';
 import { useRoute } from "vue-router";
@@ -18,14 +17,16 @@ const route = useRoute()
 const isLoading = ref<boolean>(false);
 const store = RecipeStorage()
 const itemId = ref<number | null>(null)
-  
+const currentRow = ref<RecipeMedia | null>(null);
+
 const openFile = ref<RecipeMedia>({
     id: null,
     media_file: null,
     file_type: "",
     recipes: null,
     index: 0,
-    create_date: ""
+    create_date: "",
+    is_cover: false
 })
 
 
@@ -101,6 +102,37 @@ const handleDeleteModal = (id: number | null) => {
     UIkit.modal("#file-delete").show();
     itemId.value = id;
 };
+
+const dragStart = (item: any) => {
+  currentRow.value = item;
+};
+
+
+const dragOver = (e: any) => {
+  e.preventDefault();
+};
+
+
+const dragDrop = async (item: RecipeMedia) => {
+  event?.preventDefault();
+  await store.createRecipeMediaDrag_and_drop({new_index: currentRow.value?.index, last_index: item.index, id: item.id})
+  await refresh();
+  toast.success(t("updated_successfully"));
+};
+
+
+const coverPhoto = async(item: any) => {
+  try {
+        await store.getCoverRecipeMedia(item.id)
+        toast.success(t('updated_successfully'));
+        refresh()
+    } catch (error: any) {
+        toast.error(
+            t('error')
+        );
+    }
+  store.getCoverRecipeMedia(item.id)
+}
 </script>
 
 <template>
@@ -110,7 +142,7 @@ const handleDeleteModal = (id: number | null) => {
         <div class="mb-3">
           <label
         ><b>{{ t('file') }}</b> 
-          <input type="file" class="form-file-input" @change="getFile" >
+          <input type="file" class="form-file-input fileEmpty" @change="getFile" >
           <span style="font-size:14px;color:#999999" class="ml-1">
       {{ $t('format_photo') }}: (png / jpg / 1080x1920)
     </span>
@@ -121,14 +153,19 @@ const handleDeleteModal = (id: number | null) => {
               />
         </div>
 
-        <draggable class="dragArea list-group w-full" v-else v-model="store.recipeMediaList.data" :list="store.recipeMediaList.data">
-        <div class="mt-4 flex justify-between items-center" v-for="item in store.recipeMediaList.data" >
+        <div class="mt-4 flex justify-between items-center" v-for="item in store.recipeMediaList.data" :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
           <span class="flex items-center">
             <span class="flex">
-              <Icon icon="Star" color="#FFC107" size="16" v-if="item.file_type == 'image'"/>
+
+              <button @click="coverPhoto(item)" v-if="item.file_type == 'image'">
+                <Icon icon="Star Circle" color="#FFC107" size="16" v-if="item.is_cover == true"/> 
+                <Icon icon="Star" color="#FFC107" size="16" v-else/> 
+              </button>    
+
               <span class="mr-4" v-else> </span>
               <Icon icon="Hamburger Menu"  size="16" class="ml-2"/>
             </span>
+
             <div class="flex justify-left gap-3 mx-2">
               <img
                 v-if="item && item.media_file && item.file_type == 'image'"
@@ -169,8 +206,6 @@ const handleDeleteModal = (id: number | null) => {
             </button>
           </span>
 </div>
-    </draggable>
-
 
         </div>
       </div>
@@ -180,11 +215,23 @@ const handleDeleteModal = (id: number | null) => {
       <MediaContentViewFileModal  :openFile="openFile"/>
 </template>
 
-<style>
-/* input[type=file]::before {
+<style lang="scss" scoped>
+input[type=file]::before {
   content: "📁";
   color: black;
   margin-right: 10px;
-} */
+}
+
+[type="file"]::file-selector-button {
+  width: 0;
+  margin-inline-end: 0;
+  padding: 0;
+  border: none;
+}
+
+.fileEmpty {
+  color: transparent !important;
+}
+
 
 </style>

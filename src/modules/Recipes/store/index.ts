@@ -31,7 +31,9 @@ export default defineStore("recipes", {
 
             recipeMediaList: {
                 data: [] as RecipeMedia[]
-            }
+            },
+
+            coverRecipeMedia: {}
         };
     },
     actions: {
@@ -63,6 +65,11 @@ export default defineStore("recipes", {
             this.recipeMediaList = data
         },
 
+        async getCoverRecipeMedia(recipe_media_id: number | string | string[]) {
+            const {data} = await $axios.get(`/knowledge_base/cover_recipe_media/${recipe_media_id}/`)
+            this.coverRecipeMedia = data
+        },
+
 
         //CREATE REQUEST
         create_retsept(data: object) {
@@ -89,6 +96,9 @@ export default defineStore("recipes", {
             return $axios.post(`/knowledge_base/recipe_change_status/`, data);
         },
 
+        createRecipeMediaDrag_and_drop ( data: any ) {
+            return $axios.post(`/knowledge_base/retsept_media_drag_and_drop/${data.id}/`, data);
+        },
 
         //PATCH REQUEST
         updateRetsept(data: any) {

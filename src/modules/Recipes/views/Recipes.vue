@@ -87,6 +87,12 @@ watchDebounced(() => params.search, async function () {
 }, { deep: true, debounce: 500, maxWait: 5000, })
 
 
+watchDebounced(() => params.category, async function () {
+    params.page = 1
+    await refresh(params)
+}, { deep: true, debounce: 500, maxWait: 5000, })
+
+
 const refresh = async (filter: any) => {
     isLoading.value = true;
     try {
