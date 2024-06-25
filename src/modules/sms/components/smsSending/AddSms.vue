@@ -47,11 +47,11 @@ const smsSendingData = ref<any>({
 const listStatusOs = ref([
   {
     title: 'Android',
-    value: 'ANDROID'
+    value: 'android'
   },
   {
-    title: 'Ios',
-    value: 'IOS'
+    title: 'iOS',
+    value: 'iOS'
   },
 
 ])
@@ -319,9 +319,18 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
           <template #empty-message>
             <div>{{ $t('no_available_data') }}</div>
           </template>
-          <template #item-gender="item">
-            {{ item.gender }}
+          <template #item-device_os_types="item">
+            <div v-for="(i,index) in item.device_os_types" :key="index" class="ml-12">
+              {{ i }}
+            </div>
           </template>
+          <template #item-gender>
+               <span class="text-center ml-3">
+                 -
+               </span>
+          </template>
+
+
           <template #header="header">
             {{ $t(header.text) }}
           </template>

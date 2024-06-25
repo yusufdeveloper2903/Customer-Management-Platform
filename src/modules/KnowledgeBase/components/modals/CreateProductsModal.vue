@@ -14,6 +14,7 @@ import {EditDataProductModal} from '../../interfaces/index'
 import {objectToFormData} from "@/mixins/formmatter";
 import {useSidebarStore} from '@/stores/layoutConfig'
 import FileInput from "@/components/FileInput/FileInput.vue";
+import {linkType} from "@/modules/KnowledgeBase/constants";
 
 
 //DECLARED VARIABLES
@@ -46,21 +47,22 @@ let productsData = ref({
 
 
 //FUNCTIONS
-// const getFile = (event: any) => {
-//   productsData.value.image = event.target.files[0]
-//   let input = event.target;
+store.getQuantityType({page_size: 1000});
+const getFile = (event: any) => {
+  productsData.value.image = event.target.files[0]
+  let input = event.target;
 
-//   if (event.target.files[0]) {
-//     savedImage.value = event.target.files[0]
-//   }
-//   if (input.files && input.files[0]) {
-//     let reader = new FileReader();
-//     reader.onload = (e) => {
-//       imageDiv.value = e?.target?.result;
-//     }
-//     reader.readAsDataURL(input.files[0]);
-//   }
-// }
+  if (event.target.files[0]) {
+    savedImage.value = event.target.files[0]
+  }
+  if (input.files && input.files[0]) {
+    let reader = new FileReader();
+    reader.onload = (e) => {
+      imageDiv.value = e?.target?.result;
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
 const updateDeal = async () => {
   if (!productsData.value.title_uz && !productsData.value.description_uz) {
     general.tabs = 'UZ'
@@ -69,7 +71,10 @@ const updateDeal = async () => {
   } else if (!productsData.value.title_ru && !productsData.value.description_ru) {
     general.tabs = 'RU'
   }
-  
+  if (productsData.value.measurement_type && productsData.value.measurement_type.id) {
+    productsData.value.measurement_type = productsData.value.measurement_type.id
+  }
+
   const success = await validate.value.$validate();
   if (!success) return;
   const fd = objectToFormData(['image'], productsData.value);
@@ -308,22 +313,23 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                   v-model="productsData.quantity"
                   :class="validate.quantity.$errors.length ? 'required-input' : ''"
               />
-
-            </label>
-            <label class="w-full mt-4">{{ t('Measurement_type') }}
-              <input
-                  id="number"
-                  type="text"
-                  class="form-input"
-                  v-model="productsData.measurement_type"
-                  :class="validate.measurement_type.$errors.length ? 'required-input' : ''"
-              />
               <p
-                  v-for="error in validate.measurement_type.$errors"
+                  v-for="error in validate.quantity.$errors"
                   :key="error.$uid"
                   class="text-danger text-sm"
               >
                 {{ t(error.$message) }}
+              </p>
+            </label>
+            <label class="w-full mt-4">{{ t('Measurement_type') }}
+              <v-select id="type" :options="store.quantityTypeList" :get-option-label="(item:any) => item.title"
+                        class="mb-4" :class="validate.measurement_type.$errors.length ? 'required-input' : ''"
+                        :reduce="(item:any)=>item.id"
+                        v-model="productsData.measurement_type">
+                <template #no-options> {{ $t("no_matching_options") }}</template>
+              </v-select>
+              <p v-for="error in validate.measurement_type.$errors" :key="error.$uid" class="text-danger text-sm">
+                {{ $t(error.$message) }}
               </p>
             </label>
             <label class="mt-4 w-full ">{{ t('price') }}

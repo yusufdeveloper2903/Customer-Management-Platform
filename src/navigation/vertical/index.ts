@@ -59,7 +59,7 @@ export default [
     },
     {
         name: "nav.staffs",
-        icon: "User hands",
+        icon: "User",
         path: "/staff",
         permissions: ["admin"],
     },
@@ -73,7 +73,7 @@ export default [
 
     {
         name: "Administration",
-        icon: "Shield check",
+        icon: "Shield Check",
         permissions: ["admin"],
         child: [
             {
@@ -91,7 +91,7 @@ export default [
             {
                 name: "backup&archiving",
                 path: "/reference/data-archive",
-                icon: "Server path",
+                icon: "Server",
                 permissions: ["admin"],
             },
             {

@@ -71,7 +71,6 @@ const selectedTitle = (val: any) => {
         <TermsAndConditions :knowledge="knowledge" :params="params"/>
       </Tab>
       <Tab title="Onboarding">
-
         <Onboarding :knowledge="knowledge" :params="params"/>
       </Tab>
       <Tab title="contacts">
