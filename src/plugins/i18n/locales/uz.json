@@ -408,5 +408,7 @@
   "edit_recipe": "Retseptni tahrirlash",
   "add_cooking_step": "Pishirish bosqichini qo'shish",
   "edit_cooking_step": "Pishirish bosqichini tahrirlash",
-  "recipe detail": "Retsept tafsilotlari"
+  "recipe detail": "Retsept tafsilotlari",
+  "Activity": "Faollik",
+  "changing": "O'zgartirish"
 }

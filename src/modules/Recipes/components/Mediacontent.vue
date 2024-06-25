@@ -57,7 +57,7 @@ const refresh = async () => {
 
 const getFile = async(event: any) => {
   const fd = new FormData()
-  fd.append('recipes', route.params.id)
+  fd.append('recipes', String(route.params.id))
   fd.append('media_file', event.target.files[0])
   fd.append('file_type', event.target.files[0].type.slice(0, 5))
 
@@ -66,7 +66,7 @@ const getFile = async(event: any) => {
         refresh()
         setTimeout(() => {
           toast.success(t("created_successfully"));
-        }, 200);
+        }, 200); 
       });
       isLoading.value = false;
     } catch (error: any) {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 //Imported files
-import { recipedetailFields } from "../constants";
+import { recipesFields } from "../constants";
 import recipes from "../store/index"
 import { reactive, ref, onMounted } from "vue";
 import { toast } from "vue3-toastify";
@@ -150,7 +150,7 @@ const saveData = (() => {
             </button>
         </div>
 
-        <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="recipedetailFields"
+        <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="recipesFields"
             :items="store.retseptList.results">
 
             <template #empty-message>
@@ -163,6 +163,16 @@ const saveData = (() => {
 
             <template #item-cooking_time="item">
                 {{ item.preparation_time }}
+            </template>
+
+            <template #item-category="item">
+                {{ item.category?.name }}
+            </template>
+
+            <template #item-status="item">
+                <span :class="item.status == 'DRAFT' ? 'rounded bg-secondary px-4 p-1 pt-1 inline m-1 text-white': 'CHANGING' ? 'rounded bg-warning px-4 p-1 pt-1 inline m-1 text-white' : 'rounded bg-success px-4 p-1 pt-1 inline m-1 text-white'">
+                    {{ item.status == "DRAFT" ? t('Draft') : "CHANGING" ? t('changing') : t('Published') }}
+                </span>
             </template>
 
             <template #item-photo="items">

@@ -21,7 +21,7 @@ export interface Retsept {
     calorie: number,
     preparation_time: string,
     is_active: boolean,
-    category: number | null
+    category: number | null | object
 }
 
 export interface RecipeDetail {
