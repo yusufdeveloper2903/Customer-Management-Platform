@@ -32,8 +32,8 @@ function pauseVideo() {
         
           <div class="flex justify-center mb-2 ">
             <div class="box_bg flex justify-center">
-              <video v-if="propData.openFile.file_type === 'VIDEO'" :src="propData.openFile.media_file" controls class="vd" ref="videoPlayer"></video>
-              <img v-if="propData.openFile.file_type === 'PHOTO'" :src="propData.openFile.media_file" class="img" />
+              <video v-if="propData.openFile.file_type == 'video'" :src="propData.openFile.media_file" controls class="vd" ref="videoPlayer"></video>
+              <img v-if="propData.openFile.file_type == 'image'" :src="propData.openFile.media_file" class="img" />
             </div>
         </div>
       </div>
@@ -66,7 +66,8 @@ function pauseVideo() {
 }
 
 .box_bg{
-  height: 600px;
+  max-height: 600px;
+  min-height: 200px;
   width: 500px;
   /* opacity: 0.33; */
   background-color: #000 ;

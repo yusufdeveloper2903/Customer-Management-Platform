@@ -247,9 +247,10 @@ function breadCrumbStart(newPath) {
 
       case "recipes":
       BreadcrumbList.value = [
-        {title: 'Recipes', active: true},
+        {title: "Recipes", active: true},
       ];
       break;
+      
       case "recipe-detail":
       BreadcrumbList.value = [
       {title: 'Recipes', active: false},
@@ -257,12 +258,6 @@ function breadCrumbStart(newPath) {
       ];
       break;
 
-      case "add-recipe":
-      BreadcrumbList.value = [
-      {title: 'Recipes', active: false},
-        {title: 'add_recipe', active: true},
-      ];
-      break;
     default:
       break;
   }

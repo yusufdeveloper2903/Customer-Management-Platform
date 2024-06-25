@@ -79,7 +79,7 @@ export interface RecipeMedia {
     id: number | null;
     media_file: string | null | undefined,
     file_type: string,
-    recipes: string,
+    recipes: number | null,
     index: number,
     create_date: string
 }

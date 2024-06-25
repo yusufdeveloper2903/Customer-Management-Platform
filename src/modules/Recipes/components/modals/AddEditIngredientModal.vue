@@ -131,7 +131,7 @@ const updateDeal = async () => {
 
 <template>
   <div id="ingredient_modal" class="uk-flex-top" uk-modal @shown="openModal" @hidden="clearData">
-    <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden">
+    <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg">
       <button class="uk-modal-close-default" @click="clearData" type="button" uk-close />
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
@@ -152,7 +152,8 @@ const updateDeal = async () => {
           </label>
 
 
-          <label for="type_quantity" class="my-4 block">{{ t('type_quantity') }}
+          <div class="flex my-4">
+          <label for="type_quantity" class="mr-4 w-1/2">{{ t('type_quantity') }}
             <VSelect v-model="recipes.unit_of_measure" :options="knowledgeStore.quantityTypeList"
               :getOptionLabel="(name: any) => name.title" :reduce="(item: any) => item.id" :placeholder="t('select_type')"
               :class="validate.unit_of_measure.$errors.length ? 'required-input' : ''" />
@@ -161,14 +162,14 @@ const updateDeal = async () => {
             </p>
           </label>
 
-          <label for="quantity" class="block w-full">{{ t('Quantity') }}
+          <label for="quantity" class=" w-1/2">{{ t('Quantity') }}
             <input id="quantity" type="number" class="form-input" :placeholder="t('Quantity')" v-model="recipes.discount"
               :class="validate.discount.$errors.length ? 'required-input' : ''" />
             <p v-for="error in validate.discount.$errors" :key="error.$uid" class="text-danger text-sm">
               {{ t(error.$message) }}
             </p>
           </label>
-
+        </div>
         </form>
       </div>
 

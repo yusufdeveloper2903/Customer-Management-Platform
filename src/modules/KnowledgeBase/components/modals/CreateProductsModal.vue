@@ -46,21 +46,21 @@ let productsData = ref({
 
 
 //FUNCTIONS
-const getFile = (event: any) => {
-  productsData.value.image = event.target.files[0]
-  let input = event.target;
+// const getFile = (event: any) => {
+//   productsData.value.image = event.target.files[0]
+//   let input = event.target;
 
-  if (event.target.files[0]) {
-    savedImage.value = event.target.files[0]
-  }
-  if (input.files && input.files[0]) {
-    let reader = new FileReader();
-    reader.onload = (e) => {
-      imageDiv.value = e?.target?.result;
-    }
-    reader.readAsDataURL(input.files[0]);
-  }
-}
+//   if (event.target.files[0]) {
+//     savedImage.value = event.target.files[0]
+//   }
+//   if (input.files && input.files[0]) {
+//     let reader = new FileReader();
+//     reader.onload = (e) => {
+//       imageDiv.value = e?.target?.result;
+//     }
+//     reader.readAsDataURL(input.files[0]);
+//   }
+// }
 const updateDeal = async () => {
   if (!productsData.value.title_uz && !productsData.value.description_uz) {
     general.tabs = 'UZ'

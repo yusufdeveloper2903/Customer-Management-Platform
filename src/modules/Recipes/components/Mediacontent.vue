@@ -23,7 +23,7 @@ const openFile = ref<RecipeMedia>({
     id: null,
     media_file: null,
     file_type: "",
-    recipes: "",
+    recipes: null,
     index: 0,
     create_date: ""
 })
@@ -54,10 +54,29 @@ const refresh = async () => {
 };
 
 
-const getFile = (e: any) => {
-  localStorage.setItem('media_file', JSON.stringify(e.target.value))
-  console.log(e.target.value);
+const getFile = async(event: any) => {
+  const fd = new FormData()
+  fd.append('recipes', route.params.id)
+  fd.append('media_file', event.target.files[0])
+  fd.append('file_type', event.target.files[0].type.slice(0, 5))
+  console.log(event.target.files);
   
+  try {
+      await store.createRecipeMedia(fd).then(() => {
+        refresh()
+        setTimeout(() => {
+          toast.success(t("created_successfully"));
+        }, 200);
+      });
+      isLoading.value = false;
+    } catch (error: any) {
+      isLoading.value = false;
+      if (error) {
+        toast.error(
+          error.response.message || error.response.data.msg || error.response.data.error || t('error')
+        );
+      }
+    }
 }
 
 const deleteAction = async () => {
@@ -102,22 +121,22 @@ const handleDeleteModal = (id: number | null) => {
               />
         </div>
 
-        <draggable class="dragArea list-group w-full" v-else v-model="store.recipeMediaList.data">
-        <div class="mt-4 flex justify-between items-center" v-for="item in store.recipeMediaList.data" :key="item.id">
+        <draggable class="dragArea list-group w-full" v-else v-model="store.recipeMediaList.data" :list="store.recipeMediaList.data">
+        <div class="mt-4 flex justify-between items-center" v-for="item in store.recipeMediaList.data" >
           <span class="flex items-center">
             <span class="flex">
-              <Icon icon="Star" color="#FFC107" size="16" v-if="item.file_type === 'PHOTO'"/>
+              <Icon icon="Star" color="#FFC107" size="16" v-if="item.file_type == 'image'"/>
               <span class="mr-4" v-else> </span>
               <Icon icon="Hamburger Menu"  size="16" class="ml-2"/>
             </span>
             <div class="flex justify-left gap-3 mx-2">
               <img
-                v-if="item && item.media_file && item.file_type === 'PHOTO'"
+                v-if="item && item.media_file && item.file_type == 'image'"
                 class="w-[45px] h-[45px] rounded object-cover"
                 :src="item.media_file"
                 alt="Photo"
             />
-            <video v-if="item && item.media_file && item.file_type === 'VIDEO'" :src="item.media_file" class="w-[45px] h-[45px] rounded object-cover" alt="Video">
+            <video v-if="item && item.media_file && item.file_type == 'video'" :src="item.media_file" class="w-[45px] h-[45px] rounded object-cover" alt="Video">
             
             </video>
             
@@ -139,8 +158,8 @@ const handleDeleteModal = (id: number | null) => {
 
           <span class="flex">
             <button @click="openFile = item" uk-toggle="target: #open_video" class="mr-2">
-             <Icon icon="Eye" color="#356c2d" v-if="item.file_type === 'PHOTO'"/>
-             <Icon icon="Play" color="#356c2d" v-if="item.file_type === 'VIDEO'"/>
+             <Icon icon="Eye" color="#356c2d" v-if="item.file_type == 'image'"/>
+             <Icon icon="Play" color="#356c2d" v-if="item.file_type == 'video'"/>
             </button>
             <!-- <button class="mx-2">
               <Icon icon="Upload Minimalistic" color="#356c2d" />

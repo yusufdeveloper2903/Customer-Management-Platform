@@ -280,7 +280,7 @@ const validate: Ref<Validation> = useVuelidate(rules, splashData);
           class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
       >
         <button uk-toggle="target: #splash" class="btn-secondary">
-          {{ t("Отмена") }}
+          {{ t("Cancel") }}
         </button>
 
         <button
