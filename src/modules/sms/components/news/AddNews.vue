@@ -317,10 +317,9 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <div class="uk-margin">
             <label for="form-stacked-text">{{ t('description') + ' ' + t('UZ') }}</label>
             <div class="uk-form-controls">
-          <textarea
-              @input="newsData.template = null"
-              v-model="newsData.description_uz"
-              class="form-input" rows="5"/>
+              <Editor :placeholder="$t('enter_information')" content-type="html" toolbar="full" @input="newsData.template = null"
+                  class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
+                  v-model:content="newsData.description_uz"></Editor>
             </div>
           </div>
 
@@ -345,12 +344,11 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <div class="uk-margin">
             <label for="form-stacked-text">{{ t('description') + ' ' + t('KR') }}</label>
             <div class="uk-form-controls">
-          <textarea
-              @input="newsData.template = null"
-              v-model="newsData.description_kr"
-              class="form-input" rows="5"/>
+              <Editor :placeholder="$t('enter_information')" content-type="html" toolbar="full" @input="newsData.template = null"
+                  class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
+                  v-model:content="newsData.description_kr"></Editor>
             </div>
-          </div>
+            </div>
         </ModalTab>
         <ModalTab title="RU">
 
@@ -372,10 +370,9 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <div class="uk-margin">
             <label for="form-stacked-text">{{ t('description') + ' ' + t('RU') }}</label>
             <div class="uk-form-controls">
-          <textarea
-              @input="newsData.template = null"
-              v-model="newsData.description_ru"
-              class="form-input" rows="5"/>
+              <Editor :placeholder="$t('enter_information')" content-type="html" toolbar="full" @input="newsData.template = null"
+                  class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
+                  v-model:content="newsData.description_ru"></Editor>
             </div>
           </div>
         </ModalTab>

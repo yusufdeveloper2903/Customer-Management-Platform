@@ -2,23 +2,23 @@
 
 
 //IMPORTED FILES
-import {Ref, ref, computed} from "vue";
+import { Ref, ref, computed } from "vue";
 import UIkit from "uikit";
-import {useI18n} from "vue-i18n";
-import {toast} from "vue3-toastify";
-import {helpers, required} from "@vuelidate/validators";
-import useVuelidate, {Validation} from "@vuelidate/core";
+import { useI18n } from "vue-i18n";
+import { toast } from "vue3-toastify";
+import { helpers, required } from "@vuelidate/validators";
+import useVuelidate, { Validation } from "@vuelidate/core";
 import ModalTabs from "@/components/Tab/ModalTabs.vue";
 import ModalTab from "@/components/Tab/ModalTab.vue";
 import knowledgeBase from "../../store/index";
-import {NewsTemplate} from "../../interfaces";
+import { NewsTemplate } from "../../interfaces";
 import FileInput from "@/components/FileInput/FileInput.vue";
-import {objectToFormData} from "@/mixins/formmatter";
-import {useSidebarStore} from '@/stores/layoutConfig'
+import { objectToFormData } from "@/mixins/formmatter";
+import { useSidebarStore } from '@/stores/layoutConfig'
 
 //DECLARED VARIABLES
 const emptyData = ref(false)
-const {t} = useI18n();
+const { t } = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = knowledgeBase();
 const general = useSidebarStore()
@@ -145,17 +145,9 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
 </script>
 
 <template>
-  <div
-      id="news_template"
-      class="uk-flex-top "
-      uk-modal="bgClose:false"
-      @shown="openModal"
-      @hidden="hideModal"
-  >
-    <div
-        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
-    >
-      <button class="uk-modal-close-default" type="button" uk-close/>
+  <div id="news_template" class="uk-flex-top " uk-modal="bgClose:false" @shown="openModal" @hidden="hideModal">
+    <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden">
+      <button class="uk-modal-close-default" type="button" uk-close />
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
           {{ propData.editData.id ? $t("EditNestTemplate") : $t("AddNewsTemplate") }}
@@ -165,41 +157,23 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
         <ModalTabs class="mb-4">
           <ModalTab title="UZ">
             <form>
-              <label for="nameUz"
-              >{{ t('name') + ' ' + t('UZ') }}
-                <input
-                    id="nameUz"
-                    type="text"
-                    class="form-input"
-                    v-model="newsTemplateData.title_uz"
-                    :class="validate.title_uz.$errors.length ? 'required-input' : ''"
-                />
-                <p
-                    v-for="error in validate.title_uz.$errors"
-                    :key="error.$uid"
-                    class="text-danger text-sm"
-                >
+              <label for="nameUz">{{ t('name') + ' ' + t('UZ') }}
+                <input id="nameUz" type="text" class="form-input" v-model="newsTemplateData.title_uz"
+                  :class="validate.title_uz.$errors.length ? 'required-input' : ''" />
+                <p v-for="error in validate.title_uz.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
               </label>
 
-              <label class="mt-4 block" for="descriptionUz"
-              >{{ t('description') + ' ' + t('UZ') }}
-                <input
-                    id="descriptionUz"
-                    type="text"
-                    class="form-input"
-                    v-model="newsTemplateData.description_uz"
-                    :class="validate.description_uz.$errors.length
-                      ? 'required-input'
-                      : ''
-                  "
-                />
-                <p
-                    v-for="error in validate.description_uz.$errors"
-                    :key="error.$uid"
-                    class="text-danger text-sm"
-                >
+              <label class="mt-4 block" for="descriptionUz">{{ t('description') + ' ' + t('UZ') }}
+                <Editor :placeholder="$t('enter_information')" content-type="html" toolbar="full"
+                  class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
+                  v-model:content="newsTemplateData.description_uz" :class="validate.description_uz.$errors.length
+                    ? 'required-input'
+                    : ''
+                    ">
+                </Editor>
+                <p v-for="error in validate.description_uz.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
               </label>
@@ -207,41 +181,24 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
           </ModalTab>
           <ModalTab title="KR">
             <form>
-              <label for="nameUz"
-              >{{ t('name') + ' ' + t('KR') }}
-                <input
-                    id="nameUz"
-                    type="text"
-                    class="form-input"
-                    v-model="newsTemplateData.title_kr"
-                    :class="validate.title_kr.$errors.length ? 'required-input' : ''"
-                />
-                <p
-                    v-for="error in validate.title_kr.$errors"
-                    :key="error.$uid"
-                    class="text-danger text-sm"
-                >
+              <label for="nameUz">{{ t('name') + ' ' + t('KR') }}
+                <input id="nameUz" type="text" class="form-input" v-model="newsTemplateData.title_kr"
+                  :class="validate.title_kr.$errors.length ? 'required-input' : ''" />
+                <p v-for="error in validate.title_kr.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
               </label>
 
-              <label class="mt-4 block" for="descriptionUz"
-              >{{ t('description') + ' ' + t('KR') }}
-                <input
-                    id="descriptionUz"
-                    type="text"
-                    class="form-input"
-                    v-model="newsTemplateData.description_kr"
-                    :class="validate.description_kr.$errors.length
-                      ? 'required-input'
-                      : ''
-                  "
-                />
-                <p
-                    v-for="error in validate.description_kr.$errors"
-                    :key="error.$uid"
-                    class="text-danger text-sm"
-                >
+              <label class="mt-4 block" for="descriptionUz">{{ t('description') + ' ' + t('KR') }}
+
+                <Editor :placeholder="$t('enter_information')" content-type="html" toolbar="full"
+                  class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
+                  v-model:content="newsTemplateData.description_kr" :class="validate.description_kr.$errors.length
+                    ? 'required-input'
+                    : ''
+                    ">
+                </Editor>
+                <p v-for="error in validate.description_kr.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
               </label>
@@ -250,91 +207,51 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
 
           <ModalTab title="RU">
             <form>
-              <label for="nameRu"
-              >{{ t('name') + ' ' + t('RU') }}
-                <input
-                    id="nameRu"
-                    type="text"
-                    class="form-input"
-                    v-model="newsTemplateData.title_ru"
-                    :class="validate.title_ru.$errors.length ? 'required-input' : ''
-                  "
-                />
-                <p
-                    v-for="error in validate.title_ru.$errors"
-                    :key="error.$uid"
-                    class="text-danger text-sm"
-                >
+              <label for="nameRu">{{ t('name') + ' ' + t('RU') }}
+                <input id="nameRu" type="text" class="form-input" v-model="newsTemplateData.title_ru" :class="validate.title_ru.$errors.length ? 'required-input' : ''
+                  " />
+                <p v-for="error in validate.title_ru.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
               </label>
 
-              <label class="mt-4 block" for="descriptionRu"
-              >{{ t('description') + ' ' + t('RU') }}
-                <input
-                    id="descriptionRu"
-                    type="text"
-                    class="form-input"
-                    v-model="newsTemplateData.description_ru"
-                    :class=" validate.description_ru.$errors.length
-                      ? 'required-input'
-                      : ''
-                  "
-                />
-                <p
-                    v-for="error in validate.description_ru.$errors"
-                    :key="error.$uid"
-                    class="text-danger text-sm"
-                >
+              <label class="mt-4 block" for="descriptionRu">{{ t('description') + ' ' + t('RU') }}
+
+                <Editor :placeholder="$t('enter_information')" content-type="html" toolbar="full"
+                  class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
+                  v-model:content="newsTemplateData.description_ru" :class="validate.description_ru.$errors.length
+                    ? 'required-input'
+                    : ''
+                    ">
+                </Editor>
+                <p v-for="error in validate.description_ru.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
               </label>
             </form>
           </ModalTab>
         </ModalTabs>
-        <label for="nameUz"
-        >{{ t('Link') }}
-          <input
-              id="nameUz"
-              type="text"
-              class="form-input mb-4"
-              v-model="newsTemplateData.url"
-          />
+        <label for="nameUz">{{ t('Link') }}
+          <input id="nameUz" type="text" class="form-input mb-4" v-model="newsTemplateData.url" />
         </label>
 
-        <label
-        >{{ t('photo') }}
-          <FileInput
-              :empty="emptyData"
-              v-model="newsTemplateData.file"
-              @remove="newsTemplateData.file = null"
-              :typeModal="propData.editData.id"
-              name="news-template"
-              id="news-template-id"
-          />
+        <label>{{ t('photo') }}
+          <FileInput :empty="emptyData" v-model="newsTemplateData.file" @remove="newsTemplateData.file = null"
+            :typeModal="propData.editData.id" name="news-template" id="news-template-id" />
         </label>
       </div>
 
-      <div
-          class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white"
-      >
+      <div class="uk-modal-footer transition-all flex justify-end gap-3 uk-text-right px-5 py-3 bg-white">
         <button uk-toggle="target: #news_template" class="btn-secondary">
           {{ $t("Cancel") }}
         </button>
 
-        <button
-            :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'"
-            @click="updateDeal"
-        >
-          <img
-              src="@/assets/image/loading.svg"
-              alt="loading.svg"
-              class="inline w-4 h-4 text-white animate-spin mr-2"
-              v-if="isSubmitted"
-          />
+        <button :class="propData.editData.id ? 'btn-warning mr-2' : 'btn-success mr-2'" @click="updateDeal">
+          <img src="@/assets/image/loading.svg" alt="loading.svg" class="inline w-4 h-4 text-white animate-spin mr-2"
+            v-if="isSubmitted" />
           <span>{{
-              propData.editData.id ? t("Edit") : t("Add")
-            }}</span>
+            propData.editData.id ? t("Edit") : t("Add")
+          }}</span>
         </button>
       </div>
     </div>
