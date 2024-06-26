@@ -1,23 +1,25 @@
 <script lang="ts" setup>
 // Imported files
 import { useI18n } from "vue-i18n";
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import RecipeStorage from '@/modules/Recipes/store/index';
 import { useRoute } from "vue-router";
 import { toast } from "vue3-toastify";
 import MediaContentViewFileModal from "./modals/MediaContentViewFileModal.vue";
 import { RecipeMedia } from "../interfaces/index"
 import UIkit from "uikit";
-
-
+import StarIcon from "../img/star-svgrepo-com.svg"
+import {useSidebarStore} from "@/stores/layoutConfig";
 
 // Declared variables
 const {t} = useI18n()
 const route = useRoute()
 const isLoading = ref<boolean>(false);
+const sidebar = useSidebarStore();
 const store = RecipeStorage()
 const itemId = ref<number | null>(null)
 const currentRow = ref<RecipeMedia | null>(null);
+const icon_color = ref('')
 
 const openFile = ref<RecipeMedia>({
     id: null,
@@ -29,10 +31,27 @@ const openFile = ref<RecipeMedia>({
     draft_is_cover: false
 })
 
+watch(
+    () => sidebar.currentTheme,
+    () => { 
+      if (sidebar.currentTheme === "light") {
+        icon_color.value = 'black'
+      } else {
+        icon_color.value = 'white'
+      }
+    }
+);
+
 
 // Onmounted
 onMounted(async () => {
  await refresh()
+
+ if (sidebar.currentTheme === "light") {
+        icon_color.value = 'black'
+      } else {
+        icon_color.value = 'white'
+      }
 })
 
 
@@ -157,12 +176,12 @@ const coverPhoto = async(item: any) => {
             <span class="flex">
 
               <button @click="coverPhoto(item)" v-if="item.file_type == 'image'">
-                <Icon icon="Star Circle" color="#FFC107" size="16" v-if="item.draft_is_cover == true"/> 
+                <img :src="StarIcon" alt="Icon" width="16" v-if="item.draft_is_cover == true">
                 <Icon icon="Star" color="#FFC107" size="16" v-else/> 
               </button>    
 
               <span class="mr-4" v-else> </span>
-              <Icon icon="Hamburger Menu"  size="16" class="ml-2"/>
+              <Icon icon="Hamburger Menu"  size="16" class="ml-2" :color="icon_color"/>
             </span>
 
             <div class="flex justify-left gap-3 mx-2">
