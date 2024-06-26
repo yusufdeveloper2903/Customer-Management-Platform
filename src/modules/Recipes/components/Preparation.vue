@@ -14,7 +14,7 @@ import { Preparation, EditPreparation } from "../interfaces/index"
 
 
 // Declared variables
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const store = RecipeStorage()
 const route = useRoute()
 
@@ -72,7 +72,7 @@ const dragOver = (e: any) => {
 
 const dragDrop = async (item: Preparation) => {
   event?.preventDefault();
-  await store.createPreparationDrag_and_drop({new_index: currentRow.value?.index, last_index: item.index, id: item.id})
+  await store.createPreparationDrag_and_drop({ new_index: currentRow.value?.index, last_index: item.index, id: item.id })
   await refresh(params);
   toast.success(t("updated_successfully"));
 };
@@ -108,7 +108,7 @@ const handleDeleteModal = (id: number | null) => {
   <div class="flex justify-between items-end mb-5">
     <label for="search" class="w-1/3">
       {{ t('Search') }}
-      <input type="text" class="form-input" :placeholder="t('Search')" v-model="params.search"/>
+      <input type="text" class="form-input" :placeholder="t('Search')" v-model="params.search" />
     </label>
     <button class="btn-primary" uk-toggle="target: #preparation_modal" @click="editData = <Preparation>{}">
       {{ t("Add") }}
@@ -130,32 +130,7 @@ const handleDeleteModal = (id: number | null) => {
         :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
         <td class="px-6 whitespace-no-wrap text-left ">{{ item.id }}</td>
         <td class="px-6 whitespace-no-wrap text-left">
-          <div class="grid divide-y divide-neutral-200">
-            <div class="py-5">
-              <details class="group">
-                <summary class="flex justify-between items-center font-medium cursor-pointer list-none"
-                  @click="accordItem = !accordItem">
-                  <span v-if="accordItem == false">{{
-                    item.draft_description_uz && item.draft_description_uz.length > 90
-                    ? item.draft_description_uz.slice(0, 90) + "..."
-                    : item.draft_description_uz
-                  }}</span>
-                  <span v-else>
-                    {{ item.draft_description_uz }}
-                  </span>
-                  <span class="transition group-open:rotate-180">
-                    <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor"
-                      stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24">
-                      <path d="M6 9l6 6 6-6"></path>
-                    </svg>
-                  </span>
-                </summary>
-                <!-- <p class="text-neutral-600 mt-3 group-open:animate-fadeIn" v-if="accordItem">
-                  {{ item.description }}
-                </p> -->
-              </details>
-            </div>
-          </div>
+            {{ item['draft_description_' + locale] }}
         </td>
         <td class="px-6 whitespace-no-wrap">
           <div class="flex py-2 justify-end">
@@ -175,7 +150,7 @@ const handleDeleteModal = (id: number | null) => {
 
 
   <DeleteModal @delete-action="deleteAction" :id="'preparation-delete'" />
-  <AddPreparationModal @saveData="saveData" :editData="editData"/>
+  <AddPreparationModal @saveData="saveData" :editData="editData" />
 </template>
 
 <style lang="scss" scoped>
