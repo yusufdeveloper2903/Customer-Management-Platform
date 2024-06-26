@@ -84,7 +84,7 @@ async function openModal() {
     recipes.value.calorie = propData.editData.calorie
     recipes.value.preparation_time = propData.editData.preparation_time
     recipes.value.is_active = propData.editData.is_active
-    recipes.value.category = propData.editData.category
+    recipes.value.category = propData.editData.category.id
   } else {
     recipes.value.id = null
     recipes.value.title_ru = ""

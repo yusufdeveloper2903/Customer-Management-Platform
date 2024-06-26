@@ -13,7 +13,7 @@ import {RetseptCategory} from "../interfaces/index"
 
 
 //DECLARED VARIABLES
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const store = KnowledgeBase()
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
@@ -150,6 +150,10 @@ const saveCategory = () => {
 
       <template #header="header">
         {{ t(header.text) }}
+      </template>
+
+      <template #item-name="item">
+        {{ item['name_'+ locale] }}
       </template>
 
       <template #header-actions="item">
