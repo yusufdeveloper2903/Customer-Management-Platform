@@ -192,6 +192,10 @@ pre[class*="language-"] {
     }
 }
 
+.dark .dp__overlay_cell {
+    color: white;
+}
+
 .dark .dp__action_row {
     background-color: #171d32;
 }
