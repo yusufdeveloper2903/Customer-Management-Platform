@@ -192,9 +192,28 @@ pre[class*="language-"] {
     }
 }
 
+.dark .dp__action_row {
+    background-color: #171d32;
+}
+
+.dark .dp__arrow_bottom {
+    background-color: #171d32;
+
+}
+
+.dark .dp__action_row .dp__selection_preview {
+    color: white;
+}
+
+
+.dark .dp__action_row .dp__action_button  {
+    color: white;
+}
+
+
 .dark .dp__menu_inner {
     --tw-bg-opacity: 1;
-    background-color: rgb(40 48 70 / var(--tw-bg-opacity));
+    background-color: rgb(40 48 70 / var(--tw-bg-opacity))
 
     .dp__btn {
         color: white

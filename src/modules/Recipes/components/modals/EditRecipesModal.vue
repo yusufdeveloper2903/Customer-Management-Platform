@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // imported files
-import { Ref, ref, computed } from "vue";
+import { Ref, ref, computed, watch } from 'vue';
 import UIkit from "uikit";
 import { useI18n } from "vue-i18n";
 import { toast } from "vue3-toastify";
@@ -37,6 +37,7 @@ const store = recipeStore()
 const emits = defineEmits(["saveData"]);
 const propData = defineProps<{ editData: Retsept }>();
 const knowledgeStore = knowledgeBase()
+const themeDataPicker = ref<boolean>(false)
 let recipes = ref<RecipesData>({
   id: null,
   title: "",
@@ -173,6 +174,19 @@ const updateDeal = async () => {
     }
   }
 };
+
+// watch(() => localStorage.getItem('currentTheme'),
+//     () => {
+//       if(localStorage.getItem('currentTheme') == 'dark') {
+//         themeDataPicker.value = true
+//       } else {
+//         themeDataPicker.value = false
+//       }
+//     }
+// );
+
+
+
 </script>
 
 <template>
@@ -239,7 +253,8 @@ const updateDeal = async () => {
             </label>
   
             <label for="preparation_time" class="block w-full">{{ t('preparation_time') }}
-              <VueDatePicker v-model="recipes.preparation_time" :placeholder="t('preparation_time')" model-type="hh:mm:ss" time-picker enable-seconds></VueDatePicker>
+              {{ themeDataPicker }}
+              <VueDatePicker :dark="themeDataPicker" v-model="recipes.preparation_time" :placeholder="t('preparation_time')" model-type="hh:mm:ss" time-picker enable-seconds></VueDatePicker>
             </label>
           </div>
 
@@ -276,3 +291,9 @@ const updateDeal = async () => {
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.dp__menu  {
+  background-color: black !important; 
+}
+</style>

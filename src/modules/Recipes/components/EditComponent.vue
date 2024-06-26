@@ -82,7 +82,7 @@ refresh()
 <div class="flex justify-between my-1">
   <div>{{ t('category') }}</div>
   <div>
-    <b v-if="recipeData.category">{{ recipeData.category }}</b>
+    <b v-if="recipeData.category">{{ recipeData.category.name }}</b>
     <b v-else>-</b>
   </div>
 </div>
