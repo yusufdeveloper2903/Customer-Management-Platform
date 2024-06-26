@@ -114,7 +114,7 @@ export const Regions = [
 
 export const OnboardingTable = [
     {
-        text: "ID",
+        text: "№",
         value: "id",
     },
     {

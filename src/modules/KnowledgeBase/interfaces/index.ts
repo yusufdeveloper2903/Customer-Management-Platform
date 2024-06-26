@@ -65,6 +65,7 @@ export interface Onboarding {
     description_kr: string;
     description_ru: string;
     image: null | string;
+    index: number
 
 }
 

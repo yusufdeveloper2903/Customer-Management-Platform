@@ -12,7 +12,7 @@ import {
     Link,
     Phones,
     RetseptCategory,
-    OnBoarding,
+    Onboarding,
     Splash,
     QuantityType
 
@@ -29,11 +29,11 @@ export default defineStore("knowledgeBase", {
                 results: [] as SmsTemplate[],
             } as Results<SmsTemplate>,
             newTemplate: {
-                results: [] as OnBoarding[],
-            } as Results<OnBoarding>,
-            onBoarding: {
                 results: [] as NewsTemplate[],
             } as Results<NewsTemplate>,
+            onBoarding: {
+                results: [] as Onboarding[],
+            } as Results<Onboarding>,
 
             locationList: {
                 results: [] as LocationPlace[],
@@ -207,6 +207,9 @@ export default defineStore("knowledgeBase", {
             return $axios.post(`/products/product_type/`, data);
         },
 
+        create_onboarding_drag_and_drop(data: any) {
+            return $axios.post(`/knowledge_base/onboarding/${data.id}/drag_and_drop/`, data);
+        },
 
 
         //PATCH REQUEST

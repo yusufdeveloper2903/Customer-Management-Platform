@@ -16,7 +16,7 @@ import DoubleRight from "@/modules/Users/img/double-right-chevron-svgrepo-com.sv
 
 
 //Declared variables
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const store = recipes()
 const isLoading = ref(false);
 const userId = ref<number | null>(null);
@@ -30,21 +30,21 @@ const params = reactive({
 });
 
 const recipeData = ref<RecipeDetailEdit>({
-  id: null,
-  title: "",
-  title_kr: "",
-  title_uz: "",
-  title_ru: "",
-  category: null,
-  calorie: 0,
-  preparation_time: "",
-  rating: "",
-  is_active: false
+    id: null,
+    title: "",
+    title_kr: "",
+    title_uz: "",
+    title_ru: "",
+    category: null,
+    calorie: 0,
+    preparation_time: "",
+    rating: "",
+    is_active: false
 })
 
 // Mounted
-onMounted(async() => {
-   await refresh(params)
+onMounted(async () => {
+    await refresh(params)
 })
 
 // Functions
@@ -122,9 +122,9 @@ const onPageSizeChanged = (e: number) => {
     refresh(params)
 }
 
-const saveData = (() => { 
+const saveData = (() => {
     refresh(params)
-  })
+})
 
 </script>
 
@@ -132,18 +132,18 @@ const saveData = (() => {
     <div class="card">
         <div class="md:flex justify-between items-end mb-10">
             <form class="md:flex items-center gap-5 md:w-7/12">
-            <label for="search" class="w-1/3">
-                {{ t('Search') }}
-                <input type="text" class="form-input" :placeholder="t('Search')" v-model="params.search" />
-            </label>
+                <label for="search" class="w-1/3">
+                    {{ t('Search') }}
+                    <input type="text" class="form-input" :placeholder="t('Search')" v-model="params.search" />
+                </label>
 
-            <label for="category" class="w-1/3">{{ t('category') }}
-            <VSelect v-model="params.category"
-              :options="knowledgeStore.retseptCategoryList && knowledgeStore.retseptCategoryList.results"
-              :getOptionLabel="(name: any) => name.name" :reduce="(item: any) => item.id"
-              :placeholder="t('select_category')" />
-          </label>
-        </form>
+                <label for="category" class="w-1/3">{{ t('category') }}
+                    <VSelect v-model="params.category"
+                        :options="knowledgeStore.retseptCategoryList && knowledgeStore.retseptCategoryList.results"
+                        :getOptionLabel="(name: any) => name['name_' + locale]" :reduce="(item: any) => item.id"
+                        :placeholder="t('select_category')" />
+                </label>
+            </form>
 
             <button class="btn-primary" uk-toggle="target: #edit_recipes" @click="recipeData = <RecipeDetailEdit>{}">
                 {{ t("Add") }}
@@ -165,20 +165,25 @@ const saveData = (() => {
                 {{ item.preparation_time }}
             </template>
 
+            <template #item-title="item">
+                {{ item['title_' + locale] }}
+            </template>
+
             <template #item-category="item">
                 {{ item.category?.name }}
             </template>
 
             <template #item-status="item">
-                <span :class="item.status == 'DRAFT' ? 'rounded bg-secondary px-4 p-1 pt-1 inline m-1 text-white': item.status == 'CHANGING' ? 'rounded bg-warning px-4 p-1 pt-1 inline m-1 text-white' : 'rounded bg-success px-4 p-1 pt-1 inline m-1 text-white'">
+                <span
+                    :class="item.status == 'DRAFT' ? 'rounded bg-secondary px-4 p-1 pt-1 inline m-1 text-white' : item.status == 'CHANGING' ? 'rounded bg-warning px-4 p-1 pt-1 inline m-1 text-white' : 'rounded bg-success px-4 p-1 pt-1 inline m-1 text-white'">
                     {{ item.status == "DRAFT" ? t('Draft') : item.status == "CHANGING" ? t('changing') : t('Published') }}
                 </span>
             </template>
 
             <template #item-photo="items">
                 <div class="py-3 flex justify-left gap-3">
-                    <img v-if="items && items.image" class="w-[45px] h-[45px] rounded" :src="items.image"
-                        alt="Photo"  style="aspect-ratio: 1/1 " />
+                    <img v-if="items && items.image" class="w-[45px] h-[45px] rounded" :src="items.image" alt="Photo"
+                        style="aspect-ratio: 1/1 " />
                     <div v-else
                         class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded">
                         <Icon icon="Camera" color="#356c2d" />
@@ -197,7 +202,8 @@ const saveData = (() => {
 
             <template #item-actions="item">
                 <div class="py-3 flex justify-left items-center gap-3">
-                    <button @click="router.push({ name: 'recipe-detail', params: { id: item.id } })" class="btn-success btn-action my-1">
+                    <button @click="router.push({ name: 'recipe-detail', params: { id: item.id } })"
+                        class="btn-success btn-action my-1">
                         <img :src="DoubleRight" alt="Icon">
                     </button>
 
@@ -213,11 +219,11 @@ const saveData = (() => {
 
         </EasyDataTable>
 
-        <TwPagination :total="knowledgeStore.retseptCategoryList.count" class="mt-10 tw-pagination" :current="params.page" :per-page="params.page_size"
-            :text-before-input="t('go_to_page')" :text-after-input="t('forward')" @page-changed="changePagionation"
-            @per-page-changed="onPageSizeChanged" />
+        <TwPagination :total="knowledgeStore.retseptCategoryList.count" class="mt-10 tw-pagination" :current="params.page"
+            :per-page="params.page_size" :text-before-input="t('go_to_page')" :text-after-input="t('forward')"
+            @page-changed="changePagionation" @per-page-changed="onPageSizeChanged" />
     </div>
 
     <DeleteModal @delete-action="deleteAction" :id="'recipes-delete-modal'" />
-    <EditRecipesModal  :edit-data="recipeData" @saveData="saveData"/>
+    <EditRecipesModal :edit-data="recipeData" @saveData="saveData" />
 </template>

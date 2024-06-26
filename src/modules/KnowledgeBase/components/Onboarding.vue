@@ -19,6 +19,7 @@ const {t, locale} = useI18n()
 const store = knowledgeBase();
 const isLoading = ref(false);
 const itemToDelete = ref<number | null>(null);
+const currentRow = ref<Onboarding | null>(null);
 const dataToEdit = ref<Onboarding>({
   id: null,
   title: '',
@@ -30,6 +31,7 @@ const dataToEdit = ref<Onboarding>({
   description_kr: '',
   description_ru: '',
   image: null,
+  index: 0
 });
 const params = reactive({
   page: 1,
@@ -132,11 +134,26 @@ const onPageSizeChanged = (e: number) => {
   params.page = 1
   refresh()
 }
-const handleDeleteModal = (id: number) => {
+const handleDeleteModal = (id: number | null) => {
   itemToDelete.value = id
   UIKit.modal("#onboarding-main-delete-modal").show()
 };
 
+const dragStart = (item: any) => {
+  currentRow.value = item;
+};
+
+const dragOver = (e: any) => {
+  e.preventDefault();
+};
+
+
+const dragDrop = async (item: Onboarding) => {
+  event?.preventDefault();
+  await store.create_onboarding_drag_and_drop({new_index: currentRow.value?.index, last_index: item.index, id: item.id})
+  await refresh();
+  toast.success(t("updated_successfully"));
+};
 </script>
 
 <template>
@@ -155,34 +172,30 @@ const handleDeleteModal = (id: number) => {
         {{ t("Add") }}
       </button>
     </div>
-    <EasyDataTable
-        theme-color="#7367f0"
-        hide-footer
-        :loading="isLoading"
-        :headers="OnboardingTable"
-        :items="store.onBoarding.results"
-    >
-      <template #empty-message>
-        <div>{{ t('no_available_data') }}</div>
-      </template>
-      <template #header="header">
-        {{ t(header.text) }}
-      </template>
-      <template #item-title="item">
-        {{ item['title_' + locale] }}
-      </template>
-      <template #item-description="item">
-        {{ item['description_' + locale] }}
-      </template>
 
-      <template #item-image="{ image }">
-        <div class="py-3 flex justify-left gap-3">
+
+    <table class="min-w-full bg-white border border-gray-300 dark:border-gray-600">
+      <thead>
+      <tr>
+        <th v-for="field in OnboardingTable"
+            class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider firstTable">
+          {{ t(field.text) }}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(item, index) in store.onBoarding?.results" 
+          class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
+          :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
+          <td class="px-6 whitespace-no-wrap text-left">{{ item.index }}</td>
+          <td class="px-6 whitespace-no-wrap text-left">
+          <div class="py-3 flex justify-left gap-3">
           <img
-              v-if="image"
+              v-if="item.image"
               class="w-[45px] h-[45px] rounded"
-              :src="image"
+              :src="item.image"
               alt="Rounded avatar"
-              @click="onShowFile(image)"
+              @click="onShowFile(item.image)"
               style="aspect-ratio: 1/1 "
           />
           <div
@@ -192,27 +205,25 @@ const handleDeleteModal = (id: number) => {
             <Icon icon="Camera" color="#356c2d"/>
           </div>
         </div>
-      </template>
-      <template #header-actions="item">
-        <div class="flex justify-end">
-          {{ t(item.text) }}
-        </div>
-      </template>
-      <template #item-actions="data">
-        <div class="flex my-4 justify-end">
-          <button uk-toggle="target: #onboarding_template" class="btn-warning btn-action" @click="dataToEdit = data">
-            <Icon icon="Pen New Square" color="#fff" size="16"/>
-          </button>
-          <button
-              class="ml-3 btn-danger btn-action"
+        </td>
+        <td class="px-6 whitespace-no-wrap text-left ">{{ item['title_' + locale] }}</td>
+        <td class="px-6 whitespace-no-wrap text-left">{{ item['description_' + locale] }}</td>
 
-              @click="handleDeleteModal(data.id)"
-          >
-            <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
-          </button>
-        </div>
-      </template>
-    </EasyDataTable>
+        <td class="px-6 whitespace-no-wrap">
+          <div class="flex py-2 justify-end">
+            <button class="btn-warning btn-action" uk-toggle="target: #onboarding_template" @click="dataToEdit = item">
+              <Icon icon="Pen New Square" color="#fff" size="16"/>
+            </button>
+            <button @click="handleDeleteModal(item.id)" class="ml-3 btn-danger btn-action"
+                    >
+              <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="empty_table" v-if="!store.onBoarding.results.length">{{ t('no_available_data') }}</div>
 
     <TwPagination
         :total="store.onBoarding.count"
@@ -230,3 +241,10 @@ const handleDeleteModal = (id: number) => {
   <onBoardingModal :edit-data="dataToEdit" @refresh="refresh"/>
   <ShowFileModal :image="image" id="onboarding-file-modal-image" ref="imageCard"/>
 </template>
+
+<style>
+.firstTable:nth-child(5) {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>
