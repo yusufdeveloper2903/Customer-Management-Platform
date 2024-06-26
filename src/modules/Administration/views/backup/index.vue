@@ -14,7 +14,7 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 
 
 //DECLARED VARIABLES
-const {t} = useI18n()
+const {t, locale} = useI18n()
 const dateConfig = ref({})
 const administrationStorage = administrationStore()
 const isLoading = ref(false)
@@ -74,6 +74,7 @@ const createBackup = async () => {
     let success = await administrationStorage.CREATE_BACKUP()
     if (success) {
       refresh()
+      UIkit.modal("#backup-add-modal").hide();
       toast.success(t('created_successfully'));
       isLoading.value = false
     }
