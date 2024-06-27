@@ -13,7 +13,7 @@ const videoPlayer = ref();
 
 
 function pauseVideo() {
-    if(propData.openFile.file_type === 'VIDEO')
+    if(propData.openFile.file_type == 'video')
         videoPlayer.value.pause();
     }
 </script>

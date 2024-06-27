@@ -306,3 +306,24 @@ export interface QuantityType {
     title_kr: string,
     unique_name: string
 }
+
+export interface District {
+    id: number | null;
+    name: string;
+    name_uz: string;
+    name_ru: string;
+    name_kr: string;
+    parent: {
+        id: number;
+        name: string
+    }
+}
+
+export interface EditDistrict {
+    id: number | null;
+    name: string;
+    name_uz: string;
+    name_ru: string;
+    name_kr: string;
+    parent: any
+}

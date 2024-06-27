@@ -443,5 +443,8 @@
   "edit_cooking_step": "Редактировать этап приготовления",
   "recipe detail": "Подробности рецепта",
   "Activity": "Активность",
-  "changing": "Изменение"
+  "changing": "Изменение",
+  "add_district": "Добавление района",
+  "edit_district": "Изменить район",
+  "districts": "Районы"
 }
