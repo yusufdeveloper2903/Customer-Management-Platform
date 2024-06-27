@@ -13,7 +13,7 @@ import {toast} from "vue3-toastify";
 
 
 // Declared variables
-const {t} = useI18n()
+const {t, locale} = useI18n()
 const route = useRoute()
 const store = RecipeStorage()
 const emits = defineEmits(["recipes"]);
@@ -74,7 +74,7 @@ refresh()
 <div class="flex justify-between">
   <div>{{ t('name') }}</div>
   <div>
-    <b v-if="recipeData.title">{{ recipeData.title }}</b>
+    <b v-if="recipeData.title">{{ recipeData['title_' + locale] }}</b>
     <b v-else>-</b>
   </div>
 </div>
@@ -82,7 +82,7 @@ refresh()
 <div class="flex justify-between my-1">
   <div>{{ t('category') }}</div>
   <div>
-    <b v-if="recipeData.category">{{ recipeData.category.name }}</b>
+    <b v-if="recipeData.category">{{ recipeData.category['name_' + locale] }}</b>
     <b v-else>-</b>
   </div>
 </div>

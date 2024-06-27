@@ -129,6 +129,7 @@ const handleDeleteModal = (id: number) => {
       {{ t(header.text) }}
     </template>
 
+
     <template #item-product="item">
       {{ item.draft_product?.title }}
     </template>

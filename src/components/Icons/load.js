@@ -5736,6 +5736,12 @@ export default [
         }
     },
     {
+        "name": "Star Icon",
+        "path": {
+            "default": "@/assets/icons/Star Icon.svg"
+        }
+    },
+    {
         "name": "Shield Up",
         "path": {
             "default": "@/assets/icons/Shield Up.svg"

@@ -106,7 +106,7 @@ const updateText = async () => {
     try {
       content.value.text = content.value.text_uz
       if (store.pagesList.id) {
-        await store.updatePages({id: store.pagesList.id, data: content.value}).then(() => {
+        await store.updatePages({id: store.pagesList.id, ...content.value}).then(() => {
           toast.success(t('success'));
           refresh()
         })

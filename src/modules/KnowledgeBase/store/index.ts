@@ -14,7 +14,8 @@ import {
     RetseptCategory,
     Onboarding,
     Splash,
-    QuantityType
+    QuantityType,
+    District
 
 } from "../interfaces";
 
@@ -81,7 +82,11 @@ export default defineStore("knowledgeBase", {
                 results: [] as Splash[]
             } as Results<Splash>,
 
-            quantityTypeList: [] as QuantityType[]
+            quantityTypeList: [] as QuantityType[],
+
+            distrctList: {
+                results: [] as District[],
+            } as Results<District>,
             
         };
     },
@@ -107,7 +112,7 @@ export default defineStore("knowledgeBase", {
             this.locationList = data;
             return this.locationList;
         },
-        async getRegions(params: any) {
+        async getRegions(params?: any) {
             const {data} = await $axios.get(`/knowledge_base/region/`, {params});
             this.regionsList = data;
             return this.regionsList;
@@ -152,6 +157,11 @@ export default defineStore("knowledgeBase", {
         async getQuantityType(params?: Params) {
             const {data} = await $axios.get('/products/product_type/', {params})
             this.quantityTypeList = data
+        },
+
+        async getDistrict(params?: Params) {
+            const {data} = await $axios.get('/knowledge_base/region/get_districts/', {params})
+            this.distrctList = data
         },
 
         //CREATE REQUEST

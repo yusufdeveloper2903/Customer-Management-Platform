@@ -405,5 +405,9 @@
   "edit_cooking_step": "Пишириш босқичини таҳрирлаш",
   "recipe detail": "Рецепт тафсилотлари",
   "Activity": "Фаоллик",
-  "changing": "Ўзгартириш"
+  "changing": "Ўзгартириш",
+  "add_district": "Туман қўшиш",
+  "edit_district": "Туманни таҳрирлаш",
+  "districts": "Туманлар"
+
 }

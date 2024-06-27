@@ -125,10 +125,10 @@ const handleDeleteModal = (id: number | null) => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="item in store.preparationList?.results"
+      <tr v-for="(item, index) in store.preparationList?.results"
         class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
         :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
-        <td class="px-6 whitespace-no-wrap text-left ">{{ item.id }}</td>
+        <td class="px-6 whitespace-no-wrap text-left ">{{ index + 1 }}</td>
         <td class="px-6 whitespace-no-wrap text-left">
             {{ item['draft_description_' + locale] }}
         </td>

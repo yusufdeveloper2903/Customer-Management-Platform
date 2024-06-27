@@ -355,4 +355,11 @@ export const splashFields = [
     {text: "actions", value: "actions"},
 ]
 
+export const districtFields = [
+    {text: "ID", value: "id"},
+    {text: "districts", value: "name"},
+    {text: "region", value: "region"},
+    {text: "actions", value: "actions"},
+]
+
 

@@ -18,7 +18,7 @@ import Category from "../components/Categories.vue"
 import Splash from "../components/Splash.vue";
 import QuantityType from "../components/QuantityType.vue"
 import {ref} from 'vue'
-
+import Districts from "../components/Districts.vue"
 
 //DECLARED VARIABLES
 const knowledge = ref('')
@@ -63,8 +63,13 @@ const selectedTitle = (val: any) => {
       <Tab title="PrivacyPolicy">
         <PrivacyPolicy :knowledge="knowledge" :params="params"/>
       </Tab>
+
       <Tab title="region">
         <Regions :knowledge="knowledge" :params="params"/>
+      </Tab>
+
+      <Tab title="districts">
+        <Districts :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="Terms_and_conditions">

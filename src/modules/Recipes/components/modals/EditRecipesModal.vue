@@ -253,7 +253,6 @@ const updateDeal = async () => {
             </label>
   
             <label for="preparation_time" class="block w-full">{{ t('preparation_time') }}
-              {{ themeDataPicker }}
               <VueDatePicker :dark="themeDataPicker" v-model="recipes.preparation_time" :placeholder="t('preparation_time')" model-type="hh:mm:ss" time-picker enable-seconds></VueDatePicker>
             </label>
           </div>

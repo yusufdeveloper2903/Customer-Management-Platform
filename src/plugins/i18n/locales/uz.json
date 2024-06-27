@@ -410,5 +410,8 @@
   "edit_cooking_step": "Pishirish bosqichini tahrirlash",
   "recipe detail": "Retsept tafsilotlari",
   "Activity": "Faollik",
-  "changing": "O'zgartirish"
+  "changing": "O'zgartirish",
+  "add_district": "Tuman qo'shish",
+  "edit_district": "Tumanni tahrirlash",
+  "districts": "Tumanlar"
 }

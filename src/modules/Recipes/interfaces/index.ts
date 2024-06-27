@@ -38,7 +38,7 @@ export interface RecipeDetail {
 export interface RecipeDetailEdit {
     id: number | null;
     title: string;
-    category: number | null;
+    category: object | null;
     rating: string;
     calorie: number;
     preparation_time: string;

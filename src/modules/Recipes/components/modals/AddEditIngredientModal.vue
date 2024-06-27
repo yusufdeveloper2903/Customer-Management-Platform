@@ -14,7 +14,7 @@ import { useRoute } from "vue-router";
 
 
 // Declared variables
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const isSubmitted = ref<boolean>(false);
 const store = recipeStore()
 const route = useRoute()
@@ -144,7 +144,7 @@ const updateDeal = async () => {
           <label for="product" class="mt-4 block">{{ t('product') }}
             <VSelect v-model="recipes.draft_product"
               :options="knowledgeStore.productsList && knowledgeStore.productsList.results"
-              :getOptionLabel="(name: any) => name.title" :reduce="(item: any) => item.id"
+              :getOptionLabel="(name: any) => name['title_' + locale]" :reduce="(item: any) => item.id"
               :placeholder="t('select_product')" :class="validate.draft_product.$errors.length ? 'required-input' : ''" />
             <p v-for="error in validate.draft_product.$errors" :key="error.$uid" class="text-danger text-sm">
               {{ t(error.$message) }}
@@ -155,7 +155,7 @@ const updateDeal = async () => {
           <div class="flex my-4">
           <label for="type_quantity" class="mr-4 w-1/2">{{ t('type_quantity') }}
             <VSelect v-model="recipes.draft_unit_of_measure" :options="knowledgeStore.quantityTypeList"
-              :getOptionLabel="(name: any) => name.title" :reduce="(item: any) => item.id" :placeholder="t('select_type')"
+              :getOptionLabel="(name: any) => name['title_' + locale]" :reduce="(item: any) => item.id" :placeholder="t('select_type')"
               :class="validate.draft_unit_of_measure.$errors.length ? 'required-input' : ''" />
             <p v-for="error in validate.draft_unit_of_measure.$errors" :key="error.$uid" class="text-danger text-sm">
               {{ t(error.$message) }}
