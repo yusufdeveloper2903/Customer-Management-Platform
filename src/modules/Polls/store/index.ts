@@ -23,7 +23,8 @@ export default defineStore("polls", {
             },
             contentButtonTypeList: {
                 results: []
-            }
+            },
+            questionsPollsCard: {}
         };
     },
     actions: {
@@ -70,5 +71,10 @@ export default defineStore("polls", {
             return $axios.delete(`/knowledge_base/poll_question/${id}/`);
         },
 
+
+        async getQuestionPollsCard(params) {
+            const {data} = await $axios.get(`/knowledge_base/poll_card/`, {params})
+            this.questionsPollsCard = data.data
+        },
     },
 });

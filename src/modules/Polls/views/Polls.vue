@@ -1,7 +1,4 @@
 <script setup lang="ts">
-
-
-//IMPORTED FILES
 import {PollsTable} from "../constants";
 import PollsStore from ".././store/index";
 import {onMounted, reactive, ref, watch} from "vue";
@@ -15,7 +12,6 @@ import DetailsModal from "@/modules/Polls/components/CreatePolls.vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 
 
-//DECLARED VARIABLES
 const dateConfig = ref({})
 const editData = <any>ref({
   id: null,
@@ -52,8 +48,6 @@ const listStatus = ref([
   }
 ])
 
-
-//MOUNTED LIFE CYCLE
 onMounted(async () => {
   let page = localStorage.getItem('page')
   let page_size = localStorage.getItem('page_size')
@@ -64,11 +58,9 @@ onMounted(async () => {
     params.page_size = JSON.parse(page_size)
   }
   await refresh()
-
+await store.getQuestionPollsCard()
 })
 
-
-//WATCHERS
 watchDebounced(() => params.search, function () {
   params.page = 1
   localStorage.setItem('page', '1')
@@ -99,7 +91,6 @@ watch(
     }
 )
 
-//FUNCTIONS
 const refresh = async () => {
   isLoading.value = true;
   try {
@@ -168,111 +159,146 @@ const editModal = async (val: any) => {
   editData.value = await val
   await UIKit.modal("#polls-modal").show();
 }
-
 </script>
 
 <template>
-  <div class="card">
-    <div class="flex justify-between items-end mb-7 ">
-      <div class="flex items-center md:w-7/12">
-        <label>{{ $t('Search') }}
-          <input
-              v-model="params.search"
-              type="text"
-              class="form-input"
-          />
-        </label>
-        <div class="md:w-1/3 ml-4 ">
-          <label for="role" class="dark:text-gray-300">
-            {{ $t("Status") }}
-          </label>
-          <v-select
-              :options="listStatus"
-              v-model="params.status"
-              :getOptionLabel="(name:any) => t(name.title)"
-              :reduce="(item:any) => item.value"
-          >
-            <template #no-options> {{ $t("no_matching_options") }}</template>
-          </v-select>
+  <div>
+    <div class="grid grid-cols-3 mb-5 gap-3">
+      <div class="card flex items-center justify-between">
+        <div>
+          <b class="text-[#009933] !bold">{{store.questionsPollsCard.client}}</b>
+          <p>Пользователи</p>
         </div>
-        <div class="md:w-1/3 ml-4 ">
-          <label for="from" class="dark:text-gray-300">
-            {{ $t("date_from") + ' - ' + $t("date_to") }}
-          </label>
-          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :range="{ partialRange: false }" v-model="dateConfig"/>
 
-        </div>
+        <img src="@/assets/image/avatar.svg" alt="@">
       </div>
 
-      <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-              uk-toggle="target: #polls-modal" @click="editData={}">
-        {{ $t("Add") }}
-      </button>
+      <div class="card flex items-center justify-between">
+        <div>
+          <b class="text-[#009933] !bold">{{store.questionsPollsCard.read_count}}</b>
+          <p>Просмотрено</p>
+        </div>
+
+        <img src="@/assets/image/eye.svg" alt="#">
+      </div>
+
+      <div class="card flex items-center justify-between">
+        <div>
+          <b class="text-[#009933] !bold">{{store.questionsPollsCard.leave_feedback_client}}</b>
+          <p>Прошли опрос</p>
+        </div>
+
+        <img src="@/assets/image/tab.svg" alt="">
+      </div>
     </div>
-    <EasyDataTable
-        theme-color="#7367f0"
-        hide-footer
-        :loading="isLoading"
-        :headers="PollsTable"
-        :items="PollsList"
-    >
-      <template #empty-message>
-        <div class="dark:text-white">{{ $t("no_available_data") }}</div>
-      </template>
-      <template #header="header">
-        {{ $t(header.text) }}
-      </template>
-      <template #item-count_question="items">
+
+    <div class="card">
+
+      <div class="flex justify-between items-end mb-7 ">
+        <div class="flex items-center md:w-7/12">
+          <label>{{ $t('Search') }}
+            <input
+                v-model="params.search"
+                type="text"
+                class="form-input"
+            />
+          </label>
+          <div class="md:w-1/3 ml-4 ">
+            <label for="role" class="dark:text-gray-300">
+              {{ $t("Status") }}
+            </label>
+            <v-select
+                :options="listStatus"
+                v-model="params.status"
+                :getOptionLabel="(name:any) => t(name.title)"
+                :reduce="(item:any) => item.value"
+            >
+              <template #no-options> {{ $t("no_matching_options") }}</template>
+            </v-select>
+          </div>
+          <div class="md:w-1/3 ml-4 ">
+            <label for="from" class="dark:text-gray-300">
+              {{ $t("date_from") + ' - ' + $t("date_to") }}
+            </label>
+            <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :range="{ partialRange: false }"
+                           v-model="dateConfig"/>
+
+          </div>
+        </div>
+
+        <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
+                uk-toggle="target: #polls-modal" @click="editData={}">
+          {{ $t("Add") }}
+        </button>
+      </div>
+      <EasyDataTable
+          theme-color="#7367f0"
+          hide-footer
+          :loading="isLoading"
+          :headers="PollsTable"
+          :items="PollsList"
+      >
+        <template #empty-message>
+          <div class="dark:text-white">{{ $t("no_available_data") }}</div>
+        </template>
+        <template #header="header">
+          {{ $t(header.text) }}
+        </template>
+        <template #item-name="data">
+          <div v-html="data.name"/>
+        </template>
+        <template #item-count_question="items">
           <span
               class="rounded bg-success px-4 p-1 pt-1 inline  text-white"
           >
             {{ items.count_question }}
           </span>
-      </template>
-      <template #item-status="items">
+        </template>
+        <template #item-status="items">
           <span
               :class="changeColor(items.status)" class="rounded  px-4 p-1 pt-1 inline  text-white"
           >
             {{ changeStatus(items.status) }}
           </span>
-      </template>
-      <template #header-actions="item">
-        <div class="flex justify-end">
-          {{ $t(item.text) }}
-        </div>
-      </template>
-      <template #item-actions="data">
-        <div class="flex my-4 justify-end">
-          <button @click="showDetailPage(data)" class="btn-success btn-action mr-3">
-            <img :src="DoubleRight"
-                 alt="Icon">
-          </button>
-          <button class="btn-warning btn-action"
-                  @click="editModal(data)">
-            <Icon icon="Pen New Square" color="#fff" size="16"/>
-          </button>
-          <button
-              class="ml-3 btn-danger btn-action"
-              @click="handleDeleteModal(data.id)"
-          >
-            <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
-          </button>
-        </div>
-      </template>
-    </EasyDataTable>
+        </template>
+        <template #header-actions="item">
+          <div class="flex justify-end">
+            {{ $t(item.text) }}
+          </div>
+        </template>
+        <template #item-actions="data">
+          <div class="flex my-4 justify-end">
+            <button @click="showDetailPage(data)" class="btn-success btn-action mr-3">
+              <img :src="DoubleRight"
+                   alt="Icon">
+            </button>
+            <button class="btn-warning btn-action"
+                    @click="editModal(data)">
+              <Icon icon="Pen New Square" color="#fff" size="16"/>
+            </button>
+            <button
+                class="ml-3 btn-danger btn-action"
+                @click="handleDeleteModal(data.id)"
+            >
+              <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
+            </button>
+          </div>
+        </template>
+      </EasyDataTable>
 
-    <TwPagination
-        :total="store.PollsList.count"
-        class="mt-10 tw-pagination"
-        :current="params.page"
-        :restart="toRefresh"
-        :per-page="params.page_size"
-        :text-before-input="$t('go_to_page')"
-        :text-after-input="$t('forward')"
-        @page-changed="changePagination"
-        @per-page-changed="onPageSizeChanged"
-    />
+      <TwPagination
+          :total="store.PollsList.count"
+          class="mt-10 tw-pagination"
+          :current="params.page"
+          :restart="toRefresh"
+          :per-page="params.page_size"
+          :text-before-input="$t('go_to_page')"
+          :text-after-input="$t('forward')"
+          @page-changed="changePagination"
+          @per-page-changed="onPageSizeChanged"
+      />
+    </div>
+    <DetailsModal :editData="editData" @refresh="refresh"/>
+    <DeleteModal @delete-action="deleteAction" id="polls-main-delete-modal"/>
   </div>
-  <DetailsModal :editData="editData" @refresh="refresh"/>
-  <DeleteModal @delete-action="deleteAction" id="polls-main-delete-modal"/>
 </template>

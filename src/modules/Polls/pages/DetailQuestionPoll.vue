@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-
-
 //IMPORTED FILES
 import PollsStore from ".././store/index";
 import {computed, onMounted, Ref, ref, watch} from "vue";
@@ -64,6 +62,8 @@ onMounted(async () => {
   if (route.params.id) {
     await refresh()
     pollAdd.value = store.questionsPollsId.data
+    console.log(store.questionsPollsId.data, 'store.questionsPollsId.data')
+    pollAdd.value.description_uz = store.questionsPolls.data.description_uz
     if (pollAdd.value.question_type == 'SINGLE') {
       statusQuestion.value = false
     } else {
@@ -190,16 +190,24 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
     <div class="card w-2/6">
       <ModalTabs class="mb-4">
         <ModalTab title="UZ">
-          <label
-          >{{ $t('description') + ' ' + $t('UZ') }}
-            <textarea
-                type="text"
-                class="form-input"
-                rows="4"
-                v-model="pollAdd.description_uz"
-                :class="validate.description_uz.$errors.length ? 'required-input' : ''"
+          <label>{{ $t('description') + ' ' + $t('UZ') }}
+<!--            <textarea-->
+<!--                type="text"-->
+<!--                class="form-input"-->
+<!--                rows="4"-->
+<!--                v-model="pollAdd.description_uz"-->
+<!--                :class="validate.description_uz.$errors.length ? 'required-input' : ''"-->
 
-            />
+<!--            />-->
+            <Editor
+                content-type="html"
+                toolbar="full"
+                class="scrollbar rounded border"
+                style="height: 45vh; overflow-y: auto;"
+                :class="validate.description_uz.$errors.length ? 'required-input' : ''"
+                v-model:content="pollAdd.description_uz"
+            >
+            </Editor>
             <p
                 v-for="error in validate.description_uz.$errors"
                 :key="error.$uid"
@@ -210,16 +218,24 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
           </label>
         </ModalTab>
         <ModalTab title="KR">
-          <label
-          >{{ $t('description') + ' ' + $t('KR') }}
-            <textarea
-                type="text"
-                class="form-input"
-                rows="4"
-                v-model="pollAdd.description_kr"
-                :class="validate.description_kr.$errors.length ? 'required-input' : ''"
+          <label>{{ $t('description') + ' ' + $t('KR') }}
+<!--            <textarea-->
+<!--                type="text"-->
+<!--                class="form-input"-->
+<!--                rows="4"-->
+<!--                v-model="pollAdd.description_kr"-->
+<!--                :class="validate.description_kr.$errors.length ? 'required-input' : ''"-->
 
-            />
+<!--            />-->
+            <Editor
+                content-type="html"
+                toolbar="full"
+                class="scrollbar rounded border"
+                style="height: 45vh; overflow-y: auto;"
+                :class="validate.description_kr.$errors.length ? 'required-input' : ''"
+                v-model:content="pollAdd.description_kr"
+            >
+            </Editor>
             <p
                 v-for="error in validate.description_kr.$errors"
                 :key="error.$uid"
@@ -227,7 +243,6 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
             >
               {{ $t(error.$message) }}
             </p>
-
           </label>
 
 
@@ -236,13 +251,22 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
         <ModalTab title="RU">
           <label
           >{{ $t('description') + ' ' + $t('RU') }}
-            <textarea
-                type="text"
-                class="form-input"
-                rows="4"
-                v-model="pollAdd.description_ru"
+<!--            <textarea-->
+<!--                type="text"-->
+<!--                class="form-input"-->
+<!--                rows="4"-->
+<!--                v-model="pollAdd.description_ru"-->
+<!--                :class="validate.description_ru.$errors.length ? 'required-input' : ''"-->
+<!--            />-->
+            <Editor
+                content-type="html"
+                toolbar="full"
+                class="scrollbar rounded border"
+                style="height: 45vh; overflow-y: auto;"
                 :class="validate.description_ru.$errors.length ? 'required-input' : ''"
-            />
+                v-model:content="pollAdd.description_ru"
+            >
+            </Editor>
             <p
                 v-for="error in validate.description_ru.$errors"
                 :key="error.$uid"
@@ -267,9 +291,8 @@ const validate: Ref<Validation> = useVuelidate(rules, pollAdd);
           rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
         ></div>
       </label>
-
-
     </div>
+
     <div class="card w-4/6">
       <ModalTabs class="mb-4">
         <ModalTab title="UZ">
