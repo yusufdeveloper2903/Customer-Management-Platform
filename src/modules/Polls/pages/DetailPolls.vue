@@ -39,7 +39,7 @@ onMounted(async () => {
   }
   params.poll = String(route.params.id)
   await refresh()
-
+  await store.getQuestionPollsCard({poll_id: route.params.id, ...params})
 })
 
 
@@ -107,6 +107,35 @@ const showQuestionPoll = () => {
 
 <template>
   <div>
+    <div class="grid grid-cols-3 mb-5 gap-3">
+      <div class="card flex items-center justify-between">
+        <div>
+          <b class="text-[#009933] !bold">{{store.questionsPollsCard.client}}</b>
+          <p>Пользователи</p>
+        </div>
+
+        <img src="@/assets/image/avatar.svg" alt="@">
+      </div>
+
+      <div class="card flex items-center justify-between">
+        <div>
+          <b class="text-[#009933] !bold">{{store.questionsPollsCard.read_count}}</b>
+          <p>Просмотрено</p>
+        </div>
+
+        <img src="@/assets/image/eye.svg" alt="#">
+      </div>
+
+      <div class="card flex items-center justify-between">
+        <div>
+          <b class="text-[#009933] !bold">{{store.questionsPollsCard.leave_feedback_client}}</b>
+          <p>Прошли опрос</p>
+        </div>
+
+        <img src="@/assets/image/tab.svg" alt="">
+      </div>
+    </div>
+
 
     <div class="card flex justify-between items-end">
       <div class="flex items-center md:w-7/12">
@@ -131,7 +160,9 @@ const showQuestionPoll = () => {
       <div class="tab" v-for="item in  store.questionsPolls.data.results" :key="item.id">
         <input type="checkbox" name="accordion-1" :id="String(item.id)">
         <label :for="String(item.id)" class="tab__label card">
-          <small class="ml-4 mt-1 select-none">{{ item.id }}. {{ item['description_' + $i18n.locale] }}</small>
+          <small class="ml-3 mt-1">{{item.id}}</small>
+<!--          <small class="ml-4 mt-1 select-none flex items-center">{{item.id}}{{item['description_' + $i18n.locale]}}</small>-->
+          <small class="ml-4 mt-1 select-none flex items-center" v-html='item["description_" + $i18n.locale]'></small>
           <small class="ml-auto">
             <small class="flex my-4 justify-end">
 
@@ -148,29 +179,40 @@ const showQuestionPoll = () => {
             </small>
           </small>
         </label>
-
         <div class="tab__content mt-2 mb-2 ">
           <div class="card">
-            <div v-if="item.options.length > 0">
-              <div v-if="item.question_type == 'SINGLE'">
-                <div v-for="data in item.options" :key="data.index">
-                  <input type="radio" id="test1" name="radio-group" disabled>
-                  <label class="mt-2 mb-2" for="test1">{{ data['context_' + $i18n.locale] }}</label>
-                </div>
+           <div class="grid grid-cols-2 gap-5">
+            <div class="flex flex-col" v-for="(val, index2) in item.options" :key="index2">
+              <span class="text-[#1F1F1F]">0{{index2 + 1}} {{val['context_' + $i18n.locale]}}</span>
+              <div class="w-full bg-gray-200 rounded-full h-4 dark:bg-gray-700 mt-3">
+                <div class="bg-[#009933] h-4 rounded-full" :style="'width:' + val.percent+ '%'"></div>
               </div>
-              <div v-if="item.question_type == 'MULTIPLE'">
-                <div class="form-group-checkbox pb-2 pt-2 " v-for="data in item.options" :key="data.index">
-                  <input type="checkbox" id="html" disabled>
-                  <label for="html">{{ data['context_' + $i18n.locale] }}</label>
-                </div>
+              <div class="flex items-center mt-3">
+                <img src="@/assets/image/star.svg" alt="">
+                <div class="ml-2 text-[#1F1F1F] dark:text-white">{{val.percent}}%</div>
               </div>
-
             </div>
+           </div>
+<!--            <div v-if="item.options.length > 0">-->
+<!--              <div v-if="item.question_type == 'SINGLE'">-->
+<!--                <div v-for="data in item.options" :key="data.index">-->
+<!--                  <input type="radio" id="test1" name="radio-group" disabled>-->
+<!--                  <label class="mt-2 mb-2" for="test1">{{ data['context_' + $i18n.locale] }}</label>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div v-if="item.question_type == 'MULTIPLE'">-->
+<!--                <div class="form-group-checkbox pb-2 pt-2 " v-for="data in item.options" :key="data.index">-->
+<!--                  <input type="checkbox" id="html" disabled>-->
+<!--                  <label for="html">{{ data['context_' + $i18n.locale] }}</label>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
           </div>
         </div>
       </div>
 
     </section>
+
     <section v-else class="card mt-3">
       <div class="text-center">{{ $t('no_available_data') }}</div>
     </section>
@@ -310,7 +352,7 @@ const showQuestionPoll = () => {
 }
 
 .tab input:checked ~ .tab__content {
-  max-height: 10rem;
+  max-height: 20rem;
 }
 
 .tab__label,
