@@ -170,7 +170,7 @@ const saveData = (() => {
             </template>
 
             <template #item-category="item">
-                {{ item.category?.name }}
+                {{ item.category['name_' + locale] }}
             </template>
 
             <template #item-status="item">
