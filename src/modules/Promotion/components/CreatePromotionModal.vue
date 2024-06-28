@@ -118,7 +118,6 @@ watch(
 )
 
 function openModal() {
-
   if (propData.editData.id) {
     productsData.value.title = propData.editData.title_uz
     productsData.value.title_uz = propData.editData.title_uz

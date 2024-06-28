@@ -53,10 +53,10 @@ export const headerProductCard = [
         text: 'Status',
         value: 'status'
     },
-    {
-        text: 'category',
-        value: 'category'
-    },
+    // {
+    //     text: 'category',
+    //     value: 'category'
+    // },
     {
         text: "discount percentage",
         value: "discount_percentage"

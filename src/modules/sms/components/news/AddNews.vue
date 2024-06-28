@@ -93,10 +93,10 @@ watch(() => store.receiversList.results, function () {
 
 watch(() => newsData.value.template, (val: any) => {
   if (val?.id) {
+    console.log(val,'val')
     newsData.value.title_uz = val?.title_uz
     newsData.value.title_ru = val?.title_ru
     newsData.value.title_kr = val?.title_kr
-    newsData.value.status = val?.status
     newsData.value.description_uz = val?.description_uz
     newsData.value.description_ru = val?.description_ru
     newsData.value.description_kr = val?.description_kr
@@ -144,7 +144,7 @@ onMounted(async () => {
     newsData.value.title_uz = store.newsListDetail.title_uz
     newsData.value.title_kr = store.newsListDetail.title_kr
     newsData.value.file = store.newsListDetail.file
-    newsData.value.status = store.newsListDetail.status
+    newsData.value.status = store.newsListDetail.status?.id
     newsData.value.description = store.newsListDetail.description
     newsData.value.description_ru = store.newsListDetail.description_ru
     newsData.value.description_uz = store.newsListDetail.description_uz

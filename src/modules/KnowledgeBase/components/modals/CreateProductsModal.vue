@@ -322,7 +322,8 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
               </p>
             </label>
             <label class="w-full mt-4">{{ t('Measurement_type') }}
-              <v-select id="type" :options="store.quantityTypeList.results" :get-option-label="(item:any) => item.title"
+              <v-select id="type" :options="store.quantityTypeList.results"
+                        :get-option-label="(item:any) => item['title_'+$i18n.locale]"
                         class="mb-4" :class="validate.measurement_type.$errors.length ? 'required-input' : ''"
                         :reduce="(item:any)=>item.id"
                         v-model="productsData.measurement_type">

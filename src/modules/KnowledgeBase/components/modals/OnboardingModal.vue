@@ -181,7 +181,7 @@ const validate: Ref<Validation> = useVuelidate(rules, onBoarding);
 
               <label class="mt-4 block" for="descriptionUz"
               >{{ $t('description') + ' ' + $t('UZ') }}
-                <input
+                <textarea
                     id="descriptionUz"
                     type="text"
                     class="form-input"
@@ -223,7 +223,7 @@ const validate: Ref<Validation> = useVuelidate(rules, onBoarding);
 
               <label class="mt-4 block" for="descriptionUz"
               >{{ $t('description') + ' ' + $t('KR') }}
-                <input
+                <textarea
                     id="descriptionUz"
                     type="text"
                     class="form-input"
@@ -267,7 +267,7 @@ const validate: Ref<Validation> = useVuelidate(rules, onBoarding);
 
               <label class="mt-4 block" for="descriptionRu"
               >{{ $t('description') + ' ' + $t('RU') }}
-                <input
+                <textarea
                     id="descriptionRu"
                     type="text"
                     class="form-input"

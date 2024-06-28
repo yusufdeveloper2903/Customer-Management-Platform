@@ -252,7 +252,6 @@ const dragDrop = async (item: Link) => {
   {{ changeName(item.status) }}
       </span>
         </td>
-        <td class="px-6 whitespace-no-wrap text-left">{{ item.category }}</td>
 
 
         <td class="px-6 whitespace-no-wrap text-left">

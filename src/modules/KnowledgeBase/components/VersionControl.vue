@@ -29,7 +29,8 @@ const params = reactive({
   start_date: "",
   end_date: "",
   page: 1,
-  is_active: null
+  is_active: null,
+  search: ''
 });
 const props = defineProps<{
   knowledge: string
@@ -75,6 +76,10 @@ watch(() => props.knowledge, async function (val) {
   }
 })
 watchDebounced(() => params.start_date, function () {
+  params.page = 1
+  refresh()
+}, {deep: true, debounce: 500, maxWait: 5000,})
+watchDebounced(() => params.search, function () {
   params.page = 1
   refresh()
 }, {deep: true, debounce: 500, maxWait: 5000,})

@@ -21,7 +21,7 @@ const propData = defineProps<{ editData: EditData | null }>();
 let sectionStories = ref<EditData>({
   id: null,
   name: '',
-  status: 'DRAFT',
+  status: 'WAITING',
 });
 const listStatus = ref([
   {
@@ -30,7 +30,7 @@ const listStatus = ref([
   },
   {
     title: 'Draft',
-    value: 'DRAFT'
+    value: 'WAITING'
   },
   {
     title: 'Finished',
@@ -52,7 +52,7 @@ const hideModal = () => {
   validate.value.$reset()
   sectionStories.value.id = ''
   sectionStories.value.name = ''
-  sectionStories.value.status = 'DRAFT'
+  sectionStories.value.status = 'WAITING'
 
 }
 
@@ -132,7 +132,7 @@ const validate: Ref<Validation> = useVuelidate(rules, sectionStories);
         <v-select
             :options="listStatus"
             v-model="sectionStories.status"
-            :getOptionLabel="(name:any) => t(name.title)"
+            :getOptionLabel="(name:any) => $t(name.title)"
             :reduce="(item:any) => item.value"
             :class="validate.status.$errors.length ? 'required-input' : ''"
         >
