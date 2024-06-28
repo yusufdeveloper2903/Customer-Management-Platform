@@ -82,7 +82,9 @@ export default defineStore("knowledgeBase", {
                 results: [] as Splash[]
             } as Results<Splash>,
 
-            quantityTypeList: [] as QuantityType[],
+            quantityTypeList: {
+                results: [] as QuantityType[]
+            } as Results<QuantityType>,
 
             distrctList: {
                 results: [] as District[],
