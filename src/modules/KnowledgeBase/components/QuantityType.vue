@@ -13,7 +13,7 @@ import { QuantityType } from "../interfaces/index"
 
 
 //DECLARED VARIABLES
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const store = KnowledgeBase()
 const isLoading = ref<boolean>(false);
 const itemId = ref<number | null>(null);
@@ -107,6 +107,20 @@ const refresh = async () => {
 };
 
 
+const changePagination = (page: number) => {
+  params.page = page;
+  refresh();
+};
+
+
+const onPageSizeChanged = (e: number) => {
+  params.page_size = e
+  params.page = 1
+  refresh()
+}
+
+
+
 const savetype = () => {
   refresh();
 }
@@ -115,14 +129,26 @@ const savetype = () => {
 
 <template>
   <div class="card">
-    <div class="flex justify-end items-end mb-7">
 
-      <button class="btn-primary" uk-toggle="target: #type_modal" @click="editData = <QuantityType>{}">
+    <div class="flex justify-between items-end mb-7">
+      <label for="search" class="w-1/4">
+        {{ t('Search') }}
+        <input
+            v-model="params.search"
+            type="text"
+            class="form-input"
+            :placeholder="t('Search')"
+        />
+      </label>
+      <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
+              @click="editData = <QuantityType>{}" uk-toggle="target: #type_modal">
         {{ t("Add") }}
       </button>
     </div>
+
+
     <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="recipeCategoryFields"
-      :items="store.quantityTypeList">
+      :items="store.quantityTypeList.results">
 
       <template #empty-message>
         <div>{{ t('no_available_data') }}</div>
@@ -133,7 +159,7 @@ const savetype = () => {
       </template>
 
       <template #item-name="item">
-        {{ item.title }}
+        {{ item['title_' + locale] }}
       </template>
 
       <template #header-actions="item">
@@ -154,6 +180,17 @@ const savetype = () => {
       </template>
     </EasyDataTable>
 
+    <TwPagination
+        :total="store.splashList.count"
+        class="mt-10 tw-pagination"
+        :current="params.page"
+        :restart="toRefresh"
+        :per-page="params.page_size"
+        :text-before-input="t('go_to_page')"
+        :text-after-input="t('forward')"
+        @page-changed="changePagination"
+        @per-page-changed="onPageSizeChanged"
+    />
 
     <QuantityTypeModal :edit-data="editData" @savetype="savetype" />
     <DeleteModal @delete-action="deleteType" id="quantity-type-delete" />

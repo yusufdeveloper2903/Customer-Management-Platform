@@ -43,11 +43,6 @@ function pauseVideo() {
       >
 
 
-        <button uk-toggle="target: #open_video" class="btn-success">
-          {{ t("Cancel") }}
-        </button>
-
-
       </div>
     </div>
   </div>

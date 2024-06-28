@@ -154,7 +154,7 @@ const updateDeal = async () => {
 
           <div class="flex my-4">
           <label for="type_quantity" class="mr-4 w-1/2">{{ t('type_quantity') }}
-            <VSelect v-model="recipes.draft_unit_of_measure" :options="knowledgeStore.quantityTypeList"
+            <VSelect v-model="recipes.draft_unit_of_measure" :options="knowledgeStore.quantityTypeList.results"
               :getOptionLabel="(name: any) => name['title_' + locale]" :reduce="(item: any) => item.id" :placeholder="t('select_type')"
               :class="validate.draft_unit_of_measure.$errors.length ? 'required-input' : ''" />
             <p v-for="error in validate.draft_unit_of_measure.$errors" :key="error.$uid" class="text-danger text-sm">
