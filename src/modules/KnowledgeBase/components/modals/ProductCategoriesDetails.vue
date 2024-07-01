@@ -92,7 +92,7 @@ const updateDeal = async () => {
 
   if (propData.editData.id) {
     try {
-      await store.updateRecipeCategory(categoryData.value).then(() => {
+      await store.updateProductCategory(categoryData.value).then(() => {
         emits('saveCategory')
         setTimeout(() => {
           toast.success(t('updated_successfully'))
@@ -112,7 +112,7 @@ const updateDeal = async () => {
     }
   } else {
     try {
-      await store.createRecipeCategory(categoryData.value).then(() => {
+      await store.createProductCategory(categoryData.value).then(() => {
         emits('saveCategory')
         setTimeout(() => {
           toast.success(t('created_successfully'))

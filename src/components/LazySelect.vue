@@ -83,7 +83,7 @@ export default {
     pageSize: {
       type: Number,
       required: false,
-      default: 15,
+      default: 10,
     },
     value: {
       type: [Array, Object, String, Number],

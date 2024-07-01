@@ -22,3 +22,11 @@ export interface FileInput {
     webkitRelativePath: string
 }
 
+
+export interface IResponse<T> {
+    count: number;
+    page: number
+    page_size: number
+    next: number | null
+    results: T[];
+}

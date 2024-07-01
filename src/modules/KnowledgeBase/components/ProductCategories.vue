@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue'
+import { onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { toast } from 'vue3-toastify'
 import { recipeCategoryFields } from '../constants'
 import ProductCategoriesDetails from './modals/ProductCategoriesDetails.vue'
@@ -7,7 +7,8 @@ import { useI18n } from 'vue-i18n'
 import KnowledgeBase from '../store/index'
 import UIkit from 'uikit'
 import { watchDebounced } from '@vueuse/core'
-import { RetseptCategory } from '../interfaces/index'
+import { IProductCategories, RetseptCategory } from '../interfaces/index'
+import { IResponse } from '@/interface'
 
 const { t, locale } = useI18n()
 const store = KnowledgeBase()
@@ -47,10 +48,9 @@ const onPageSizeChanged = (e) => {
 }
 
 const deleteCategory = async () => {
-  isLoading.value = true
   try {
-    await store.deleteRecipeCategory(itemId.value)
-    await UIkit.modal('#category-delete').hide()
+    await store.deleteProductCategory(itemId.value)
+    UIkit.modal('#product-category-delete').hide()
     toast.success(t('deleted_successfully'))
     if (
       store.retseptCategoryList.count > 1 &&
@@ -61,7 +61,6 @@ const deleteCategory = async () => {
     } else {
       await refresh(params)
     }
-    isLoading.value = false
   } catch (error: any) {
     toast.error(t('error'))
   }
@@ -70,7 +69,7 @@ const deleteCategory = async () => {
 const refresh = async (filter) => {
   isLoading.value = true
   try {
-    store.getRetseptCategory(filter)
+    store.getProductsCategories(filter)
   } catch (error: any) {
     toast.error(t('error'))
   }
@@ -92,7 +91,7 @@ onMounted(async () => {
     params.page_size = JSON.parse(page_size)
   }
   let knowledgeBase = localStorage.getItem('knowledgeBase')
-  if (knowledgeBase == 'recipe category') {
+  if (knowledgeBase == 'product_categories') {
     await refresh(params)
   }
 })
@@ -101,7 +100,7 @@ watch(
   () => props.knowledge,
   async function (val) {
     toRefresh.value = !toRefresh.value
-    if (val == 'recipe category') {
+    if (val == 'product_categories') {
       params.page = props.params.page
       params.page_size = props.params.page_size
       await refresh(params)
@@ -118,6 +117,10 @@ watchDebounced(
   },
   { deep: true, debounce: 500, maxWait: 5000 }
 )
+
+onBeforeUnmount(() => [
+  (store.productCategories = {} as IResponse<IProductCategories>),
+])
 </script>
 
 <template>
@@ -145,7 +148,7 @@ watchDebounced(
       hide-footer
       :loading="isLoading"
       :headers="recipeCategoryFields"
-      :items="store.retseptCategoryList.results">
+      :items="store.productCategories.results || []">
       <template #empty-message>
         <div>{{ t('no_available_data') }}</div>
       </template>
@@ -175,7 +178,7 @@ watchDebounced(
           <button
             @click="itemId = item.id"
             class="ml-3 btn-danger btn-action"
-            uk-toggle="target: #category-delete">
+            uk-toggle="target: #product-category-delete">
             <Icon icon="Trash Bin Trash" color="#fff" size="16" />
           </button>
         </div>
@@ -185,7 +188,7 @@ watchDebounced(
     <TwPagination
       class="mt-10 tw-pagination"
       :current="params.page"
-      :total="store.retseptCategoryList.count"
+      :total="store.productCategories.count"
       :per-page="params.page_size"
       :text-before-input="t('go_to_page')"
       :text-after-input="t('forward')"
@@ -196,6 +199,6 @@ watchDebounced(
       :edit-data="editData"
       @saveCategory="saveCategory" />
 
-    <DeleteModal @delete-action="deleteCategory" id="category-delete" />
+    <DeleteModal @delete-action="deleteCategory" id="product-category-delete" />
   </div>
 </template>
