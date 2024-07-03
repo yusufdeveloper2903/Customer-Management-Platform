@@ -1,20 +1,20 @@
 <script lang="ts" setup>
 // Imported files
-import { useI18n } from "vue-i18n";
-import { preparation } from "../constants/index";
+import {useI18n} from "vue-i18n";
+import {preparation} from "../constants/index";
 import Icon from '@/components/Icons/Icon.vue';
 import AddPreparationModal from "./modals/AddPreparationModal.vue";
-import { onMounted, ref, reactive } from 'vue';
-import { watchDebounced } from "@vueuse/core";
+import {onMounted, ref, reactive} from 'vue';
+import {watchDebounced} from "@vueuse/core";
 import UIkit from "uikit";
 import RecipeStorage from '@/modules/Recipes/store/index';
-import { useRoute } from "vue-router";
-import { toast } from "vue3-toastify";
-import { Preparation, EditPreparation } from "../interfaces/index"
+import {useRoute} from "vue-router";
+import {toast} from "vue3-toastify";
+import {Preparation, EditPreparation} from "../interfaces/index"
 
 
 // Declared variables
-const { t, locale } = useI18n()
+const {t, locale} = useI18n()
 const store = RecipeStorage()
 const route = useRoute()
 
@@ -41,7 +41,7 @@ onMounted(async () => {
 
 watchDebounced(() => params.search, async function () {
   await refresh(params)
-}, { deep: true, debounce: 500, maxWait: 5000, })
+}, {deep: true, debounce: 500, maxWait: 5000,})
 
 
 // Functions
@@ -54,7 +54,7 @@ const refresh = async (filter) => {
     }
   } catch (error: any) {
     toast.error(
-      error.response || "Error"
+        error.response || "Error"
     );
   }
 
@@ -72,7 +72,7 @@ const dragOver = (e: any) => {
 
 const dragDrop = async (item: Preparation) => {
   event?.preventDefault();
-  await store.createPreparationDrag_and_drop({ new_index: currentRow.value?.index, last_index: item.index, id: item.id })
+  await store.createPreparationDrag_and_drop({new_index: currentRow.value?.index, last_index: item.index, id: item.id})
   await refresh(params);
   toast.success(t("updated_successfully"));
 };
@@ -91,7 +91,7 @@ const deleteAction = async () => {
     isLoading.value = false
   } catch (error: any) {
     toast.error(
-      t('error')
+        t('error')
     );
     isLoading.value = false
   }
@@ -108,7 +108,7 @@ const handleDeleteModal = (id: number | null) => {
   <div class="flex justify-between items-end mb-5">
     <label for="search" class="w-1/3">
       {{ t('Search') }}
-      <input type="text" class="form-input" :placeholder="t('Search')" v-model="params.search" />
+      <input type="text" class="form-input" :placeholder="t('Search')" v-model="params.search"/>
     </label>
     <button class="btn-primary" uk-toggle="target: #preparation_modal" @click="editData = <Preparation>{}">
       {{ t("Add") }}
@@ -117,45 +117,61 @@ const handleDeleteModal = (id: number | null) => {
 
   <table class="min-w-full bg-white border border-gray-300 dark:border-gray-600">
     <thead>
-      <tr>
-        <th v-for="field in preparation"
+    <tr>
+      <th v-for="field in preparation"
           class="px-6 py-3 bg-gray-100 dark:bg-darkLayoutMain text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider firstTable">
-          {{ t(field.text) }}
-        </th>
-      </tr>
+        {{ t(field.text) }}
+      </th>
+    </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, index) in store.preparationList?.results"
+    <tr v-for="(item, index) in store.preparationList?.results"
         class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
         :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
-        <td class="px-6 whitespace-no-wrap text-left ">{{ index + 1 }}</td>
-        <td class="px-6 whitespace-no-wrap text-left">
-            {{ item['draft_description_' + locale] }}
-        </td>
-        <td class="px-6 whitespace-no-wrap">
-          <div class="flex py-2 justify-end">
-            <button class="btn-warning btn-action" uk-toggle="target: #preparation_modal" @click="editData = item">
-              <Icon icon="Pen New Square" color="#fff" size="16" />
-            </button>
-            <button @click="handleDeleteModal(item.id)" class="ml-3 btn-danger btn-action">
-              <Icon icon="Trash Bin Trash" color="#fff" size="16" />
-            </button>
-          </div>
-        </td>
-      </tr>
+      <td class="px-6 whitespace-no-wrap text-left ">{{ index + 1 }}</td>
+      <td class="px-6 whitespace-no-wrap text-left quilTable">
+        <div  class="relative">
+          <Editor
+              content-type="html"
+              toolbar="false"
+              class="scrollbar"
+              style="height: 10vh; overflow-y: auto;border:none"
+              v-model:content="item['draft_description_' + locale]"
+          >
+          </Editor>
+          <div class="absolute w-full h-[100%] top-0"/>
+        </div>
+
+
+      </td>
+      <td class="px-6 whitespace-no-wrap">
+        <div class="flex py-2 justify-end">
+          <button class="btn-warning btn-action" uk-toggle="target: #preparation_modal" @click="editData = item">
+            <Icon icon="Pen New Square" color="#fff" size="16"/>
+          </button>
+          <button @click="handleDeleteModal(item.id)" class="ml-3 btn-danger btn-action">
+            <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
+          </button>
+        </div>
+      </td>
+    </tr>
     </tbody>
   </table>
   <div class="empty_table" v-if="!store.preparationList?.results.length">{{ t('no_available_data') }}</div>
 
 
-
-  <DeleteModal @delete-action="deleteAction" :id="'preparation-delete'" />
-  <AddPreparationModal @saveData="saveData" :editData="editData" />
+  <DeleteModal @delete-action="deleteAction" :id="'preparation-delete'"/>
+  <AddPreparationModal @saveData="saveData" :editData="editData"/>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .firstTable:nth-child(3) {
   display: flex;
   justify-content: flex-end;
 }
+
+.quilTable .ql-toolbar {
+  display: none;
+}
+
 </style>

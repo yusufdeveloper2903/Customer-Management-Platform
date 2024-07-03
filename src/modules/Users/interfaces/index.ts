@@ -1,4 +1,3 @@
-
 export interface UserListResults {
     id: number;
     full_name: string | null;
@@ -12,6 +11,8 @@ export interface params {
     page: number;
     page_size: number;
     search: string | null;
+    gender: string | null,
+    os_type: string | null,
 
 }
 

@@ -86,7 +86,7 @@ router.beforeEach(async (to, _, next) => {
             if (isUserLoggedIn()) {
                 next(); // Allow navigation to the route
             } else {
-                next('/error-404'); // Prevent navigation to the route
+                next('/login'); // Prevent navigation to the route
             }
         }
 

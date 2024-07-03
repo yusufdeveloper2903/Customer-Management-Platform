@@ -12,6 +12,14 @@ export const fields = [
         value: "phone",
     },
     {
+        text: "gender",
+        value: "gender",
+    },
+    {
+        text: "device_os_types",
+        value: "device_os_types",
+    },
+    {
         text: "created_date",
         value: "created_date"
     },

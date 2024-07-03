@@ -25,8 +25,31 @@ const filterUsers = reactive<params>({
   page_size: 10,
   page: 1,
   search: null,
+  gender: null,
+  os_type: null,
 });
+const listStatusOs = ref([
+  {
+    title: 'Android',
+    value: 'android'
+  },
+  {
+    title: 'iOS',
+    value: 'iOS'
+  },
 
+])
+const listStatus = ref([
+  {
+    title: 'Male',
+    value: 'M'
+  },
+  {
+    title: 'Female',
+    value: 'F'
+  },
+
+])
 // MOUNTED
 
 onMounted(async () => {
@@ -44,12 +67,21 @@ onMounted(async () => {
 
 // WATCHERS
 
-
+watchDebounced(() => filterUsers.gender, async function () {
+  filterUsers.page = 1
+  localStorage.setItem('page', '1')
+  await refresh()
+}, {deep: true, debounce: 500, maxWait: 5000,})
+watchDebounced(() => filterUsers.os_type, async function () {
+  filterUsers.page = 1
+  localStorage.setItem('page', '1')
+  await refresh()
+}, {deep: true, debounce: 500, maxWait: 5000,})
 watchDebounced(() => filterUsers.search, async () => {
       filterUsers.page = 1
-  localStorage.setItem('page', '1')
+      localStorage.setItem('page', '1')
 
-  await refresh()
+      await refresh()
     }, {deep: true, debounce: 500, maxWait: 5000}
 )
 
@@ -83,7 +115,7 @@ const showDetailPage = (item: any) => {
   <div>
     <div class="card">
       <div class="md:flex items-center justify-between mb-9">
-        <form class=" md:flex items-center gap-5 md:w-5/12">
+        <form class=" md:flex items-center gap-5 w-full">
           <div>
             <label for="search" class="dark:text-gray-300">
               {{ $t("Search") }}
@@ -95,6 +127,28 @@ const showDetailPage = (item: any) => {
                 class="form-input"
                 v-model="filterUsers.search"
             />
+          </div>
+          <div class="w-1/5">
+            <p>{{ $t("gender") }}</p>
+            <v-select
+                :options="listStatus"
+                v-model="filterUsers.gender"
+                :getOptionLabel="(name:any) => t(name.title)"
+                :reduce="(item:any) => item.value"
+            >
+              <template #no-options> {{ $t("no_matching_options") }}</template>
+            </v-select>
+          </div>
+          <div class="w-1/5">
+            <p>{{ $t("device_os_types") }}</p>
+            <v-select
+                :options="listStatusOs"
+                v-model="filterUsers.os_type"
+                :getOptionLabel="(name:any) => t(name.title)"
+                :reduce="(item:any) => item.value"
+            >
+              <template #no-options> {{ $t("no_matching_options") }}</template>
+            </v-select>
           </div>
 
         </form>
@@ -114,7 +168,16 @@ const showDetailPage = (item: any) => {
           {{ $t(header.text) }}
         </template>
 
-
+        <template #item-device_os_types="item">
+          <div v-for="(i,index) in item.device_os_types" :key="index" class="ml-12">
+            {{ i }}
+          </div>
+        </template>
+        <template #item-gender>
+               <span class="text-center ml-3">
+                 -
+               </span>
+        </template>
         <template #item-phone="items">
           <span v-if="items.phone">
             {{ formatPhoneNumber(items.phone) }}

@@ -104,7 +104,7 @@ const refresh = async (val: any) => {
 const changeColor = (val: string) => {
   if (val == 'ACTIVE') {
     return t('bg-success')
-  } else if (val == 'WAITING') {
+  } else if (val == 'DRAFT') {
     return t('bg-warning')
   } else {
     return t('bg-secondary')
@@ -114,8 +114,8 @@ const changeColor = (val: string) => {
 const changeStatus = (val: string) => {
   if (val == 'ACTIVE') {
     return t('Active')
-  } else if (val == 'WAITING') {
-    return t('Waiting')
+  } else if (val == 'DRAFT') {
+    return t('Draft')
   } else {
     return t('Finished')
   }

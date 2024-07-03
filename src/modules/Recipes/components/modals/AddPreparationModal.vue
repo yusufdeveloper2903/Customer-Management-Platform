@@ -1,20 +1,20 @@
 <script lang="ts" setup>
 // imported files
-import { Ref, ref, computed } from "vue";
+import {Ref, ref, computed} from "vue";
 import UIkit from "uikit";
-import { useI18n } from "vue-i18n";
-import { toast } from "vue3-toastify";
-import { helpers, required } from "@vuelidate/validators";
-import useVuelidate, { Validation } from "@vuelidate/core";
+import {useI18n} from "vue-i18n";
+import {toast} from "vue3-toastify";
+import {helpers, required} from "@vuelidate/validators";
+import useVuelidate, {Validation} from "@vuelidate/core";
 import ModalTabs from "@/components/Tab/ModalTabs.vue";
 import ModalTab from "@/components/Tab/ModalTab.vue";
 import recipeStore from "../../store/index"
-import { EditPreparation } from "../../interfaces/index"
+import {EditPreparation} from "../../interfaces/index"
 import {useSidebarStore} from '@/stores/layoutConfig'
-import { useRoute } from "vue-router";
+import {useRoute} from "vue-router";
 
 // Declared variables
-const { t } = useI18n();
+const {t} = useI18n();
 const isSubmitted = ref<boolean>(false);
 const route = useRoute()
 const store = recipeStore()
@@ -50,7 +50,6 @@ const rules = computed(() => {
 const validate: Ref<Validation> = useVuelidate(rules, preparationData);
 
 
-
 // Functions
 async function openModal() {
   if (propData.editData.id) {
@@ -72,12 +71,12 @@ async function openModal() {
 
 function clearData() {
   preparationData.value.id = null
-    preparationData.value.draft_description = " "
-    preparationData.value.draft_description_uz = " "
-    preparationData.value.draft_description_ru = " "
-    preparationData.value.draft_description_kr = " "
-    preparationData.value.food = null
-    validate.value.$reset()
+  preparationData.value.draft_description = " "
+  preparationData.value.draft_description_uz = " "
+  preparationData.value.draft_description_ru = " "
+  preparationData.value.draft_description_kr = " "
+  preparationData.value.food = null
+  validate.value.$reset()
 }
 
 
@@ -112,7 +111,7 @@ const updateDeal = async () => {
     } catch (error: any) {
       isSubmitted.value = false;
       toast.error(
-        error.response.message || error.response.data.msg || error.response.data.error || t('error')
+          error.response.message || error.response.data.msg || error.response.data.error || t('error')
       );
     }
 
@@ -132,7 +131,7 @@ const updateDeal = async () => {
       isSubmitted.value = false;
       if (error) {
         toast.error(
-          error.response.message || error.response.data.msg || error.response.data.error || t('error')
+            error.response.message || error.response.data.msg || error.response.data.error || t('error')
         );
       }
     }
@@ -143,7 +142,7 @@ const updateDeal = async () => {
 <template>
   <div id="preparation_modal" class="uk-modal-container" uk-modal @shown="openModal" @hidden="clearData">
     <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden">
-      <button class="uk-modal-close-default" @click="clearData" type="button" uk-close />
+      <button class="uk-modal-close-default" @click="clearData" type="button" uk-close/>
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
           {{ propData.editData.id ? t("edit_cooking_step") : t('add_cooking_step') }}
@@ -155,14 +154,14 @@ const updateDeal = async () => {
             <form>
               <label for="nameUz">{{ t('description') }} O'z
                 <Editor
-              :placeholder="$t('enter_information')"
-              content-type="html"
-              toolbar="full"
-              class="scrollbar rounded border"
-              style="height: 45vh; overflow-y: auto;"
-              v-model:content="preparationData.draft_description_uz"
-          >
-          </Editor>
+                    :placeholder="$t('enter_information')"
+                    content-type="html"
+                    toolbar="full"
+                    class="scrollbar rounded border"
+                    style="height: 45vh; overflow-y: auto;"
+                    v-model:content="preparationData.draft_description_uz"
+                >
+                </Editor>
                 <p v-for="error in validate.draft_description_uz.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
@@ -174,14 +173,14 @@ const updateDeal = async () => {
             <form>
               <label for="nameRu">{{ t('description') }} Ўз
                 <Editor
-              :placeholder="$t('enter_information')"
-              content-type="html"
-              toolbar="full"
-              class="scrollbar rounded border"
-              style="height: 45vh; overflow-y: auto;"
-              v-model:content="preparationData.draft_description_kr"
-          >
-          </Editor>
+                    :placeholder="$t('enter_information')"
+                    content-type="html"
+                    toolbar="full"
+                    class="scrollbar rounded border"
+                    style="height: 45vh; overflow-y: auto;"
+                    v-model:content="preparationData.draft_description_kr"
+                >
+                </Editor>
                 <p v-for="error in validate.draft_description_kr.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
@@ -193,14 +192,14 @@ const updateDeal = async () => {
             <form>
               <label for="nameRu">{{ t('description') }} Ру
                 <Editor
-              :placeholder="$t('enter_information')"
-              content-type="html"
-              toolbar="full"
-              class="scrollbar rounded border"
-              style="height: 45vh; overflow-y: auto;"
-              v-model:content="preparationData.draft_description_ru"
-          >
-          </Editor>
+                    :placeholder="$t('enter_information')"
+                    content-type="html"
+                    toolbar="full"
+                    class="scrollbar rounded border"
+                    style="height: 45vh; overflow-y: auto;"
+                    v-model:content="preparationData.draft_description_ru"
+                >
+                </Editor>
                 <p v-for="error in validate.draft_description_ru.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
@@ -215,8 +214,9 @@ const updateDeal = async () => {
           {{ t("Cancel") }}
         </button>
 
-       
-        <button  :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal" :disabled="isSubmitted">
+
+        <button :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal"
+                :disabled="isSubmitted">
           <span>{{ propData.editData.id ? t("Change") : t('Add') }}</span>
         </button>
       </div>

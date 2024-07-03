@@ -50,6 +50,7 @@
     "question": "Savol",
     "audio": "Audio"
   },
+  "Discounted_price": "Chegirmali narx",
   "logout": "Chiqish",
   "nameButton": "Tugma nomi",
   "sec": "сония",
@@ -413,5 +414,6 @@
   "changing": "O'zgartirish",
   "add_district": "Tuman qo'shish",
   "edit_district": "Tumanni tahrirlash",
-  "districts": "Tumanlar"
+  "districts": "Tumanlar",
+  "product_categories": "Mahsulotlar toifalari"
 }

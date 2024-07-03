@@ -109,6 +109,7 @@ export interface EditDataProductModal {
     code: string;
     quantity: string;
     measurement_type: string;
+    category: { id: number } | null
 
 }
 
@@ -326,4 +327,8 @@ export interface EditDistrict {
     name_ru: string;
     name_kr: string;
     parent: any
+}
+
+export interface IProductCategories {
+
 }

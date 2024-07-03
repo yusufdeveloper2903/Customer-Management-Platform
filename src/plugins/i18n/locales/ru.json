@@ -55,6 +55,7 @@
     "question": "Вопрос",
     "audio": "Аудио"
   },
+  "Discounted_price": "Цена со скидкой",
   "Draft": "Черновик",
   "codeCountSmall": "Числа не могут быть меньше 13",
   "codeCountBigger": "Чисел не может быть больше 13",
@@ -446,5 +447,6 @@
   "changing": "Изменение",
   "add_district": "Добавление района",
   "edit_district": "Изменить район",
-  "districts": "Районы"
+  "districts": "Районы",
+  "product_categories": "Категории Продуктов"
 }

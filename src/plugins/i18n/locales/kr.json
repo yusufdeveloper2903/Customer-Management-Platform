@@ -50,6 +50,7 @@
     "question": "Савол",
     "audio": "Аудио"
   },
+  "Discounted_price": "Чегирмали нарх",
   "sec": "секунд",
   "gender": "Жинс",
   "Male": "Эркак",
@@ -408,6 +409,6 @@
   "changing": "Ўзгартириш",
   "add_district": "Туман қўшиш",
   "edit_district": "Туманни таҳрирлаш",
-  "districts": "Туманлар"
-
+  "districts": "Туманлар",
+  "product_categories": "Маҳсулотлар тоифалари"
 }

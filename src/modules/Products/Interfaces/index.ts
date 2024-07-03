@@ -17,5 +17,5 @@ export interface EditDataSecond {
     title_uz: string,
     title_kr: string,
     discount_percentage: number,
-    price: string
+    discount_price: string
 }

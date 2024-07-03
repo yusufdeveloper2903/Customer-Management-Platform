@@ -1,35 +1,33 @@
 <script setup lang="ts">
-
-
 //IMPORTED FILES
-import {nextTick, onMounted, reactive, ref, watch} from "vue";
-import {toast} from "vue3-toastify";
-import {productsFields} from "../constants";
-import CreateProducts from "./modals/CreateProductsModal.vue";
-import knowledgeBase from "../store/index"
-import UIkit from "uikit";
-import {watchDebounced} from "@vueuse/core";
-import {useI18n} from "vue-i18n";
-import ShowFileModal from "@/components/ShowPhotoGlobal.vue";
-import {EditDataProduct} from '../interfaces/index'
+import { nextTick, onMounted, reactive, ref, watch } from 'vue'
+import { toast } from 'vue3-toastify'
+import { productsFields } from '../constants'
+import CreateProducts from './modals/CreateProductsModal.vue'
+import knowledgeBase from '../store/index'
+import UIkit from 'uikit'
+import { watchDebounced } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
+import ShowFileModal from '@/components/ShowPhotoGlobal.vue'
+import { EditDataProduct } from '../interfaces/index'
 
 //DECLARED VARIABLES
-const {t, locale} = useI18n()
-const isLoading = ref<boolean>(false);
-const itemId = ref<number | null>(null);
+const { t, locale } = useI18n()
+const isLoading = ref<boolean>(false)
+const itemId = ref<number | null>(null)
 const store = knowledgeBase()
 const params = reactive({
   page_size: 10,
   page: 1,
-  search: null
-});
+  search: null,
+})
 const props = defineProps<{
   knowledge: string
   params: {
-    page: number,
+    page: number
     page_size: number
   }
-}>();
+}>()
 let toRefresh = ref(false)
 const editData = ref<EditDataProduct>({
   id: '',
@@ -43,16 +41,15 @@ const editData = ref<EditDataProduct>({
   description_ru: '',
   price: '',
   image: '',
-  code: "",
+  code: '',
   measurement_type: '',
-  quantity: ''
+  quantity: '',
 })
-const image = ref<string>("");
-const imageCard = ref();
-
+const image = ref<string>('')
+const imageCard = ref()
 
 //MOUNTED LIFE CYCLE
-onMounted(async () => {
+onMounted(() => {
   let page = localStorage.getItem('page')
   let page_size = localStorage.getItem('page_size')
   if (page) {
@@ -63,66 +60,69 @@ onMounted(async () => {
   }
   let knowledgeBase = localStorage.getItem('knowledgeBase')
   if (knowledgeBase == 'products') {
-    await refresh()
-  }
-});
-
-
-//WATCHERS
-watch(() => props.knowledge, async function (val) {
-  toRefresh.value = !toRefresh.value
-  if (val == 'products') {
-    params.page = props.params.page
-    params.page_size = props.params.page_size
-    await refresh()
+    refresh()
   }
 })
-watchDebounced(
-    () => params.search,
-    async () => {
-      params.page = 1;
-      localStorage.setItem('page', '1')
-      await refresh()
-    }, {deep: true, debounce: 500, maxWait: 5000}
-);
 
+//WATCHERS
+watch(
+  () => props.knowledge,
+  async function (val) {
+    toRefresh.value = !toRefresh.value
+    if (val == 'products') {
+      params.page = props.params.page
+      params.page_size = props.params.page_size
+      await refresh()
+    }
+  }
+)
+watchDebounced(
+  () => params.search,
+  async () => {
+    params.page = 1
+    localStorage.setItem('page', '1')
+    await refresh()
+  },
+  { deep: true, debounce: 500, maxWait: 5000 }
+)
 
 //FUNCTIONS
 const changePagionation = (e: number) => {
-  params.page = e;
-  refresh();
-};
+  params.page = e
+  refresh()
+}
 const onPageSizeChanged = (e: number) => {
   params.page_size = e
   params.page = 1
   refresh()
 }
 const handleDeleteModal = (id: number) => {
-  UIkit.modal("#product-delete-modal").show()
+  UIkit.modal('#product-delete-modal').show()
   itemId.value = id
-};
+}
 const saveProducts = () => {
-  refresh();
+  refresh()
 }
 
 const refresh = async () => {
-  isLoading.value = true;
+  isLoading.value = true
   try {
     await store.getProducts(params)
   } catch (error: any) {
-    toast.error(
-        t('error')
-    );
+    toast.error(t('error'))
   }
-  isLoading.value = false;
-};
+  isLoading.value = false
+}
 const deleteAction = async () => {
   isLoading.value = true
   try {
     await store.deleteProducts(itemId.value)
-    await UIkit.modal("#product-delete-modal").hide();
-    toast.success(t('deleted_successfully'));
-    if (store.productsList.count > 1 && ((store.productsList.count - 1) % params.page_size == 0)) {
+    await UIkit.modal('#product-delete-modal').hide()
+    toast.success(t('deleted_successfully'))
+    if (
+      store.productsList.count > 1 &&
+      (store.productsList.count - 1) % params.page_size == 0
+    ) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -130,36 +130,43 @@ const deleteAction = async () => {
     }
     isLoading.value = false
   } catch (error: any) {
-    toast.error(t('error'));
+    toast.error(t('error'))
   }
-};
+}
 const onShowFile = (item: any) => {
-  image.value = item;
+  image.value = item
   nextTick(() => {
-    UIkit.modal("#file-show-image").show();
-  });
-};
+    UIkit.modal('#file-show-image').show()
+  })
+}
 </script>
 
 <template>
   <div class="card">
     <div class="flex justify-between items-end mb-7">
-
       <label for="search" class="w-1/4">
         {{ t('Search') }}
-        <input type="text" class="form-input" :placeholder="t('Search')"
-               v-model="params.search"/>
+        <input
+          type="text"
+          class="form-input"
+          :placeholder="t('Search')"
+          v-model="params.search" />
       </label>
 
-      <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-              uk-toggle="target: #create_products" @click="editData = {}">
-        {{ t("Add") }}
+      <button
+        class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
+        uk-toggle="target: #create_products"
+        @click="editData = {}">
+        {{ t('Add') }}
       </button>
     </div>
 
-    <EasyDataTable theme-color="#7367f0" hide-footer :loading="isLoading" :headers="productsFields"
-                   :items="store.productsList.results">
-
+    <EasyDataTable
+      theme-color="#7367f0"
+      hide-footer
+      :loading="isLoading"
+      :headers="productsFields"
+      :items="store.productsList.results">
       <template #empty-message>
         <div>{{ t('no_available_data') }}</div>
       </template>
@@ -168,7 +175,9 @@ const onShowFile = (item: any) => {
         {{ t(header.text) }}
       </template>
       <template #item-price="data">
-        {{ (`${data.price}`).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' So`m' }}
+        {{
+          `${data.price}`.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' So`m'
+        }}
       </template>
 
       <template #item-title="item">
@@ -176,25 +185,28 @@ const onShowFile = (item: any) => {
       </template>
 
       <template #item-quantity="item">
-        {{ item.quantity + ' ' + item.measurement_type['title_' + $i18n.locale] }}
+        {{
+          item.quantity + ' ' + item.measurement_type['title_' + $i18n.locale]
+        }}
       </template>
+
+      <template #item-category="item">
+        {{ item.category?.['name_' + $i18n.locale] || '' }}
+      </template>
+
       <template #item-image="item">
         <div class="py-3 flex justify-left items-center gap-3">
-          <img v-if="item.image"
-               class="w-[45px] h-[45px] rounded"
-               :src="item.image"
-               alt="Rounded avatar"
-               @click="onShowFile(item.image)"
-               style="aspect-ratio: 1/1 "
-          />
+          <img
+            v-if="item.image"
+            class="w-[45px] h-[45px] rounded"
+            :src="item.image"
+            alt="Rounded avatar"
+            @click="onShowFile(item.image)"
+            style="aspect-ratio: 1/1" />
           <div
-              v-else
-              class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded"
-          >
-            <Icon
-                icon="Camera"
-                color="#356c2d"
-            />
+            v-else
+            class="relative text-primary inline-flex items-center justify-center w-[45px] h-[45px] overflow-hidden bg-primary/10 rounded">
+            <Icon icon="Camera" color="#356c2d" />
           </div>
         </div>
       </template>
@@ -209,26 +221,35 @@ const onShowFile = (item: any) => {
       </template>
       <template #item-actions="item">
         <div class="flex justify-end my-4">
-          <button class="btn-warning btn-action" uk-toggle="target: #create_products" @click="editData = item">
-            <Icon icon="Pen New Square" color="#fff" size="16"/>
+          <button
+            class="btn-warning btn-action"
+            uk-toggle="target: #create_products"
+            @click="editData = item">
+            <Icon icon="Pen New Square" color="#fff" size="16" />
           </button>
-          <button class="ml-3 btn-danger btn-action" @click="handleDeleteModal(item.id)"
-          >
-            <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
+          <button
+            class="ml-3 btn-danger btn-action"
+            @click="handleDeleteModal(item.id)">
+            <Icon icon="Trash Bin Trash" color="#fff" size="16" />
           </button>
         </div>
       </template>
     </EasyDataTable>
 
-    <DeleteModal @delete-action="deleteAction" :id="'product-delete-modal'"/>
+    <DeleteModal @delete-action="deleteAction" :id="'product-delete-modal'" />
 
-    <TwPagination :restart="toRefresh" :total="store.productsList.count" class="mt-10 tw-pagination"
-                  :current="params.page"
-                  :per-page="params.page_size"
-                  :text-before-input="t('go_to_page')" :text-after-input="t('forward')"
-                  @page-changed="changePagionation" @per-page-changed="onPageSizeChanged"/>
+    <TwPagination
+      :restart="toRefresh"
+      :total="store.productsList.count"
+      class="mt-10 tw-pagination"
+      :current="params.page"
+      :per-page="params.page_size"
+      :text-before-input="t('go_to_page')"
+      :text-after-input="t('forward')"
+      @page-changed="changePagionation"
+      @per-page-changed="onPageSizeChanged" />
 
-    <CreateProducts :editData="editData" @saveProducts="saveProducts"/>
-    <ShowFileModal :image="image" ref="imageCard" id="file-show-image"/>
+    <CreateProducts :editData="editData" @saveProducts="saveProducts" />
+    <ShowFileModal :image="image" ref="imageCard" id="file-show-image" />
   </div>
 </template>
