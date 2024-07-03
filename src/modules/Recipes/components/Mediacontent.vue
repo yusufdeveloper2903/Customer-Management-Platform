@@ -28,7 +28,8 @@ const openFile = ref<RecipeMedia>({
     recipes: null,
     index: 0,
     create_date: "",
-    draft_is_cover: false
+    draft_is_cover: false,
+    draft_index: 0
 })
 
 watch(
@@ -133,7 +134,7 @@ const dragOver = (e: any) => {
 
 const dragDrop = async (item: RecipeMedia) => {
   event?.preventDefault();
-  await store.createRecipeMediaDrag_and_drop({new_index: currentRow.value?.index, last_index: item.index, id: item.id})
+  await store.createRecipeMediaDrag_and_drop({new_index: currentRow.value?.draft_index, last_index: item.draft_index, id: item.id})
   await refresh();
   toast.success(t("updated_successfully"));
 };
@@ -202,9 +203,10 @@ const coverPhoto = async(item: any) => {
             </div>
 
             <span>
-              <h4 class="text-success"><b>{{  item.media_file && item.media_file.length > 30
-                    ? item.media_file.slice(0, 30) + "..."
-                    : item.media_file}}</b></h4>
+              <h4 class="text-success"><b>{{ item.media_file && item.media_file.length > 30
+                    ? item.media_file.split("/").at(-1).slice(0, 30) + "..."
+                    : item.media_file.split("/").at(-1) }}</b></h4>
+
               <small>{{ item.create_date }}</small>
             </span>
 

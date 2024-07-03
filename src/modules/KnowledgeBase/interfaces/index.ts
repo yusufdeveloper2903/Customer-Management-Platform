@@ -196,6 +196,7 @@ export interface LocationPlaceData {
     address_kr: string;
     address_ru: string;
     closed_at: string;
+    district: string;
     coordinates: {
         lat: number | null;
         lng: number | null;

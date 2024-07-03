@@ -161,6 +161,8 @@ const saveSmsTemplate = () => {
       <template #item-description="item">
         {{ item.description }}
       </template>
+
+      
       <template #header-actions="item">
         <div class="flex justify-end">
           {{ $t(item.text) }}

@@ -187,7 +187,7 @@ const dragDrop = async (item: Onboarding) => {
       <tr v-for="(item, index) in store.onBoarding?.results" 
           class="border-y dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-darkLayoutMain dark:text-gray-200 cursor-move"
           :draggable="true" @dragstart="dragStart(item)" @dragover="dragOver" @drop="dragDrop(item)">
-          <td class="px-6 whitespace-no-wrap text-left">{{ item.index }}</td>
+          <td class="px-6 whitespace-no-wrap text-left">{{ index }}</td>
           <td class="px-6 whitespace-no-wrap text-left">
           <div class="py-3 flex justify-left gap-3">
           <img
