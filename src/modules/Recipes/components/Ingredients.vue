@@ -120,6 +120,9 @@ const handleDeleteModal = (id: number) => {
       {{ t("Add") }}
     </button>
   </div>
+
+
+
   <EasyDataTable theme-color="#7367f0" hide-footer :headers="ingredients" :items="store.ingredients.results">
     <template #empty-message>
       <div class="dark:text-white">{{ t("no_available_data") }}</div>
@@ -129,6 +132,9 @@ const handleDeleteModal = (id: number) => {
       {{ t(header.text) }}
     </template>
 
+    <template #item-id="item">
+      {{ item.length }}
+    </template>
 
     <template #item-product="item">
       {{ item.draft_product?.title }}

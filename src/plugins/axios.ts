@@ -44,23 +44,6 @@ axiosIns.interceptors.request.use(
 );
 
 
-// axiosIns.interceptors.request.use(
-//     (config) => {
-//       let token = getAccessToken();
-//       if (token && config.headers) {
-//         // config.headers.Authorization = "Bearer " + token;
-//       }
-//       if (config.headers) {
-//         config.headers['Content-Language'] = i18n.global.locale.value;
-//     }
-//       return config;
-//     },
-//     (error) => {
-//       return Promise.reject(error);
-//     }
-//   );
-
-
   
 
 //404 OR 401 PAGES USE THIS RESPONSE

@@ -161,7 +161,7 @@ export default defineStore("knowledgeBase", {
             this.quantityTypeList = data
         },
 
-        async getDistrict(params?: Params) {
+        async getDistrict(params?) {
             const {data} = await $axios.get('/knowledge_base/region/get_districts/', {params})
             this.distrctList = data
         },
