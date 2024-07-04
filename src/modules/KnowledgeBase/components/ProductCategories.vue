@@ -49,7 +49,7 @@ const onPageSizeChanged = (e) => {
 
 const deleteCategory = async () => {
   try {
-    await store.deleteProductCategory(itemId.value)
+    await store.q(itemId.value)
     UIkit.modal('#product-category-delete').hide()
     toast.success(t('deleted_successfully'))
     if (
@@ -121,6 +121,8 @@ watchDebounced(
 onBeforeUnmount(() => [
   (store.productCategories = {} as IResponse<IProductCategories>),
 ])
+
+// test
 </script>
 
 <template>
