@@ -318,7 +318,7 @@ export default defineStore("knowledgeBase", {
       return $axios.delete(`/products/product_type/${id}/`);
     },
 
-
+    // products categories related apis
     async getProductsCategories(params?: Params) {
       const { data } = await $axios.get('/products/product_category/', { params })
       this.productCategories = data
