@@ -121,6 +121,8 @@ watchDebounced(
 onBeforeUnmount(() => [
   (store.productCategories = {} as IResponse<IProductCategories>),
 ])
+
+// test
 </script>
 
 <template>
