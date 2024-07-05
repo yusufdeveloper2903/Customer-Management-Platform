@@ -214,8 +214,10 @@ const dragDrop = async (item: Link) => {
 
         <td class="px-6 whitespace-no-wrap text-left ">{{ item.id }}</td>
         <td class="px-6 whitespace-no-wrap text-left">{{ item['title_' + $i18n.locale] }}</td>
-        <td class="px-6 whitespace-no-wrap text-left">{{ item.active_products_count }}</td>
-        <td class="px-6 whitespace-no-wrap text-left">{{ item.inactive_products_count }}</td>
+        <td class="pr-9 whitespace-no-wrap  text-center">
+          {{ item.active_products_count }}
+        </td>
+        <td class="pr-9  whitespace-no-wrap text-center">{{ item.inactive_products_count }}</td>
         <td class="px-6 whitespace-no-wrap text-left"> <span
             :class="changeColor(item.status)" class="rounded  px-4 p-1 pt-1 inline  text-white"
         >

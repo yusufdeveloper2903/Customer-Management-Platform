@@ -310,9 +310,6 @@ export const headerPlaces = [
         text: "phones",
         value: "phones"
     },
-    { text: "id", value: "id" },
-    { text: "title", value: "title" },
-    { text: "phones", value: "phones" },
     { text: "region", value: "region" },
     { text: "address", value: "address" },
     { text: "actions", value: "actions" },

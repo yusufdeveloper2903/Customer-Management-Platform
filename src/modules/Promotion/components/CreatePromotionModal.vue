@@ -380,46 +380,46 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
 
         </div>
         <div class="w-1/2">
-          <div class="mt-[58px]">
-            <label>{{ $t('Detail photo') }}</label>
-            <FileInput
-                v-model="productsData.detail_photo"
-                @remove="productsData.detail_photo = null"
-                :typeModal="propData.editData.id"
-                name="promotion-modal"
-            />
-            <div v-if="general.imageDetail"
-                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
-              <img
+<!--          <div class="mt-[58px]">-->
+<!--            <label>{{ $t('Detail photo') }}</label>-->
+<!--            <FileInput-->
+<!--                v-model="productsData.detail_photo"-->
+<!--                @remove="productsData.detail_photo = null"-->
+<!--                :typeModal="propData.editData.id"-->
+<!--                name="promotion-modal"-->
+<!--            />-->
+<!--            <div v-if="general.imageDetail"-->
+<!--                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">-->
+<!--              <img-->
 
-                  :src="general.imageDetail"
-                  alt="image"
-                  style="aspect-ratio: 1/1 "
-              />
+<!--                  :src="general.imageDetail"-->
+<!--                  alt="image"-->
+<!--                  style="aspect-ratio: 1/1 "-->
+<!--              />-->
 
-            </div>
-            <div v-else-if="productsData.detail_photo"
-                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
-              <img
+<!--            </div>-->
+<!--            <div v-else-if="productsData.detail_photo"-->
+<!--                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">-->
+<!--              <img-->
 
-                  :src="productsData.detail_photo"
-                  alt="image"
-                  style="aspect-ratio: 1/1 "
-              />
+<!--                  :src="productsData.detail_photo"-->
+<!--                  alt="image"-->
+<!--                  style="aspect-ratio: 1/1 "-->
+<!--              />-->
 
-            </div>
+<!--            </div>-->
 
 
-            <div v-else
-                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
-              <div
-                  class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">
-                <span class="font-medium dark:text-white">{{ $t("no_photo") }}</span>
+<!--            <div v-else-->
+<!--                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">-->
+<!--              <div-->
+<!--                  class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">-->
+<!--                <span class="font-medium dark:text-white">{{ $t("no_photo") }}</span>-->
 
-              </div>
-            </div>
+<!--              </div>-->
+<!--            </div>-->
 
-          </div>
+<!--          </div>-->
 
           <div>
             <label class="mt-2 block">{{ $t('Background photo') }}</label>

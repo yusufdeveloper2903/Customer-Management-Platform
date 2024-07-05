@@ -280,24 +280,24 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
               {{ productsCategory.product.measurement_type['title_' + $i18n.locale] }}</p>
             <p class="priceProduct price-container" v-if="!productsCategory.has_discount">
 
-              <span class="price-main">{{ formattedPrice(productsCategory.product.price).main }}</span>
+              <span class="price-main dark:text-dark">{{ formattedPrice(productsCategory.product.price).main }}</span>
               <span style="display:flex ; flex-direction:column">
-              <span class="price-thousands">{{ formattedPrice(productsCategory.product.price).thousands }}</span>
-              <span class="currency-symbol">сум</span>
+              <span class="price-thousands dark:text-dark">{{ formattedPrice(productsCategory.product.price).thousands }}</span>
+              <span class="currency-symbol dark:text-dark">{{$t('som')}}</span>
               </span>
             </p>
             <p class="priceProduct price-container" v-else>
-              <span class="price-main" v-if="productsCategory.discount_price">{{
+              <span class="price-main dark:text-dark" v-if="productsCategory.discount_price">{{
                   formattedPrice(productsCategory.discount_price).main
                 }}</span>
               <span style="display:flex ; flex-direction:column">
-              <span class="price-thousands" v-if="productsCategory.discount_price">{{
+              <span class="price-thousands dark:text-dark" v-if="productsCategory.discount_price">{{
                   formattedPrice(productsCategory.discount_price).thousands
                 }}</span>
-              <span class="currency-symbol" v-if="productsCategory.discount_price">сум</span>
+              <span class="currency-symbol dark:text-dark" v-if="productsCategory.discount_price">{{$t('som')}}</span>
               </span>
             </p>
-            <p class="oldPrice" v-if="productsCategory.has_discount">
+            <p class="oldPrice dark:text-dark" v-if="productsCategory.has_discount">
               {{ formatNumber(productsCategory.product.price) }}
               <svg class="RectanglePrice" width="46" height="14" viewBox="0 0 46 14" fill="none"
                    xmlns="http://www.w3.org/2000/svg">
@@ -367,7 +367,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
   top: 28px;
   font-size: 13px;
   color: gray;
-  margin-left: 12px;
+  margin-left: 8px;
 }
 
 .priceProduct {
