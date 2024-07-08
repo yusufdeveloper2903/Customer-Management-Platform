@@ -296,21 +296,9 @@ export const linkType = [
     },
 ]
 export const headerPlaces = [
-    {
-        text: "id",
-        value: "id"
-    },
-    {
-        text: "name",
-        value: "title"
-    },
-    {
-        text: "phones",
-        value: "phones"
-    },
-    {text: "id", value: "id"},
-    {text: "title", value: "title"},
-    {text: "phones", value: "phones"},
+    { text: "id", value: "id" },
+    { text: "name", value: "title" },
+    { text: "phones", value: "phones" },
     {text: "region", value: "region"},
     {text: "address", value: "address"},
     {text: "actions", value: "actions"},

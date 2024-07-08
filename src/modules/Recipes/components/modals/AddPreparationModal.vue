@@ -10,7 +10,7 @@ import ModalTabs from "@/components/Tab/ModalTabs.vue";
 import ModalTab from "@/components/Tab/ModalTab.vue";
 import recipeStore from "../../store/index"
 import { EditPreparation } from "../../interfaces/index"
-import {useSidebarStore} from '@/stores/layoutConfig'
+import { useSidebarStore } from '@/stores/layoutConfig'
 import { useRoute } from "vue-router";
 
 // Declared variables
@@ -62,22 +62,22 @@ async function openModal() {
     preparationData.value.food = propData.editData.food
   } else {
     preparationData.value.id = null
-    preparationData.value.draft_description = " "
-    preparationData.value.draft_description_uz = " "
-    preparationData.value.draft_description_ru = " "
-    preparationData.value.draft_description_kr = " "
+    preparationData.value.draft_description = ""
+    preparationData.value.draft_description_uz = ""
+    preparationData.value.draft_description_ru = ""
+    preparationData.value.draft_description_kr = ""
     preparationData.value.food = null
   }
 }
 
 function clearData() {
   preparationData.value.id = null
-    preparationData.value.draft_description = " "
-    preparationData.value.draft_description_uz = " "
-    preparationData.value.draft_description_ru = " "
-    preparationData.value.draft_description_kr = " "
-    preparationData.value.food = null
-    validate.value.$reset()
+  preparationData.value.draft_description = ""
+  preparationData.value.draft_description_uz = ""
+  preparationData.value.draft_description_ru = ""
+  preparationData.value.draft_description_kr = ""
+  preparationData.value.food = null
+  validate.value.$reset()
 }
 
 
@@ -154,15 +154,8 @@ const updateDeal = async () => {
           <ModalTab title="UZ">
             <form>
               <label for="nameUz">{{ t('description') }} O'z
-                <Editor
-              :placeholder="$t('enter_information')"
-              content-type="html"
-              toolbar="full"
-              class="scrollbar rounded border"
-              style="height: 45vh; overflow-y: auto;"
-              v-model:content="preparationData.draft_description_uz"
-          >
-          </Editor>
+                <textarea rows="10" v-model="preparationData.draft_description_uz" :placeholder="$t('enter_information')"
+                  class="form-input"></textarea>
                 <p v-for="error in validate.draft_description_uz.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
@@ -173,15 +166,10 @@ const updateDeal = async () => {
           <ModalTab title="KR">
             <form>
               <label for="nameRu">{{ t('description') }} Ўз
-                <Editor
-              :placeholder="$t('enter_information')"
-              content-type="html"
-              toolbar="full"
-              class="scrollbar rounded border"
-              style="height: 45vh; overflow-y: auto;"
-              v-model:content="preparationData.draft_description_kr"
-          >
-          </Editor>
+
+                <textarea rows="10" v-model="preparationData.draft_description_kr" :placeholder="$t('enter_information')"
+                  class="form-input"></textarea>
+
                 <p v-for="error in validate.draft_description_kr.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
@@ -192,15 +180,9 @@ const updateDeal = async () => {
           <ModalTab title="RU">
             <form>
               <label for="nameRu">{{ t('description') }} Ру
-                <Editor
-              :placeholder="$t('enter_information')"
-              content-type="html"
-              toolbar="full"
-              class="scrollbar rounded border"
-              style="height: 45vh; overflow-y: auto;"
-              v-model:content="preparationData.draft_description_ru"
-          >
-          </Editor>
+
+                <textarea rows="10" v-model="preparationData.draft_description_ru" :placeholder="$t('enter_information')"
+                  class="form-input"></textarea>
                 <p v-for="error in validate.draft_description_ru.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
                 </p>
@@ -215,11 +197,10 @@ const updateDeal = async () => {
           {{ t("Cancel") }}
         </button>
 
-       
-        <button  :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal" :disabled="isSubmitted">
+
+        <button :class="propData.editData.id ? 'btn-warning' : 'btn-success'" @click="updateDeal" :disabled="isSubmitted">
           <span>{{ propData.editData.id ? t("Change") : t('Add') }}</span>
         </button>
       </div>
     </div>
-  </div>
-</template>
+  </div></template>
