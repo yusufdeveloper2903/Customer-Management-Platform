@@ -34,26 +34,6 @@ export const PollsFields = [
         value: "actions",
     },
 ];
-export const categoryitems = [
-    {
-        id: 1,
-        photo: "https://picsum.photos/300",
-        name: "Парфюм",
-        step_id: 1,
-    },
-    {
-        id: 2,
-        photo: "",
-        name: "Для взрослых",
-        step_id: 2,
-    },
-    {
-        id: 3,
-        photo: "https://picsum.photos/300",
-        name: "Аксессуары",
-        step_id: 3,
-    },
-];
 
 export const introFields = [
     {
@@ -96,19 +76,11 @@ export const SmsFields = [
         value: "actions",
     },
 ];
+
 export const Regions = [
-    {
-        text: "ID",
-        value: "id",
-    },
-    {
-        text: "name",
-        value: "name",
-    },
-    {
-        text: "actions",
-        value: "actions",
-    },
+    {text: "ID", value: "id"},
+    {text: "name", value: "name"},
+    {text: "actions", value: "actions"},
 ];
 
 
@@ -138,28 +110,11 @@ export const OnboardingTable = [
 ];
 
 export const newsTemplateTable = [
-    {
-        text: "ID",
-        value: "id",
-    },
-    {
-        text: "photo",
-        value: "photo",
-    },
-    {
-        text: "name",
-        value: "title",
-    },
-    {
-        text: "description",
-        value: "description",
-    },
-
-
-    {
-        text: "actions",
-        value: "actions",
-    },
+    { text: "ID", value: "id"},
+    {text: "photo", value: "photo" },
+    {text: "name", value: "title"},
+    {text: "description", value: "description"},
+    {text: "actions", value: "actions"},
 ];
 
 export const versionControlFields = [
@@ -230,19 +185,11 @@ export const productsFields = [
         value: "actions"
     },
 ]
+
 export const phoneNumberFields = [
-    {
-        text: "ID",
-        value: "id"
-    },
-    {
-        text: "Phone Number",
-        value: "phone"
-    },
-    {
-        text: "actions",
-        value: "actions"
-    },
+    {text: "ID", value: "id"},
+    {text: "Phone Number", value: "phone"},
+    {text: "actions", value: "actions"},
 ]
 
 export const linksFields = [
@@ -348,6 +295,12 @@ export const districtFields = [
     {text: "districts", value: "name"},
     {text: "region", value: "region"},
     {text: "actions", value: "actions"},
+]
+
+export const errorResponseFields = [
+    {text: "status_code", value: "status_code"},
+    {text: "message", value: "message"},
+    {text: "actions", value: "actions"}
 ]
 
 

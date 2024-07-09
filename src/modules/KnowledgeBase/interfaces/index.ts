@@ -328,3 +328,11 @@ export interface EditDistrict {
     name_kr: string;
     parent: any
 }
+
+export interface ErrorMessage {
+    status_code: number;
+    message: string;
+    message_ru: string;
+    message_kr: string;
+    message_uz: string;
+}

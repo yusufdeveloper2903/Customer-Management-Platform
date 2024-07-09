@@ -17,6 +17,7 @@ import Regions from '../components/Regions.vue'
 import Category from "../components/Categories.vue"
 import Splash from "../components/Splash.vue";
 import QuantityType from "../components/QuantityType.vue"
+import ErrorResponse from "../components/ErrorResponse.vue";
 import {ref} from 'vue'
 import Districts from "../components/Districts.vue"
 
@@ -92,6 +93,10 @@ const selectedTitle = (val: any) => {
 
       <Tab title="type_quantity">
         <QuantityType :knowledge="knowledge" :params="params"/>
+      </Tab>
+
+      <Tab title="error_response">
+        <ErrorResponse :knowledge="knowledge" :params="params"/>
       </Tab>
 
     </Tabs>

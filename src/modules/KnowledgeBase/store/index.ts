@@ -15,8 +15,9 @@ import {
     Onboarding,
     Splash,
     QuantityType,
-    District
-
+    District,
+    ErrorMessage
+    
 } from "../interfaces";
 
 
@@ -89,6 +90,10 @@ export default defineStore("knowledgeBase", {
             distrctList: {
                 results: [] as District[],
             } as Results<District>,
+
+            errorMessageList: {
+                results: [] as ErrorMessage[],
+            } as Results<ErrorMessage>,
             
         };
     },
@@ -164,6 +169,11 @@ export default defineStore("knowledgeBase", {
         async getDistrict(params?) {
             const {data} = await $axios.get('/knowledge_base/region/get_districts/', {params})
             this.distrctList = data
+        },
+
+        async getErrorMessage(params?) {
+            const {data} = await $axios.get('/knowledge_base/error_message/', {params})
+            this.errorMessageList = data
         },
 
         //CREATE REQUEST
@@ -271,6 +281,9 @@ export default defineStore("knowledgeBase", {
             return $axios.patch(`/products/product_type/${data.id}/`, data);
         },
 
+        updateErrorMessage(data: any) {
+            return $axios.patch(`/knowledge_base/error_message/${data.status_code}/`, data);
+        },
 
         //DELETE REQUEST
         deleteSmsTemplate(id: number | null) {
