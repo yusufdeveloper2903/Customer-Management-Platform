@@ -33,6 +33,10 @@ const selectedTitle = (val: any) => {
   localStorage.setItem('page_size', '10')
   localStorage.setItem('knowledgeBase', val)
   knowledge.value = val
+
+  const modal = document.getElementsByClassName('uk-modal')
+  const modalArray = Array.from(modal) as Element[]
+  modalArray.forEach((el) => el.remove())
 }
 </script>
 
