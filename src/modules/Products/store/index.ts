@@ -24,7 +24,7 @@ export default defineStore("productStore", {
     actions: {
         //GET REQUEST
         async getProductList(params?: any) {
-            const {data} = await $axios.get("products/categories/", {params});
+            const {data} = await $axios.get("/products/categories/", {params});
             this.productListCategory = data;
         },
         async getProductFromKnowledgeBase(params: any) {
@@ -32,7 +32,7 @@ export default defineStore("productStore", {
             this.productFromKnowledgeBase = data
         },
         async getProductCardsId(params: any) {
-            const {data} = await $axios.get(`products/product_cards`, {params});
+            const {data} = await $axios.get(`/products/product_cards/`, {params});
             this.productListCards = data;
         },
 

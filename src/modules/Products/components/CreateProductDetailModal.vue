@@ -60,18 +60,19 @@ watch(() => productsCategory.value.has_discount, function (val) {
   if (!val) {
     productsCategory.value.discount_percentage = 0
 
-  } else {
+  } else if (!productsCategory.value.discount_percentage) {
     productsCategory.value.discount_price = productsCategory.value.product.price
   }
 })
 
 const discountPercentageInput = (val) => {
   let discountAmount = (val.target.value / 100) * productsCategory.value.product.price;
-  productsCategory.value.discount_price = String(productsCategory.value.product.price - discountAmount)
+  let result = productsCategory.value.product.price - discountAmount
+  productsCategory.value.discount_price = result.toFixed(2)
 }
 const discountPriceInput = (val) => {
   let discountPercentage = (Number(val.target.value) * 100) / productsCategory.value.product.price
-  productsCategory.value.discount_percentage = discountPercentage
+  productsCategory.value.discount_percentage = discountPercentage.toFixed(0)
 }
 const productChange = (val) => {
   productsCategory.value.discount_price = val.price
@@ -125,13 +126,14 @@ const formattedPrice = (val) => {
 
 function openModal() {
   if (propData.editData.id) {
+    productsCategory.value.discount_price = propData.editData.discount_price
     productsCategory.value.status = propData.editData.status
     productsCategory.value.product = propData.editData.product
     productsCategory.value.category = propData.editData.category
-    productsCategory.value.discount_price = propData.editData.discount_price
     productsCategory.value.has_discount = propData.editData.has_discount
     productsCategory.value.discount_percentage = propData.editData.discount_percentage
     productsCategory.value.id = String(propData.editData.id)
+
   } else {
     productsCategory.value.category = String(route.params.id)
   }
@@ -282,8 +284,10 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
 
               <span class="price-main dark:text-dark">{{ formattedPrice(productsCategory.product.price).main }}</span>
               <span style="display:flex ; flex-direction:column">
-              <span class="price-thousands dark:text-dark">{{ formattedPrice(productsCategory.product.price).thousands }}</span>
-              <span class="currency-symbol dark:text-dark">{{$t('som')}}</span>
+              <span class="price-thousands dark:text-dark">{{
+                  formattedPrice(productsCategory.product.price).thousands
+                }}</span>
+              <span class="currency-symbol dark:text-dark">{{ $t('som') }}</span>
               </span>
             </p>
             <p class="priceProduct price-container" v-else>
@@ -294,7 +298,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
               <span class="price-thousands dark:text-dark" v-if="productsCategory.discount_price">{{
                   formattedPrice(productsCategory.discount_price).thousands
                 }}</span>
-              <span class="currency-symbol dark:text-dark" v-if="productsCategory.discount_price">{{$t('som')}}</span>
+              <span class="currency-symbol dark:text-dark" v-if="productsCategory.discount_price">{{ $t('som') }}</span>
               </span>
             </p>
             <p class="oldPrice dark:text-dark" v-if="productsCategory.has_discount">
