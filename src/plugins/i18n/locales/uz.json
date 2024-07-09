@@ -415,6 +415,10 @@
   "changing": "O'zgartirish",
   "add_district": "Tuman qo'shish",
   "edit_district": "Tumanni tahrirlash",
+  "error_response": "Xato xabari",
+  "status_code": "Status kodi",
+  "message": "Xabar",
+  "edit_message": "Xabarni tahrirlash",
   "districts": "Tumanlar",
   "product_categories": "Mahsulotlar toifalari"
 }

@@ -1,41 +1,43 @@
-import { defineStore } from "pinia";
+import {defineStore} from "pinia";
 import $axios from "@/plugins/axios";
 import {
-  SmsTemplate,
-  Results,
-  Params,
-  NewsTemplate,
-  LocationPlace,
-  Regions,
-  VersionControl,
-  Products,
-  Link,
-  Phones,
-  RetseptCategory,
-  Onboarding,
-  Splash,
-  QuantityType,
-  District,
-  IProductCategories
+    SmsTemplate,
+    Results,
+    Params,
+    NewsTemplate,
+    LocationPlace,
+    Regions,
+    VersionControl,
+    Products,
+    Link,
+    Phones,
+    RetseptCategory,
+    Onboarding,
+    Splash,
+    QuantityType,
+    District,
+    ErrorMessage,
+    IProductCategories
+
 } from "../interfaces";
 import { IResponse } from "@/interface";
 
 
 export default defineStore("knowledgeBase", {
-  state: () => {
-    return {
-      tabs: 'UZ',
-      knowledge: '',
-      smsTemplateList: {
-        count: 0,
-        results: [] as SmsTemplate[],
-      } as Results<SmsTemplate>,
-      newTemplate: {
-        results: [] as NewsTemplate[],
-      } as Results<NewsTemplate>,
-      onBoarding: {
-        results: [] as Onboarding[],
-      } as Results<Onboarding>,
+    state: () => {
+        return {
+            tabs: 'UZ',
+            knowledge: '',
+            smsTemplateList: {
+                count: 0,
+                results: [] as SmsTemplate[],
+            } as Results<SmsTemplate>,
+            newTemplate: {
+                results: [] as NewsTemplate[],
+            } as Results<NewsTemplate>,
+            onBoarding: {
+                results: [] as Onboarding[],
+            } as Results<Onboarding>,
 
       locationList: {
         results: [] as LocationPlace[],
@@ -87,14 +89,17 @@ export default defineStore("knowledgeBase", {
         results: [] as QuantityType[]
       } as Results<QuantityType>,
 
-      distrctList: {
-        results: [] as District[],
-      } as Results<District>,
+            distrctList: {
+                results: [] as District[],
+            } as Results<District>,
 
-      productCategories: {} as IResponse<IProductCategories>
-    };
-  },
-  actions: {
+            errorMessageList: {
+                results: [] as ErrorMessage[],
+            } as Results<ErrorMessage>,
+
+        };
+    },
+    actions: {
 
 
     //GET REQUEST
@@ -168,31 +173,36 @@ export default defineStore("knowledgeBase", {
       this.distrctList = data
     },
 
-    //CREATE REQUEST
-    createSmsTemplate(data: any) {
-      return $axios.post("/knowledge_base/sms_template/", data);
-    },
-    createNewsTemplate(data: any) {
-      return $axios.post(`/knowledge_base/news_template/`, data);
-    },
-    createOnboarding(data: any) {
-      return $axios.post(`/knowledge_base/onboarding/`, data);
-    },
-    AddForms(data: any) {
-      return $axios.post("/knowledge_base/location/", data);
-    },
-    createRegions(data: object) {
-      return $axios.post('knowledge_base/region/', data)
-    },
-    createVersion(data: object) {
-      return $axios.post(`/versions/create_version/`, data);
-    },
-    createProducts(data: any) {
-      return $axios.post(`/products/products/`, data);
-    },
-    create_drag_and_drop(data: any) {
-      return $axios.post(`/knowledge_base/social_media_links/drag_and_drop/`, data);
-    },
+        async getErrorMessage(params?) {
+            const {data} = await $axios.get('/knowledge_base/error_message/', {params})
+            this.errorMessageList = data
+        },
+
+        //CREATE REQUEST
+        createSmsTemplate(data: any) {
+            return $axios.post("/knowledge_base/sms_template/", data);
+        },
+        createNewsTemplate(data: any) {
+            return $axios.post(`/knowledge_base/news_template/`, data);
+        },
+        createOnboarding(data: any) {
+            return $axios.post(`/knowledge_base/onboarding/`, data);
+        },
+        AddForms(data: any) {
+            return $axios.post("/knowledge_base/location/", data);
+        },
+        createRegions(data: object) {
+            return $axios.post('knowledge_base/region/', data)
+        },
+        createVersion(data: object) {
+            return $axios.post(`/versions/create_version/`, data);
+        },
+        createProducts(data: any) {
+            return $axios.post(`/products/products/`, data);
+        },
+        create_drag_and_drop(data: any) {
+            return $axios.post(`/knowledge_base/social_media_links/drag_and_drop/`, data);
+        },
 
     createSocialMediaLinks(data: any) {
       return $axios.post(`/knowledge_base/social_media_links/`, data)
@@ -273,6 +283,9 @@ export default defineStore("knowledgeBase", {
       return $axios.patch(`/products/product_type/${data.id}/`, data);
     },
 
+        updateErrorMessage(data: any) {
+            return $axios.patch(`/knowledge_base/error_message/${data.status_code}/`, data);
+        },
 
     //DELETE REQUEST
     deleteSmsTemplate(id: number | null) {

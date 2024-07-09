@@ -411,5 +411,9 @@
   "add_district": "Туман қўшиш",
   "edit_district": "Туманни таҳрирлаш",
   "districts": "Туманлар",
+  "error_response": "Хато хабари",
+  "status_code": "Статус коди",
+  "message": "Хабар",
+  "edit_message": "Хабарни таҳрирлаш",
   "product_categories": "Маҳсулотлар тоифалари"
 }

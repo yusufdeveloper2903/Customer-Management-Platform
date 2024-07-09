@@ -330,6 +330,14 @@ export interface EditDistrict {
     parent: any
 }
 
+export interface ErrorMessage {
+    status_code: number;
+    message: string;
+    message_ru: string;
+    message_kr: string;
+    message_uz: string;
+}
+
 export interface IProductCategories {
 
 }

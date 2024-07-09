@@ -12,18 +12,19 @@ import PrivacyPolicy from '../components/PrivacyPolicy.vue'
 import TermsAndConditions from '../components/TermsAndConditions.vue'
 import Contacts from '../components/Links.vue'
 import Regions from '../components/Regions.vue'
-import Category from '../components/Categories.vue'
-import Splash from '../components/Splash.vue'
-import QuantityType from '../components/QuantityType.vue'
-import { ref } from 'vue'
-import Districts from '../components/Districts.vue'
 import ProductCategories from '../components/ProductCategories.vue'
+import Category from "../components/Categories.vue"
+import Splash from "../components/Splash.vue";
+import QuantityType from "../components/QuantityType.vue"
+import ErrorResponse from "../components/ErrorResponse.vue";
+import {ref} from 'vue'
+import Districts from "../components/Districts.vue"
 
 //DECLARED VARIABLES
 const knowledge = ref('')
 let params = ref({
   page: 1,
-  page_size: 10,
+  page_size: 10
 })
 
 //FUNCTIONS
@@ -37,25 +38,27 @@ const selectedTitle = (val: any) => {
 
 <template>
   <div
-    class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm">
+      class="uk-card uk-card-default uk-card-body uk-card-small rounded dark:bg-darkLayoutStorm"
+  >
     <Tabs vertical pill @selectedTitle="selectedTitle" unique="unique">
+
       <Tab title="sms_template">
-        <SMSTemplate :knowledge="knowledge" :params="params" />
+        <SMSTemplate :knowledge="knowledge" :params="params"/>
       </Tab>
       <Tab title="News template">
-        <NewsTemplate :knowledge="knowledge" :params="params" />
+        <NewsTemplate :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="Locations">
-        <NearbyPlaces :knowledge="knowledge" :params="params" />
+        <NearbyPlaces :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="version_control">
-        <VersionControl :knowledge="knowledge" :params="params" />
+        <VersionControl :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="products">
-        <Products :knowledge="knowledge" :params="params" />
+        <Products :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="product_categories">
@@ -63,22 +66,22 @@ const selectedTitle = (val: any) => {
       </Tab>
 
       <Tab title="PrivacyPolicy">
-        <PrivacyPolicy :knowledge="knowledge" :params="params" />
+        <PrivacyPolicy :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="region">
-        <Regions :knowledge="knowledge" :params="params" />
+        <Regions :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="districts">
-        <Districts :knowledge="knowledge" :params="params" />
+        <Districts :knowledge="knowledge" :params="params"/>
       </Tab>
 
       <Tab title="Terms_and_conditions">
-        <TermsAndConditions :knowledge="knowledge" :params="params" />
+        <TermsAndConditions :knowledge="knowledge" :params="params"/>
       </Tab>
       <Tab title="Onboarding">
-        <Onboarding :knowledge="knowledge" :params="params" />
+        <Onboarding :knowledge="knowledge" :params="params"/>
       </Tab>
       <Tab title="contacts">
         <Contacts :knowledge="knowledge" :params="params" />
@@ -95,6 +98,11 @@ const selectedTitle = (val: any) => {
       <Tab title="type_quantity">
         <QuantityType :knowledge="knowledge" :params="params" />
       </Tab>
+
+      <Tab title="error_response">
+        <ErrorResponse :knowledge="knowledge" :params="params"/>
+      </Tab>
+
     </Tabs>
   </div>
 </template>

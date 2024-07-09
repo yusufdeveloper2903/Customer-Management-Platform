@@ -449,5 +449,9 @@
   "add_district": "Добавление района",
   "edit_district": "Изменить район",
   "districts": "Районы",
-  "product_categories": "Категории Продуктов"
+  "product_categories": "Категории Продуктов",
+  "error_response": "Сообщение об ошибке",
+  "status_code": "Код состояния",
+  "message": "Сообщение",
+  "edit_message": "Редактировать сообщение"
 }
