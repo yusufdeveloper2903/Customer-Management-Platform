@@ -115,13 +115,12 @@ const saveMessage = () => {
   <div class="card">
 
     <div class="flex justify-between items-end mb-7">
-      <label for="search" class="w-1/4">
+      <label for="search" >
         {{ t('Search') }}
         <input
             v-model="params.search"
             type="text"
             class="form-input"
-            :placeholder="t('Search')"
         />
       </label>
     </div>

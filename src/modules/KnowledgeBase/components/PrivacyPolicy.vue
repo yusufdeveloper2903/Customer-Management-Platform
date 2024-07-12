@@ -138,7 +138,7 @@ const deletePrivacyPolicy = async () => {
       <Tabs pill>
         <Tab title="UZ">
           <div v-if="!store.pagesListPolicy.id || isEdit">
-            <Editor :placeholder="t('enter_information')" content-type="html" toolbar="full"
+            <Editor  content-type="html" toolbar="full"
                          class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
                          v-model:content="content.text_uz">
             </Editor>
@@ -157,7 +157,7 @@ const deletePrivacyPolicy = async () => {
 
         <Tab title="KR">
           <div v-if="!store.pagesListPolicy.id || isEdit">
-            <Editor :placeholder="t('enter_information')" content-type="html" toolbar="full"
+            <Editor  content-type="html" toolbar="full"
                          class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
                          v-model:content="content.text_kr">
             </Editor>
@@ -177,7 +177,7 @@ const deletePrivacyPolicy = async () => {
 
         <Tab title="RU">
           <div v-if="!store.pagesListPolicy.id || isEdit">
-            <Editor :placeholder="t('enter_information')" content-type="html" toolbar="full"
+            <Editor  content-type="html" toolbar="full"
                          class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
                          v-model:content="content.text_ru">
             </Editor>

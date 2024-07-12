@@ -19,6 +19,7 @@ import QuantityType from "../components/QuantityType.vue"
 import ErrorResponse from "../components/ErrorResponse.vue";
 import {ref} from 'vue'
 import Districts from "../components/Districts.vue"
+import Faqs from '../components/Faqs.vue'
 
 //DECLARED VARIABLES
 const knowledge = ref('')
@@ -107,6 +108,9 @@ const selectedTitle = (val: any) => {
         <ErrorResponse :knowledge="knowledge" :params="params"/>
       </Tab>
 
+      <Tab title="faqs">
+        <Faqs :knowledge="knowledge" :params="params"/>
+      </Tab>
     </Tabs>
   </div>
 </template>

@@ -146,7 +146,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
 
 <template>
   <div id="news_template" class="uk-flex-top " uk-modal="bgClose:false" @shown="openModal" @hidden="hideModal">
-    <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden">
+    <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg ">
       <button class="uk-modal-close-default" type="button" uk-close />
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
@@ -166,7 +166,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
               </label>
 
               <label class="mt-4 block" for="descriptionUz">{{ t('description') + ' ' + t('UZ') }}
-                <Editor :placeholder="$t('enter_information')" content-type="html" toolbar="full"
+                <Editor  content-type="html" toolbar="full"
                   class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
                   v-model:content="newsTemplateData.description_uz" :class="validate.description_uz.$errors.length
                     ? 'required-input'
@@ -191,7 +191,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
 
               <label class="mt-4 block" for="descriptionUz">{{ t('description') + ' ' + t('KR') }}
 
-                <Editor :placeholder="$t('enter_information')" content-type="html" toolbar="full"
+                <Editor  content-type="html" toolbar="full"
                   class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
                   v-model:content="newsTemplateData.description_kr" :class="validate.description_kr.$errors.length
                     ? 'required-input'
@@ -217,7 +217,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
 
               <label class="mt-4 block" for="descriptionRu">{{ t('description') + ' ' + t('RU') }}
 
-                <Editor :placeholder="$t('enter_information')" content-type="html" toolbar="full"
+                <Editor  content-type="html" toolbar="full"
                   class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
                   v-model:content="newsTemplateData.description_ru" :class="validate.description_ru.$errors.length
                     ? 'required-input'

@@ -123,7 +123,7 @@ const handleDeleteModal = (id: number) => {
 
 
 
-  <EasyDataTable theme-color="#7367f0" hide-footer :headers="ingredients" :items="store.ingredients.results">
+  <EasyDataTable   show-index theme-color="#7367f0" hide-footer :headers="ingredients" :items="store.ingredients.results">
     <template #empty-message>
       <div class="dark:text-white">{{ t("no_available_data") }}</div>
     </template>

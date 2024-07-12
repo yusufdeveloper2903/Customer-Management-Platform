@@ -142,7 +142,7 @@ const updateDeal = async () => {
 
 <template>
   <div id="preparation_modal" class="uk-modal-container" uk-modal @shown="openModal" @hidden="clearData">
-    <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden">
+    <div class="uk-modal-dialog uk-margin-auto-vertical rounded-lg ">
       <button class="uk-modal-close-default" @click="clearData" type="button" uk-close />
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">
@@ -154,7 +154,7 @@ const updateDeal = async () => {
           <ModalTab title="UZ">
             <form>
               <label for="nameUz">{{ t('description') }} O'z
-                <textarea rows="10" v-model="preparationData.draft_description_uz" :placeholder="$t('enter_information')"
+                <textarea rows="10" v-model="preparationData.draft_description_uz"
                   class="form-input"></textarea>
                 <p v-for="error in validate.draft_description_uz.$errors" :key="error.$uid" class="text-danger text-sm">
                   {{ t(error.$message) }}
@@ -167,7 +167,7 @@ const updateDeal = async () => {
             <form>
               <label for="nameRu">{{ t('description') }} Ўз
 
-                <textarea rows="10" v-model="preparationData.draft_description_kr" :placeholder="$t('enter_information')"
+                <textarea rows="10" v-model="preparationData.draft_description_kr"
                   class="form-input"></textarea>
 
                 <p v-for="error in validate.draft_description_kr.$errors" :key="error.$uid" class="text-danger text-sm">

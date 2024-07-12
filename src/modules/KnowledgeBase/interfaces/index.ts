@@ -21,6 +21,21 @@ export interface SmsTemplate {
     };
 }
 
+export interface FaqsMessage {
+    id: number;
+    title: {
+        uz: string | null;
+        ru: string | null;
+        kr: string | null;
+    };
+    description: {
+        uz: string | null;
+        ru: string | null;
+        kr: string | null;
+
+    };
+}
+
 export interface OnBoarding {
     id: number;
     title: {
@@ -41,6 +56,7 @@ export interface Polls {
     is_active: boolean;
 }
 
+
 export interface NewsTemplate {
     id: number | null;
     title: string;
@@ -51,9 +67,20 @@ export interface NewsTemplate {
     description_uz: string;
     description_kr: string;
     description_ru: string;
-    file: null | string;
-    url: string;
 }
+
+export interface FaqsTemplate {
+    id: number | null;
+    question: string;
+    question_uz: string;
+    question_kr: string;
+    question_ru: string;
+    answer: string;
+    answer_uz: string;
+    answer_kr: string;
+    answer_ru: string;
+}
+
 export interface Onboarding {
     id: number | null;
     title: string;

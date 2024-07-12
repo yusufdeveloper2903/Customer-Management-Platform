@@ -128,12 +128,11 @@ onBeforeUnmount(() => [
 <template>
   <div class="card">
     <div class="flex justify-between items-end mb-10">
-      <label for="search" class="w-1/4">
+      <label for="search" >
         {{ t('Search') }}
         <input
           type="text"
           class="form-input"
-          :placeholder="t('Search')"
           v-model="params.search" />
       </label>
 

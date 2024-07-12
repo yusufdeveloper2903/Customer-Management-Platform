@@ -139,7 +139,6 @@ function openModal() {
 const onHide = () => {
   general.tabs = 'UZ'
   document.getElementsByClassName('ql-editor')[0].innerHTML = ''
-
   validate.value.$reset()
   general.imageDetail = ""
   general.imageBackground = ""
@@ -152,7 +151,6 @@ const onHide = () => {
   productsData.value.title_ru = ''
   productsData.value.title_kr = ''
   productsData.value.status = 'DRAFT'
-
   productsData.value.start_date = ""
   productsData.value.end_date = ""
   productsData.value.background_photo = ""
@@ -160,39 +158,6 @@ const onHide = () => {
   productsData.value.description_uz = " "
   productsData.value.description_ru = " "
   productsData.value.description_kr = " "
-  const firstTab = document.querySelectorAll('.first_tab');
-  const secondTab = document.querySelectorAll('.second_tab');
-  const thirdTab = document.querySelectorAll('.third_tab');
-  firstTab.forEach(function (val) {
-    const inputElement = val.querySelector('input');
-    const textAreaElement = val.querySelector('textarea');
-    if (inputElement) {
-      inputElement.value = ''
-    }
-    if (textAreaElement) {
-      textAreaElement.value = ''
-    }
-  });
-  secondTab.forEach(function (val) {
-    const inputElement = val.querySelector('input');
-    const textAreaElement = val.querySelector('textarea');
-    if (inputElement) {
-      inputElement.value = ''
-    }
-    if (textAreaElement) {
-      textAreaElement.value = ''
-    }
-  });
-  thirdTab.forEach(function (val) {
-    const inputElement = val.querySelector('input');
-    const textAreaElement = val.querySelector('textarea');
-    if (inputElement) {
-      inputElement.value = ''
-    }
-    if (textAreaElement) {
-      textAreaElement.value = ''
-    }
-  });
 }
 
 
@@ -228,7 +193,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
 
   <div id="create_edit_promotion" class="uk-flex-top" uk-modal @shown="openModal" @hidden="onHide">
     <div
-        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
+        class="uk-modal-dialog uk-margin-auto-vertical rounded-lg "
         style="width:800px"
     >
       <button class="uk-modal-close-default" type="button" uk-close/>
@@ -259,8 +224,9 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 </p>
                 <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('UZ') }} </label>
                 <Editor
+
                     v-if="productsData.description_uz"
-                    :placeholder="$t('enter_information')"
+
                     content-type="html"
                     id="editorFirst"
                     toolbar="full"
@@ -300,7 +266,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('KR') }} </label>
                 <Editor
                     v-if="productsData.description_kr"
-                    :placeholder="$t('enter_information')"
+
                     content-type="html"
                     toolbar="full"
                     class="scrollbar rounded border"
@@ -339,7 +305,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
                 <label for="number" class="block mt-4">{{ $t('description') + ' ' + $t('RU') }}</label>
                 <Editor
                     v-if="productsData.description_ru"
-                    :placeholder="$t('enter_information')"
+
                     content-type="html"
                     toolbar="full"
                     class="scrollbar rounded border"
@@ -380,47 +346,6 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData);
 
         </div>
         <div class="w-1/2">
-<!--          <div class="mt-[58px]">-->
-<!--            <label>{{ $t('Detail photo') }}</label>-->
-<!--            <FileInput-->
-<!--                v-model="productsData.detail_photo"-->
-<!--                @remove="productsData.detail_photo = null"-->
-<!--                :typeModal="propData.editData.id"-->
-<!--                name="promotion-modal"-->
-<!--            />-->
-<!--            <div v-if="general.imageDetail"-->
-<!--                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">-->
-<!--              <img-->
-
-<!--                  :src="general.imageDetail"-->
-<!--                  alt="image"-->
-<!--                  style="aspect-ratio: 1/1 "-->
-<!--              />-->
-
-<!--            </div>-->
-<!--            <div v-else-if="productsData.detail_photo"-->
-<!--                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">-->
-<!--              <img-->
-
-<!--                  :src="productsData.detail_photo"-->
-<!--                  alt="image"-->
-<!--                  style="aspect-ratio: 1/1 "-->
-<!--              />-->
-
-<!--            </div>-->
-
-
-<!--            <div v-else-->
-<!--                 class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">-->
-<!--              <div-->
-<!--                  class=" mt-2 flex h-56 w-full mx-auto items-center justify-center overflow-hidden rounded bg-slate-200 dark:bg-darkLayoutMain">-->
-<!--                <span class="font-medium dark:text-white">{{ $t("no_photo") }}</span>-->
-
-<!--              </div>-->
-<!--            </div>-->
-
-<!--          </div>-->
-
           <div>
             <label class="mt-2 block">{{ $t('Background photo') }}</label>
             <FileInput

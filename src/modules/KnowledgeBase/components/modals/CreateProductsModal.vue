@@ -237,7 +237,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData)
     @shown="openModal"
     @hidden="onHide">
     <div
-      class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden">
+      class="uk-modal-dialog uk-margin-auto-vertical rounded-lg ">
       <button class="uk-modal-close-default" type="button" uk-close />
       <div class="uk-modal-header">
         <h2 class="uk-modal-title text-xl font-normal text-[#4b4b4b]">

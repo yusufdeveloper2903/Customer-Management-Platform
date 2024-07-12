@@ -42,17 +42,32 @@ const showUntieCardModal = (item) => {
     <div class="md:w-3/12 sm:w-full">
       <div class="card">
         <h2 class="text-success mb-3"><b>Профиль</b></h2>
-        <div class="flex justify-between">
-          <div>Ф.И.О.</div>
+        <div class="flex justify-between mb-2">
+          <div>Фамилия</div>
+          <div><small><b>{{ userItem.first_name }}</b></small></div>
+        </div>
+        <div class="flex justify-between mb-2">
+          <div>Имя</div>
+          <div><small><b>{{ userItem.last_name }}</b></small></div>
+        </div>
+        <div class="flex justify-between mb-2">
+          <div>Отчество</div>
           <div><small><b>{{ userItem.full_name }}</b></small></div>
         </div>
-
-        <div class="flex justify-between my-2">
+        <div class="flex justify-between mb-2">
+          <div>Пол</div>
+          <div><small><b>{{ userItem.gender }}</b></small></div>
+        </div>
+        <div class="flex justify-between mb-2">
+          <div>Дата рождения</div>
+          <div><small><b>{{ userItem.date_of_birth }}</b></small></div>
+        </div>
+        <div class="flex justify-between mb-2">
           <div>Номер телефона</div>
           <div v-if="userItem.phone"><small><b>+{{ userItem.phone }}</b></small></div>
         </div>
 
-        <div class="flex justify-between">
+        <div class="flex justify-between mb-2">
           <div>Создано</div>
           <div><small><b>{{ userItem.created_date }}</b></small></div>
         </div>
@@ -145,9 +160,9 @@ const showUntieCardModal = (item) => {
             <div><small><b>12:00 / 25.12.2023</b></small></div>
           </div>
 
-          <button class="mt-2 w-full rounded-md bg-danger text-white" @click="showUntieCardModal">
-            <small>Отвязать</small>
-          </button>
+<!--          <button class="mt-2 w-full rounded-md bg-danger text-white" @click="showUntieCardModal">-->
+<!--            <small>Отвязать</small>-->
+<!--          </button>-->
 
         </li>
       </ul>

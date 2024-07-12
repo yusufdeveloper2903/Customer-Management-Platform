@@ -1,30 +1,46 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 
 
 //IMPORTED FILES
-import PollsStore from ".././store/index";
-import {onMounted, reactive, ref} from "vue";
+import knowledgeBase from ".././store/index";
+import {onMounted, reactive, ref, watch} from "vue";
 import {useI18n} from "vue-i18n";
-import UIKit from "uikit";
+import UIkit from "uikit";
+import FaqsModal from "../components/modals/FaqsModal.vue";
+import {FaqsTemplate} from "../interfaces/index";
 import {toast} from "vue3-toastify";
 import {watchDebounced} from "@vueuse/core";
-import {useRouter, useRoute} from "vue-router";
+
 
 //DECLARED VARIABLES
-const route = useRoute()
-const router = useRouter();
-let toRefresh = ref(false)
-let QuestionPollList = ref<object[]>([]);
 const {t} = useI18n()
-const store = PollsStore();
+const store = knowledgeBase();
 const isLoading = ref(false);
 const itemToDelete = ref<number | null>(null);
+const dataToEdit = ref<FaqsTemplate>({
+  id: null,
+  question: '',
+  question_uz: '',
+  question_kr: '',
+  question_ru: '',
+  answer: '',
+  answer_uz: '',
+  answer_kr: '',
+  answer_ru: '',
+});
 const params = reactive({
   page: 1,
   page_size: 10,
-  search: null,
-  poll: ''
+  search: ''
 })
+const props = defineProps<{
+  knowledge: string
+  params: {
+    page: number,
+    page_size: number
+  }
+}>();
+let toRefresh = ref(false)
 
 
 //MOUNTED LIFE CYCLE
@@ -37,41 +53,50 @@ onMounted(async () => {
   if (page_size) {
     params.page_size = JSON.parse(page_size)
   }
-  params.poll = String(route.params.id)
-  await refresh()
-  await store.getQuestionPollsCard({poll_id: route.params.id, ...params})
-})
+  let knowledgeBase = localStorage.getItem('knowledgeBase')
+  if (knowledgeBase == 'faqs') {
+    await refresh()
+  }
+});
 
 
 //WATCHERS
-watchDebounced(() => params.search, function () {
+watch(() => props.knowledge, async function (val) {
+  toRefresh.value = !toRefresh.value
+  if (val == 'faqs') {
+    params.page = props.params.page
+    params.page_size = props.params.page_size
+    await refresh()
+  }
+
+})
+watchDebounced(() => params.search, async function () {
   params.page = 1
   localStorage.setItem('page', '1')
-  refresh()
+  await refresh()
 }, {deep: true, debounce: 500, maxWait: 5000})
+
 
 //FUNCTIONS
 const refresh = async () => {
-  isLoading.value = true;
-  try {
-    await store.getQuestionPolls(params);
-    QuestionPollList.value = store.questionsPolls.data.results
-    isLoading.value = false;
-  } catch (error: any) {
-    toast.error(
-        t('error')
-    );
-  }
-
+  await store.getFaqs(params);
 };
+const openModal = () => {
+  UIkit.modal("#faqs_template", {
+    selPanel: '.uk-modal-dialog',
+    stack: false
+  }).show()
+  dataToEdit.value = {};
+}
+
 
 const deleteAction = async () => {
   isLoading.value = true
   try {
-    await store.deletePollsQuestion(itemToDelete.value)
-    await UIKit.modal("#detail-poll-delete-modal").hide();
+    await store.deleteFaqs(itemToDelete.value)
+    await UIkit.modal("#faqs-delete-modal").hide();
     toast.success(t('deleted_successfully'));
-    if (store.questionsPolls.data.count > 1 && ((store.questionsPolls.data.count - 1) % params.page_size == 0)) {
+    if (store.faqsList.count > 1 && ((store.faqsList.count - 1) % params.page_size == 0)) {
       params.page = params.page - 1
       await refresh()
     } else {
@@ -91,82 +116,39 @@ const onPageSizeChanged = (e: number) => {
   params.page = 1
   refresh()
 }
-
 const handleDeleteModal = (id: number) => {
   itemToDelete.value = id
-  UIKit.modal("#detail-poll-delete-modal").show()
+  UIkit.modal("#faqs-delete-modal").show()
 };
-const editPage = (id: number) => {
-  router.push({name: 'polls-question-id', params: {id: id}, query: {editId: route.params.id}});
-}
-const showQuestionPoll = () => {
-  router.push({path: '/polls-question-add', query: {id: route.params.id}})
-}
 
 </script>
 
 <template>
   <div>
-    <div class="grid grid-cols-3 mb-5 gap-3">
-      <div class="card flex items-center justify-between">
-        <div>
-          <b class="text-[#009933] !bold">{{ store.questionsPollsCard.client }}</b>
-          <p>{{ $t('Users') }}</p>
-        </div>
-
-        <img src="@/assets/image/avatar.svg" alt="@">
-      </div>
-
-      <div class="card flex items-center justify-between">
-        <div>
-          <b class="text-[#009933] !bold">{{ store.questionsPollsCard.read_count }}</b>
-          <p>{{ $t('watched') }}</p>
-        </div>
-
-        <img src="@/assets/image/eye.svg" alt="#">
-      </div>
-
-      <div class="card flex items-center justify-between">
-        <div>
-          <b class="text-[#009933] !bold">{{ store.questionsPollsCard.leave_feedback_client }}</b>
-          <p>{{ $t('last_poll') }}</p>
-        </div>
-
-        <img src="@/assets/image/tab.svg" alt="">
-      </div>
-    </div>
-
-
-    <div class="card flex justify-between items-end">
-      <div class="flex items-center md:w-7/12">
-        <label>{{ $t('Search') }}
-          <input
-              type="text"
-              class="form-input"
-              v-model="params.search"
-          />
-        </label>
-
-
-      </div>
-
+    <div class="flex justify-between items-end mb-7">
+      <label for="search">
+        {{ $t('Search') }}
+        <input
+            v-model="params.search"
+            type="text"
+            class="form-input"
+        />
+      </label>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-              @click="showQuestionPoll">
+              @click="openModal(false )">
         {{ $t("Add") }}
       </button>
     </div>
-
-    <section class="accordion mt-3" v-if="store.questionsPolls.data.results">
-      <div class="tab" v-for="item in  store.questionsPolls.data.results" :key="item.id">
+    <section class="accordion mt-3" v-if="store.faqsList.results.length">
+      <div class="tab" v-for="item in  store.faqsList.results" :key="item.id">
         <input type="checkbox" name="accordion-1" :id="String(item.id)">
         <label :for="String(item.id)" class="tab__label card">
-          <small class="ml-3 mt-1">{{ item.id }}</small>
-          <!--          <small class="ml-4 mt-1 select-none flex items-center">{{item.id}}{{item['description_' + $i18n.locale]}}</small>-->
-          <small class="ml-4 mt-1 select-none flex items-center" v-html='item["description_" + $i18n.locale]'></small>
+          <div class="ml-3 mt-1">{{ item.id }}</div>
+          <div class="ml-4 mt-1 select-none flex items-center">{{ item["question_" + $i18n.locale] }}</div>
           <small class="ml-auto">
             <small class="flex my-4 justify-end">
 
-              <button class="btn-warning btn-action" @click="editPage(item.id)"
+              <button uk-toggle="target: #faqs_template" @click="dataToEdit = item" class="btn-warning btn-action"
               >
                 <Icon icon="Pen New Square" color="#fff" size="16"/>
               </button>
@@ -180,44 +162,29 @@ const showQuestionPoll = () => {
           </small>
         </label>
         <div class="tab__content mt-2 mb-2 ">
-          <div class="card">
-            <div class="grid grid-cols-2 gap-5">
-              <div class="flex flex-col" v-for="(val, index2) in item.options" :key="index2">
-                <span class="text-[#1F1F1F]">0{{ index2 + 1 }} {{ val['context_' + $i18n.locale] }}</span>
-                <div class="w-full bg-gray-200 rounded-full h-4 dark:bg-gray-700 mt-3">
-                  <div class="bg-[#009933] h-4 rounded-full" :style="'width:' + val.percent+ '%'"></div>
-                </div>
-                <div class="flex items-center mt-3">
-                  <img src="@/assets/image/star.svg" alt="">
-                  <div class="ml-2 text-[#1F1F1F] dark:text-white">{{ val.percent }}%</div>
-                </div>
-              </div>
+          <div class="card relative ">
+            <div class="quilTable">
+              <Editor
+                  content-type="html"
+                  :readOnly="true"
+                  toolbar="false"
+                  class="scrollbar"
+                  style="height: 7vh; overflow-y: scroll;border:none;margin-top:-12px"
+                  v-model:content="item['answer_' + $i18n.locale] "
+              >
+              </Editor>
             </div>
-            <!--            <div v-if="item.options.length > 0">-->
-            <!--              <div v-if="item.question_type == 'SINGLE'">-->
-            <!--                <div v-for="data in item.options" :key="data.index">-->
-            <!--                  <input type="radio" id="test1" name="radio-group" disabled>-->
-            <!--                  <label class="mt-2 mb-2" for="test1">{{ data['context_' + $i18n.locale] }}</label>-->
-            <!--                </div>-->
-            <!--              </div>-->
-            <!--              <div v-if="item.question_type == 'MULTIPLE'">-->
-            <!--                <div class="form-group-checkbox pb-2 pt-2 " v-for="data in item.options" :key="data.index">-->
-            <!--                  <input type="checkbox" id="html" disabled>-->
-            <!--                  <label for="html">{{ data['context_' + $i18n.locale] }}</label>-->
-            <!--                </div>-->
-            <!--              </div>-->
-            <!--            </div>-->
           </div>
+
         </div>
       </div>
 
     </section>
-
     <section v-else class="card mt-3">
       <div class="text-center">{{ $t('no_available_data') }}</div>
     </section>
     <TwPagination
-        :total="store.questionsPolls.data.count"
+        :total="store.faqsList.count"
         class="mt-10 tw-pagination"
         :current="params.page"
         :restart="toRefresh"
@@ -228,11 +195,21 @@ const showQuestionPoll = () => {
         @per-page-changed="onPageSizeChanged"
     />
   </div>
-  <DeleteModal @delete-action="deleteAction" id="detail-poll-delete-modal"/>
-
+  <DeleteModal @delete-action="deleteAction" id="faqs-delete-modal"/>
+  <FaqsModal :edit-data="dataToEdit" @refresh="refresh"/>
 </template>
 <style lang="scss" scoped>
 
+
+.dark .card {
+  --tw-bg-opacity: 1;
+  background-color: rgb(23 29 50 / var(--tw-bg-opacity)) !important;
+  color: white !important;
+}
+
+.card {
+  box-shadow: none
+}
 
 .new {
   padding: 50px;
@@ -397,6 +374,7 @@ const showQuestionPoll = () => {
   padding: 1rem;
 }
 
+
 .tab__close {
   justify-content: flex-end;
   padding: 0.5rem 1rem;
@@ -405,5 +383,12 @@ const showQuestionPoll = () => {
 
 
 </style>
+<style lang="scss">
+.quilTable .ql-toolbar {
+  display: none !important;
+}
 
-
+.quilTable .ql-editor::before {
+  display: none;
+}
+</style>

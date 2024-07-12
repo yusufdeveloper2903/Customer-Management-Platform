@@ -135,13 +135,12 @@ const handleDeleteModal = (id: number) => {
 <template>
   <div class="card">
     <div class="flex justify-between items-end mb-7">
-      <label for="search" class="w-1/4">
+      <label for="search" >
         {{ t('Search') }}
         <input
             v-model="params.search"
             type="text"
             class="form-input"
-            :placeholder="t('Search')"
         />
       </label>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"

@@ -25,7 +25,6 @@ export const recipesFields = [
 ]
 
 export const ingredients = [
-    { text: "ID", value: "id" },
     { text: "product", value: "product"},
     { text: "Quantity", value: "quantity"},
     { text: "actions", value: "actions" },

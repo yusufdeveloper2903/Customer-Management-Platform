@@ -93,7 +93,7 @@ watch(() => store.receiversList.results, function () {
 
 watch(() => newsData.value.template, (val: any) => {
   if (val?.id) {
-    console.log(val,'val')
+    console.log(val, 'val')
     newsData.value.title_uz = val?.title_uz
     newsData.value.title_ru = val?.title_ru
     newsData.value.title_kr = val?.title_kr
@@ -207,6 +207,9 @@ const saveData = async () => {
   if (newsData.value.template && newsData.value.template.id) {
     newsData.value.template = newsData.value.template.id
   }
+  if (!newsData.value.template) {
+    newsData.value.template = ''
+  }
   if (newsData.value.status && newsData.value.status.id) {
     newsData.value.status = newsData.value.status.id
   }
@@ -317,9 +320,10 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <div class="uk-margin">
             <label for="form-stacked-text">{{ t('description') + ' ' + t('UZ') }}</label>
             <div class="uk-form-controls">
-              <Editor :placeholder="$t('enter_information')" content-type="html" toolbar="full" @input="newsData.template = null"
-                  class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
-                  v-model:content="newsData.description_uz"></Editor>
+              <Editor  content-type="html" toolbar="full"
+                      @input="newsData.template = null"
+                      class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
+                      v-model:content="newsData.description_uz"></Editor>
             </div>
           </div>
 
@@ -344,11 +348,12 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <div class="uk-margin">
             <label for="form-stacked-text">{{ t('description') + ' ' + t('KR') }}</label>
             <div class="uk-form-controls">
-              <Editor :placeholder="$t('enter_information')" content-type="html" toolbar="full" @input="newsData.template = null"
-                  class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
-                  v-model:content="newsData.description_kr"></Editor>
+              <Editor  content-type="html" toolbar="full"
+                      @input="newsData.template = null"
+                      class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
+                      v-model:content="newsData.description_kr"></Editor>
             </div>
-            </div>
+          </div>
         </ModalTab>
         <ModalTab title="RU">
 
@@ -370,9 +375,10 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <div class="uk-margin">
             <label for="form-stacked-text">{{ t('description') + ' ' + t('RU') }}</label>
             <div class="uk-form-controls">
-              <Editor :placeholder="$t('enter_information')" content-type="html" toolbar="full" @input="newsData.template = null"
-                  class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
-                  v-model:content="newsData.description_ru"></Editor>
+              <Editor  content-type="html" toolbar="full"
+                      @input="newsData.template = null"
+                      class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
+                      v-model:content="newsData.description_ru"></Editor>
             </div>
           </div>
         </ModalTab>

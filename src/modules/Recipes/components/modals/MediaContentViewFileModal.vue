@@ -22,7 +22,7 @@ function pauseVideo() {
     
   <div id="open_video" class="uk-flex-top" uk-modal @hidden="pauseVideo">
     <div
-      class="uk-modal-dialog uk-margin-auto-vertical rounded-lg overflow-hidden"
+      class="uk-modal-dialog uk-margin-auto-vertical rounded-lg "
     >
       <button class="uk-modal-close-default" type="button" uk-close />
       <div class="uk-modal-header">

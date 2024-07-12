@@ -94,6 +94,7 @@ const clearData = () => {
   emit('remove', inputValue.value)
   (document.getElementById(`${props.name}`) as HTMLInputElement).value = ''
 }
+
 const textFileInput = (val: any, second: any) => {
   if (second === 'inputValue') {
     const lastDotIndex = val.lastIndexOf(".");

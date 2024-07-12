@@ -58,7 +58,7 @@ onMounted(async () => {
     params.page_size = JSON.parse(page_size)
   }
   await refresh()
-await store.getQuestionPollsCard()
+  await store.getQuestionPollsCard()
 })
 
 watchDebounced(() => params.search, function () {
@@ -166,8 +166,8 @@ const editModal = async (val: any) => {
     <div class="grid grid-cols-3 mb-5 gap-3">
       <div class="card flex items-center justify-between">
         <div>
-          <b class="text-[#009933] !bold">{{store.questionsPollsCard.client}}</b>
-          <p>Пользователи</p>
+          <b class="text-[#009933] !bold">{{ store.questionsPollsCard.client }}</b>
+          <p>{{ $t('Users') }}</p>
         </div>
 
         <img src="@/assets/image/avatar.svg" alt="@">
@@ -175,8 +175,8 @@ const editModal = async (val: any) => {
 
       <div class="card flex items-center justify-between">
         <div>
-          <b class="text-[#009933] !bold">{{store.questionsPollsCard.read_count}}</b>
-          <p>Просмотрено</p>
+          <b class="text-[#009933] !bold">{{ store.questionsPollsCard.read_count }}</b>
+          <p>{{ $t('watched') }}</p>
         </div>
 
         <img src="@/assets/image/eye.svg" alt="#">
@@ -184,8 +184,8 @@ const editModal = async (val: any) => {
 
       <div class="card flex items-center justify-between">
         <div>
-          <b class="text-[#009933] !bold">{{store.questionsPollsCard.leave_feedback_client}}</b>
-          <p>Прошли опрос</p>
+          <b class="text-[#009933] !bold">{{ store.questionsPollsCard.leave_feedback_client }}</b>
+          <p>{{ $t('last_poll') }}</p>
         </div>
 
         <img src="@/assets/image/tab.svg" alt="">

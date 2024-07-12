@@ -36,12 +36,10 @@ import DeleteModal from "@/components/DeleteModal.vue";
 import LazySelect from "./components/LazySelect.vue";
 import VueApexCharts from "vue3-apexcharts";
 import Icon from "@/components/Icons/Icon.vue";
-
 //DECLARED VARIABLES
 const app = createApp(App);
 QuillEditor.props.globalOptions.default = () => globalOptions
 const globalOptions = {
-    placeholder: 'Ma`lumot kiriting',
     readOnly: false,
     theme: 'snow',
 }

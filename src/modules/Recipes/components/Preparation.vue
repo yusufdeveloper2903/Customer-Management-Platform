@@ -132,6 +132,7 @@ const handleDeleteModal = (id: number | null) => {
       <td class="px-6 whitespace-no-wrap text-left quilTable">
         <div  class="relative">
           <Editor
+
               content-type="html"
               toolbar="false"
               class="scrollbar"

@@ -18,12 +18,12 @@
         <button uk-toggle="target: #untie-card-confirm-modal" class="btn-secondary">
           {{ $t("Cancel") }}
         </button>
-        <button
-            uk-toggle="target: #untie-card-confirm-modal"
-            class="rounded-md btn-danger px-6 py-2 text-white duration-100 hover:opacity-90"
-        >
-          {{ $t("Отвязать") }}
-        </button>
+<!--        <button-->
+<!--            uk-toggle="target: #untie-card-confirm-modal"-->
+<!--            class="rounded-md btn-danger px-6 py-2 text-white duration-100 hover:opacity-90"-->
+<!--        >-->
+<!--          {{ $t("Отвязать") }}-->
+<!--        </button>-->
       </div>
     </div>
   </div>
