@@ -21,7 +21,7 @@ const propData = defineProps<{ editData: EditData | null }>();
 let sectionStories = ref<EditData>({
   id: null,
   name: '',
-  status: 'WAITING',
+  status: 'DRAFT',
 });
 const listStatus = ref([
   {
@@ -30,7 +30,7 @@ const listStatus = ref([
   },
   {
     title: 'Draft',
-    value: 'WAITING'
+    value: 'DRAFT'
   },
   {
     title: 'Finished',
@@ -52,7 +52,7 @@ const hideModal = () => {
   validate.value.$reset()
   sectionStories.value.id = ''
   sectionStories.value.name = ''
-  sectionStories.value.status = 'WAITING'
+  sectionStories.value.status = 'DRAFT'
 
 }
 

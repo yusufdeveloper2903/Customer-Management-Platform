@@ -204,4 +204,34 @@ watch(
 .Toastify__toast-body {
   font-family: Montserrat, Helvetica, Arial, serif !important;
 }
+
+.dark .dp__menu_inner {
+  --tw-bg-opacity: 1;
+  background-color: rgb(40 48 70 / var(--tw-bg-opacity));
+
+  .dp__calendar_header {
+    color: white
+  }
+
+  .dp__month_year_wrap {
+    button {
+      color: white
+    }
+  }
+
+  .dp__calendar_row .dp__range_between {
+    color: black !important
+  }
+
+  .dp__calendar {
+    div {
+      color: white;
+
+    }
+  }
+
+  :hover {
+    color: black !important
+  }
+}
 </style>

@@ -12,7 +12,7 @@ export const PollsTable = [
         value: "count_question",
     },
     {
-        text: "created_date",
+        text: "date_and_time",
         value: "created_date",
     },
     {
