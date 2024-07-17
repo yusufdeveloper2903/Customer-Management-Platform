@@ -490,10 +490,9 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             <div class="py-3 flex justify-left gap-3">
               <div v-if="item['background_'+ locale]">
                 <img
-                    class="w-[45px] h-[45px] rounded "
+                    class="w-[45px] h-[90px] rounded "
                     :src="item['background_'+ locale].full_size"
                     alt="Rounded avatar"
-                    style="aspect-ratio: 1/1"
 
                 />
               </div>

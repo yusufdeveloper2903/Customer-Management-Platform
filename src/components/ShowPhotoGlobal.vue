@@ -19,7 +19,7 @@ const props = defineProps<PropsShowImage>();
     >
       <button class="uk-modal-close-default" type="button" uk-close></button>
       <div class="uk-modal-body flex justify-center">
-        <img :src="props.image" alt="image" style="aspect-ratio: 1/1"/>
+        <img v-if="props.id === 'stories-template-ru'" :src="props.image" alt="image" style="aspect-ratio: 1/1"/>
       </div>
 
     </div>

@@ -30,7 +30,6 @@ interface Props {
 
 
 //DECLARED VARIABLES
-const regionValue = ref("")
 const emptyData = ref(false)
 const general = useSidebarStore()
 const props = defineProps<Props>();

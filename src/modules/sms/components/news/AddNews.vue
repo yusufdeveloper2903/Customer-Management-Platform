@@ -49,6 +49,7 @@ const newsData = ref<any>({
   template: null,
   enable_push_notify: false
 })
+const inOrOut = ref<Boolean>(false)
 const params = reactive({
   page_size: 10,
   page: 1,
@@ -90,10 +91,24 @@ watch(() => store.receiversList.results, function () {
   newsData.value.receivers = store.receiversList.results
   select.value = true
 })
+watch(() => newsData.value.description_uz, function () {
+  if (inOrOut.value) {
+    newsData.value.template = null
+  }
+})
+watch(() => newsData.value.description_kr, function () {
+  if (inOrOut.value) {
+    newsData.value.template = null
+  }
+})
+watch(() => newsData.value.description_ru, function () {
+  if (inOrOut.value) {
+    newsData.value.template = null
 
+  }
+})
 watch(() => newsData.value.template, (val: any) => {
   if (val?.id) {
-    console.log(val, 'val')
     newsData.value.title_uz = val?.title_uz
     newsData.value.title_ru = val?.title_ru
     newsData.value.title_kr = val?.title_kr
@@ -151,6 +166,7 @@ onMounted(async () => {
     newsData.value.description_kr = store.newsListDetail.description_kr
     newsData.value.template = store.newsListDetail.template
     newsData.value.enable_push_notify = store.newsListDetail.enable_push_notify
+
   }
   await store.getStatus()
   await newTemplate.getNewsTemplate({page_size: 1000})
@@ -159,6 +175,9 @@ onMounted(async () => {
 
 
 //FUNCTIONS
+const clickedEditor = () => {
+  inOrOut.value = true
+}
 const refresh = async () => {
   loading.value = true;
   try {
@@ -291,10 +310,13 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           />
         </label>
       </div>
-
+{{inOrOut}}
       <div class="uk-margin">
-        <label for="form-stacked-text" class="mt-4 block">{{ t('template') }}
+        <label
+            for="form-stacked-text" class="mt-4 block">{{ t('template') }}
           <VSelect v-model="newsData.template"
+                   @click="inOrOut = false"
+
                    :getOptionLabel="(name) => name['title_'+ locale]"
                    :options="newTemplate.newTemplate && newTemplate.newTemplate.results"
                    :reduce="(name) => name"
@@ -320,8 +342,9 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <div class="uk-margin">
             <label for="form-stacked-text">{{ t('description') + ' ' + t('UZ') }}</label>
             <div class="uk-form-controls">
-              <Editor  content-type="html" toolbar="full"
+              <Editor content-type="html" toolbar="full"
                       @input="newsData.template = null"
+                      @click="clickedEditor"
                       class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
                       v-model:content="newsData.description_uz"></Editor>
             </div>
@@ -348,8 +371,9 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <div class="uk-margin">
             <label for="form-stacked-text">{{ t('description') + ' ' + t('KR') }}</label>
             <div class="uk-form-controls">
-              <Editor  content-type="html" toolbar="full"
+              <Editor content-type="html" toolbar="full"
                       @input="newsData.template = null"
+                      @click="clickedEditor"
                       class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
                       v-model:content="newsData.description_kr"></Editor>
             </div>
@@ -375,8 +399,9 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <div class="uk-margin">
             <label for="form-stacked-text">{{ t('description') + ' ' + t('RU') }}</label>
             <div class="uk-form-controls">
-              <Editor  content-type="html" toolbar="full"
+              <Editor content-type="html" toolbar="full"
                       @input="newsData.template = null"
+                      @click="clickedEditor"
                       class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
                       v-model:content="newsData.description_ru"></Editor>
             </div>

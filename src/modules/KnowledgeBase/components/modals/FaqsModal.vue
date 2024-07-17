@@ -60,9 +60,9 @@ const hideModal = () => {
   FaqsTemplate.value.question_uz = ''
   FaqsTemplate.value.question_kr = ''
   FaqsTemplate.value.answer = ''
-  FaqsTemplate.value.answer_ru = ''
-  FaqsTemplate.value.answer_kr = ''
-  FaqsTemplate.value.answer_uz = ''
+  FaqsTemplate.value.answer_ru = ' '
+  FaqsTemplate.value.answer_kr = ' '
+  FaqsTemplate.value.answer_uz = ' '
   FaqsTemplate.value.id = null
 
 }

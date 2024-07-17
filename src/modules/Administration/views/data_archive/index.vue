@@ -74,10 +74,11 @@ const createBackup = async () => {
   isLoading.value = true
   try {
     await administrationStorage.CREATE_BACKUP_MEDIA()
+    await UIkit.modal("#backup-add-modal").hide();
     await refresh()
     isLoading.value = false
     toast.success(t('created_successfully'));
-    UIkit.modal("#backup-add-modal").hide();
+
   } catch (err) {
     toast.error(t('error'));
     isError.value = true

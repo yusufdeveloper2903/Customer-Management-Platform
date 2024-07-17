@@ -81,12 +81,15 @@ watchDebounced(() => params.search, async function () {
 const refresh = async () => {
   await store.getFaqs(params);
 };
-const openModal = () => {
-  UIkit.modal("#faqs_template", {
-    selPanel: '.uk-modal-dialog',
-    stack: false
-  }).show()
-  dataToEdit.value = {};
+const openModal = (val) => {
+  if (val) {
+    UIkit.modal("#faqs_template").show()
+    dataToEdit.value = val
+  } else {
+    UIkit.modal("#faqs_template").show()
+    dataToEdit.value = {};
+  }
+
 }
 
 
@@ -115,6 +118,7 @@ const onPageSizeChanged = (e: number) => {
   params.page_size = e
   params.page = 1
   refresh()
+
 }
 const handleDeleteModal = (id: number) => {
   itemToDelete.value = id
@@ -135,7 +139,7 @@ const handleDeleteModal = (id: number) => {
         />
       </label>
       <button class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
-              @click="openModal(false )">
+              @click="openModal(false)">
         {{ $t("Add") }}
       </button>
     </div>
@@ -148,7 +152,7 @@ const handleDeleteModal = (id: number) => {
           <small class="ml-auto">
             <small class="flex my-4 justify-end">
 
-              <button uk-toggle="target: #faqs_template" @click="dataToEdit = item" class="btn-warning btn-action"
+              <button @click="openModal(item)" class="btn-warning btn-action"
               >
                 <Icon icon="Pen New Square" color="#fff" size="16"/>
               </button>

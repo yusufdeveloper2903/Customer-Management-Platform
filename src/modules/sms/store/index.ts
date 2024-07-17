@@ -1,7 +1,7 @@
 //IMPORTED FILES
 import {defineStore} from "pinia";
 import $axios from "@/plugins/axios";
-import { Results, Status, News, SmsSending, Reseivers} from "../interfaces";
+import {Results, Status, News, SmsSending, Reseivers} from "../interfaces";
 
 
 //EXPORT DEFAULT
@@ -14,7 +14,7 @@ export default defineStore("sms", {
             newsList: {
                 results: [] as News[]
             } as Results<News>,
-            newsListDetail: {} as News,
+            newsListDetail: {} as any,
             smsSendingList: {
                 results: [] as SmsSending[]
             } as Results<SmsSending>,
