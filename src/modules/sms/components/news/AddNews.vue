@@ -232,8 +232,9 @@ const saveData = async () => {
   if (newsData.value.status && newsData.value.status.id) {
     newsData.value.status = newsData.value.status.id
   }
-
+  
   const fd = objectToFormData(['file'], newsData.value)
+
 
   if (route.params.id) {
     try {

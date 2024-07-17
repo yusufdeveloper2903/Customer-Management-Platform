@@ -105,6 +105,7 @@ const onSubmit = async () => {
 const hideModal = () => {
   openTime.value = '';
   closeTime.value = '';
+  search.value = ''
   general.tabs = ''
   emptyData.value = false
   Object.assign(location, {
