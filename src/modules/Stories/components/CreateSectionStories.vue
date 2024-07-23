@@ -284,7 +284,7 @@ const saveEdit = async () => {
                 v-model="sectionStories.background_uz"
                 @remove="sectionStories.background_uz = null"
                 :typeModal="propData.editData && propData.editData.story_section_id"
-                name="stories-template-uz"
+                name="stories-template-section"
             />
             <p
                 v-if="!sectionStories.background_uz && validated"
@@ -317,7 +317,7 @@ const saveEdit = async () => {
                 v-model="sectionStories.background_kr"
                 @remove="sectionStories.background_kr = null"
                 :typeModal="propData.editData && propData.editData.story_section_id"
-                name="stories-template-kr"
+                name="stories-template-section"
             />
             <p
                 v-if="!sectionStories.background_kr && validated"
@@ -353,7 +353,7 @@ const saveEdit = async () => {
                 v-model="sectionStories.background_ru"
                 @remove="sectionStories.background_ru = null"
                 :typeModal="propData.editData && propData.editData.story_section_id"
-                name="stories-template-ru"
+                name="stories-template-section"
             />
             <p
                 v-if="!sectionStories.background_ru && validated"

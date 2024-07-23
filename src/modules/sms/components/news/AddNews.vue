@@ -232,7 +232,7 @@ const saveData = async () => {
   if (newsData.value.status && newsData.value.status.id) {
     newsData.value.status = newsData.value.status.id
   }
-  
+
   const fd = objectToFormData(['file'], newsData.value)
 
 
@@ -311,7 +311,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           />
         </label>
       </div>
-{{inOrOut}}
+
       <div class="uk-margin">
         <label
             for="form-stacked-text" class="mt-4 block">{{ t('template') }}

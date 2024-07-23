@@ -89,7 +89,6 @@ const openModal = (val) => {
     UIkit.modal("#faqs_template").show()
     dataToEdit.value = {};
   }
-
 }
 
 

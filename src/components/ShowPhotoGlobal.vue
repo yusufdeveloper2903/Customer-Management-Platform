@@ -19,7 +19,8 @@ const props = defineProps<PropsShowImage>();
     >
       <button class="uk-modal-close-default" type="button" uk-close></button>
       <div class="uk-modal-body flex justify-center">
-        <img v-if="props.id === 'stories-template-ru'" :src="props.image" alt="image" style="aspect-ratio: 1/1"/>
+        <img v-if="props.id === 'stories-template-section'" class="h-[450px] w-[240px]" :src="props.image" alt="image" style="aspect-ratio: 1/1"/>
+        <img v-else :src="props.image" alt="image" style="aspect-ratio: 1/1"/>
       </div>
 
     </div>
