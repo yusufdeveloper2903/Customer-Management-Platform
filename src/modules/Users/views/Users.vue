@@ -167,6 +167,14 @@ const showDetailPage = (item: any) => {
         <template #header="header">
           {{ $t(header.text) }}
         </template>
+        <template #item-full_name="item">
+             <span v-if="item.full_name">
+            {{ item.full_name }}
+          </span>
+          <span v-else class="text-center " style="margin-left:20px">
+                 -
+          </span>
+        </template>
 
         <template #item-device_os_types="item">
           <div v-for="(i,index) in item.device_os_types" :key="index" class="ml-12">
@@ -182,14 +190,17 @@ const showDetailPage = (item: any) => {
           <span v-if="items.phone">
             {{ formatPhoneNumber(items.phone) }}
           </span>
+          <span v-else class="text-center " style="margin-left:60px">
+                 -
+          </span>
         </template>
         <template #item-created_date="data">
-          <span>
+          <span style="margin-left:40px">
             {{ formatDate(data.created_date) }}
           </span>
         </template>
         <template #item-last_login="data">
-          <span>
+          <span style="margin-left:55px">
             {{ formatDate(data.last_login) }}
           </span>
         </template>

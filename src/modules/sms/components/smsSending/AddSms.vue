@@ -15,6 +15,7 @@ import {watchDebounced} from "@vueuse/core";
 import {helpers, required} from "@vuelidate/validators";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import {addFields} from '../../constants/index'
+import {formatPhoneNumber} from "@/components/Formatters/Formatters";
 
 //DECLARED VARIABLES
 
@@ -318,6 +319,22 @@ const validate: Ref<Validation> = useVuelidate(rules, smsSendingData);
 
           <template #empty-message>
             <div>{{ $t('no_available_data') }}</div>
+          </template>
+          <template #item-phone="items">
+          <span v-if="items.phone">
+            {{ formatPhoneNumber(items.phone) }}
+          </span>
+            <span v-else class="text-center " style="margin-left:60px">
+                 -
+          </span>
+          </template>
+          <template #item-full_name="item">
+             <span v-if="item.full_name">
+            {{ item.full_name }}
+          </span>
+            <span v-else class="text-center " style="margin-left:20px">
+                 -
+          </span>
           </template>
           <template #item-device_os_types="item">
             <div v-for="(i,index) in item.device_os_types" :key="index" class="ml-12">

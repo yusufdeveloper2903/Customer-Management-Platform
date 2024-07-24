@@ -18,7 +18,6 @@ const layouts = {
 const body = ref<HTMLElement | null>(document.querySelector("body"));
 
 
-
 //MOUNTED
 onMounted(() => {
   body.value?.classList.add(sidebar.currentTheme);
@@ -180,6 +179,15 @@ watch(
   box-shadow: 0 8px 25px -8px #82868b;
 }
 
+.vs__search {
+  padding: 5px 7px !important;
+  margin: 0 !important
+}
+
+.dp__input_wrap input{
+  padding: 0.68rem 7px !important;
+}
+
 .custom-button {
   background-color: white !important;
   color: black !important;
@@ -196,6 +204,10 @@ watch(
 
 .custom-button:hover {
   top: 36px;
+}
+
+.dp__active_date {
+  color: white !important
 }
 
 .vue3-easy-data-table__main {

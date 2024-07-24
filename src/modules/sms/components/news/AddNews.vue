@@ -19,6 +19,7 @@ import ModalTabs from "@/components/Tab/ModalTabs.vue";
 import ModalTab from "@/components/Tab/ModalTab.vue";
 import {objectToFormData} from "@/mixins/formmatter";
 import {useSidebarStore} from '@/stores/layoutConfig'
+import {formatPhoneNumber} from "@/components/Formatters/Formatters";
 
 //DECLARED VARIABLES
 const general = useSidebarStore()
@@ -169,6 +170,9 @@ onMounted(async () => {
 
   }
   await store.getStatus()
+  if (!newsData.value.status && store.statusList.results.length > 0) {
+    newsData.value.status = store.statusList.results[1]
+  }
   await newTemplate.getNewsTemplate({page_size: 1000})
   lang.value = localStorage.getItem('last-locale')
 })
@@ -288,7 +292,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
       <div class="uk-margin">
         <label for="form-stacked-text">{{ t('start_date') }} </label>
         <div class="uk-form-controls">
-          <VueDatePicker format="dd-MM-yyyy" :enableTimePicker="false" auto-apply :locale="'ru'"
+          <VueDatePicker   auto-apply :locale="'ru'"
                          model-type="yyyy-MM-dd hh:mm:ss"
                          :class="validate.start_time.$errors.length ? 'required-input' : ''"
                          v-model="newsData.start_time"
@@ -306,6 +310,8 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
         <label for="form-stacked-text" class="mt-4 block">{{ t('Status') }}
           <VSelect v-model="newsData.status"
                    :options="store.statusList.results"
+                   :clearable="false"
+
                    :getOptionLabel="(item) => item['title_'+ locale]"
                    :reduce="(name) => name.id"
           />
@@ -317,7 +323,6 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
             for="form-stacked-text" class="mt-4 block">{{ t('template') }}
           <VSelect v-model="newsData.template"
                    @click="inOrOut = false"
-
                    :getOptionLabel="(name) => name['title_'+ locale]"
                    :options="newTemplate.newTemplate && newTemplate.newTemplate.results"
                    :reduce="(name) => name"
@@ -481,10 +486,23 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
           <template #header="header">
             {{ t(header.text) }}
           </template>
-
-          <template #item-fio="item">
-            {{ item.full_name }}
+          <template #item-phone="items">
+          <span v-if="items.phone">
+            {{ formatPhoneNumber(items.phone) }}
+          </span>
+            <span v-else class="text-center " style="margin-left:60px">
+                 -
+          </span>
           </template>
+          <template #item-fio="item">
+             <span v-if="item.full_name">
+            {{ item.full_name }}
+          </span>
+            <span v-else class="text-center " style="margin-left:20px">
+                 -
+          </span>
+          </template>
+
           <template #item-device_os_types="item">
             <div v-for="(i,index) in item.device_os_types" :key="index" class="ml-12">
               {{ i }}

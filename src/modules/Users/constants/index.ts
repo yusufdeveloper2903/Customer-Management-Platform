@@ -43,19 +43,19 @@ export const fieldsUserDetail = [
         value: "id",
     },
     {
-        text: "Создано",
+        text: "Created",
         value: "created",
     },
     {
-        text: "Номер карты",
+        text: "number_card",
         value: "number_card"
     },
     {
-        text: "Устройство",
+        text: "Device",
         value: "device"
     },
     {
-        text: "Тип карты",
+        text: "type_card",
         value: "type_card",
     },
 ];

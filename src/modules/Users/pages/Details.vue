@@ -31,82 +31,85 @@ const showTerminateModal = (item) => {
   userId.value = item.id
 };
 
-const showUntieCardModal = (item) => {
-  UIkit.modal("#untie-card-confirm-modal").show();
-  userId.value = item.id
-};
 </script>
 
 <template>
   <div class="md:flex sm:block items-start gap-5 dark:text-white h-fit">
     <div class="md:w-3/12 sm:w-full">
       <div class="card">
-        <h2 class="text-success mb-3"><b>Профиль</b></h2>
+        <h2 class="text-success mb-3"><b>{{ $t('Profile') }}</b></h2>
         <div class="flex justify-between mb-2">
-          <div>Фамилия</div>
-          <div><small><b>{{ userItem.first_name }}</b></small></div>
+          <div>{{ $t('Surname') }}</div>
+          <div v-if="userItem.first_name"><small><b>{{ userItem.first_name }}</b></small></div>
+          <div v-else>-</div>
         </div>
         <div class="flex justify-between mb-2">
-          <div>Имя</div>
-          <div><small><b>{{ userItem.last_name }}</b></small></div>
+          <div>{{ $t('First Name') }}</div>
+          <div v-if="userItem.last_name"><small><b>{{ userItem.last_name }}</b></small></div>
+          <div v-else>-</div>
         </div>
         <div class="flex justify-between mb-2">
-          <div>Отчество</div>
-          <div><small><b>{{ userItem.full_name }}</b></small></div>
+          <div>{{ $t('Father_name') }}</div>
+          <div v-if="userItem.full_name"><small><b>{{ userItem.full_name }}</b></small></div>
+          <div v-else>-</div>
         </div>
         <div class="flex justify-between mb-2">
-          <div>Пол</div>
-          <div><small><b>{{ userItem.gender }}</b></small></div>
+          <div>{{ $t('gender') }}</div>
+          <div v-if="userItem.gender"><small><b>{{ userItem.gender }}</b></small></div>
+          <div v-else>-</div>
         </div>
         <div class="flex justify-between mb-2">
-          <div>Дата рождения</div>
-          <div><small><b>{{ userItem.date_of_birth }}</b></small></div>
+          <div>{{ $t('date_birth')}}</div>
+          <div v-if="userItem.date_of_birth"><small><b>{{ userItem.date_of_birth }}</b></small></div>
+          <div v-else>-</div>
         </div>
         <div class="flex justify-between mb-2">
-          <div>Номер телефона</div>
+          <div>{{ $t('phone_number')}}</div>
           <div v-if="userItem.phone"><small><b>+{{ userItem.phone }}</b></small></div>
+          <div v-else>-</div>
         </div>
 
         <div class="flex justify-between mb-2">
-          <div>Создано</div>
-          <div><small><b>{{ userItem.created_date }}</b></small></div>
+          <div>{{ $t('Created') }}</div>
+          <div v-if="userItem.created_date"><small><b>{{ userItem.created_date }}</b></small></div>
+          <div v-else>-</div>
         </div>
       </div>
 
 
       <div class="card mt-4">
-        <h2 class="text-success mb-3"><b>Активные сессии</b></h2>
+        <h2 class="text-success mb-3"><b>{{$t('active_session')}}</b></h2>
         <ul class="uk-list uk-list-divider" v-if="store.user && store.user.sessions && store.user.sessions.length">
           <li v-for="(item, index) in store.user.sessions" :key="index"
               class="dark:bg-secondary card-bg p-3 rounded-md">
 
             <div class="flex justify-between">
-              <div>Устройство</div>
+              <div>{{$t('Device')}}</div>
               <div><small><b>{{ item.device_model }}</b></small></div>
             </div>
 
             <div class="flex justify-between mt-2">
-              <div>Версия приложения</div>
+              <div>{{$t('version_app')}}</div>
               <div><small><b>{{ item.device_type }}</b></small></div>
             </div>
 
             <div class="flex justify-between mt-2">
-              <div>IP-адресс</div>
+              <div>{{$t('ip_address')}}</div>
               <div><small><b>{{ item.ip_address }}</b></small></div>
             </div>
 
             <div class="flex justify-between my-2">
-              <div>Дата создания</div>
+              <div>{{$t('date_created')}}</div>
               <div><small><b>{{ item.created_date }}</b></small></div>
             </div>
 
             <div class="flex justify-between">
-              <div>Посещение</div>
+              <div>{{$t('coming')}}</div>
               <div><small><b>{{ item.last_visit }}</b></small></div>
             </div>
 
             <button class="mt-2 w-full rounded-md bg-danger text-white" @click="showTerminateModal(item)">
-              <small>Завершить</small>
+              <small>{{$t('finishing')}}</small>
 
             </button>
 
@@ -142,27 +145,24 @@ const showUntieCardModal = (item) => {
 
 
     <div class="md:w-3/12 sm:w-full card">
-      <h2 class="text-success mb-3"><b>Карты</b></h2>
+      <h2 class="text-success mb-3"><b>{{$t('cards')}}</b></h2>
       <ul class="uk-list uk-list-divider">
         <li class="card-bg p-3 rounded-md dark:bg-secondary">
           <div class="flex justify-between ">
-            <div>Имя</div>
-            <div><small><b>Uzbekistan Bank</b></small></div>
+            <div>{{ $t('First Name') }}</div>
+            <div><small><b>-</b></small></div>
           </div>
 
           <div class="flex justify-between my-2">
-            <div>Номер</div>
-            <div><small><b>8600 **** **** 2434</b></small></div>
+            <div>{{ $t('number_card') }}</div>
+            <div><small><b>-</b></small></div>
           </div>
 
           <div class="flex justify-between">
-            <div>Добавлено</div>
-            <div><small><b>12:00 / 25.12.2023</b></small></div>
+            <div>{{ $t('added') }}</div>
+            <div><small><b>-</b></small></div>
           </div>
 
-<!--          <button class="mt-2 w-full rounded-md bg-danger text-white" @click="showUntieCardModal">-->
-<!--            <small>Отвязать</small>-->
-<!--          </button>-->
 
         </li>
       </ul>
