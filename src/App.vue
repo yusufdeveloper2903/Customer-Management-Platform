@@ -184,8 +184,13 @@ watch(
   margin: 0 !important
 }
 
-.dp__input_wrap input{
-  padding: 0.68rem 7px !important;
+.dp__input_wrap input {
+  padding: 0.68rem 40px !important;
+}
+
+.form-input {
+  margin-top: 0.4rem !important;
+  padding: 0.628rem
 }
 
 .custom-button {
