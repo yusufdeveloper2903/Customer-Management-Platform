@@ -74,7 +74,6 @@ onMounted(async () => {
     params.page_size = JSON.parse(page_size)
   }
   await refresh()
-  await productStorage.getProductFromKnowledgeBase({page_size: 1000})
   await productStorage.getProductList({page_size: 1000})
 });
 

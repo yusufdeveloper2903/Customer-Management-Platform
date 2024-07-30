@@ -71,8 +71,9 @@ const discountPercentageInput = (val) => {
   productsCategory.value.discount_price = result.toFixed(2)
 }
 const discountPriceInput = (val) => {
-  let discountPercentage = (Number(val.target.value) * 100) / productsCategory.value.product.price
-  productsCategory.value.discount_percentage = discountPercentage.toFixed(0)
+  let discountPercentage = ((Number(val.target.value) / productsCategory.value.product.price)) * 100
+  console.log((Number(val.target.value) / productsCategory.value.product.price))
+  productsCategory.value.discount_percentage = 100 - Number(discountPercentage.toFixed(0))
 }
 const productChange = (val) => {
   productsCategory.value.discount_price = val.price
@@ -178,17 +179,28 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
 
       <div class="uk-modal-body py-4 flex items-center">
         <div class="w-2/3">
+
           <label>
             <p class=" mt-5 mb-1">{{ $t("products") }}:</p>
-            <v-select
-                @update:modelValue="productChange"
-                :options="productStorage.productFromKnowledgeBase.results"
+            <LazySelect
+                id="model"
                 v-model="productsCategory.product"
-                :getOptionLabel="(name) => name['title_'+$i18n.locale]"
+                :options="productStorage.productFromKnowledgeBase"
                 :reduce="(name) => name"
-            >
-              <template #no-options> {{ $t("no_matching_options") }}</template>
-            </v-select>
+                :getOptionLabel="(name) => name['title_'+$i18n.locale]"
+                :fetch="productStorage.getProductFromKnowledgeBase"
+                @update:modelValue="productChange"
+                class="mt-1"
+            />
+            <!--            <v-select-->
+            <!--                @update:modelValue="productChange"-->
+            <!--                :options="productStorage.productFromKnowledgeBase.results"-->
+            <!--                v-model="productsCategory.product"-->
+            <!--                :getOptionLabel="(name) => name['title_'+$i18n.locale]"-->
+            <!--                :reduce="(name) => name"-->
+            <!--            >-->
+            <!--              <template #no-options> {{ $t("no_matching_options") }}</template>-->
+            <!--            </v-select>-->
             <p
                 v-for="error in validate.product.$errors"
                 :key="error.$uid"
@@ -225,7 +237,7 @@ const validate: Ref<Validation> = useVuelidate(rules, productsCategory);
           <div class="flex gap-3">
 
             <div v-if="propData.editData.id" class="w-1/2">
-              <p style="margin-top:17px" class=" mt-4">{{ $t("category") }}:</p>
+              <p style="margin-top:22px" class=" mt-4">{{ $t("category") }}:</p>
               <v-select
                   :options="productStorage.productListCategory.results"
                   v-model="productsCategory.category"
