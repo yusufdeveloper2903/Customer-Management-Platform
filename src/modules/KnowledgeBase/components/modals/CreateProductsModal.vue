@@ -329,7 +329,8 @@ const validate: Ref<Validation> = useVuelidate(rules, productsData)
               :reduce="(el) => el"
               :getOptionLabel="(v) => v.name || ''"
               :fetch="store.getProductsCategories"
-              class="mt-1" />
+              class="mt-1"
+            />
             <p
               v-for="error in validate.category.$errors"
               :key="error.$uid"
