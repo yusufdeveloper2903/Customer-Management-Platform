@@ -72,14 +72,15 @@ function download(url: string) {
 
 const createBackup = async () => {
   isLoading.value = true
+  UIkit.modal("#backup-add-modal").hide();
   try {
     let response = await administrationStorage.CREATE_BACKUP_MEDIA()
     if (response && response.size === 14) {
       refresh()
-      UIkit.modal("#backup-add-modal").hide();
       isLoading.value = false
       toast.success(t('created_successfully'));
     } else {
+      isLoading.value = false
       toast.error(t('error'));
     }
   } catch (err) {
