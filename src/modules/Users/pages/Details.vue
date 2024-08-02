@@ -26,6 +26,10 @@ onMounted(async () => {
 })
 
 // FUNCTION
+const refreshPage = () => {
+  let id = +route.params.id
+  store.getUserById(id)
+}
 const showTerminateModal = (item) => {
   UIkit.modal("#terminate-session-modal").show();
   userId.value = item.id
@@ -55,16 +59,17 @@ const showTerminateModal = (item) => {
         </div>
         <div class="flex justify-between mb-2">
           <div>{{ $t('gender') }}</div>
-          <div v-if="userItem.gender"><small><b>{{ userItem.gender }}</b></small></div>
+          <div v-if="userItem.gender"><small><b>{{ userItem.gender === 'M' ? $t('Male') : $t('Female') }}</b></small>
+          </div>
           <div v-else>-</div>
         </div>
         <div class="flex justify-between mb-2">
-          <div>{{ $t('date_birth')}}</div>
+          <div>{{ $t('date_birth') }}</div>
           <div v-if="userItem.date_of_birth"><small><b>{{ userItem.date_of_birth }}</b></small></div>
           <div v-else>-</div>
         </div>
         <div class="flex justify-between mb-2">
-          <div>{{ $t('phone_number')}}</div>
+          <div>{{ $t('phone_number') }}</div>
           <div v-if="userItem.phone"><small><b>+{{ userItem.phone }}</b></small></div>
           <div v-else>-</div>
         </div>
@@ -78,38 +83,38 @@ const showTerminateModal = (item) => {
 
 
       <div class="card mt-4">
-        <h2 class="text-success mb-3"><b>{{$t('active_session')}}</b></h2>
+        <h2 class="text-success mb-3"><b>{{ $t('active_session') }}</b></h2>
         <ul class="uk-list uk-list-divider" v-if="store.user && store.user.sessions && store.user.sessions.length">
           <li v-for="(item, index) in store.user.sessions" :key="index"
               class="dark:bg-secondary card-bg p-3 rounded-md">
 
             <div class="flex justify-between">
-              <div>{{$t('Device')}}</div>
+              <div>{{ $t('Device') }}</div>
               <div><small><b>{{ item.device_model }}</b></small></div>
             </div>
 
             <div class="flex justify-between mt-2">
-              <div>{{$t('version_app')}}</div>
+              <div>{{ $t('version_app') }}</div>
               <div><small><b>{{ item.device_type }}</b></small></div>
             </div>
 
             <div class="flex justify-between mt-2">
-              <div>{{$t('ip_address')}}</div>
+              <div>{{ $t('ip_address') }}</div>
               <div><small><b>{{ item.ip_address }}</b></small></div>
             </div>
 
             <div class="flex justify-between my-2">
-              <div>{{$t('date_created')}}</div>
+              <div>{{ $t('date_created') }}</div>
               <div><small><b>{{ item.created_date }}</b></small></div>
             </div>
 
             <div class="flex justify-between">
-              <div>{{$t('coming')}}</div>
+              <div>{{ $t('coming') }}</div>
               <div><small><b>{{ item.last_visit }}</b></small></div>
             </div>
 
             <button class="mt-2 w-full rounded-md bg-danger text-white" @click="showTerminateModal(item)">
-              <small>{{$t('finishing')}}</small>
+              <small>{{ $t('finishing') }}</small>
 
             </button>
 
@@ -145,7 +150,7 @@ const showTerminateModal = (item) => {
 
 
     <div class="md:w-3/12 sm:w-full card">
-      <h2 class="text-success mb-3"><b>{{$t('cards')}}</b></h2>
+      <h2 class="text-success mb-3"><b>{{ $t('cards') }}</b></h2>
       <ul class="uk-list uk-list-divider">
         <li class="card-bg p-3 rounded-md dark:bg-secondary">
           <div class="flex justify-between ">
@@ -169,8 +174,8 @@ const showTerminateModal = (item) => {
     </div>
   </div>
 
-  <TerminateSessionModal :userId="userId"/>
-  <ConfirmUntieCardModal/>
+  <TerminateSessionModal :userId="userId" @deleteUser="refreshPage"/>
+  <!--  <ConfirmUntieCardModal/>-->
 </template>
 
 <style lang="scss">

@@ -181,10 +181,13 @@ const showDetailPage = (item: any) => {
             {{ i }}
           </div>
         </template>
-        <template #item-gender>
-               <span class="text-center ml-3">
+        <template #item-gender="item">
+          <span v-if="item.gender" class="text-center ml-2">
+            {{ item.gender === 'M' ? $t('Male') : $t('Female') }}
+          </span>
+          <span v-else class="text-center ml-3">
                  -
-               </span>
+          </span>
         </template>
         <template #item-phone="items">
           <span v-if="items.phone">
