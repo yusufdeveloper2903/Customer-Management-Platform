@@ -6,13 +6,12 @@ import UIkit from "uikit";
 import {useI18n} from "vue-i18n";
 import {toast} from "vue3-toastify";
 import useVuelidate, {Validation} from "@vuelidate/core";
-import { helpers, required } from "@vuelidate/validators";
-import { ErrorMessage } from "@/modules/KnowledgeBase/interfaces/index"
+import {helpers, required} from "@vuelidate/validators";
+import {ErrorMessage} from "@/modules/KnowledgeBase/interfaces/index"
 import KnowledgeBase from "@/modules/KnowledgeBase/store/index";
 import ModalTabs from "@/components/Tab/ModalTabs.vue";
 import ModalTab from "@/components/Tab/ModalTab.vue";
 import {useSidebarStore} from '@/stores/layoutConfig'
-
 
 
 //DECLARED VARIABLES
@@ -23,13 +22,12 @@ const propData = defineProps<{ editData: ErrorMessage }>();
 const emits = defineEmits(["saveMessage"]);
 const store = KnowledgeBase()
 const errorMessage = ref<ErrorMessage>({
-status_code: 0,
-message: "",
-message_uz: "",
-message_ru: "",
-message_kr: "",
+  status_code: 0,
+  message: "",
+  message_uz: "",
+  message_ru: "",
+  message_kr: "",
 })
-
 
 
 // validations
@@ -50,21 +48,20 @@ const rules = computed(() => {
 const validate: Ref<Validation> = useVuelidate(rules, errorMessage);
 
 
-
 //FUNCTIONS
 async function openModal() {
-    errorMessage.value.status_code = propData.editData.status_code
-    errorMessage.value.message_uz = propData.editData.message_uz
-    errorMessage.value.message_ru = propData.editData.message_ru
-    errorMessage.value.message_kr = propData.editData.message_kr
+  errorMessage.value.status_code = propData.editData.status_code
+  errorMessage.value.message_uz = propData.editData.message_uz
+  errorMessage.value.message_ru = propData.editData.message_ru
+  errorMessage.value.message_kr = propData.editData.message_kr
 }
 
 
 function hideModal() {
-    errorMessage.value.status_code = 0
-    errorMessage.value.message_uz = ""
-    errorMessage.value.message_ru = ""
-    errorMessage.value.message_kr = ""
+  errorMessage.value.status_code = 0
+  errorMessage.value.message_uz = ""
+  errorMessage.value.message_ru = ""
+  errorMessage.value.message_kr = ""
   validate.value.$reset()
 }
 
@@ -83,30 +80,30 @@ const updateDeal = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
 
-    try {
-      await store.updateErrorMessage(errorMessage.value).then(() => {
-        emits("saveMessage");
-        setTimeout(() => {
-          toast.success(t("updated_successfully"));
-        }, 200);
-        UIkit.modal("#response_modal").hide();
-      });
+  try {
+    await store.updateErrorMessage(propData.editData.id, errorMessage.value).then(() => {
+      emits("saveMessage");
+      setTimeout(() => {
+        toast.success(t("updated_successfully"));
+      }, 200);
+      UIkit.modal("#response_modal").hide();
+    });
 
-      isSubmitted.value = false;
+    isSubmitted.value = false;
 
-    } catch (error: any) {
-      isSubmitted.value = false;
-      toast.error(
+  } catch (error: any) {
+    isSubmitted.value = false;
+    toast.error(
         error.response.message || error.response.data.msg || error.response.data.error || t('error')
-      );
-    }
+    );
+  }
 };
 
 
 </script>
 
 <template>
-  <div id="response_modal" class="uk-flex-top" uk-modal @shown="openModal" @hidden="hideModal" >
+  <div id="response_modal" class="uk-flex-top" uk-modal @shown="openModal" @hidden="hideModal">
     <div
         class="uk-modal-dialog uk-margin-auto-vertical rounded-lg "
     >

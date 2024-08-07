@@ -250,7 +250,7 @@ export default defineStore("knowledgeBase", {
 
         //PATCH REQUEST
         updateFaqs(data: any) {
-            console.log(data,'data')
+            console.log(data, 'data')
             return $axios.patch(`/knowledge_base/faq/${data.id}/`, data);
         },
         updateSmsTemplate(data: any) {
@@ -299,8 +299,9 @@ export default defineStore("knowledgeBase", {
             return $axios.patch(`/products/product_type/${data.id}/`, data);
         },
 
-        updateErrorMessage(data: any) {
-            return $axios.patch(`/knowledge_base/error_message/${data.status_code}/`, data);
+        updateErrorMessage(id, data) {
+            console.log(data, 'data')
+            return $axios.patch(`/knowledge_base/error_message/${id}/`, data);
         },
 
         //DELETE REQUEST

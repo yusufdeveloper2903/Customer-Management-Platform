@@ -309,6 +309,7 @@ export const districtFields = [
 ]
 
 export const errorResponseFields = [
+    {text: "ID", value: "id"},
     {text: "status_code", value: "status_code"},
     {text: "message", value: "message"},
     {text: "actions", value: "actions"}
