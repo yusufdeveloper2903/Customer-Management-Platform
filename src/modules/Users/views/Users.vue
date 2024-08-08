@@ -203,7 +203,7 @@ const showDetailPage = (item: any) => {
           </span>
         </template>
         <template #item-last_login="data">
-          <span style="margin-left:55px">
+          <span style="margin-left:20px">
             {{ formatDate(data.last_login) }}
           </span>
         </template>

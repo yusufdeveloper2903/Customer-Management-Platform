@@ -44,17 +44,17 @@ const showTerminateModal = (item) => {
         <h2 class="text-success mb-3"><b>{{ $t('Profile') }}</b></h2>
         <div class="flex justify-between mb-2">
           <div>{{ $t('Surname') }}</div>
-          <div v-if="userItem.first_name"><small><b>{{ userItem.first_name }}</b></small></div>
+          <div v-if="userItem.first_name"><small><b>{{ userItem.full_name }}</b></small></div>
           <div v-else>-</div>
         </div>
         <div class="flex justify-between mb-2">
           <div>{{ $t('First Name') }}</div>
-          <div v-if="userItem.last_name"><small><b>{{ userItem.last_name }}</b></small></div>
+          <div v-if="userItem.last_name"><small><b>{{ userItem.first_name }}</b></small></div>
           <div v-else>-</div>
         </div>
         <div class="flex justify-between mb-2">
           <div>{{ $t('Father_name') }}</div>
-          <div v-if="userItem.full_name"><small><b>{{ userItem.full_name }}</b></small></div>
+          <div v-if="userItem.full_name"><small><b>{{ userItem.last_name }}</b></small></div>
           <div v-else>-</div>
         </div>
         <div class="flex justify-between mb-2">
