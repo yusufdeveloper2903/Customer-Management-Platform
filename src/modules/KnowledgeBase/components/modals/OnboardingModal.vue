@@ -24,7 +24,7 @@ const store = knowledgeBase();
 const general = useSidebarStore()
 const emit = defineEmits(["refresh"]);
 const propData = defineProps<{ editData: Onboarding }>();
-let onBoarding = ref<Onboarding>({
+let onBoarding = ref({
   id: null,
   title: '',
   title_ru: '',
@@ -87,7 +87,7 @@ const updateDeal = async () => {
 
   if (propData.editData.id) {
     try {
-      const fd = objectToFormData(['file'], onBoarding.value);
+      const fd = objectToFormData(['image'], onBoarding.value);
       await store.updateOnboarding(fd)
       await UIkit.modal("#onboarding_template").hide();
       toast.success(t("updated_successfully"));
@@ -99,7 +99,7 @@ const updateDeal = async () => {
     }
   } else {
     try {
-      const fd = objectToFormData(['file'], onBoarding.value);
+      const fd = objectToFormData(['image'], onBoarding.value);
       await store.createOnboarding(fd)
       await UIkit.modal("#onboarding_template").hide();
       toast.success(t("created_successfully"));
