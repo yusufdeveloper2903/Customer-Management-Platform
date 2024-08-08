@@ -139,7 +139,7 @@ const getFile = (event: any) => {
       <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
     </button>
     <span style="font-size:14px;color:#999999" class="ml-1">
-      {{ $t('format_photo') }}: (png / jpg / 1080x1920)
+      {{ $t('format_photo') }}: (png / jpg / 672 x 368)
     </span>
   </div>
 

@@ -110,8 +110,9 @@ const textFileInput = (val: any, second: any) => {
 
     return truncatedStr + extension;
   }
-
 }
+
+
 const getFile = (event: any) => {
   let input = event.target;
   if (input.files && input.files[0]) {
@@ -150,7 +151,7 @@ const getFile = (event: any) => {
       <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
     </button>
     <span style="font-size:14px;color:#999999" class="ml-1">
-      {{ $t('format_photo') }}: (png / jpg / 1080x1920)
+      {{ $t('format_photo') }}: (png / jpg / 672 x 368)
     </span>
   </div>
 
@@ -158,6 +159,14 @@ const getFile = (event: any) => {
     <div v-if="props.typeModal" class="flex justify-between items-center mt-3 " @click.prevent>
       <div class="flex items-center">
         <img
+            v-if="props.name === 'stories-template-section'"
+            :src="inputValue"
+            class="rounded-lg w-[60px] h-[120px] "
+            style="aspect-ratio: 1/1 "
+            alt="image"
+        />
+        <img
+            v-else
             :src="inputValue"
             class="rounded-lg w-[90px] h-[90px] "
             style="aspect-ratio: 1/1 "
@@ -195,6 +204,14 @@ const getFile = (event: any) => {
     >
       <div class="flex items-center">
         <img
+            v-if="props.name === 'stories-template-section'"
+            :src="changePhoto"
+            class="rounded-lg w-[60px] h-[120px] "
+            style="aspect-ratio: 1/1 "
+            alt="image"
+        />
+        <img
+            v-else
             :src="changePhoto"
             class="rounded-lg w-[90px] h-[90px] "
             style="aspect-ratio: 1/1 "

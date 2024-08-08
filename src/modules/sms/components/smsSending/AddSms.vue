@@ -79,7 +79,7 @@ onMounted(async () => {
           notification_type: 'sms',
           search: params.search,
           page: params.page,
-          page_size: params.page_size
+          page_size: 1000
         })
         smsSendingData.value.start_time = store.smsSendingDetail.start_time;
         smsSendingData.value.description = store.smsSendingDetail.description

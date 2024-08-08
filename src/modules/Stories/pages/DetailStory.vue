@@ -190,8 +190,8 @@ const refresh = async () => {
         t('error')
     );
   }
-
 };
+
 const getDetail = async () => {
   isLoading.value = true;
   try {
@@ -490,7 +490,7 @@ const validate: Ref<Validation> = useVuelidate(rules, storiesVariable);
             <div class="py-3 flex justify-left gap-3">
               <div v-if="item['background_'+ locale]">
                 <img
-                    class="w-[90px] h-[90px] rounded "
+                    class="w-[60px] h-[120px] rounded "
                     :src="item['background_'+ locale].full_size"
                     alt="Rounded avatar"
 

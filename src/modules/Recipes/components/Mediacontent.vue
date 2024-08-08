@@ -163,7 +163,7 @@ const coverPhoto = async(item: any) => {
         ><b>{{ t('file') }}</b> 
           <input type="file" class="form-file-input fileEmpty" @change="getFile" >
           <span style="font-size:14px;color:#999999" class="ml-1">
-      {{ $t('format_photo') }}: (png / jpg / 1080x1920)
+      {{ $t('format_photo') }}: (png / jpg / 672 x 368)
     </span>
         </label>
 

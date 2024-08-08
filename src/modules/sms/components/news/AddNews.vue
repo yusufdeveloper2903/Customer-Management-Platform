@@ -149,7 +149,7 @@ onMounted(async () => {
       notification_type: 'news',
       search: params.search,
       page: params.page,
-      page_size: params.page_size
+      page_size: 1000
     })
 
     newsData.value.start_time = store.newsListDetail.start_time;
@@ -292,7 +292,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsData);
       <div class="uk-margin">
         <label for="form-stacked-text">{{ t('start_date') }} </label>
         <div class="uk-form-controls">
-          <VueDatePicker   auto-apply :locale="'ru'"
+          <VueDatePicker auto-apply :locale="'ru'"
                          model-type="yyyy-MM-dd hh:mm:ss"
                          :class="validate.start_time.$errors.length ? 'required-input' : ''"
                          v-model="newsData.start_time"

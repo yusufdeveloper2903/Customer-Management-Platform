@@ -167,7 +167,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
 
               <label class="mt-4 block" for="descriptionUz">{{ t('description') + ' ' + t('UZ') }}
                 <Editor  content-type="html" toolbar="full"
-                  class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
+                  class="scrollbar rounded border" style="height: 25vh; overflow-y: auto;"
                   v-model:content="newsTemplateData.description_uz" :class="validate.description_uz.$errors.length
                     ? 'required-input'
                     : ''
@@ -192,7 +192,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
               <label class="mt-4 block" for="descriptionUz">{{ t('description') + ' ' + t('KR') }}
 
                 <Editor  content-type="html" toolbar="full"
-                  class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
+                  class="scrollbar rounded border" style="height: 25vh; overflow-y: auto;"
                   v-model:content="newsTemplateData.description_kr" :class="validate.description_kr.$errors.length
                     ? 'required-input'
                     : ''
@@ -218,7 +218,7 @@ const validate: Ref<Validation> = useVuelidate(rules, newsTemplateData);
               <label class="mt-4 block" for="descriptionRu">{{ t('description') + ' ' + t('RU') }}
 
                 <Editor  content-type="html" toolbar="full"
-                  class="scrollbar rounded border" style="height: 45vh; overflow-y: auto;"
+                  class="scrollbar rounded border" style="height: 25vh; overflow-y: auto;"
                   v-model:content="newsTemplateData.description_ru" :class="validate.description_ru.$errors.length
                     ? 'required-input'
                     : ''

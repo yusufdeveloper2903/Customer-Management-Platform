@@ -231,8 +231,7 @@ const dragDrop = async (item: Link) => {
         <td class="px-6 whitespace-no-wrap">
           <div class="flex py-2 justify-left">
             <button @click="showDetailPage(item)" class="btn-success btn-action mr-2">
-              <img :src="DoubleRight"
-                   alt="Icon">
+              <Icon icon="Login" color="#fff" size="16"/>
             </button>
 
             <button class="btn-warning btn-action" uk-toggle="target: #create_and_edit_category"

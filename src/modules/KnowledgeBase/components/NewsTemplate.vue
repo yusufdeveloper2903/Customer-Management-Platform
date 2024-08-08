@@ -169,11 +169,22 @@ const handleDeleteModal = (id: number) => {
         {{ item['title_' + $i18n.locale] }}
       </template>
       <template #item-description="item">
-        {{ item['description_' + $i18n.locale] }}
+        <div class="quilTable">
+          <Editor
+              content-type="html"
+              :readOnly="true"
+              toolbar="false"
+              class="scrollbar"
+              style="height: 12vh; overflow-y: scroll;border:none;margin-top:12px;margin-left:-10px"
+              v-model:content="item['description_' + $i18n.locale] "
+          >
+          </Editor>
+        </div>
       </template>
       <template #item-url="{ url }">
         <a :href="url" class="">{{ url }}</a>
       </template>
+
       <template #item-photo="{ file }">
         <div class="py-3 flex justify-left gap-3">
           <img
@@ -229,3 +240,14 @@ const handleDeleteModal = (id: number) => {
   <NewsTemplateModal :edit-data="dataToEdit" @refresh="refresh"/>
   <ShowFileModal :image="image" id="file-modal-image" ref="imageCard"/>
 </template>
+
+
+<style lang="scss">
+.quilTable .ql-toolbar {
+  display: none !important;
+}
+
+.quilTable .ql-editor::before {
+  display: none;
+}
+</style>
