@@ -103,12 +103,12 @@ const showTerminateModal = (item) => {
               <div><small><b>{{ item.ip_address }}</b></small></div>
             </div>
 
-            <div class="flex justify-between my-2">
-              <div>{{ $t('date_created') }}</div>
-              <div><small><b>{{ item.created_date }}</b></small></div>
-            </div>
+<!--            <div class="flex justify-between my-2">-->
+<!--              <div>{{ $t('date_created') }}</div>-->
+<!--              <div><small><b>{{ item.created_date }}</b></small></div>-->
+<!--            </div>-->
 
-            <div class="flex justify-between">
+            <div class="flex justify-between my-2">
               <div>{{ $t('coming') }}</div>
               <div><small><b>{{ item.last_visit }}</b></small></div>
             </div>
