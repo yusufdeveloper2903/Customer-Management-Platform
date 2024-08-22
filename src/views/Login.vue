@@ -88,7 +88,7 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
                 id="login"
                 type="text"
                 name="login"
-                class="form-input"
+                class="form-input !bg-white"
                 :class="validate.username.$errors.length ? 'required-input' : ''"
             />
             <p
@@ -114,7 +114,7 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
                 id="password"
                 :type="isPasswordShown ? 'text' : 'password'"
                 name="password"
-                class="form-input"
+                class="form-input !bg-white"
                 :class="validate.password.$errors.length ? 'required-input' : ''"
             />
             <button

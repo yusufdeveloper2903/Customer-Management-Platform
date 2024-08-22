@@ -19,7 +19,7 @@ import Locale from "@/layout/Bars/Locale.vue";
         </div>
 
         <div
-            class="flex items-center gap-4 bg-white dark:bg-darkLayoutMain pt-3 pb-3 px-4 rounded-md"
+            class="flex items-center gap-4 !bg-white  pt-3 pb-3 px-4 rounded-md"
         >
 <!--          <ThemeTogler/>-->
 
@@ -39,6 +39,7 @@ import Locale from "@/layout/Bars/Locale.vue";
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: 100%;
+  background-position: center;
 }
 
 </style>
