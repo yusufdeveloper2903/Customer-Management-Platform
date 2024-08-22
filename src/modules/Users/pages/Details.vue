@@ -15,7 +15,7 @@ const store = users()
 const route = useRoute()
 const userItem = ref<object>({});
 const userId = ref<null | number>(null)
-
+const status = ref(false)
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
@@ -79,6 +79,21 @@ const showTerminateModal = (item) => {
           <div v-if="userItem.created_date"><small><b>{{ userItem.created_date }}</b></small></div>
           <div v-else>-</div>
         </div>
+        <div class="flex justify-between mb-2">
+          <div >{{ $t("Status") }}:</div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+                type="checkbox"
+                v-model="status"
+                class="sr-only peer"
+            />
+            <div
+                class="w-11 h-6 bg-gray-200 peer-focus:outline-none
+          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
+            />
+          </label>
+        </div>
+
       </div>
 
 
@@ -103,10 +118,10 @@ const showTerminateModal = (item) => {
               <div><small><b>{{ item.ip_address }}</b></small></div>
             </div>
 
-<!--            <div class="flex justify-between my-2">-->
-<!--              <div>{{ $t('date_created') }}</div>-->
-<!--              <div><small><b>{{ item.created_date }}</b></small></div>-->
-<!--            </div>-->
+            <!--            <div class="flex justify-between my-2">-->
+            <!--              <div>{{ $t('date_created') }}</div>-->
+            <!--              <div><small><b>{{ item.created_date }}</b></small></div>-->
+            <!--            </div>-->
 
             <div class="flex justify-between my-2">
               <div>{{ $t('coming') }}</div>

@@ -47,7 +47,6 @@ const validationForm = async () => {
   }
 };
 
-
 //COMPUTED
 const rules = computed(() => {
   return {
@@ -68,9 +67,9 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
     <div class="flex-1">
       <div class="text-center">
         <h2
-            class="text-center text-4xl font-bold text-gray-700 dark:text-white"
+            class="text-center text-4xl font-bold text-white dark:text-white"
         >
-          {{ t("Login") }}
+          {{ t("enter_to_system") }}
         </h2>
       </div>
 
@@ -80,7 +79,7 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
             <div class="flex justify-between">
               <label
                   for="login"
-                  class="text-sm text-gray-600 dark:text-gray-200"
+                  class="text-sm text-white dark:text-gray-200"
               >{{ t("Login") }}</label
               >
             </div>
@@ -105,7 +104,7 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
             <div class="flex justify-between">
               <label
                   for="password"
-                  class="text-sm text-gray-600 dark:text-gray-200"
+                  class="text-sm text-white dark:text-gray-200"
               >{{ t("Password") }}</label
               >
             </div>
@@ -139,7 +138,7 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
           </div>
 
           <div class="mt-12">
-            <button type="submit" class="btn-primary w-full">
+            <button type="submit" class="btn-primary w-full " style="color:green">
               {{ t("Login") }}
             </button>
           </div>
@@ -148,3 +147,10 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
     </div>
   </div>
 </template>
+
+<style scoped>
+.btn-primary {
+  background-color: white
+}
+
+</style>
