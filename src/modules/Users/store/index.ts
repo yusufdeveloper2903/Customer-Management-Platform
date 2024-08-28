@@ -30,7 +30,7 @@ export default defineStore("users", {
             const {data} = await $axios.get("/clients/client/", {params});
             this.usersList = data;
         },
-        async getUsersSelected(params:any) {
+        async getUsersSelected(params: any) {
             const {data} = await $axios.get("/clients/client/", {params});
             this.usersListSelected = data;
         },
@@ -42,6 +42,12 @@ export default defineStore("users", {
             const {data} = await $axios.get("/knowledge_base/regions/", {params});
             this.regions = data;
             return data;
+        },
+
+
+        //PATCH REQUESTS
+        patchUserById(id: number, data: any) {
+            return $axios.patch(`/clients/client/${id}/`, {is_active: !data});
         },
 
 

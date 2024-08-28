@@ -6,16 +6,19 @@ import users from "../store/index"
 import {useRoute} from "vue-router";
 import UIkit from "uikit";
 import TerminateSessionModal from "../components/TerminateSessionModal.vue"
-import ConfirmUntieCardModal from "../components/ConfirmUntieCardModal.vue"
+// import ConfirmUntieCardModal from "../components/ConfirmUntieCardModal.vue"
 import {fieldsUserDetail} from "../constants/index"
+import {toast} from "vue3-toastify";
+import {useI18n} from "vue-i18n";
 
 
 //DECLARED VARIABLES
 const store = users()
 const route = useRoute()
+const {t} = useI18n()
 const userItem = ref<object>({});
 const userId = ref<null | number>(null)
-const status = ref(false)
+// const status = ref(false)
 
 //MOUNTED LIFE CYCLE
 onMounted(async () => {
@@ -34,7 +37,14 @@ const showTerminateModal = (item) => {
   UIkit.modal("#terminate-session-modal").show();
   userId.value = item.id
 };
-
+const changeStatusDetail = async (val) => {
+  try {
+    await store.patchUserById(+route.params.id, val)
+    toast.success(t("success"));
+  } catch (error: any) {
+    toast.error(t('error'));
+  }
+}
 </script>
 
 <template>
@@ -80,11 +90,12 @@ const showTerminateModal = (item) => {
           <div v-else>-</div>
         </div>
         <div class="flex justify-between mb-2">
-          <div >{{ $t("Status") }}:</div>
+          <div>{{ $t("Status") }}:</div>
           <label class="relative inline-flex items-center cursor-pointer">
             <input
                 type="checkbox"
-                v-model="status"
+                @input="changeStatusDetail(userItem.is_active)"
+                v-model="userItem.is_active"
                 class="sr-only peer"
             />
             <div
