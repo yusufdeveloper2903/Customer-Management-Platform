@@ -3,7 +3,7 @@
 //IMPORTED FILES
 import {useRouter} from "vue-router";
 import {login} from "@/auth/jwtService";
-import {Ref, computed, reactive, ref} from "vue";
+import {Ref, computed, reactive, ref, watch} from "vue";
 import {toast} from "vue3-toastify";
 import {setAccessToken} from "@/auth/jwtService";
 import {setRefreshToken} from "@/auth/jwtService";
@@ -22,7 +22,19 @@ let formData = reactive<Login>({
   password: "",
 });
 const isPasswordShown = ref<Boolean>(false);
+const isValidated = ref(false)
 
+
+//WATCHERS
+
+
+watch(
+    () => formData,
+    (value) => {
+      isValidated.value = !!(value.password && value.username);
+    },
+    {deep: true}
+)
 
 //FUNCTIONS
 const validationForm = async () => {
@@ -88,13 +100,14 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
                 id="login"
                 type="text"
                 name="login"
-                class="form-input !bg-white"
+                class="form-input "
                 :class="validate.username.$errors.length ? 'required-input' : ''"
             />
             <p
                 v-for="error in validate.username.$errors"
                 :key="error.$uid"
-                class="whitespace-nowrap text-danger text-sm"
+                class="whitespace-nowrap  text-sm"
+                style="color:#ff7081"
             >
               {{ t(error.$message) }}
             </p>
@@ -114,7 +127,7 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
                 id="password"
                 :type="isPasswordShown ? 'text' : 'password'"
                 name="password"
-                class="form-input !bg-white"
+                class="form-input "
                 :class="validate.password.$errors.length ? 'required-input' : ''"
             />
             <button
@@ -129,17 +142,17 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
               />
             </button>
             <p
-                class="whitespace-nowrap text-danger text-sm"
+                class="whitespace-nowrap  text-sm"
                 v-for="error in validate.password.$errors"
                 :key="error.$uid"
+                style="color:#ff7081"
             >
               {{ t(error.$message) }}
             </p>
           </div>
-
           <div class="mt-12">
-            <button type="submit" class="btn-primary w-full " style="color:green">
-              {{ t("Login") }}
+            <button type="submit" class="btn-primary w-full" :class="[isValidated ? 'green-color' : '']">
+              {{ t("LoginSystem") }}
             </button>
           </div>
         </form>
@@ -148,9 +161,27 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .btn-primary {
-  background-color: white
+  background-color: white;
+  color: black;
+  font-weight: 700;
+
 }
+
+.green-color {
+  color: green;
+  font-weight: 700;
+}
+
+.red-color {
+  color: #ff7081
+}
+
+.form-input {
+  background-color: white;
+  color: black
+}
+
 
 </style>
