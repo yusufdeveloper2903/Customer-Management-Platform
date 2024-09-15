@@ -5,15 +5,13 @@ import {isUserLoggedIn} from './utils'
 
 
 //DECLARED VARIABLES
-let userData = JSON.parse(localStorage.getItem('userAbilities') || '""')
+// let userData = JSON.parse(localStorage.getItem('userAbilities') || '""')
 const routes: Array<RouteRecordRaw> = [
     ...users,
     {
         path: "/",
         redirect: () => {
-            if (userData && userData.name || isUserLoggedIn()) {
-                return {name: 'users'}
-            }
+
             return {name: "login"};
 
         },
