@@ -15,6 +15,11 @@ export interface webInfo {
     username: string
 }
 
+export interface user {
+    password: string;
+    username: string
+}
+
 export interface ListInterface {
     title: string,
     active: boolean

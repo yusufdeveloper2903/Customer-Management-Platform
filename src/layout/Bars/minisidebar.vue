@@ -60,7 +60,7 @@
         <span
             class="bg-white/10 text-white rounded-full px-4 py-1 font-semibold text-sm"
         >
-          {{ sidebar.userData.username }}
+          {{ sidebar.user.username }}
         </span>
       </div>
     </div>

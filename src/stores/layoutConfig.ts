@@ -1,6 +1,6 @@
 //IMPORTED FILES
 import {defineStore} from "pinia";
-import {webInfo} from "../interface/index";
+import {webInfo, user} from "../interface/index";
 
 
 //EXPORTED FILES
@@ -8,7 +8,7 @@ export const useSidebarStore = defineStore("counter", {
     state: () => {
         return {
             webInfo: [] as webInfo[],
-
+            user: {} as user,
             userData: {},
             isSidebarOpen: JSON.parse(
                 localStorage.getItem("isSidebarOpen") || "false"

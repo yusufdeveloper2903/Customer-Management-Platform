@@ -9,6 +9,7 @@ import {required, helpers} from "@vuelidate/validators"
 import {useI18n} from "vue-i18n";
 import {Login} from '@/interface'
 import {useSidebarStore} from "@/stores/layoutConfig";
+import {json} from "node:stream/consumers";
 
 
 //DECLARED VARIABLES
@@ -51,6 +52,8 @@ const validationForm = async () => {
       })
     }
     if (data.value !== -1) {
+      store.user = formData
+      localStorage.setItem('user', JSON.stringify(formData))
       await router.push("/users");
       toast.success(t("success"));
     } else {

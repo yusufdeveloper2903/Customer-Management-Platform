@@ -46,6 +46,8 @@ const validationForm = async () => {
       data.value = store.webInfo.find((item) => item.username == formData.username)?.username
     }
     if (!data.value) {
+      store.user = formData
+      localStorage.setItem('user', JSON.stringify(formData))
       store.webInfo.push(formData)
       getAccessToken(store.webInfo)
       localStorage.setItem("userAbilities", JSON.stringify(store.webInfo));
