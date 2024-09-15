@@ -8,3 +8,6 @@ export function logout() {
 }
 
 
+export function getAccessToken(val): boolean {
+    return !!val.length;
+}

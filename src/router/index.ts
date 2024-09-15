@@ -1,18 +1,17 @@
 //IMPORTED FILES
 import {createRouter, createWebHistory, RouteRecordRaw} from "vue-router";
-import {ref} from 'vue'
 import users from "@/modules/Users/router";
+import {isUserLoggedIn} from './utils'
 
-let userData = JSON.parse(localStorage.getItem('userAbilities') || '""')
-let userInformation = ref<boolean>(false)
 
 //DECLARED VARIABLES
+let userData = JSON.parse(localStorage.getItem('userAbilities') || '""')
 const routes: Array<RouteRecordRaw> = [
     ...users,
     {
         path: "/",
         redirect: () => {
-            if (userData && userData.name || userInformation) {
+            if (userData && userData.name || isUserLoggedIn()) {
                 return {name: 'users'}
             }
             return {name: "login"};
@@ -57,17 +56,14 @@ const router = createRouter({
     routes,
 });
 
+console.log(isUserLoggedIn(), 'isUserLoggedIn')
 router.beforeEach(async (to, _, next) => {
         if (to.meta.loginNotRequired) {
             next(); // Allow navigation to the route without login
         } else {
             // Check if the user is logged in or any other condition
-            if (window.webInfor && window.webInfor.username) {
-                userInformation.value = true
-            } else {
-                userInformation.value = false
-            }
-            if ((userData && userData.length) || userInformation.value) {
+
+            if ((userData && userData.length) || isUserLoggedIn()) {
                 next(); // Allow navigation to the route
             } else {
                 next('/login'); // Prevent navigation to the route

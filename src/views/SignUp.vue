@@ -9,7 +9,7 @@ import {required, helpers} from "@vuelidate/validators"
 import {useI18n} from "vue-i18n";
 import {SignUp} from '../interface/index'
 import {useSidebarStore} from "@/stores/layoutConfig";
-
+import {getAccessToken} from "@/auth/jwtService";
 
 //DECLARED VARIABLES
 const store = useSidebarStore()
@@ -47,7 +47,7 @@ const validationForm = async () => {
     }
     if (!data.value) {
       store.webInfo.push(formData)
-      window.webInfor = store.webInfo
+      getAccessToken(store.webInfo)
       localStorage.setItem("userAbilities", JSON.stringify(store.webInfo));
       await router.push("/users");
       toast.success(t("success"));
