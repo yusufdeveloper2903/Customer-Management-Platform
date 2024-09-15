@@ -1,7 +1,7 @@
 //IMPORTED FILES
 import {createRouter, createWebHistory, RouteRecordRaw} from "vue-router";
 import users from "@/modules/Users/router";
-import {isUserLoggedIn} from './utils'
+// import {isUserLoggedIn} from './utils'
 
 
 //DECLARED VARIABLES
