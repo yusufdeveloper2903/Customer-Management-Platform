@@ -56,7 +56,6 @@ const router = createRouter({
     routes,
 });
 
-console.log(isUserLoggedIn(), 'isUserLoggedIn')
 router.beforeEach(async (to, _, next) => {
         if (to.meta.loginNotRequired) {
             next(); // Allow navigation to the route without login
