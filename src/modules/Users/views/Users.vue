@@ -1,126 +1,114 @@
 <script setup lang="ts">
+//Imported files
 
-// IMPORTED FILES
-
-import {fields} from "../constants/index";
 import {onMounted, reactive, ref} from "vue";
-import {useRouter} from "vue-router";
 import users from "../store/index";
+import {fields} from "../constants/index";
+import UIkit from "uikit";
+import {useRouter} from "vue-router";
 import {toast} from "vue3-toastify";
-import {formatPhoneNumber} from "@/components/Formatters/Formatters";
-import DoubleRight from "../img/double-right-chevron-svgrepo-com.svg"
-import {useI18n} from 'vue-i18n'
-import {formatDate} from "@/mixins/features";
 import {watchDebounced} from "@vueuse/core";
-import {params} from '../interfaces'
+import DeleteModal from "@/components/DeleteModal.vue";
+import {useI18n} from "vue-i18n";
 
-// DECLARED VARIABLES
 
+//Declared files
 const {t} = useI18n()
 const store = users();
-let usersList = ref<object[]>([]);
+const router = useRouter();
+const userId = ref<number>(0);
 const isLoading = ref(false);
-const router = useRouter()
-const filterUsers = reactive<params>({
+let allUsers = ref<any>([])
+let pageTo = ref<number>(0)
+let pageFrom = ref<number>(0)
+const filterUsers = reactive({
   page_size: 10,
   page: 1,
-  search: null,
-  gender: null,
-  os_type: null,
-});
-const listStatusOs = ref([
-  {
-    title: 'Android',
-    value: 'android'
-  },
-  {
-    title: 'iOS',
-    value: 'iOS'
-  },
-
-])
-const listStatus = ref([
-  {
-    title: 'Male',
-    value: 'M'
-  },
-  {
-    title: 'Female',
-    value: 'F'
-  },
-
-])
-// MOUNTED
-
-onMounted(async () => {
-  let page = localStorage.getItem('page')
-  let page_size = localStorage.getItem('page_size')
-  if (page) {
-    filterUsers.page = JSON.parse(page)
-  }
-  if (page_size) {
-    filterUsers.page_size = JSON.parse(page_size)
-  }
-  await refresh()
+  search: "",
 });
 
 
-// WATCHERS
+//Mounted
 
-watchDebounced(() => filterUsers.gender, async function () {
-  filterUsers.page = 1
-  localStorage.setItem('page', '1')
-  await refresh()
-}, {deep: true, debounce: 500, maxWait: 5000,})
-watchDebounced(() => filterUsers.os_type, async function () {
-  filterUsers.page = 1
-  localStorage.setItem('page', '1')
-  await refresh()
-}, {deep: true, debounce: 500, maxWait: 5000,})
-watchDebounced(() => filterUsers.search, async () => {
-      filterUsers.page = 1
-      localStorage.setItem('page', '1')
+onMounted(() => {
+  refresh()
+})
 
-      await refresh()
-    }, {deep: true, debounce: 500, maxWait: 5000}
-)
 
-// FUNCTIONS
+//FUNCTIONS
+const handleDeleteModal = (id: number) => {
+  UIkit.modal("#user-delete-modal").show();
+  userId.value = id;
+};
 
-const refresh = async () => {
+
+const refresh = () => {
   isLoading.value = true;
   try {
-    await store.getUsers(filterUsers);
-    usersList.value = store.usersList.results;
+    allUsers.value = store.usersList.results.slice(0, filterUsers.page_size)
+    isLoading.value = false;
   } catch (error: any) {
-    toast.error(t('error'));
+    toast.error(
+        t('error')
+    );
   }
-  isLoading.value = false;
 };
-const changePagination = (e: number) => {
-  filterUsers.page = e;
-  refresh();
+
+const deleteAction = async () => {
+  isLoading.value = true
+  try {
+    allUsers.value = allUsers.value.filter(item => item.id !== userId.value);
+    store.usersList.results = store.usersList.results.filter(item => item.id !== userId.value);
+    store.usersList.count = store.usersList.results.length
+    UIkit.modal("#user-delete-modal").hide();
+    toast.success(t('deleted_successfully'));
+    refresh()
+    isLoading.value = false
+  } catch (error: any) {
+    toast.error(
+        t('error')
+    );
+  }
 };
+
+const changePagionation = (e: number) => {
+  filterUsers.page = e
+  pageTo.value = e * filterUsers.page_size
+  pageFrom.value = (e * filterUsers.page_size) - filterUsers.page_size
+  if (pageFrom.value || pageTo.value) {
+    allUsers.value = store.usersList.results.slice(pageFrom.value, pageTo.value)
+  }
+
+};
+
+
 const onPageSizeChanged = (event: number) => {
-  filterUsers.page = 1
   filterUsers.page_size = event
-  refresh()
-}
-const showDetailPage = (item: any) => {
-  router.push({name: 'user detail', params: {id: item.id}})
+  allUsers.value = store.usersList.results.slice(0, event)
 };
+
+const openDetailePage = (val) => {
+  store.userDetail = val
+  router.push({name: 'users detail', params: {id: val.id}})
+}
+
+//WATCHERS
+watchDebounced(() => filterUsers.search, async function () {
+  filterUsers.page = 1
+  allUsers.value = store.usersList.results.filter(item => item.name.includes(filterUsers.search));
+}, {deep: true, debounce: 500, maxWait: 5000,})
+
 </script>
 
 <template>
   <div>
     <div class="card">
-      <div class="md:flex items-center justify-between mb-9">
-        <form class=" md:flex items-center gap-5 w-full">
+      <div class="md:flex items-end justify-between mb-7">
+        <form class="md:flex items-center gap-5 md:w-7/12">
           <div>
             <label for="search" class="dark:text-gray-300">
-              {{ $t("Search") }}
+              {{ t("Search") }}
             </label>
-
             <input
                 id="search"
                 type="text"
@@ -128,116 +116,88 @@ const showDetailPage = (item: any) => {
                 v-model="filterUsers.search"
             />
           </div>
-          <div class="w-1/5">
-            <p>{{ $t("gender") }}</p>
-            <v-select
-                :options="listStatus"
-                v-model="filterUsers.gender"
-                :getOptionLabel="(name:any) => t(name.title)"
-                :reduce="(item:any) => item.value"
-            >
-              <template #no-options> {{ $t("no_matching_options") }}</template>
-            </v-select>
-          </div>
-          <div class="w-1/5">
-            <p>{{ $t("device_os_types") }}</p>
-            <v-select
-                :options="listStatusOs"
-                v-model="filterUsers.os_type"
-                :getOptionLabel="(name:any) => t(name.title)"
-                :reduce="(item:any) => item.value"
-            >
-              <template #no-options> {{ $t("no_matching_options") }}</template>
-            </v-select>
-          </div>
-
         </form>
+        <button
+            class="rounded-md bg-success px-6 py-2 text-white duration-100 hover:opacity-90 md:w-auto w-full"
+            @click="
+                router.push({ name: 'add users'})
+              "
+        >
+          {{ t("Add") }}
+        </button>
       </div>
-
       <EasyDataTable
           theme-color="#7367f0"
           hide-footer
           :loading="isLoading"
           :headers="fields"
-          :items="usersList"
+          :items="allUsers"
       >
         <template #empty-message>
-          <div class="dark:text-white">{{ $t("no_available_data") }}</div>
+          <div class="dark:text-white">{{ t("no_available_data") }}</div>
         </template>
         <template #header="header">
-          {{ $t(header.text) }}
+          {{ t(header.text) }}
         </template>
-        <template #item-full_name="item">
-             <span v-if="item.full_name">
-            {{ item.full_name }}
-          </span>
-          <span v-else class="text-center " style="margin-left:20px">
-                 -
+
+
+        <template #item-name="items">
+          <span class="text-nowrap">
+          {{ items.name }}
+
           </span>
         </template>
 
-        <template #item-device_os_types="item">
-          <div v-for="(i,index) in item.device_os_types" :key="index" class="ml-12">
-            {{ i }}
+
+        <template #item-phone="items">
+          <span
+              class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-xs font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center">{{
+              items.phone
+            }}</span>
+        </template>
+        <template #item-hobbies="items">
+          <span
+              v-if="items.hobbies.length"
+              v-for="item in items.hobbies"
+              class="rounded bg-success px-4 p-1 pt-1 inline m-1 text-white"
+          >
+            {{ item }}
+          </span>
+        </template>
+
+        <template #header-actions="item">
+          <div class="flex justify-end">
+            {{ $t(item.text) }}
           </div>
         </template>
-        <template #item-gender="item">
-          <span v-if="item.gender" class="text-center ml-2">
-            {{ item.gender === 'M' ? $t('Male') : $t('Female') }}
-          </span>
-          <span v-else class="text-center ml-3">
-                 -
-          </span>
-        </template>
-        <template #item-phone="items">
-          <span v-if="items.phone">
-            {{ formatPhoneNumber(items.phone) }}
-          </span>
-          <span v-else class="text-center " style="margin-left:60px">
-                 -
-          </span>
-        </template>
-        <template #item-created_date="data">
-          <span style="margin-left:40px">
-            {{ formatDate(data.created_date) }}
-          </span>
-        </template>
-        <template #item-last_login="data">
-          <span style="margin-left:20px">
-            {{ formatDate(data.last_login) }}
-          </span>
-        </template>
-
-        <template #item-is_active="items">
-          <label class=" mt-2 relative inline-flex items-center cursor-pointer">
-            <input
-                type="checkbox"
-                :checked="items.is_active"
-                disabled
-                class="sr-only peer"
-            />
-            <div
-                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"/>
-          </label>
-        </template>
-
-        <template #item-detail="item">
-          <button @click="showDetailPage(item)" class="btn-success btn-action my-1"><img :src="DoubleRight" alt="Icon">
-          </button>
+        <template #item-actions="items">
+          <div class="flex justify-end">
+            <button
+                class="btn-warning btn-action"
+                @click="openDetailePage(items)"
+            >
+              <Icon icon="Pen New Square" color="#fff" size="16"/>
+            </button>
+            <button
+                class="ml-3 btn-danger btn-action"
+                @click="handleDeleteModal(items.id)"
+            >
+              <Icon icon="Trash Bin Trash" color="#fff" size="16"/>
+            </button>
+          </div>
         </template>
       </EasyDataTable>
-
       <TwPagination
           class="mt-10 tw-pagination"
           :current="filterUsers.page"
           :total="store.usersList.count"
-          :per-page="filterUsers.page_size"
-          :text-before-input="$t('go_to_page')"
-          :text-after-input="$t('forward')"
-          @page-changed="changePagination"
+          :per-page='filterUsers.page_size'
+          :text-before-input="t('go_to_page')"
+          :text-after-input="t('forward')"
+          @page-changed="changePagionation"
           @per-page-changed="onPageSizeChanged"
       />
-
+      <DeleteModal @delete-action="deleteAction" id="user-delete-modal"/>
     </div>
   </div>
 </template>

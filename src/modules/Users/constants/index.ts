@@ -1,61 +1,38 @@
 export const fields = [
     {
         text: "ID",
-        value: 'id'
+        value: "id"
     },
+
     {
         text: "Full Name",
-        value: "full_name",
+        value: "name",
     },
     {
-        text: "phone_number",
+        text: "username",
+        value: "username",
+    },
+    {
+        text: "age",
+        value: "age",
+    },
+    {
+        text: "email",
+        value: "email",
+    },
+    {
+        text: "Phone Number",
         value: "phone",
     },
-    {
-        text: "gender",
-        value: "gender",
-    },
-    {
-        text: "device_os_types",
-        value: "device_os_types",
-    },
-    {
-        text: "created_date",
-        value: "created_date"
-    },
-    {
-        text: "last_visit",
-        value: "last_login"
-    },
-    {
-        text: "Status",
-        value: "is_active",
-    },
-    {
-        text: "details",
-        value: "detail",
-    },
-];
 
-export const fieldsUserDetail = [
     {
-        text: "№",
-        value: "id",
+        text: "hobbies",
+        value: "hobbies",
     },
+
+
     {
-        text: "Created",
-        value: "created",
-    },
-    {
-        text: "number_card",
-        value: "number_card"
-    },
-    {
-        text: "Device",
-        value: "device"
-    },
-    {
-        text: "type_card",
-        value: "type_card",
+        text: "actions",
+        value: "actions",
     },
 ];

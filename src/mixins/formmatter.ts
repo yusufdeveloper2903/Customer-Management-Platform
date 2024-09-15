@@ -6,7 +6,7 @@ export const objectToFormData = (photo: any, obj: any) => {
                 if (property == i) {
                     if (obj[property] == null) {
                         formData.append(property, '');
-                    } else if (typeof obj[property] == 'string') {  // DOES NOT CUT THIS PART IT'S IMPORTANT TO VALIDATION
+                    } else if (typeof obj[property] == 'string') {
                         // formData.append(property, '');
                     } else {
                         formData.append(property, obj[property]);

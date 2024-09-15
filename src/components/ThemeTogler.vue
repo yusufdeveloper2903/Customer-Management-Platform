@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import {useSidebarStore} from "@/stores/layoutConfig.ts"
+import {useSidebarStore} from "@/stores/layoutConfig"
 import Icon from "@/components/Icons/Icon.vue";
 
 const sidebar = useSidebarStore();

@@ -78,186 +78,24 @@ onMounted(() => {
 });
 
 function breadCrumbStart(newPath) {
-  localStorage.setItem('sidebar', newPath)
   switch (newPath) {
-    case "dashboard":
-      BreadcrumbList.value = [
-        {title: "dashboard", active: true},
-      ];
-      break;
     case "users":
       BreadcrumbList.value = [
         {title: 'Users', active: true},
       ];
       break;
-    case "polls":
+    case "add users":
       BreadcrumbList.value = [
-        {title: 'Polls', active: true},
+        {title: 'Users', active: false},
+        {title: 'add_users', active: true},
       ];
       break;
-    case "polls-detail-id":
-      BreadcrumbList.value = [
-        {title: 'Polls', active: false},
-        {title: 'Poll Details', active: true},
-      ];
-      break
-    case "polls-question-add":
-      BreadcrumbList.value = [
-        {title: 'Polls', active: false},
-        {title: 'Poll Details', active: false},
-        {title: 'Poll Questions Add', active: true},
-      ];
-      break;
-    case "polls-question-id":
-      BreadcrumbList.value = [
-        {title: 'Polls', active: false},
-        {title: 'Poll Details', active: false},
-        {title: 'Poll Questions Edit', active: true},
-      ];
-      break;
-
-    case "stories":
-      BreadcrumbList.value = [
-        {title: 'Stories', active: true},
-      ];
-      break;
-    case "stories-detail-id":
-      BreadcrumbList.value = [
-        {title: 'Stories', active: false},
-        {title: 'storiesDetail', active: true},
-      ];
-      break;
-    case "stories-detail":
-      BreadcrumbList.value = [
-        {title: 'Stories', active: false},
-        {title: 'storiesDetail', active: true},
-      ]
-      break;
-    case "user detail":
+    case "users detail":
       BreadcrumbList.value = [
         {title: 'Users', active: false},
         {title: 'user_details', active: true},
       ];
       break;
-    case "transactions":
-      BreadcrumbList.value = [
-        {title: 'Transactions', active: true},
-      ];
-      break;
-
-    case "add-sms":
-      BreadcrumbList.value = [
-        {title: 'Notifications', active: false},
-        {title: 'addNotification', active: true},
-      ];
-      break;
-    case "knowledgeBase":
-      BreadcrumbList.value = [
-        {title: 'nav.directory', active: true},
-      ];
-      break;
-
-    case "staff":
-      BreadcrumbList.value = [
-        {title: 'nav.staffs', active: true},
-      ];
-      break;
-    case "add staff":
-      BreadcrumbList.value = [
-        {title: 'nav.staffs', active: false},
-        {title: 'add_staff', active: true},
-      ];
-      break;
-    case "staff detail":
-      BreadcrumbList.value = [
-        {title: 'nav.staffs', active: false},
-        {title: 'staff_details', active: true},
-      ];
-      break;
-    case "sms-template":
-      BreadcrumbList.value = [
-        {title: 'Notifications', active: true},
-      ];
-      break;
-    case "news-detail":
-      BreadcrumbList.value = [
-        {title: 'Notifications', active: false},
-        {title: 'detailNews', active: true}
-      ]
-      break;
-    case "add-news":
-      BreadcrumbList.value = [
-        {title: 'Notifications', active: false},
-        {title: 'addNews', active: true}
-      ]
-      break;
-
-    case "sms-detail":
-      BreadcrumbList.value = [
-        {title: 'Notifications', active: false},
-        {title: 'detailNotification', active: true},
-      ];
-      break;
-
-    case "Backup":
-      BreadcrumbList.value = [
-        {title: "Administration", active: true},
-        {title: "backups", active: true},
-      ];
-      break;
-    case "Logging":
-      BreadcrumbList.value = [
-        {title: "Administration", active: true},
-        {title: "journaling", active: true},
-      ];
-      break;
-    case "DataArchive":
-      BreadcrumbList.value = [
-        {title: "Administration", active: true},
-        {title: "backup&archiving", active: true},
-      ];
-      break;
-    case "SystemInfo":
-      BreadcrumbList.value = [
-        {title: "Administration", active: true},
-        {title: "info_about_system", active: true},
-      ];
-      break;
-    case "discounts":
-      BreadcrumbList.value = [
-        {title: "Discounts", active: true},
-      ];
-      break;
-    case "products":
-      BreadcrumbList.value = [
-        {title: "productsCategory", active: true},
-      ];
-      break;
-    case "product-details":
-      BreadcrumbList.value = [
-        {title: "productsCategory", active: false},
-        {title: "products", active: true},
-      ];
-      break;
-    case "promotion":
-      BreadcrumbList.value = [
-        {title: "Promotions", active: true},
-      ];
-      break;
-
-      case "recipes":
-      BreadcrumbList.value = [
-        {title: "Recipes", active: true},
-      ];
-      break;
-      
-      case "recipe-detail":
-      BreadcrumbList.value = [
-      {title: 'Recipes', active: false},
-        {title: 'recipe detail', active: true},
-      ];
-      break;
-
     default:
       break;
   }

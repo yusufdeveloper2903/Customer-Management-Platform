@@ -4,30 +4,30 @@ export default [
         name: "users",
         component: () => import("@/modules/Users/views/Users.vue"),
         meta: {
-            sidebar:'Users',
+            sidebar: 'Users',
             layout: "MainLayout",
-            permissions: ['admin'],
+            permissions: ["admin"],
         },
     },
     {
-        path: "/user-detail/:id",
-        name: "user detail",
+        path: "/users-detail/:id",
+        name: "users detail",
         component: () => import("@/modules/Users/pages/Details.vue"),
         meta: {
-            sidebar:'Users',
+            sidebar: 'Users',
             layout: "MainLayout",
-            permissions: ['admin'],
-        },
-    },
-    {
-        path: "/add-user",
-        name: "add user",
-        component: () => import("@/modules/Users/pages/Details.vue"),
-        meta: {
-            sidebar:'Users',
-            layout: "MainLayout",
-            permissions: ['admin'],
+            permissions: ["admin"],
         },
     },
 
+    {
+        path: "/add-users",
+        name: "add users",
+        component: () => import("@/modules/Users/pages/Details.vue"),
+        meta: {
+            sidebar: 'Users',
+            layout: "MainLayout",
+            permissions: ["admin"],
+        },
+    },
 ];

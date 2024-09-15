@@ -30,12 +30,7 @@ function onChangeLocale(lang: string) {
           src="@/assets/image/flags/uz.png"
           alt="uz"
       />
-      <img
-          v-if="locale == 'kr'"
-          class="w-[48px]"
-          src="@/assets/image/flags/uz.png"
-          alt="uz"
-      />
+
     </div>
 
     <div
@@ -65,17 +60,7 @@ function onChangeLocale(lang: string) {
         />
         <span>Oʻzbek</span>
       </div>
-      <div
-          class="p-3 hover:bg-primary/10 hover:text-primary"
-          @click="onChangeLocale('kr')"
-      >
-        <img
-            class="mr-2 inline-block w-[28px]"
-            src="@/assets/image/flags/uz.png"
-            alt="uz"
-        />
-        <span>Ўзбек</span>
-      </div>
+
     </div>
   </div>
 </template>

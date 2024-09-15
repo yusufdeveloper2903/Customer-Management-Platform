@@ -1,211 +1,250 @@
 <script setup lang="ts">
 
-//IMPORTED FILES
-import {onMounted, ref} from "vue"
-import users from "../store/index"
-import {useRoute} from "vue-router";
-import UIkit from "uikit";
-import TerminateSessionModal from "../components/TerminateSessionModal.vue"
-// import ConfirmUntieCardModal from "../components/ConfirmUntieCardModal.vue"
-import {fieldsUserDetail} from "../constants/index"
-import {toast} from "vue3-toastify";
-import {useI18n} from "vue-i18n";
 
+//IMPORTED FILES
+import {Ref, computed, ref, onMounted} from "vue";
+import users from "../store/index";
+import {useI18n} from "vue-i18n";
+import useVuelidate, {Validation} from "@vuelidate/core";
+import {helpers, minLength, required} from "@vuelidate/validators";
+import {useRoute, useRouter} from "vue-router";
+import {toast} from "vue3-toastify";
+import {UserAdd} from "../interfaces/index";
 
 //DECLARED VARIABLES
 const store = users()
-const route = useRoute()
-const {t} = useI18n()
-const userItem = ref<object>({});
-const userId = ref<null | number>(null)
-// const status = ref(false)
-
-//MOUNTED LIFE CYCLE
-onMounted(async () => {
-  let id = +route.params.id
-  await store.getUserById(id)
-  userItem.value = store.user
-
+const {t} = useI18n();
+const router = useRouter();
+const route = useRoute();
+let userData = ref<UserAdd>({
+  id: 3,
+  name: "",
+  phone: "",
+  username: "",
+  hobbies: [],
+  email: "",
+  age: null
 })
 
-// FUNCTION
-const refreshPage = () => {
-  let id = +route.params.id
-  store.getUserById(id)
-}
-const showTerminateModal = (item) => {
-  UIkit.modal("#terminate-session-modal").show();
-  userId.value = item.id
-};
-const changeStatusDetail = async (val) => {
-  try {
-    await store.patchUserById(+route.params.id, val)
-    toast.success(t("success"));
-  } catch (error: any) {
-    toast.error(t('error'));
+
+//MOUNTED
+
+onMounted(() => {
+  if (route.params.id) {
+    userData.value = store.userDetail
+
+  } else {
+    userData = {
+      id: 3,
+      name: "",
+      phone: "",
+      username: "",
+      hobbies: [],
+      email: "",
+      age: null
+    }
   }
+})
+
+
+//FUNCTIONS
+
+function removeSpaces(str) {
+  return str.replace(/[\s+]/g, "");
 }
+
+
+const saveUser = async () => {
+  const success = await validate.value.$validate();
+  if (!success) return;
+
+  if (userData.value.phone) {
+    userData.value.phone = removeSpaces(userData.value.phone);
+  }
+
+  if (route.params.id) {
+    try {
+      const foundIndex = store.usersList.results.findIndex((element) => element.id == +route.params.id)
+      store.usersList.results.splice(foundIndex, 1, userData.value);
+      await router.push("/users");
+      toast.success(t("updated_successfully"));
+    } catch (error: any) {
+      toast.error(t('error'))
+    }
+
+  } else {
+    try {
+      userData.value.id = store.usersList.results[store.usersList.results.length - 1].id + 1
+      store.usersList.count = store.usersList.count + 1
+      store.usersList.results.push(userData.value)
+      await router.push("/users");
+      toast.success(t("created_successfully"));
+    } catch (error: any) {
+      toast.error(t('error'))
+    }
+  }
+};
+const handleChangeTag = (hobbies) => {
+  userData.value.hobbies = hobbies;
+};
+
+//COMPUTED
+const rules = computed(() => {
+  return {
+    username: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    age: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    email: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    hobbies: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    name: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    phone: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+      minLength: helpers.withMessage(
+          "Номер телефона необходимо вводить в формате: '998 [XX] [XXX XX XX]",
+          minLength(17)
+      ),
+    },
+  };
+
+});
+
+const validate: Ref<Validation> = useVuelidate(rules, userData);
+
+
 </script>
 
-<template>
-  <div class="md:flex sm:block items-start gap-5 dark:text-white h-fit">
-    <div class="md:w-3/12 sm:w-full">
-      <div class="card">
-        <h2 class="text-success mb-3"><b>{{ $t('Profile') }}</b></h2>
-        <div class="flex justify-between mb-2">
-          <div>{{ $t('Surname') }}</div>
-          <div v-if="userItem.first_name"><small><b>{{ userItem.full_name }}</b></small></div>
-          <div v-else>-</div>
-        </div>
-        <div class="flex justify-between mb-2">
-          <div>{{ $t('First Name') }}</div>
-          <div v-if="userItem.last_name"><small><b>{{ userItem.first_name }}</b></small></div>
-          <div v-else>-</div>
-        </div>
-        <div class="flex justify-between mb-2">
-          <div>{{ $t('Father_name') }}</div>
-          <div v-if="userItem.full_name"><small><b>{{ userItem.last_name }}</b></small></div>
-          <div v-else>-</div>
-        </div>
-        <div class="flex justify-between mb-2">
-          <div>{{ $t('gender') }}</div>
-          <div v-if="userItem.gender"><small><b>{{ userItem.gender === 'M' ? $t('Male') : $t('Female') }}</b></small>
-          </div>
-          <div v-else>-</div>
-        </div>
-        <div class="flex justify-between mb-2">
-          <div>{{ $t('date_birth') }}</div>
-          <div v-if="userItem.date_of_birth"><small><b>{{ userItem.date_of_birth }}</b></small></div>
-          <div v-else>-</div>
-        </div>
-        <div class="flex justify-between mb-2">
-          <div>{{ $t('phone_number') }}</div>
-          <div v-if="userItem.phone"><small><b>+{{ userItem.phone }}</b></small></div>
-          <div v-else>-</div>
-        </div>
 
-        <div class="flex justify-between mb-2">
-          <div>{{ $t('Created') }}</div>
-          <div v-if="userItem.created_date"><small><b>{{ userItem.created_date }}</b></small></div>
-          <div v-else>-</div>
-        </div>
-        <div class="flex justify-between mb-2">
-          <div>{{ $t("Status") }}:</div>
-          <label class="relative inline-flex items-center cursor-pointer">
+<template>
+  <div>
+    <div class="md:flex gap-5 dark:text-white">
+      <div class="md:w-9/12 sm:w-full card">
+        <div class=" md:flex items-start gap-8">
+          <label for="loginDetail" class="w-4/12 text-xs">
+            {{ $t("username") }}:
             <input
-                type="checkbox"
-                @input="changeStatusDetail(userItem.is_active)"
-                v-model="userItem.is_active"
-                class="sr-only peer"
+                autocomplete="off"
+                id="loginDetail"
+                v-model="userData.username"
+                type="text"
+                class="form-input md:mb-0 mb-4"
+                :class="validate.username.$errors.length ? 'required-input' : ''"
             />
-            <div
-                class="w-11 h-6 bg-gray-200 peer-focus:outline-none
-          rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"
+            <p
+                v-for="error in validate.username.$errors"
+                :key="error.$uid"
+                class="text-danger text-sm"
+            >
+              {{ $t(error.$message) }}
+            </p>
+          </label>
+
+          <label for="passwordDetail" class="w-4/12 text-xs relative">
+            {{ $t("email") }}:
+            <input
+                autocomplete="off"
+                id="passwordDetail"
+                type="email"
+                class="form-input"
+                v-model="userData.email"
+                :class="validate.email.$errors.length ? 'required-input' : ''"
             />
+            <p
+                v-for="error in validate.email.$errors"
+                :key="error.$uid"
+                class="text-danger text-sm"
+            >
+              {{ $t(error.$message) }}
+            </p>
+          </label>
+          <label for="passwordDetail" class="w-4/12 text-xs relative">
+            {{ $t("age") }}:
+            <input
+                autocomplete="off"
+                id="passwordDetail"
+                type="number"
+                class="form-input"
+                v-model="userData.age"
+                :class="validate.age.$errors.length ? 'required-input' : ''"
+            />
+
           </label>
         </div>
+        <label class="mt-5 mb-1 block text-xs"> {{ $t("hobbies") }}:
+          <vue3-tags-input
+              :class="validate.hobbies.$errors.length ? 'required-input' : ''"
+              style="border:1px solid rgb(209 213 219);
+               padding:0.100rem;
+               background-color:rgb(249 250 251)"
+              @on-tags-changed="handleChangeTag"
+              :tags="userData.hobbies"
+              :placeholder="$t('enter_your_hobby')"/>
+          <p
+              v-for="error in validate.hobbies.$errors"
+              :key="error.$uid"
+              class="text-danger text-sm"
+          >
+            {{ $t(error.$message) }}
+          </p>
+        </label>
 
       </div>
 
+      <div class="md:w-3/12 card sm:w-full">
 
-      <div class="card mt-4">
-        <h2 class="text-success mb-3"><b>{{ $t('active_session') }}</b></h2>
-        <ul class="uk-list uk-list-divider" v-if="store.user && store.user.sessions && store.user.sessions.length">
-          <li v-for="(item, index) in store.user.sessions" :key="index"
-              class="dark:bg-secondary card-bg p-3 rounded-md">
+        <label for="login" class="block text-xs">
+          {{ $t("Full Name") }}:
+          <input
+              id="login"
+              type="text"
+              class="form-input"
+              v-model="userData.name"
+              :class="validate.name.$errors.length ? 'required-input' : ''"
+          />
+          <p
+              v-for="error in validate.name.$errors"
+              :key="error.$uid"
+              class="text-danger text-sm"
+          >
+            {{ $t(error.$message) }}
+          </p>
+        </label>
 
-            <div class="flex justify-between">
-              <div>{{ $t('Device') }}</div>
-              <div><small><b>{{ item.device_model }}</b></small></div>
-            </div>
+        <label for="phoneNumber" class="mt-4 block text-xs">
+          {{ $t("phone_number") }}:
+          <input
+              v-model="userData.phone"
+              v-maska
+              data-maska="+998 ## ### ## ##"
+              class="form-input"
+              :class="validate.phone.$errors.length ? 'required-input' : ''"
+          />
+          <p
+              v-for="error in validate.name.$errors"
+              :key="error.$uid"
+              class="text-danger text-sm"
+          >
+            {{ $t(error.$message) }}
+          </p>
+        </label>
 
-            <div class="flex justify-between mt-2">
-              <div>{{ $t('version_app') }}</div>
-              <div><small><b>{{ item.device_type }}</b></small></div>
-            </div>
-
-            <div class="flex justify-between mt-2">
-              <div>{{ $t('ip_address') }}</div>
-              <div><small><b>{{ item.ip_address }}</b></small></div>
-            </div>
-
-            <!--            <div class="flex justify-between my-2">-->
-            <!--              <div>{{ $t('date_created') }}</div>-->
-            <!--              <div><small><b>{{ item.created_date }}</b></small></div>-->
-            <!--            </div>-->
-
-            <div class="flex justify-between my-2">
-              <div>{{ $t('coming') }}</div>
-              <div><small><b>{{ item.last_visit }}</b></small></div>
-            </div>
-
-            <button class="mt-2 w-full rounded-md bg-danger text-white" @click="showTerminateModal(item)">
-              <small>{{ $t('finishing') }}</small>
-
-            </button>
-
-          </li>
-        </ul>
-        <h2 v-else class="text-center">{{ $t('no_available_data') }}</h2>
       </div>
     </div>
-
-
-    <div class="md:w-6/12 sm:w-full card">
-      <EasyDataTable
-          theme-color="#7367f0"
-          hide-footer
-          :headers="fieldsUserDetail"
-          :items="[]"
-      >
-        <template #empty-message>
-          <div class="dark:text-white">{{ $t("no_available_data") }}</div>
-        </template>
-        <template #header="header">
-          {{ $t(header.text) }}
-        </template>
-        <template #item-created="item">
-          {{ item.created_date }}
-        </template>
-
-        <template #item-device="item">
-          {{ item.device_model }}
-        </template>
-      </EasyDataTable>
-    </div>
-
-
-    <div class="md:w-3/12 sm:w-full card">
-      <h2 class="text-success mb-3"><b>{{ $t('cards') }}</b></h2>
-      <ul class="uk-list uk-list-divider">
-        <li class="card-bg p-3 rounded-md dark:bg-secondary">
-          <div class="flex justify-between ">
-            <div>{{ $t('First Name') }}</div>
-            <div><small><b>-</b></small></div>
-          </div>
-
-          <div class="flex justify-between my-2">
-            <div>{{ $t('number_card') }}</div>
-            <div><small><b>-</b></small></div>
-          </div>
-
-          <div class="flex justify-between">
-            <div>{{ $t('added') }}</div>
-            <div><small><b>-</b></small></div>
-          </div>
-
-
-        </li>
-      </ul>
+    <div class="mt-5 flex justify-end gap-4">
+      <button class="btn-secondary" @click="$router.push('/users')">
+        {{ $t("Cancel") }}
+      </button>
+      <button class="btn-success" @click="saveUser">
+        {{ route.params.id ? $t("Change") : $t("Add") }}
+      </button>
     </div>
   </div>
-
-  <TerminateSessionModal :userId="userId" @deleteUser="refreshPage"/>
-  <!--  <ConfirmUntieCardModal/>-->
 </template>
-
-<style lang="scss">
-.card-bg {
-  background-color: #F2F2F2;
-}
-</style>

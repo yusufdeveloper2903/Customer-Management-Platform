@@ -69,13 +69,10 @@ export default defineComponent({
     changePage: function (page: number) {
       if (page > 0 && page <= this.totalPages) {
         this.$emit("page-changed", page);
-        localStorage.setItem('page', JSON.stringify(page))
       }
     },
     changePerPage: function (val: any) {
       this.$emit("per-page-changed", val.target.value);
-      localStorage.setItem('page_size', val.target.value);
-      localStorage.setItem('page', '1')
     },
   },
   watch: {
@@ -159,8 +156,11 @@ export default defineComponent({
         </span>
         </div>
 
-        <div class="flex items-center gap-x-4">
 
+      </ul>
+      <ul>
+
+        <div class="flex items-center gap-x-4">
           <li>
             <a
                 href="#"
@@ -248,49 +248,10 @@ export default defineComponent({
               </div>
             </a>
           </li>
-        </div>
 
+        </div>
       </ul>
 
-      <div class="flex items-center" v-if="story !== 'story'">
-
-        <div class="pr-2 text-gray-400 font-medium">
-          <span id="text-before-input">
-            {{ textBeforeInput }}
-          </span>
-        </div>
-        <div class="w-14 rounded-md border border-indigo-400 px-1 py-1"
-             style="border: 1px solid rgb(53 108 45 ); border-radius: 0.375rem">
-          <input
-              v-model="input"
-              class="w-12 focus:outline-none px-2"
-              type="text"
-              @keypress="enteredInput"
-          />
-        </div>
-        <div
-            @click="toPage"
-            class="flex items-center pl-4 font-medium cursor-pointer"
-        >
-          <span id="text-after-input">
-            {{ textAfterInput }}
-          </span>
-          <svg
-              class="h-4 w-4"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-          >
-            <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </div>
-      </div>
     </section>
   </div>
 </template>

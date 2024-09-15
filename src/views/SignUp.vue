@@ -7,7 +7,7 @@ import {toast} from "vue3-toastify";
 import useVuelidate, {Validation} from "@vuelidate/core";
 import {required, helpers} from "@vuelidate/validators"
 import {useI18n} from "vue-i18n";
-import {Login} from '@/interface'
+import {SignUp} from '../interface/index'
 import {useSidebarStore} from "@/stores/layoutConfig";
 
 
@@ -15,9 +15,10 @@ import {useSidebarStore} from "@/stores/layoutConfig";
 const store = useSidebarStore()
 const router = useRouter();
 const {t} = useI18n();
-let formData = reactive<Login>({
+let formData = reactive<SignUp>({
   username: "",
   password: "",
+  name: ""
 });
 const isPasswordShown = ref<Boolean>(false);
 const isValidated = ref(false)
@@ -29,34 +30,30 @@ const isValidated = ref(false)
 watch(
     () => formData,
     (value) => {
-      isValidated.value = !!(value.password && value.username);
+      isValidated.value = !!(value.password && value.username && value.name);
     },
     {deep: true}
 )
+
 
 //FUNCTIONS
 const validationForm = async () => {
   const success = await validate.value.$validate();
   if (!success) return;
-
   try {
-    let data = ref<number>(-1)
+    let data = ref<string | undefined>('')
     if (store.webInfo && store.webInfo.length) {
-      data.value = store.webInfo.findIndex((item) => {
-        if (item.username === formData.username && item.password === formData.password) {
-          return item
-        } else {
-          return null
-        }
-      })
+      data.value = store.webInfo.find((item) => item.username == formData.username)?.username
     }
-    if (data.value !== -1) {
+    if (!data.value) {
+      store.webInfo.push(formData)
+      window.webInfor = store.webInfo
+      localStorage.setItem("userAbilities", JSON.stringify(store.webInfo));
       await router.push("/users");
       toast.success(t("success"));
     } else {
-      toast.error(t('No such user exists'));
+      toast.error(t('A user with such username exists'));
     }
-
   } catch (error: any) {
     toast.error(t('error'));
   }
@@ -69,6 +66,9 @@ const rules = computed(() => {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
     password: {
+      required: helpers.withMessage("validation.this_field_is_required", required),
+    },
+    name: {
       required: helpers.withMessage("validation.this_field_is_required", required),
     },
   };
@@ -84,7 +84,7 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
         <h2
             class="text-center text-4xl font-bold  dark:text-white"
         >
-          {{ t("enter_to_system") }}
+          {{ t("Sign Up") }}
         </h2>
       </div>
 
@@ -92,6 +92,31 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
         <form @submit.prevent="validationForm">
           <div>
             <div class="flex justify-between">
+              <label
+                  for="Full Name"
+                  class="text-sm  dark:text-gray-200"
+              >{{ t("Full Name") }}</label
+              >
+            </div>
+            <input
+                v-model="formData.name"
+                id="login"
+                type="text"
+                name="login"
+                class="form-input "
+                :class="validate.name.$errors.length ? 'required-input' : ''"
+            />
+            <p
+                v-for="error in validate.name.$errors"
+                :key="error.$uid"
+                class="whitespace-nowrap  text-sm"
+                style="color:#ff7081"
+            >
+              {{ t(error.$message) }}
+            </p>
+          </div>
+          <div>
+            <div class="mt-6  flex justify-between">
               <label
                   for="login"
                   class="text-sm  dark:text-gray-200"
@@ -155,13 +180,14 @@ const validate: Ref<Validation> = useVuelidate(rules, formData);
           </div>
           <div class="mt-12">
             <button type="submit" class="btn-dark w-full" :class="[isValidated ? '!text-green-500' : '']">
-              {{ t("LoginSystem") }}
+              {{ t("Sign Up") }}
             </button>
           </div>
-          <p class="text-center mt-4">{{ $t(`Don't have an account?`) }}<span
+          <p class="text-center mt-4">{{ $t('Already have an account?') }} <span
               class="text-blue-700 dark:text-blue-700 cursor-pointer"
-              @click="router.push('/signup')">{{ $t('Sign Up') }}</span></p>
-
+              @click="router.push('/login')">{{
+              $t('Login')
+            }}</span></p>
         </form>
       </div>
     </div>

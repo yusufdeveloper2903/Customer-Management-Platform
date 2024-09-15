@@ -81,6 +81,7 @@
     "vue3-rich-accordion": "^0.0.7",
     "vue3-scroll-picker": "^0.1.15",
     "vue3-tabs": "^0.1.13-beta.3",
+    "vue3-tags-input": "^1.0.12",
     "vue3-toastify": "^0.1.10",
     "vuejs-paginate-next": "^1.0.2",
     "vuejs-progress-bar": "^1.2.8",

@@ -184,12 +184,7 @@ function goToPage(item) {
   router.push(item.path);
 }
 
-function onEnter() {
-  router.push(items2.value[0].path);
-  UIkit.modal("#modal-search").hide();
-  search.value = "";
-  items2.value = pagesList.value;
-}
+
 
 function check() {
   if (window.innerWidth < 1000) return true;

@@ -4,11 +4,11 @@
       :class="{ open: sidebar.isSidebarOpen }"
   >
     <div class="logo-details bg-primary dark:bg-darkLayoutStorm">
-      <div class="w-16 h-16 mt-6 ml-3" v-if="sidebar.isSidebarOpen">
-        <img src="../../assets/havas/logo.svg" alt=""/>
+      <div class="w-24 h-24 mt-12 ml-3" v-if="sidebar.isSidebarOpen">
+        <img src="../../assets/system/logo.png" alt=""/>
       </div>
       <div class="logo_name">
-        <span v-if="sidebar.isSidebarOpen">Havas</span>
+        <span v-if="sidebar.isSidebarOpen">CMP</span>
       </div>
       <i id="btn" :class="`bx ${menuBtnChange()}`" @click="toggleSidebar"/>
     </div>
@@ -25,11 +25,9 @@
               ($route.meta.sidebar ==  route.name && 'active-module')
             "
           >
-
             <a
                 class="link"
                 @click="toggleDropdwon(route, index)"
-                v-if="check(route.permissions)"
             >
               <i class="flex w-[30px] items-center justify-center text-white">
                 <Icon :icon="route.icon" :color="$route.meta.sidebar ==  route.name ? '#FFCC00' : '#fff'"/>
@@ -38,58 +36,8 @@
                 {{ $t(route.name) }}
               </span>
 
-              <button v-if="route.child" class="links_dropdown_arrow">
-                <svg
-                    width="15"
-                    height="15"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                      d="M19 9L12 15L5 9"
-                      stroke="#ffffff"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                  />
-                </svg>
-              </button>
+
             </a>
-            <span v-if="route.child" class="tooltip">
-              <span v-if="!sidebar.isSidebarOpen" class="my-3 block">{{
-                  $t(route.name)
-                }}</span>
-              <router-link
-                  v-for="(child, index) in route.child"
-                  :key="index"
-                  active-class="active-route"
-                  :to="child.path"
-                  @click="onMobile ? toggleSidebar() : ''"
-              >
-                <template v-if="check(child.permissions)">
-                  <i
-                      class="flex w-[30px] items-center justify-center text-white"
-                  >
-                    <Icon :icon="child.icon" :color="$route.path === child.path ? '#FFCC00' : '#fff'" size="16"/>
-                  </i>
-                  <span :class="$route.path === child.path && 'text-warning'">
-                    {{ $t(child.name) }}
-                  </span>
-                </template>
-              </router-link>
-            </span>
-            <span v-else class="tooltip">
-              <router-link active-class="active-route" :to="route.path">
-                <i
-                    uk-icon="chevron-double-right"
-                    class="flex w-[30px] items-center justify-center text-white"
-                />
-                <span class="text-white">
-                  {{ $t(route.name) }}
-                </span>
-              </router-link>
-            </span>
           </li>
 
           <li
@@ -124,7 +72,6 @@ import {useSidebarStore} from "@/stores/layoutConfig";
 import sidebarRoutes from "@/navigation/vertical/index";
 import {useRouter} from "vue-router";
 import {logout} from "@/auth/jwtService";
-import {check} from "@/mixins/permissions";
 
 
 //DECLARED VARIABLES
