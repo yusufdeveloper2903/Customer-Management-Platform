@@ -61,14 +61,13 @@ router.beforeEach(async (to, _, next) => {
             next(); // Allow navigation to the route without login
         } else {
             // Check if the user is logged in or any other condition
-
-            if ((userData && userData.length) || isUserLoggedIn()) {
-                next(); // Allow navigation to the route
-            } else {
-                next('/login'); // Prevent navigation to the route
-            }
+            // console.log(isUserLoggedIn(), 'isUserLoggedIn')
+            // if ((userData && userData.length) || isUserLoggedIn()) {
+            next(); // Allow navigation to the route
+            // } else {
+            //     next('/login'); // Prevent navigation to the route
+            // }
         }
-
 
 
     }

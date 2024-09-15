@@ -8,6 +8,8 @@ export function logout() {
 }
 
 
-export function getAccessToken(val): boolean {
-    return !!val.length;
+export function getAccessToken(val): any {
+    if (val && val.length) {
+        return !!val.length;
+    }
 }
