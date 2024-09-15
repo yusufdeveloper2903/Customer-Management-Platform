@@ -21,7 +21,7 @@ const body = ref<HTMLElement | null>(document.querySelector("body"));
 //MOUNTED
 onMounted(() => {
   body.value?.classList.add(sidebar.currentTheme);
-  sidebar.user = JSON.parse(localStorage.getItem("user") || '');
+  sidebar.user = JSON.parse(localStorage.getItem("user") || '{}');
   sidebar.webInfo = JSON.parse(localStorage.getItem("userAbilities") || '[]');
 });
 
